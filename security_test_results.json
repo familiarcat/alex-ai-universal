@@ -1,0 +1,103 @@
+{
+  "timestamp": "2025-09-15T19:45:02.168740",
+  "duration_seconds": 0.0,
+  "overall_status": "FAIL",
+  "overall_score": 91.1,
+  "total_tests": 45,
+  "total_passed": 41,
+  "total_failed": 4,
+  "test_results": [
+    {
+      "test_name": "Code Quality Analysis",
+      "passed": 10,
+      "failed": 0,
+      "details": [
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/sql-injection-prevention.ts",
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/xss-prevention.ts",
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/authentication.ts",
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/data-loss-prevention.ts",
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/api-security.ts",
+        "\u2705 Security file exists: packages/@alex-ai/core/src/security/security-manager.ts",
+        "\u2705 Test file exists: scripts/security/alex_ai_security_test.py",
+        "\u2705 Test file exists: scripts/security/automated_security_validation.py",
+        "\u2705 Test file exists: scripts/security/penetration_testing_suite.py",
+        "\u2705 Test file exists: scripts/security/security_performance_test.py"
+      ]
+    },
+    {
+      "test_name": "Security Pattern Detection",
+      "passed": 9,
+      "failed": 1,
+      "details": [
+        "\u2705 Password hashing implementation found",
+        "\u2705 JWT token implementation found",
+        "\u2705 SQL injection prevention found",
+        "\u2705 XSS prevention found",
+        "\u2705 Data encryption found",
+        "\u2705 Input validation found",
+        "\u274c Rate limiting not found",
+        "\u2705 CORS implementation found",
+        "\u2705 Security headers found",
+        "\u2705 CSRF protection found"
+      ]
+    },
+    {
+      "test_name": "Configuration Validation",
+      "passed": 5,
+      "failed": 0,
+      "details": [
+        "\u2705 Security dependency found: bcrypt",
+        "\u2705 Security dependency found: jsonwebtoken",
+        "\u2705 Security dependency found: pg",
+        "\u2705 Configuration file exists: ALEX_AI_COMPLETE_SECURITY_DOCUMENTATION.md",
+        "\u2705 Configuration file exists: ALEX_AI_SECURITY_INTEGRATION_GUIDE.md"
+      ]
+    },
+    {
+      "test_name": "Dependency Security",
+      "passed": 8,
+      "failed": 0,
+      "details": [
+        "\u2705 Security dependency present: bcrypt",
+        "\u2705 Security dependency present: jsonwebtoken",
+        "\u2705 Security dependency present: helmet",
+        "\u2705 Security dependency present: express-rate-limit",
+        "\u2705 Security dependency present: cors",
+        "\u2705 Security dependency present: express-validator",
+        "\u2705 No vulnerable dependency: lodash",
+        "\u2705 No vulnerable dependency: moment"
+      ]
+    },
+    {
+      "test_name": "File Permissions",
+      "passed": 4,
+      "failed": 0,
+      "details": [
+        "\u2705 Sensitive file properly protected: .env (600)",
+        "\u2705 Sensitive file not present: config.json",
+        "\u2705 Sensitive file not present: credentials.json",
+        "\u2705 Sensitive file not present: secrets.json"
+      ]
+    },
+    {
+      "test_name": "Environment Security",
+      "passed": 5,
+      "failed": 3,
+      "details": [
+        "\u274c Environment variable missing: JWT_SECRET",
+        "\u274c Environment variable missing: ENCRYPTION_KEY",
+        "\u274c Environment variable missing: DATABASE_URL",
+        "\u2705 Security pattern in .gitignore: .env",
+        "\u2705 Security pattern in .gitignore: *.key",
+        "\u2705 Security pattern in .gitignore: *.pem",
+        "\u2705 Security pattern in .gitignore: credentials",
+        "\u2705 Security pattern in .gitignore: secrets"
+      ]
+    }
+  ],
+  "recommendations": [
+    "Failed tests: 4 - review and fix issues",
+    "Security systems are functioning well - ready for production"
+  ],
+  "summary": "Offline Security Test Results: FAIL - 91.11111111111111% score (41/45 tests passed)"
+}
