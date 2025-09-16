@@ -1,0 +1,135 @@
+{
+  "memory_id": "n8n_workflow_prime_directive_enforcement",
+  "timestamp": "2025-09-15T23:45:00Z",
+  "version": "1.0.0",
+  "title": "N8N Workflow Integration for Prime Directive Enforcement",
+  "description": "Integration of Prime Directive memory with n8n workflows for system-wide crew member enforcement",
+  "category": "workflow_integration",
+  "priority": "critical",
+  "tags": ["n8n", "workflow", "prime-directive", "crew-enforcement", "supabase", "automation"],
+  "content": {
+    "integration_architecture": {
+      "supabase_memory": "Prime Directive stored in alex_ai_memories table",
+      "n8n_workflows": "Distributed to all crew member agent workflows",
+      "enforcement_level": "system-wide",
+      "scope": "all_alex_ai_instances"
+    },
+    "workflow_components": {
+      "memory_sync": {
+        "trigger": "Prime Directive memory update in Supabase",
+        "action": "Sync to all active n8n workflows",
+        "frequency": "real-time",
+        "scope": "all_crew_members"
+      },
+      "crew_distribution": {
+        "targets": [
+          "captain_picard_workflow",
+          "commander_data_workflow", 
+          "lieutenant_geordi_workflow",
+          "lieutenant_worf_workflow",
+          "dr_crusher_workflow",
+          "commander_riker_workflow",
+          "counselor_troi_workflow",
+          "lieutenant_uhura_workflow",
+          "quark_workflow"
+        ],
+        "distribution_method": "n8n webhook triggers",
+        "verification": "confirmation from each crew member workflow"
+      },
+      "enforcement_checkpoints": {
+        "pre_file_creation": "Check Prime Directive before any file creation",
+        "pre_dependency_addition": "Verify no Alex AI dependencies without permission",
+        "pre_project_modification": "Validate project boundary respect",
+        "real_time_monitoring": "Continuous compliance checking"
+      }
+    },
+    "safety_mechanisms": {
+      "permission_gates": {
+        "explicit_user_consent": "Required for any Alex AI file introduction",
+        "clear_justification": "Must provide reasoning for any deviation",
+        "audit_logging": "All permission requests logged and tracked"
+      },
+      "automatic_prevention": {
+        "file_pattern_detection": "Block creation of .alex-ai-* files",
+        "dependency_scanning": "Prevent Alex AI package additions",
+        "project_pollution_detection": "Monitor for unauthorized AI artifacts"
+      },
+      "fallback_protection": {
+        "emergency_stop": "Immediate halt if Prime Directive violation detected",
+        "rollback_capability": "Automatic cleanup of unauthorized additions",
+        "alert_system": "Notify administrators of any violations"
+      }
+    },
+    "implementation_details": {
+      "supabase_table": "alex_ai_memories",
+      "memory_category": "governance",
+      "n8n_webhook_endpoints": "Configured for each crew member",
+      "real_time_sync": "WebSocket connections for immediate updates",
+      "backup_enforcement": "Local memory cache for offline scenarios"
+    },
+    "crew_member_integration": {
+      "captain_picard": {
+        "role": "Strategic oversight and Prime Directive enforcement",
+        "workflow_trigger": "governance_decision_required",
+        "enforcement_level": "highest"
+      },
+      "commander_data": {
+        "role": "Analytics and pattern recognition for compliance",
+        "workflow_trigger": "compliance_analysis_required",
+        "enforcement_level": "analytical"
+      },
+      "lieutenant_worf": {
+        "role": "Security validation and boundary protection",
+        "workflow_trigger": "security_checkpoint",
+        "enforcement_level": "security_focused"
+      },
+      "all_crew_members": {
+        "shared_responsibility": "Prime Directive compliance",
+        "enforcement_mechanism": "n8n workflow integration",
+        "verification_required": "confirmation of compliance understanding"
+      }
+    },
+    "monitoring_and_reporting": {
+      "compliance_tracking": "Real-time monitoring of Prime Directive adherence",
+      "violation_detection": "Automatic detection of unauthorized AI file introduction",
+      "audit_reports": "Regular compliance reports and violation summaries",
+      "performance_metrics": "Enforcement effectiveness and response times"
+    },
+    "emergency_procedures": {
+      "violation_detected": {
+        "immediate_action": "Halt all AI file creation activities",
+        "notification": "Alert user and administrators",
+        "cleanup": "Remove unauthorized files if detected",
+        "investigation": "Log violation details for analysis"
+      },
+      "system_compromise": {
+        "fallback_mode": "Switch to manual governance oversight",
+        "isolation": "Isolate affected workflows",
+        "recovery": "Restore from last known compliant state"
+      }
+    }
+  },
+  "implementation_notes": {
+    "created_by": "Alex AI Crew - System Architecture Team",
+    "last_updated": "2025-09-15T23:45:00Z",
+    "status": "active",
+    "enforcement": "system-wide",
+    "documentation": "Complete with technical implementation details",
+    "maintenance": "Regular updates as n8n workflows evolve"
+  },
+  "related_memories": [
+    "prime_directive_core_governance",
+    "alex_ai_milestone_push_system",
+    "crew_workflow_integration",
+    "supabase_memory_system",
+    "n8n_automation_framework"
+  ],
+  "technical_specifications": {
+    "n8n_workflow_version": "1.0.0",
+    "supabase_integration": "real-time",
+    "webhook_endpoints": "secured",
+    "data_sync": "bidirectional",
+    "monitoring": "continuous",
+    "compliance_checking": "automated"
+  }
+}
