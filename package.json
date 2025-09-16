@@ -13,7 +13,10 @@
     "lint": "lerna run lint",
     "clean": "lerna clean",
     "publish": "lerna publish",
-    "version": "lerna version"
+    "version": "lerna version",
+    "milestone:universal": "./scripts/alex-ai-universal-milestone-push.sh",
+    "milestone": "./scripts/alex-ai-universal-milestone-push.sh",
+    "milestone:help": "./scripts/alex-ai-universal-milestone-push.sh --help"
   },
   "devDependencies": {
     "lerna": "^8.0.0",

@@ -125,4 +125,46 @@ For detailed security information, see our comprehensive documentation:
 
 ---
 
+## 🚀 Universal Milestone System
+
+**Alex AI includes a powerful universal milestone push system that works across all projects and teams.**
+
+### 🎯 Key Features
+- **🤖 Crew Coordination**: Full Star Trek crew personality integration
+- **🛡️ Security Validation**: Comprehensive security checks and validation
+- **🏥 Health Monitoring**: System resource and git repository health checks
+- **📊 Impact Analysis**: Intelligent impact scoring and analysis
+- **🔧 Git Integration**: Native git staging, committing, and pushing
+- **⚡ Error Handling**: Robust error handling and recovery
+
+### 📋 Usage Commands
+```bash
+# Universal milestone push (recommended)
+npm run milestone:universal "Milestone Name"
+
+# Alternative command
+npm run milestone "Milestone Name"
+
+# Help and usage information
+npm run milestone:help
+```
+
+### 🎨 Crew Coordination
+The milestone system features full crew coordination with specialized roles:
+- **Captain Picard**: Strategic leadership and decision making
+- **Commander Data**: Advanced analytics and pattern recognition
+- **Lt. Cmdr. Geordi**: Universal integration and optimization
+- **Lieutenant Worf**: Security validation and threat assessment
+- **Dr. Crusher**: System health monitoring and diagnostics
+- **Commander Riker**: Tactical execution and crew coordination
+- **Counselor Troi**: User experience and emotional intelligence
+- **Lieutenant Uhura**: Communication and data transmission
+- **Quark**: Business logic and profit optimization
+
+### 📚 Documentation
+- **[Universal Milestone System Guide](ALEX_AI_UNIVERSAL_MILESTONE_SYSTEM.md)** - Complete usage guide
+- **[Milestone Memory File](memories/alex_ai_milestone_push_memory_20250114.json)** - Collective memory integration
+
+---
+
 **Made with ❤️ by the Alex AI Team**
