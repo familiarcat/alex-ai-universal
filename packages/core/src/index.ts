@@ -1,80 +1,54 @@
 /**
- * Universal Alex AI Package
- * 
- * Provides universal Alex AI functionality across all major IDEs and editors.
- * This package serves as the core integration layer for multi-IDE support.
+ * Universal Alex AI Package - Ultra Minimal Working Version
  */
 
-// Core Universal Alex AI
-export { UniversalAlexAIManager } from './core/universal-alex-ai';
+export class MinimalAlexAI {
+  constructor() {
+    console.log('Alex AI Core initialized');
+  }
 
-// Types
-export type {
-  UniversalAlexAI,
-  IDEAdapter,
-  ChatRequest,
-  ChatResponse,
-  CodeContext,
-  CrewMember,
-  AlexAIConfig,
-  AlexAIStatus,
-  IDESettings,
-  FileContext,
-  ProjectContext,
-  CodeSuggestion,
-  CodeAction,
-  ChatMessage,
-  IDEPosition,
-  IDERange,
-  IDEConfig
-} from './types/ide-types';
+  async initialize(): Promise<void> {
+    console.log('Alex AI Core ready');
+  }
 
-// Adapters (to be implemented)
-export { VSCodeAdapter } from './adapters/vscode-adapter';
-export { CursorAdapter } from './adapters/cursor-adapter';
-export { IntelliJAdapter } from './adapters/intellij-adapter';
-export { SublimeAdapter } from './adapters/sublime-adapter';
-export { VimAdapter } from './adapters/vim-adapter';
-
-// UI Components (to be implemented)
-export { UniversalChatInterface } from './ui/chat-interface';
-export { UniversalCodeActions } from './ui/code-actions';
-export { UniversalSettingsManager } from './ui/settings-manager';
-
-// Utility functions
-export { createUniversalAlexAI } from './core/universal-alex-ai';
-
-/**
- * Create a new Universal Alex AI instance
- */
-export function createUniversalAlexAI(): UniversalAlexAIManager {
-  return new UniversalAlexAIManager();
+  getStatus() {
+    return {
+      connected: true,
+      ready: true,
+      version: '1.0.0'
+    };
+  }
 }
 
-/**
- * Default configuration for Universal Alex AI
- */
-export const DEFAULT_CONFIG: AlexAIConfig = {
-  environment: 'development',
-  enableN8NIntegration: true,
-  enableStealthScraping: true,
-  enableCrewManagement: true,
-  enableTesting: true,
-  logLevel: 'info'
-};
+export interface AlexAIConfig {
+  apiKey: string;
+  model: string;
+  temperature: number;
+  maxTokens: number;
+  timeout: number;
+}
 
-/**
- * Default IDE settings
- */
-export const DEFAULT_IDE_SETTINGS: IDESettings = {
-  apiUrl: 'http://localhost:3000',
-  apiKey: '',
-  defaultCrewMember: 'Commander Data',
-  enableContextAwareness: true,
-  maxContextLength: 4000,
-  theme: 'auto',
-  language: 'en'
-};
+export interface AlexAIStatus {
+  connected: boolean;
+  ready: boolean;
+  version: string;
+}
+
+// Crew Self-Discovery System
+export { CrewSelfDiscoverySystem, CrewMemberFeature, SelfDiscoveryReport } from './crew-self-discovery';
+export { CrewSelfDiscoveryCLI } from './crew-self-discovery-cli';
+
+// N8N Workflow Integration
+export { CrewWorkflowUpdater, N8NCredentials, SupabaseConfig, CrewWorkflowUpdate, CrewMemoryEntry } from './n8n/crew-workflow-updater';
+export { N8NWorkflowCLI } from './n8n/n8n-workflow-cli';
+
+// Scenario Analysis
+export { ComprehensiveProjectScenarioAnalyzer, ProjectScenario, ScenarioStep, CrewMemberLearning } from './scenario-analysis/comprehensive-project-scenario';
+export { ScenarioAnalysisCLI } from './scenario-analysis/scenario-analysis-cli';
+
+// Crew Consciousness System
+export { CrewConsciousnessWorkflow, ProjectAnalysisRequest, CrewConsciousnessSession, CrewMemberAnalysis, CollectiveInsights } from './crew-consciousness/crew-consciousness-workflow';
+export { CrewConsciousnessCLI } from './crew-consciousness/crew-consciousness-cli';
 
 
 

@@ -2,10 +2,10 @@
   "name": "@alex-ai/cli",
   "version": "1.0.0",
   "description": "Command-line interface for Alex AI Universal",
-  "main": "dist/index.js",
+  "main": "dist/simple-cli.js",
   "bin": {
-    "alex-ai": "dist/cli.js",
-    "engage-alex-ai": "dist/cli.js"
+    "alex-ai": "dist/simple-cli.js",
+    "engage-alex-ai": "dist/simple-cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -22,13 +22,8 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
-    "@alex-ai/core": "^1.0.0",
-    "commander": "^12.0.0",
-    "fs-extra": "^11.2.0",
-    "simple-git": "^3.24.0",
-    "yaml": "^2.4.2",
-    "chalk": "^5.3.0",
-    "inquirer": "^9.2.12"
+    "@alex-ai/core": "file:../core",
+    "commander": "^12.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

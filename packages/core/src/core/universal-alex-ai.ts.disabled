@@ -5,7 +5,7 @@
  * This is the core package that IDE-specific adapters will use.
  */
 
-import { AlexAIManager } from '@alex-ai/core';
+import { AlexAIManager } from '../alex-ai-manager';
 import { 
   UniversalAlexAI, 
   IDEAdapter, 
