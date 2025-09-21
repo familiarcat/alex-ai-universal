@@ -30,4 +30,6 @@ export { ComprehensiveProjectScenarioAnalyzer, ProjectScenario, ScenarioStep, Cr
 export { ScenarioAnalysisCLI } from './scenario-analysis/scenario-analysis-cli';
 export { CrewConsciousnessWorkflow, ProjectAnalysisRequest, CrewConsciousnessSession, CrewMemberAnalysis, CollectiveInsights } from './crew-consciousness/crew-consciousness-workflow';
 export { CrewConsciousnessCLI } from './crew-consciousness/crew-consciousness-cli';
+export { AntiHallucinationSystem, LLMOptimizer, HallucinationDetector, UniversalCrewActivation, HallucinationCorrector, createAntiHallucinationSystem, AntiHallucinationUtils, DEFAULT_ANTI_HALLUCINATION_CONFIG } from './anti-hallucination';
+export type { AntiHallucinationConfig, AntiHallucinationResult, SystemMetrics, LLMOptimizationConfig, CrewPerspective, HallucinationAnalysis, CrewActivationResult, CorrectedResponse, HallucinationLearning } from './anti-hallucination';
 //# sourceMappingURL=index.d.ts.map

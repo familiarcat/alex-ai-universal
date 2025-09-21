@@ -3,7 +3,7 @@
  * Universal Alex AI Package - Ultra Minimal Working Version
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CrewConsciousnessCLI = exports.CrewConsciousnessWorkflow = exports.ScenarioAnalysisCLI = exports.ComprehensiveProjectScenarioAnalyzer = exports.N8NWorkflowCLI = exports.CrewWorkflowUpdater = exports.CrewSelfDiscoveryCLI = exports.CrewSelfDiscoverySystem = exports.MinimalAlexAI = void 0;
+exports.DEFAULT_ANTI_HALLUCINATION_CONFIG = exports.AntiHallucinationUtils = exports.createAntiHallucinationSystem = exports.HallucinationCorrector = exports.UniversalCrewActivation = exports.HallucinationDetector = exports.LLMOptimizer = exports.AntiHallucinationSystem = exports.CrewConsciousnessCLI = exports.CrewConsciousnessWorkflow = exports.ScenarioAnalysisCLI = exports.ComprehensiveProjectScenarioAnalyzer = exports.N8NWorkflowCLI = exports.CrewWorkflowUpdater = exports.CrewSelfDiscoveryCLI = exports.CrewSelfDiscoverySystem = exports.MinimalAlexAI = void 0;
 class MinimalAlexAI {
     constructor() {
         console.log('Alex AI Core initialized');
@@ -40,4 +40,14 @@ var crew_consciousness_workflow_1 = require("./crew-consciousness/crew-conscious
 Object.defineProperty(exports, "CrewConsciousnessWorkflow", { enumerable: true, get: function () { return crew_consciousness_workflow_1.CrewConsciousnessWorkflow; } });
 var crew_consciousness_cli_1 = require("./crew-consciousness/crew-consciousness-cli");
 Object.defineProperty(exports, "CrewConsciousnessCLI", { enumerable: true, get: function () { return crew_consciousness_cli_1.CrewConsciousnessCLI; } });
+// Anti-Hallucination System
+var anti_hallucination_1 = require("./anti-hallucination");
+Object.defineProperty(exports, "AntiHallucinationSystem", { enumerable: true, get: function () { return anti_hallucination_1.AntiHallucinationSystem; } });
+Object.defineProperty(exports, "LLMOptimizer", { enumerable: true, get: function () { return anti_hallucination_1.LLMOptimizer; } });
+Object.defineProperty(exports, "HallucinationDetector", { enumerable: true, get: function () { return anti_hallucination_1.HallucinationDetector; } });
+Object.defineProperty(exports, "UniversalCrewActivation", { enumerable: true, get: function () { return anti_hallucination_1.UniversalCrewActivation; } });
+Object.defineProperty(exports, "HallucinationCorrector", { enumerable: true, get: function () { return anti_hallucination_1.HallucinationCorrector; } });
+Object.defineProperty(exports, "createAntiHallucinationSystem", { enumerable: true, get: function () { return anti_hallucination_1.createAntiHallucinationSystem; } });
+Object.defineProperty(exports, "AntiHallucinationUtils", { enumerable: true, get: function () { return anti_hallucination_1.AntiHallucinationUtils; } });
+Object.defineProperty(exports, "DEFAULT_ANTI_HALLUCINATION_CONFIG", { enumerable: true, get: function () { return anti_hallucination_1.DEFAULT_ANTI_HALLUCINATION_CONFIG; } });
 //# sourceMappingURL=index.js.map

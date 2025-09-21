@@ -9,6 +9,7 @@ import { CrewSelfDiscoveryCLI } from '@alex-ai/core';
 import { N8NWorkflowCLI } from '@alex-ai/core';
 import { ScenarioAnalysisCLI } from '@alex-ai/core';
 import { CrewConsciousnessCLI } from '@alex-ai/core';
+import { AntiHallucinationCLI } from './anti-hallucination-cli';
 import * as commander from 'commander';
 
 const program = new commander.Command();
@@ -60,6 +61,7 @@ program
     console.log('  n8n-workflows     - N8N workflow management');
     console.log('  scenario-analysis - Comprehensive project scenario analysis');
     console.log('  crew-consciousness - Crew consciousness and project analysis');
+    console.log('  anti-hallucination - Anti-hallucination system management');
     console.log('  help              - Show this help');
     console.log('');
     console.log('Examples:');
@@ -71,6 +73,9 @@ program
     console.log('  alex-ai scenario-analysis end-to-end-test');
     console.log('  alex-ai crew-consciousness demo');
     console.log('  alex-ai crew-consciousness quick-analyze');
+    console.log('  alex-ai anti-hallucination enable');
+    console.log('  alex-ai anti-hallucination test');
+    console.log('  alex-ai anti-hallucination dashboard');
   });
 
 // Initialize crew self-discovery CLI
@@ -88,6 +93,10 @@ scenarioAnalysisCLI.initializeCommands(program);
 // Initialize crew consciousness CLI
 const crewConsciousnessCLI = new CrewConsciousnessCLI();
 crewConsciousnessCLI.initializeCommands(program);
+
+// Initialize anti-hallucination CLI
+const antiHallucinationCLI = new AntiHallucinationCLI();
+antiHallucinationCLI.setupCommands(program);
 
 // Parse command line arguments
 program.parse();

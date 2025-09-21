@@ -87,7 +87,7 @@ export declare class ComprehensiveProjectScenarioAnalyzer {
      */
     private storeRAGMemory;
     /**
-     * Conduct Observation Lounge session
+     * Conduct Observation Lounge session in cinematic screenplay format
      */
     conductObservationLoungeSession(): Promise<void>;
 }

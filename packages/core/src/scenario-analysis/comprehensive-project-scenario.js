@@ -5,6 +5,39 @@
  * Analyzes complete developer workflow with CursorAI integration
  * and captures crew member learning through RAG system
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComprehensiveProjectScenarioAnalyzer = void 0;
 class ComprehensiveProjectScenarioAnalyzer {
@@ -424,50 +457,19 @@ class ComprehensiveProjectScenarioAnalyzer {
         console.log(`  💾 Stored ${type} memory for ${crewMember}`);
     }
     /**
-     * Conduct Observation Lounge session
+     * Conduct Observation Lounge session in cinematic screenplay format
      */
     async conductObservationLoungeSession() {
-        console.log('\n🖖 OBSERVATION LOUNGE - CREW LEARNING DEBRIEF');
-        console.log('='.repeat(60));
-        console.log('Captain Picard: "Let us gather in the Observation Lounge to discuss what we have learned."');
-        console.log('All crew members: "Aye, Captain!"\n');
+        const { ObservationLoungeScreenplay } = await Promise.resolve().then(() => __importStar(require('./observation-lounge-screenplay')));
+        const screenplay = new ObservationLoungeScreenplay();
+        // Generate screenplay opening
+        console.log(screenplay.generateScreenplayOpening());
+        // Generate character segments
         for (const [crewMember, learning] of this.scenario.crewLearning) {
-            console.log(`\n${'='.repeat(60)}`);
-            console.log(`🖖 ${crewMember.toUpperCase()} - LEARNING DEBRIEF`);
-            console.log(`${'='.repeat(60)}`);
-            console.log(`\nProject Insights:`);
-            learning.projectInsights.forEach((insight, index) => {
-                console.log(`  ${index + 1}. ${insight}`);
-            });
-            console.log(`\nTechnical Learnings:`);
-            learning.technicalLearnings.forEach((learning, index) => {
-                console.log(`  ${index + 1}. ${learning}`);
-            });
-            console.log(`\nClient Understanding:`);
-            learning.clientUnderstanding.forEach((understanding, index) => {
-                console.log(`  ${index + 1}. ${understanding}`);
-            });
-            console.log(`\nProject Type Knowledge:`);
-            learning.projectTypeKnowledge.forEach((knowledge, index) => {
-                console.log(`  ${index + 1}. ${knowledge}`);
-            });
-            console.log(`\nCollaboration Insights:`);
-            learning.collaborationInsights.forEach((insight, index) => {
-                console.log(`  ${index + 1}. ${insight}`);
-            });
-            console.log(`\nIntrospection:`);
-            console.log(`  ${learning.introspection}`);
-            console.log(`\nRAG Verification Queries:`);
-            learning.verificationQueries.forEach((query, index) => {
-                console.log(`  ${index + 1}. ${query}`);
-            });
-            console.log(`\nRAG Memories Stored: ${learning.ragMemories.length}`);
+            console.log(screenplay.generateCharacterSegment(crewMember, learning));
         }
-        console.log(`\n${'='.repeat(60)}`);
-        console.log('🎯 OBSERVATION LOUNGE SESSION COMPLETE');
-        console.log(`${'='.repeat(60)}`);
-        console.log('Captain Picard: "Excellent work, crew. Our learnings have been documented and stored in our RAG system."');
-        console.log('All crew members: "Aye, Captain! Mission accomplished!"');
+        // Generate screenplay closing
+        console.log(screenplay.generateScreenplayClosing());
     }
 }
 exports.ComprehensiveProjectScenarioAnalyzer = ComprehensiveProjectScenarioAnalyzer;
