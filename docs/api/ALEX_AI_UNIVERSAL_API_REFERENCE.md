@@ -131,6 +131,23 @@ alexi status --n8n
 ✅ Security System: Active
 ```
 
+**Command Options**:
+```bash
+alexi status --help
+# or
+alexi status -h
+
+# Available options:
+--verbose, -v          Show detailed status information
+--crew, -c            Show only crew member status
+--memory, -m          Show only memory system status
+--n8n, -n             Show only N8N integration status
+--security, -s        Show only security system status
+--json, -j            Output status in JSON format
+--format <type>       Output format: text, json, yaml
+--quiet, -q           Suppress non-essential output
+```
+
 ---
 
 #### **`alexi chat`**
@@ -169,6 +186,26 @@ alexi chat --context ./error.log
 
 # Chat session with memory integration
 alexi chat --use-memory
+```
+
+**Command Options**:
+```bash
+alexi chat --help
+# or
+alexi chat -h
+
+# Available options:
+--crew <name>, -c <name>    Direct query to specific crew member
+--query <text>, -q <text>   Send direct query without interactive mode
+--context <file>, -f <file> Load context from file for conversation
+--use-memory, -m           Enable RAG memory integration
+--session <id>, -s <id>    Continue existing chat session
+--save-session, -save      Save current session for later use
+--load-session <id>, -l <id> Load previous chat session
+--history, -hist           Show chat history
+--clear-history, -clear    Clear chat history
+--format <type>            Output format: text, json, markdown
+--verbose, -v              Show detailed conversation metadata
 ```
 
 ---
@@ -211,6 +248,27 @@ alexi init --security-focused
 alexi init --project-type "react-app"
 alexi init --project-type "microservices"
 alexi init --project-type "enterprise"
+```
+
+**Command Options**:
+```bash
+alexi init --help
+# or
+alexi init -h
+
+# Available options:
+--config <file>, -c <file>      Use custom configuration file
+--project-type <type>, -t <type> Set project type: react-app, microservices, enterprise, api, web-app
+--security-focused, -s          Initialize with enhanced security settings
+--crew-config <file>, -crew <file> Custom crew configuration file
+--n8n-config <file>, -n8n <file>  Custom N8N configuration file
+--memory-config <file>, -mem <file> Custom memory system configuration
+--force, -f                     Force initialization even if config exists
+--dry-run, -d                   Show what would be initialized without creating files
+--interactive, -i               Interactive initialization with prompts
+--template <name>, -tmpl <name>  Use predefined template configuration
+--output <dir>, -o <dir>        Specify output directory for configuration files
+--verbose, -v                   Show detailed initialization process
 ```
 
 ---
@@ -257,6 +315,25 @@ alexi crew-discovery start "Captain Picard" --focus "strategic-planning"
 alexi crew-discovery start --all
 ```
 
+**Command Options**:
+```bash
+alexi crew-discovery start --help
+# or
+alexi crew-discovery start -h
+
+# Available options:
+--focus <area>, -f <area>      Focus on specific area: machine-learning, strategic-planning, security, engineering, etc.
+--all, -a                     Start discovery for all crew members
+--force, -force               Force restart even if discovery is already active
+--config <file>, -c <file>    Use custom discovery configuration
+--timeout <seconds>, -t <seconds> Set discovery timeout in seconds
+--interactive, -i             Interactive discovery with user prompts
+--output <format>, -o <format> Output format: text, json, yaml
+--verbose, -v                 Show detailed discovery process
+--dry-run, -d                 Show what would be discovered without starting
+--resume, -r                  Resume previous discovery session
+```
+
 ---
 
 #### **`alexi crew-discovery add-feature <member> <name> <desc> <category>`**
@@ -293,6 +370,26 @@ alexi crew-discovery add-feature "Captain Picard" "Strategic Planning" "Advanced
 # Add multiple features
 alexi crew-discovery add-feature "Geordi La Forge" "GraphQL" "GraphQL API development" "api" --impact medium
 alexi crew-discovery add-feature "Lieutenant Worf" "OWASP" "OWASP security standards" "security" --impact high
+```
+
+**Command Options**:
+```bash
+alexi crew-discovery add-feature --help
+# or
+alexi crew-discovery add-feature -h
+
+# Available options:
+--impact <level>, -i <level>    Set impact level: low, medium, high, critical
+--category <cat>, -c <cat>     Set feature category: technical, capability, security, infrastructure, api, etc.
+--priority <level>, -p <level> Set priority level: low, medium, high
+--tags <tags>, -t <tags>       Add comma-separated tags to feature
+--version <ver>, -v <ver>      Set feature version
+--dependencies <deps>, -d <deps> Specify feature dependencies
+--documentation <doc>, -doc <doc> Add feature documentation
+--examples <examples>, -e <examples> Add usage examples
+--force, -f                    Force add feature even if conflicts exist
+--dry-run, -dr                 Show what would be added without adding
+--verbose, -verbose            Show detailed feature addition process
 ```
 
 ---
@@ -336,6 +433,26 @@ alexi crew-discovery introspect --all
 alexi crew-discovery introspect "Commander Data" --focus "machine-learning"
 ```
 
+**Command Options**:
+```bash
+alexi crew-discovery introspect --help
+# or
+alexi crew-discovery introspect -h
+
+# Available options:
+--detailed, -d               Show detailed analysis with metrics
+--focus <area>, -f <area>    Focus analysis on specific area: technical, strategic, security, etc.
+--all, -a                   Introspect all crew members
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-metrics, -m        Include performance metrics in analysis
+--include-history, -h        Include historical analysis data
+--include-recommendations, -r Include improvement recommendations
+--output <file>, -o <file>   Save analysis to file
+--verbose, -v               Show detailed introspection process
+--timeout <seconds>, -t <seconds> Set introspection timeout
+--compare <member>, -c <member> Compare with another crew member
+```
+
 ---
 
 #### **`alexi crew-discovery complete <member>`**
@@ -375,6 +492,25 @@ alexi crew-discovery complete --all
 
 # Complete with specific learning objective
 alexi crew-discovery complete "Commander Data" --objective "machine-learning"
+```
+
+**Command Options**:
+```bash
+alexi crew-discovery complete --help
+# or
+alexi crew-discovery complete -h
+
+# Available options:
+--summary, -s               Show completion summary
+--objective <obj>, -o <obj> Complete specific learning objective
+--all, -a                  Complete all active learning cycles
+--force, -f                Force completion even if objectives not met
+--save-report, -save        Save completion report to file
+--format <type>, -fmt <type> Report format: text, json, yaml
+--include-metrics, -m       Include learning metrics in completion
+--next-cycle, -n            Prepare for next learning cycle
+--verbose, -v              Show detailed completion process
+--dry-run, -d              Show what would be completed without completing
 ```
 
 ---
@@ -418,6 +554,26 @@ alexi crew-discovery list-features "Commander Data" --category "technical"
 alexi crew-discovery list-features --all
 ```
 
+**Command Options**:
+```bash
+alexi crew-discovery list-features --help
+# or
+alexi crew-discovery list-features -h
+
+# Available options:
+--detailed, -d              Show detailed feature descriptions
+--category <cat>, -c <cat>  Filter features by category: technical, security, api, etc.
+--impact <level>, -i <level> Filter by impact level: low, medium, high, critical
+--all, -a                  List features for all crew members
+--format <type>, -fmt <type> Output format: text, json, yaml, table
+--sort-by <field>, -s <field> Sort by: name, category, impact, priority, version
+--search <term>, -search <term> Search features by name or description
+--include-examples, -e      Include usage examples for features
+--include-metrics, -m       Include feature usage metrics
+--output <file>, -o <file>  Save feature list to file
+--verbose, -v              Show detailed feature information
+```
+
 ---
 
 #### **`alexi crew-discovery stats <member>`**
@@ -459,6 +615,26 @@ alexi crew-discovery stats --all
 alexi crew-discovery stats "Commander Data" --time-range "last-week"
 ```
 
+**Command Options**:
+```bash
+alexi crew-discovery stats --help
+# or
+alexi crew-discovery stats -h
+
+# Available options:
+--detailed, -d               Show detailed statistics and metrics
+--time-range <range>, -t <range> Time range: last-hour, last-day, last-week, last-month, last-year
+--all, -a                   Show stats for all crew members
+--format <type>, -fmt <type> Output format: text, json, yaml, csv
+--include-history, -h        Include historical statistics
+--include-trends, -tr        Include trend analysis
+--include-comparisons, -c    Include comparisons with other crew members
+--output <file>, -o <file>   Save statistics to file
+--sort-by <field>, -s <field> Sort by: performance, usage, learning, efficiency
+--filter <criteria>, -f <criteria> Filter statistics by criteria
+--verbose, -v               Show detailed statistics calculation
+```
+
 ---
 
 #### **`alexi crew-discovery demo <member>`**
@@ -498,6 +674,27 @@ alexi crew-discovery demo "Commander Data" --interactive
 
 # Demo all crew members
 alexi crew-discovery demo --all
+```
+
+**Command Options**:
+```bash
+alexi crew-discovery demo --help
+# or
+alexi crew-discovery demo -h
+
+# Available options:
+--scenario <scenario>, -s <scenario> Use specific demo scenario: security-audit, code-review, architecture-design, etc.
+--interactive, -i             Enable interactive demo mode
+--all, -a                    Demo all crew members
+--format <type>, -fmt <type>  Demo output format: text, json, html
+--duration <seconds>, -d <seconds> Set demo duration in seconds
+--include-examples, -e        Include practical examples in demo
+--include-metrics, -m         Show performance metrics during demo
+--output <file>, -o <file>    Save demo output to file
+--record, -r                 Record demo session for replay
+--playback <file>, -p <file>  Playback recorded demo session
+--verbose, -v                Show detailed demo process
+--step-by-step, -step        Show demo step by step with pauses
 ```
 
 ---
@@ -542,6 +739,27 @@ alexi crew-consciousness demo --interactive
 alexi crew-consciousness demo --crew "Captain Picard,Commander Data"
 ```
 
+**Command Options**:
+```bash
+alexi crew-consciousness demo --help
+# or
+alexi crew-consciousness demo -h
+
+# Available options:
+--scenario <scenario>, -s <scenario> Use specific scenario: complex-architecture, team-coordination, problem-solving, etc.
+--interactive, -i             Enable interactive demo mode
+--crew <members>, -c <members> Specify crew members to include (comma-separated)
+--format <type>, -fmt <type>  Demo output format: text, json, html
+--duration <seconds>, -d <seconds> Set demo duration in seconds
+--include-analysis, -a        Include detailed crew analysis
+--include-insights, -ins      Include collective insights generation
+--include-coordination, -coord Include crew coordination examples
+--output <file>, -o <file>    Save demo output to file
+--record, -r                 Record demo session for replay
+--verbose, -v                Show detailed demo process
+--step-by-step, -step        Show demo step by step with pauses
+```
+
 ---
 
 ## 🔄 **WORKFLOW & AUTOMATION**
@@ -584,6 +802,27 @@ alexi n8n-workflows update-all --dry-run
 alexi n8n-workflows update-all --verbose
 ```
 
+**Command Options**:
+```bash
+alexi n8n-workflows update-all --help
+# or
+alexi n8n-workflows update-all -h
+
+# Available options:
+--force, -f                Force update even if workflows are current
+--dry-run, -d              Show what would be updated without updating
+--verbose, -v              Show detailed update process
+--backup, -b               Create backup before updating
+--rollback <version>, -r <version> Rollback to specific version
+--parallel, -p             Update workflows in parallel for speed
+--timeout <seconds>, -t <seconds> Set update timeout in seconds
+--include-crew, -c         Include crew-specific workflows
+--include-memory, -m       Include memory-related workflows
+--include-security, -s     Include security workflows
+--output <file>, -o <file> Save update log to file
+--format <type>, -fmt <type> Output format: text, json, yaml
+```
+
 ---
 
 #### **`alexi n8n-workflows update-crew`**
@@ -622,6 +861,26 @@ alexi n8n-workflows update-crew --force
 
 # Update with dry run
 alexi n8n-workflows update-crew --dry-run
+```
+
+**Command Options**:
+```bash
+alexi n8n-workflows update-crew --help
+# or
+alexi n8n-workflows update-crew -h
+
+# Available options:
+--member <name>, -m <name>   Update workflows for specific crew member
+--force, -f                Force update even if workflows are current
+--dry-run, -d              Show what would be updated without updating
+--verbose, -v              Show detailed update process
+--backup, -b               Create backup before updating
+--parallel, -p             Update crew workflows in parallel
+--timeout <seconds>, -t <seconds> Set update timeout in seconds
+--include-features, -feat   Include crew member features in update
+--include-learning, -learn Include learning workflows
+--output <file>, -o <file> Save update log to file
+--format <type>, -fmt <type> Output format: text, json, yaml
 ```
 
 ---
@@ -664,6 +923,26 @@ alexi n8n-workflows retrieve-memories --filter "last-week"
 alexi n8n-workflows retrieve-memories --verbose
 ```
 
+**Command Options**:
+```bash
+alexi n8n-workflows retrieve-memories --help
+# or
+alexi n8n-workflows retrieve-memories -h
+
+# Available options:
+--type <type>, -t <type>     Retrieve specific memory types: project-insights, technical-learning, client-understanding, etc.
+--filter <criteria>, -f <criteria> Filter memories by criteria: date, crew-member, category
+--format <type>, -fmt <type> Output format: text, json, yaml, csv
+--verbose, -v               Show detailed retrieval process
+--backup, -b                Create backup before retrieval
+--sync, -s                  Sync with local memory system
+--validate, -val            Validate retrieved memories
+--output <file>, -o <file>  Save retrieved memories to file
+--include-metadata, -m      Include memory metadata
+--include-tags, -tags       Include memory tags
+--timeout <seconds>, -timeout <seconds> Set retrieval timeout
+```
+
 ---
 
 #### **`alexi n8n-workflows memory-stats`**
@@ -704,6 +983,26 @@ alexi n8n-workflows memory-stats --time-range "last-month"
 alexi n8n-workflows memory-stats --by-type
 ```
 
+**Command Options**:
+```bash
+alexi n8n-workflows memory-stats --help
+# or
+alexi n8n-workflows memory-stats -h
+
+# Available options:
+--detailed, -d               Show detailed memory statistics
+--time-range <range>, -t <range> Time range: last-hour, last-day, last-week, last-month, last-year
+--by-type, -type             Group statistics by memory type
+--by-crew, -crew             Group statistics by crew member
+--format <type>, -fmt <type> Output format: text, json, yaml, csv
+--include-trends, -trends    Include trend analysis
+--include-growth, -growth    Include growth metrics
+--include-usage, -usage      Include usage statistics
+--output <file>, -o <file>   Save statistics to file
+--compare <period>, -c <period> Compare with previous period
+--verbose, -v               Show detailed statistics calculation
+```
+
 ---
 
 #### **`alexi n8n-workflows optimize-storage`**
@@ -740,6 +1039,26 @@ alexi n8n-workflows optimize-storage --dry-run
 
 # Optimize specific memory types
 alexi n8n-workflows optimize-storage --type "old-memories"
+```
+
+**Command Options**:
+```bash
+alexi n8n-workflows optimize-storage --help
+# or
+alexi n8n-workflows optimize-storage -h
+
+# Available options:
+--aggressive, -a             Perform aggressive optimization
+--dry-run, -d               Show what would be optimized without optimizing
+--type <type>, -t <type>     Optimize specific memory types: old-memories, duplicate-memories, unused-memories
+--format <type>, -fmt <type> Output format: text, json, yaml
+--backup, -b                Create backup before optimization
+--compress, -c              Enable compression during optimization
+--remove-duplicates, -rd    Remove duplicate memories
+--archive-old, -ao          Archive old memories instead of deleting
+--output <file>, -o <file>  Save optimization report to file
+--verbose, -v               Show detailed optimization process
+--timeout <seconds>, -timeout <seconds> Set optimization timeout
 ```
 
 ---
@@ -782,6 +1101,27 @@ alexi n8n-workflows test-connection --url "https://n8n.example.com"
 alexi n8n-workflows test-connection --auth
 ```
 
+**Command Options**:
+```bash
+alexi n8n-workflows test-connection --help
+# or
+alexi n8n-workflows test-connection -h
+
+# Available options:
+--verbose, -v               Show detailed connection test information
+--url <url>, -u <url>       Test connection to specific N8N URL
+--auth, -a                  Test authentication credentials
+--timeout <seconds>, -t <seconds> Set connection timeout in seconds
+--retries <count>, -r <count> Number of connection retry attempts
+--format <type>, -fmt <type> Output format: text, json, yaml
+--include-workflows, -w     Test workflow access
+--include-executions, -e    Test execution access
+--include-credentials, -c   Test credentials access
+--output <file>, -o <file>  Save test results to file
+--benchmark, -b             Run connection benchmark test
+--diagnose, -d              Run detailed connection diagnostics
+```
+
 ---
 
 #### **`alexi n8n-workflows demo`**
@@ -820,6 +1160,27 @@ alexi n8n-workflows demo --interactive
 
 # Demo with specific scenario
 alexi n8n-workflows demo --scenario "project-setup"
+```
+
+**Command Options**:
+```bash
+alexi n8n-workflows demo --help
+# or
+alexi n8n-workflows demo -h
+
+# Available options:
+--workflow <name>, -w <name>  Demo specific workflow by name
+--scenario <scenario>, -s <scenario> Use specific demo scenario: project-setup, crew-coordination, memory-sync, etc.
+--interactive, -i             Enable interactive demo mode
+--format <type>, -fmt <type>  Demo output format: text, json, html
+--duration <seconds>, -d <seconds> Set demo duration in seconds
+--include-execution, -e       Include workflow execution examples
+--include-monitoring, -m      Include workflow monitoring examples
+--include-troubleshooting, -t Include troubleshooting examples
+--output <file>, -o <file>    Save demo output to file
+--record, -r                 Record demo session for replay
+--verbose, -v                Show detailed demo process
+--step-by-step, -step        Show demo step by step with pauses
 ```
 
 ---
@@ -865,6 +1226,26 @@ alexi scenario-analysis run --detailed
 alexi scenario-analysis run --crew "Commander Data,Captain Picard"
 ```
 
+**Command Options**:
+```bash
+alexi scenario-analysis run --help
+# or
+alexi scenario-analysis run -h
+
+# Available options:
+--focus <area>, -f <area>    Focus analysis on specific area: performance, security, architecture, etc.
+--detailed, -d              Show detailed analysis with metrics
+--crew <members>, -c <members> Include specific crew members (comma-separated)
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-recommendations, -r Include improvement recommendations
+--include-metrics, -m       Include performance metrics
+--include-trends, -t        Include trend analysis
+--output <file>, -o <file>  Save analysis to file
+--parallel, -p              Run analysis in parallel for speed
+--timeout <seconds>, -timeout <seconds> Set analysis timeout
+--verbose, -v               Show detailed analysis process
+```
+
 ---
 
 #### **`alexi scenario-analysis end-to-end-test`**
@@ -905,6 +1286,27 @@ alexi scenario-analysis end-to-end-test --components "crew,memory"
 alexi scenario-analysis end-to-end-test --detailed
 ```
 
+**Command Options**:
+```bash
+alexi scenario-analysis end-to-end-test --help
+# or
+alexi scenario-analysis end-to-end-test -h
+
+# Available options:
+--verbose, -v               Show detailed test process and results
+--components <list>, -c <list> Test specific components: crew,memory,n8n,security (comma-separated)
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--detailed, -d              Show detailed test results and metrics
+--parallel, -p              Run tests in parallel for speed
+--timeout <seconds>, -t <seconds> Set test timeout in seconds
+--include-performance, -perf Include performance testing
+--include-security, -sec   Include security testing
+--include-integration, -int Include integration testing
+--output <file>, -o <file>  Save test results to file
+--retry <count>, -r <count> Number of retry attempts for failed tests
+--benchmark, -b             Run benchmark tests
+```
+
 ---
 
 #### **`alexi scenario-analysis details`**
@@ -943,6 +1345,26 @@ alexi scenario-analysis details --verbose
 
 # Show historical data
 alexi scenario-analysis details --history
+```
+
+**Command Options**:
+```bash
+alexi scenario-analysis details --help
+# or
+alexi scenario-analysis details -h
+
+# Available options:
+--scenario <name>, -s <name>  Show details for specific scenario
+--verbose, -v               Show detailed information
+--history, -h               Show historical analysis data
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-config, -c        Include configuration details
+--include-metrics, -m       Include performance metrics
+--include-examples, -e      Include usage examples
+--output <file>, -o <file>  Save details to file
+--compare <scenario>, -comp <scenario> Compare with another scenario
+--export, -exp              Export scenario configuration
+--import <file>, -imp <file> Import scenario configuration
 ```
 
 ---
@@ -986,6 +1408,27 @@ alexi scenario-analysis test-crew "Commander Data" --detailed
 alexi scenario-analysis test-crew "Captain Picard" --scenario "strategic-planning"
 ```
 
+**Command Options**:
+```bash
+alexi scenario-analysis test-crew --help
+# or
+alexi scenario-analysis test-crew -h
+
+# Available options:
+--focus <area>, -f <area>    Focus test on specific area: technical, strategic, security, etc.
+--detailed, -d              Show detailed test results
+--scenario <scenario>, -s <scenario> Use specific test scenario: strategic-planning, code-analysis, security-audit, etc.
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-metrics, -m       Include performance metrics
+--include-learning, -l      Include learning progress assessment
+--include-recommendations, -r Include improvement recommendations
+--output <file>, -o <file>  Save test results to file
+--timeout <seconds>, -t <seconds> Set test timeout
+--compare <member>, -c <member> Compare with another crew member
+--verbose, -v               Show detailed test process
+--benchmark, -b             Run benchmark tests
+```
+
 ---
 
 ### **🖖 Observation Lounge**
@@ -1027,6 +1470,28 @@ alexi scenario-analysis observation-lounge --crew "Captain Picard,Commander Data
 
 # Observation Lounge with detailed output
 alexi scenario-analysis observation-lounge --detailed
+```
+
+**Command Options**:
+```bash
+alexi scenario-analysis observation-lounge --help
+# or
+alexi scenario-analysis observation-lounge -h
+
+# Available options:
+--focus <focus>, -f <focus>    Focus on specific area: project-status, learning-review, daily-standup, deployment-readiness
+--crew <members>, -c <members> Include specific crew members (comma-separated)
+--detailed, -d                Show detailed crew presentations
+--format <type>, -fmt <type>  Output format: text, json, html, screenplay
+--cinematic, -cin             Enable full cinematic screenplay format
+--interactive, -i             Enable interactive crew presentations
+--include-metrics, -m         Include crew performance metrics
+--include-insights, -ins      Include collective insights generation
+--output <file>, -o <file>    Save session to file
+--record, -r                  Record session for replay
+--duration <minutes>, -dur <minutes> Set session duration in minutes
+--verbose, -v                 Show detailed session process
+--step-by-step, -step         Show crew presentations step by step
 ```
 
 ---
@@ -1074,6 +1539,27 @@ alexi security audit --detailed
 alexi security audit --components "api,database"
 ```
 
+**Command Options**:
+```bash
+alexi security audit --help
+# or
+alexi security audit -h
+
+# Available options:
+--standard <std>, -s <std>    Security standard: OWASP, PCI-DSS, SOC2, ISO27001, HIPAA
+--detailed, -d               Show detailed audit results
+--components <list>, -c <list> Audit specific components: api,database,frontend,infrastructure (comma-separated)
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-recommendations, -r Include security recommendations
+--include-remediation, -rem  Include remediation steps
+--include-compliance, -comp  Include compliance assessment
+--output <file>, -o <file>   Save audit report to file
+--severity <level>, -sev <level> Filter by severity: low, medium, high, critical
+--ignore <patterns>, -i <patterns> Ignore specific patterns or files
+--verbose, -v               Show detailed audit process
+--parallel, -p              Run audit in parallel for speed
+```
+
 ---
 
 #### **`alexi security classify`**
@@ -1112,6 +1598,28 @@ alexi security classify --policy "enterprise" --content "financial data"
 
 # Classify with detailed output
 alexi security classify --detailed --content "personal information"
+```
+
+**Command Options**:
+```bash
+alexi security classify --help
+# or
+alexi security classify -h
+
+# Available options:
+--level <level>, -l <level>   Classification level: public, internal, confidential, secret, top-secret
+--content <content>, -c <content> Content to classify (text or file path)
+--policy <policy>, -p <policy> Use specific classification policy: enterprise, government, healthcare, financial
+--detailed, -d               Show detailed classification reasoning
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-recommendations, -r Include handling recommendations
+--include-tags, -t           Include security tags
+--include-handling, -h       Include data handling instructions
+--output <file>, -o <file>   Save classification report to file
+--batch <file>, -b <file>    Process multiple items from file
+--validate, -v               Validate existing classifications
+--auto-classify, -a          Enable automatic classification
+--verbose, -verbose          Show detailed classification process
 ```
 
 ---
@@ -1158,6 +1666,28 @@ alexi health check --detailed
 alexi health check --monitor --interval 30
 ```
 
+**Command Options**:
+```bash
+alexi health check --help
+# or
+alexi health check -h
+
+# Available options:
+--components <list>, -c <list> Check specific components: crew,memory,n8n,security (comma-separated)
+--detailed, -d               Show detailed health metrics
+--monitor, -m                Enable continuous monitoring mode
+--interval <seconds>, -i <seconds> Monitoring interval in seconds
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-metrics, -metrics  Include performance metrics
+--include-alerts, -alerts    Include alert notifications
+--include-trends, -trends    Include health trends
+--output <file>, -o <file>   Save health report to file
+--threshold <level>, -t <level> Set alert threshold level
+--notify <method>, -n <method> Notification method: email, slack, webhook
+--verbose, -v               Show detailed health check process
+--timeout <seconds>, -timeout <seconds> Set health check timeout
+```
+
 ---
 
 ### **Performance Optimization**
@@ -1199,6 +1729,28 @@ alexi optimize --focus "memory"
 
 # Optimize with detailed analysis
 alexi optimize --detailed
+```
+
+**Command Options**:
+```bash
+alexi optimize --help
+# or
+alexi optimize -h
+
+# Available options:
+--components <list>, -c <list> Optimize specific components: memory,crew,performance,n8n (comma-separated)
+--focus <area>, -f <area>    Focus optimization on specific area: performance, memory, cpu, storage
+--detailed, -d               Show detailed optimization analysis
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--include-recommendations, -r Include optimization recommendations
+--include-benchmarks, -b     Include performance benchmarks
+--include-metrics, -m        Include optimization metrics
+--output <file>, -o <file>   Save optimization report to file
+--auto-apply, -a             Automatically apply safe optimizations
+--dry-run, -dr               Show what would be optimized without applying
+--aggressive, -ag            Perform aggressive optimizations
+--verbose, -v               Show detailed optimization process
+--timeout <seconds>, -t <seconds> Set optimization timeout
 ```
 
 ---
@@ -1243,6 +1795,28 @@ alexi memory status --time-range "last-week"
 alexi memory status --by-type
 ```
 
+**Command Options**:
+```bash
+alexi memory status --help
+# or
+alexi memory status -h
+
+# Available options:
+--detailed, -d               Show detailed memory statistics
+--time-range <range>, -t <range> Time range: last-hour, last-day, last-week, last-month, last-year
+--by-type, -type             Group statistics by memory type
+--by-crew, -crew             Group statistics by crew member
+--format <type>, -fmt <type> Output format: text, json, yaml, csv
+--include-trends, -trends    Include memory usage trends
+--include-growth, -growth    Include memory growth metrics
+--include-efficiency, -eff   Include memory efficiency metrics
+--output <file>, -o <file>   Save memory report to file
+--compare <period>, -c <period> Compare with previous period
+--threshold <level>, -th <level> Set memory usage threshold alerts
+--verbose, -v               Show detailed memory analysis
+--monitor, -m               Enable continuous memory monitoring
+```
+
 ---
 
 #### **`alexi memory cleanup`**
@@ -1282,6 +1856,28 @@ alexi memory cleanup --type "old-memories"
 
 # Cleanup with detailed output
 alexi memory cleanup --detailed
+```
+
+**Command Options**:
+```bash
+alexi memory cleanup --help
+# or
+alexi memory cleanup -h
+
+# Available options:
+--aggressive, -a             Perform aggressive cleanup
+--dry-run, -d               Show what would be cleaned without cleaning
+--type <type>, -t <type>     Clean specific memory types: old-memories, duplicate-memories, unused-memories
+--format <type>, -fmt <type> Output format: text, json, yaml, html
+--backup, -b                Create backup before cleanup
+--compress, -c              Enable compression during cleanup
+--remove-duplicates, -rd    Remove duplicate memories
+--archive-old, -ao          Archive old memories instead of deleting
+--output <file>, -o <file>  Save cleanup report to file
+--include-metrics, -m       Include cleanup metrics
+--include-recommendations, -r Include cleanup recommendations
+--verbose, -v               Show detailed cleanup process
+--timeout <seconds>, -timeout <seconds> Set cleanup timeout
 ```
 
 ---
