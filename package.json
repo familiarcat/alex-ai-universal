@@ -16,7 +16,9 @@
     "version": "lerna version",
     "milestone:universal": "./scripts/alex-ai-universal-milestone-push.sh",
     "milestone": "./scripts/alex-ai-universal-milestone-push.sh",
-    "milestone:help": "./scripts/alex-ai-universal-milestone-push.sh --help"
+    "milestone:help": "./scripts/alex-ai-universal-milestone-push.sh --help",
+    "milestone:enhanced": "./scripts/alex-ai-enhanced-milestone-push-corrected.sh",
+    "alex-ai:milestone": "./scripts/alex-ai-enhanced-milestone-push-corrected.sh"
   },
   "devDependencies": {
     "lerna": "^8.0.0",
