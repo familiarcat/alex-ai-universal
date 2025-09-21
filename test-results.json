@@ -1,6 +1,6 @@
 {
-  "startTime": "2025-09-21T08:00:54.658Z",
-  "endTime": "2025-09-21T08:00:57.455Z",
+  "startTime": "2025-09-21T08:12:27.761Z",
+  "endTime": "2025-09-21T08:12:30.609Z",
   "totalTests": 12,
   "passedTests": 12,
   "failedTests": 0,
@@ -8,24 +8,24 @@
   "performanceMetrics": {},
   "errors": [],
   "summary": {
-    "totalDuration": 2797,
+    "totalDuration": 2848,
     "successRate": 100,
     "testSuites": {
       "n8n": [
         {
           "name": "N8N Connection",
           "status": "PASSED",
-          "duration": 289,
+          "duration": 270,
           "result": {
             "status": 200,
             "workflowCount": 28,
-            "responseTime": 1758441654946
+            "responseTime": 1758442348030
           }
         },
         {
           "name": "Workflow Execution",
           "status": "PASSED",
-          "duration": 31,
+          "duration": 33,
           "result": {
             "workflowId": "L6K4bzSKlGC36ABL",
             "connectionCount": 7,
@@ -35,7 +35,7 @@
         {
           "name": "Workflow Sync",
           "status": "PASSED",
-          "duration": 45,
+          "duration": 44,
           "result": {
             "n8nWorkflows": 28,
             "localWorkflows": 49,
@@ -47,16 +47,16 @@
         {
           "name": "RAG Connection",
           "status": "PASSED",
-          "duration": 217,
+          "duration": 336,
           "result": {
             "status": 200,
-            "responseTime": 1758441655240
+            "responseTime": 1758442348443
           }
         },
         {
           "name": "Memory Retrieval",
           "status": "PASSED",
-          "duration": 75,
+          "duration": 62,
           "result": {
             "memoryCount": 10,
             "sampleMemories": [
@@ -81,7 +81,7 @@
         {
           "name": "Memory Encryption",
           "status": "PASSED",
-          "duration": 3,
+          "duration": 2,
           "result": {
             "encryptionSuccess": true,
             "dataIntegrity": true
@@ -92,7 +92,7 @@
         {
           "name": "Crew Workflow Files",
           "status": "PASSED",
-          "duration": 13,
+          "duration": 11,
           "result": {
             "totalFiles": 49,
             "validFiles": 49,
@@ -104,14 +104,14 @@
           "status": "PASSED",
           "duration": 2,
           "result": {
-            "memoryFiles": 21,
+            "memoryFiles": 22,
             "directories": 19
           }
         },
         {
           "name": "Configuration Files",
           "status": "PASSED",
-          "duration": 1,
+          "duration": 0,
           "result": {
             "configFiles": 2,
             "requiredFiles": 2,
@@ -123,9 +123,9 @@
         {
           "name": "N8N Performance",
           "status": "PASSED",
-          "duration": 36,
+          "duration": 57,
           "result": {
-            "responseTime": 36,
+            "responseTime": 57,
             "threshold": 5000,
             "passed": true
           }
@@ -133,9 +133,9 @@
         {
           "name": "RAG Performance",
           "status": "PASSED",
-          "duration": 77,
+          "duration": 45,
           "result": {
-            "responseTime": 76,
+            "responseTime": 45,
             "threshold": 3000,
             "passed": true
           }
@@ -143,9 +143,9 @@
         {
           "name": "Sync Performance",
           "status": "PASSED",
-          "duration": 2007,
+          "duration": 1986,
           "result": {
-            "syncTime": 2007,
+            "syncTime": 1986,
             "threshold": 10000,
             "passed": true
           }

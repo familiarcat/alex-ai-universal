@@ -1,0 +1,32 @@
+{
+  "name": "@alex-ai/web",
+  "version": "1.0.0-private",
+  "description": "Alex AI Universal Web Interface",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "tsc",
+    "test": "echo \"No tests specified\"",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@alex-ai/core": "file:../core"
+  },
+  "keywords": [
+    "alex-ai",
+    "ai",
+    "assistant",
+    "web-interface",
+    "star-trek"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-09-21T08:12:21.089Z",
+  "version": "1.0.0-private",
+  "directories": [
+    "./testing-environment",
+    "./testing-environment/vscode-workspace",
+    "./testing-environment/cursor-workspace",
+    "./testing-environment/web-platform",
+    "./testing-environment/test-data",
+    "./testing-environment/test-projects",
+    "./testing-environment/config"
+  ],
+  "components": [
+    "NPM Packages (@alex-ai/core, @alex-ai/cli)",
+    "VS Code Extension (@alex-ai/vscode)",
+    "Cursor AI Extension (@alex-ai/cursor)",
+    "Web Platform (@alex-ai/web)"
+  ],
+  "testProjects": [
+    "react-test-project",
+    "nodejs-test-project",
+    "typescript-test-project"
+  ],
+  "scripts": [
+    "start.sh",
+    "stop.sh",
+    "test.sh"
+  ]
+}

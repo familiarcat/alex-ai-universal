@@ -1,0 +1,39 @@
+{
+  "title": "Alex AI Testing Report",
+  "timestamp": "2025-09-21T08:12:30.615Z",
+  "version": "1.0.0-private",
+  "testResults": [
+    {
+      "test": "NPM Package Installation",
+      "success": false,
+      "error": "Command failed: cd testing-environment && npm install\nnpm error code E404\nnpm error 404 Not Found - GET https://npm.pkg.github.com/@alex-ai%2fcli - npm package \"cli\" does not exist under owner \"alex-ai\"\nnpm error 404\nnpm error 404  '@alex-ai/cli@^1.0.0-private' is not in this registry.\nnpm error 404\nnpm error 404 Note that you can also install from a\nnpm error 404 tarball, folder, http url, or git url.\nnpm error A complete log of this run can be found in: /Users/bradygeorgen/.npm/_logs/2025-09-21T08_12_21_143Z-debug-0.log\n"
+    },
+    {
+      "test": "VS Code Extension",
+      "success": true
+    },
+    {
+      "test": "Cursor AI Extension",
+      "success": true
+    },
+    {
+      "test": "Web Platform",
+      "success": true
+    },
+    {
+      "test": "Alex AI CLI",
+      "success": false,
+      "error": "Command failed: cd testing-environment && npx @alex-ai/cli --version\nnpm error code E404\nnpm error 404 Not Found - GET https://npm.pkg.github.com/@alex-ai%2fcli - npm package \"cli\" does not exist under owner \"alex-ai\"\nnpm error 404\nnpm error 404  '@alex-ai/cli@*' is not in this registry.\nnpm error 404\nnpm error 404 Note that you can also install from a\nnpm error 404 tarball, folder, http url, or git url.\nnpm error A complete log of this run can be found in: /Users/bradygeorgen/.npm/_logs/2025-09-21T08_12_27_329Z-debug-0.log\n"
+    },
+    {
+      "test": "End-to-End Integration",
+      "success": true
+    }
+  ],
+  "summary": {
+    "totalTests": 6,
+    "successfulTests": 4,
+    "successRate": 67,
+    "duration": 9524
+  }
+}

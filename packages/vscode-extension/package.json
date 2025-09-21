@@ -1,6 +1,6 @@
 {
   "name": "@alex-ai/vscode",
-  "version": "1.0.0",
+  "version": "1.0.0-private",
   "description": "VSCode extension for Alex AI Universal",
   "displayName": "Alex AI Universal",
   "publisher": "alex-ai",
@@ -86,6 +86,6 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   }
 }

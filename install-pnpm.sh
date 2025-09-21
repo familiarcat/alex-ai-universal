@@ -83,3 +83,4 @@ echo "  npx alexi help        - Show Alex AI CLI help"
 echo ""
 echo "🚀 Ready for development!"
 
+

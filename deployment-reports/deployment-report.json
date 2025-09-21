@@ -1,0 +1,61 @@
+{
+  "title": "Alex AI Private Deployment Report",
+  "timestamp": "2025-09-21T08:12:30.614Z",
+  "version": "1.0.0-private",
+  "phases": [
+    {
+      "phase": "deployment",
+      "success": true,
+      "duration": 34330,
+      "timestamp": "2025-09-21T08:12:21.074Z"
+    },
+    {
+      "phase": "testing-setup",
+      "success": true,
+      "duration": 15,
+      "timestamp": "2025-09-21T08:12:21.089Z"
+    },
+    {
+      "phase": "testing-execution",
+      "success": true,
+      "duration": 9524,
+      "testResults": [
+        {
+          "test": "NPM Package Installation",
+          "success": false,
+          "error": "Command failed: cd testing-environment && npm install\nnpm error code E404\nnpm error 404 Not Found - GET https://npm.pkg.github.com/@alex-ai%2fcli - npm package \"cli\" does not exist under owner \"alex-ai\"\nnpm error 404\nnpm error 404  '@alex-ai/cli@^1.0.0-private' is not in this registry.\nnpm error 404\nnpm error 404 Note that you can also install from a\nnpm error 404 tarball, folder, http url, or git url.\nnpm error A complete log of this run can be found in: /Users/bradygeorgen/.npm/_logs/2025-09-21T08_12_21_143Z-debug-0.log\n"
+        },
+        {
+          "test": "VS Code Extension",
+          "success": true
+        },
+        {
+          "test": "Cursor AI Extension",
+          "success": true
+        },
+        {
+          "test": "Web Platform",
+          "success": true
+        },
+        {
+          "test": "Alex AI CLI",
+          "success": false,
+          "error": "Command failed: cd testing-environment && npx @alex-ai/cli --version\nnpm error code E404\nnpm error 404 Not Found - GET https://npm.pkg.github.com/@alex-ai%2fcli - npm package \"cli\" does not exist under owner \"alex-ai\"\nnpm error 404\nnpm error 404  '@alex-ai/cli@*' is not in this registry.\nnpm error 404\nnpm error 404 Note that you can also install from a\nnpm error 404 tarball, folder, http url, or git url.\nnpm error A complete log of this run can be found in: /Users/bradygeorgen/.npm/_logs/2025-09-21T08_12_27_329Z-debug-0.log\n"
+        },
+        {
+          "test": "End-to-End Integration",
+          "success": true
+        }
+      ],
+      "successRate": 67,
+      "timestamp": "2025-09-21T08:12:30.614Z"
+    }
+  ],
+  "summary": {
+    "totalPhases": 3,
+    "successfulPhases": 3,
+    "failedPhases": 0,
+    "totalDuration": 43869,
+    "overallSuccess": true
+  }
+}

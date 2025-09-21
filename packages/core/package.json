@@ -1,6 +1,6 @@
 {
   "name": "@alex-ai/core",
-  "version": "1.0.0",
+  "version": "1.0.0-private",
   "description": "Core AI engine and crew management for Alex AI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -40,6 +40,6 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   }
 }

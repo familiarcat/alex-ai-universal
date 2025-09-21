@@ -4,8 +4,6 @@
  * Provides Cursor AI integration for Alex AI with Star Trek crew-based AI assistance
  */
 
-import { createCursorExtension } from '@alex-ai/universal-extension';
-
 // Cursor AI integration interface
 interface CursorAI {
   showChat: (message: string) => void;
@@ -64,11 +62,43 @@ const cursorAI: CursorAI = {
   }
 };
 
-// Create the universal extension using Cursor adapter
-const { core, commands } = createCursorExtension(cursorAI);
+// Alex AI Core for Cursor
+class AlexAICore {
+  private initialized = false;
+
+  async initialize(): Promise<void> {
+    if (this.initialized) return;
+    
+    console.log('🚀 Alex AI Universal Cursor extension is now active!');
+    cursorAI.showStatus('Alex AI initialized');
+    this.initialized = true;
+  }
+
+  async processMessage(message: string): Promise<string> {
+    cursorAI.showChat(`Processing: ${message}`);
+    return `Alex AI response: ${message}`;
+  }
+
+  async getCrewMembers(): Promise<string[]> {
+    return [
+      'Captain Picard',
+      'Commander Data',
+      'Commander Riker',
+      'Lieutenant Commander Geordi',
+      'Lieutenant Worf',
+      'Counselor Troi',
+      'Dr. Crusher',
+      'Lieutenant Uhura',
+      'Quark'
+    ];
+  }
+}
+
+// Create the core instance
+const alexAI = new AlexAICore();
 
 // Export for Cursor AI integration
-export const alexAI = core;
+export { alexAI };
 
 // Initialize on load
-core.initialize().catch(console.error);
+alexAI.initialize().catch(console.error);

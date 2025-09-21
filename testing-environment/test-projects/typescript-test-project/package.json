@@ -1,0 +1,10 @@
+{
+  "name": "typescript-test-project",
+  "version": "1.0.0",
+  "description": "TypeScript application for testing Alex AI integration",
+  "private": true,
+  "dependencies": {
+    "@alex-ai/core": "^1.0.0-private",
+    "@alex-ai/cli": "^1.0.0-private"
+  }
+}
