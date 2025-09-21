@@ -512,3 +512,4 @@ export class CrewWorkflowUpdater {
     console.log(`📦 Compressed ${group.length} memories into 1 optimized entry`);
   }
 }
+

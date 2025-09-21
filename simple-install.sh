@@ -41,3 +41,4 @@ echo "🧪 Running test harness..."
 # Run test harness
 cd test-harness
 node run-all-tests.js
+

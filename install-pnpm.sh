@@ -82,3 +82,4 @@ echo "  pnpm run n8n-security - Run N8N security integration"
 echo "  npx alexi help        - Show Alex AI CLI help"
 echo ""
 echo "🚀 Ready for development!"
+

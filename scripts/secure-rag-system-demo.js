@@ -438,3 +438,4 @@ demonstrateSecurityAuditing().catch(console.error);
 
 // Run the demo
 new SecureRAGSystemDemo().run();
+

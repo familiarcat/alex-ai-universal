@@ -347,3 +347,4 @@ Each crew member gets their own N8N workflow with:
 ---
 
 *"The automated crew workflow integration represents a quantum leap in our N8N capabilities. Every crew member now has their own specialized workflow with secure RAG processing, completely eliminating the black box problem!"* - **Captain Picard**
+

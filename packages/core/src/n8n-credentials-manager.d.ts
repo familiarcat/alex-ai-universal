@@ -1,85 +1,48 @@
 /**
- * N8N Credentials Manager - Universal Credential Management
- *
- * This service manages all credentials through n8n.pbradygeorgen.com
- * as the single source of truth, eliminating the need for local environment variables.
+ * N8N Credentials Manager
+ * Handles N8N workflow credentials and authentication
  */
-interface CredentialsCache {
-    supabase: {
-        url: string;
-        anonKey: string;
-        serviceKey?: string;
-    };
-    n8n: {
-        apiKey: string;
-        baseUrl: string;
-    };
-    openai: {
-        apiKey: string;
-    };
-    anthropic: {
-        apiKey: string;
-    };
-    openrouter: {
-        apiKey: string;
-    };
-    github: {
-        token: string;
-    };
-    timestamp: number;
+export interface N8NCredentials {
+    apiKey?: string;
+    baseUrl?: string;
+    username?: string;
+    password?: string;
 }
 export declare class N8NCredentialsManager {
+    private credentials;
+    constructor(credentials?: N8NCredentials);
     /**
-     * Get all credentials from N8N Federation Crew
+     * Set credentials for N8N connection
      */
-    getCredentials(): Promise<CredentialsCache>;
+    setCredentials(credentials: N8NCredentials): void;
     /**
-     * Get Supabase credentials
+     * Get current credentials
      */
-    getSupabaseCredentials(): Promise<{
-        url: string;
-        anonKey: string;
-        serviceKey?: string;
-    }>;
+    getCredentials(): N8NCredentials;
     /**
-     * Get N8N credentials
+     * Check if credentials are valid
      */
-    getN8NCredentials(): Promise<{
-        apiKey: string;
-        baseUrl: string;
-    }>;
+    hasValidCredentials(): boolean;
     /**
-     * Get OpenAI credentials
+     * Clear all credentials
      */
-    getOpenAICredentials(): Promise<{
-        apiKey: string;
-    }>;
+    clearCredentials(): void;
     /**
-     * Get Anthropic credentials
+     * Get authentication headers for API requests
      */
-    getAnthropicCredentials(): Promise<{
-        apiKey: string;
-    }>;
-    /**
-     * Get OpenRouter credentials
-     */
-    getOpenRouterCredentials(): Promise<{
-        apiKey: string;
-    }>;
-    /**
-     * Get GitHub credentials
-     */
-    getGitHubCredentials(): Promise<{
-        token: string;
-    }>;
-    /**
-     * Clear credentials cache (force refresh)
-     */
-    clearCache(): void;
+    getAuthHeaders(): Record<string, string>;
     /**
      * Test N8N connection
      */
     testConnection(): Promise<boolean>;
+    /**
+     * Get N8N credentials (alias for getCredentials)
+     */
+    getN8NCredentials(): N8NCredentials;
+    /**
+     * Get Supabase credentials (placeholder - this might need separate implementation)
+     */
+    getSupabaseCredentials(): any;
 }
-export {};
+export default N8NCredentialsManager;
 //# sourceMappingURL=n8n-credentials-manager.d.ts.map

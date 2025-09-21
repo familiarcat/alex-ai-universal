@@ -1,170 +1,66 @@
 /**
- * N8N Credentials Manager - Universal Credential Management
- * 
- * This service manages all credentials through n8n.pbradygeorgen.com
- * as the single source of truth, eliminating the need for local environment variables.
+ * N8N Credentials Manager
+ * Handles N8N workflow credentials and authentication
  */
 
-import axios from 'axios'
-
-// N8N Federation Crew credentials endpoint
-const N8N_BASE_URL = 'https://n8n.pbradygeorgen.com'
-const N8N_CREDENTIALS_ENDPOINT = '/webhook/federation-mission'
-
-// Credentials cache
-interface CredentialsCache {
-  supabase: {
-    url: string
-    anonKey: string
-    serviceKey?: string
-  }
-  n8n: {
-    apiKey: string
-    baseUrl: string
-  }
-  openai: {
-    apiKey: string
-  }
-  anthropic: {
-    apiKey: string
-  }
-  openrouter: {
-    apiKey: string
-  }
-  github: {
-    token: string
-  }
-  timestamp: number
+export interface N8NCredentials {
+  apiKey?: string;
+  baseUrl?: string;
+  username?: string;
+  password?: string;
 }
 
-let credentialsCache: CredentialsCache | null = null
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
-
 export class N8NCredentialsManager {
-  /**
-   * Get all credentials from N8N Federation Crew
-   */
-  async getCredentials(): Promise<CredentialsCache> {
-    // Return cached credentials if still valid
-    if (credentialsCache && Date.now() - credentialsCache.timestamp < CACHE_DURATION) {
-      return credentialsCache
-    }
+  private credentials: N8NCredentials = {};
 
-    try {
-      console.log('🔐 Fetching credentials from N8N Federation Crew...')
-      
-      const response = await axios.post(
-        `${N8N_BASE_URL}${N8N_CREDENTIALS_ENDPOINT}`,
-        {
-          action: 'get_credentials',
-          timestamp: new Date().toISOString(),
-          source: 'alex_ai_core'
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          timeout: 10000
-        }
-      )
-
-      if (response.data && response.data.credentials) {
-        credentialsCache = {
-          ...response.data.credentials,
-          timestamp: Date.now()
-        }
-        
-        console.log('✅ Credentials loaded from N8N Federation Crew')
-        return credentialsCache!
-      } else {
-        throw new Error('Invalid credentials response from N8N')
-      }
-
-    } catch (error) {
-      console.warn('⚠️ Failed to fetch credentials from N8N, using fallback:', error)
-      
-      // Fallback to default credentials for development
-      credentialsCache = {
-        supabase: {
-          url: 'https://rpkkkbufdwxmjaerbhbn.supabase.co',
-          anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwa2trYnVmZHd4bWphZXJiYm4iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczNjI0NzQ0MCwiZXhwIjoyMDUxODIzNDQwfQ.placeholder'
-        },
-        n8n: {
-          apiKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder',
-          baseUrl: N8N_BASE_URL
-        },
-        openai: {
-          apiKey: 'sk-placeholder'
-        },
-        anthropic: {
-          apiKey: 'sk-ant-placeholder'
-        },
-        openrouter: {
-          apiKey: 'sk-or-placeholder'
-        },
-        github: {
-          token: 'ghp-placeholder'
-        },
-        timestamp: Date.now()
-      }
-      
-      return credentialsCache
+  constructor(credentials?: N8NCredentials) {
+    if (credentials) {
+      this.credentials = { ...credentials };
     }
   }
 
   /**
-   * Get Supabase credentials
+   * Set credentials for N8N connection
    */
-  async getSupabaseCredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.supabase
+  setCredentials(credentials: N8NCredentials): void {
+    this.credentials = { ...credentials };
   }
 
   /**
-   * Get N8N credentials
+   * Get current credentials
    */
-  async getN8NCredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.n8n
+  getCredentials(): N8NCredentials {
+    return { ...this.credentials };
   }
 
   /**
-   * Get OpenAI credentials
+   * Check if credentials are valid
    */
-  async getOpenAICredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.openai
+  hasValidCredentials(): boolean {
+    return !!(this.credentials.apiKey || (this.credentials.username && this.credentials.password));
   }
 
   /**
-   * Get Anthropic credentials
+   * Clear all credentials
    */
-  async getAnthropicCredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.anthropic
+  clearCredentials(): void {
+    this.credentials = {};
   }
 
   /**
-   * Get OpenRouter credentials
+   * Get authentication headers for API requests
    */
-  async getOpenRouterCredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.openrouter
-  }
-
-  /**
-   * Get GitHub credentials
-   */
-  async getGitHubCredentials() {
-    const credentials = await this.getCredentials()
-    return credentials.github
-  }
-
-  /**
-   * Clear credentials cache (force refresh)
-   */
-  clearCache() {
-    credentialsCache = null
+  getAuthHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {};
+    
+    if (this.credentials.apiKey) {
+      headers['Authorization'] = `Bearer ${this.credentials.apiKey}`;
+    } else if (this.credentials.username && this.credentials.password) {
+      const auth = Buffer.from(`${this.credentials.username}:${this.credentials.password}`).toString('base64');
+      headers['Authorization'] = `Basic ${auth}`;
+    }
+    
+    return headers;
   }
 
   /**
@@ -172,27 +68,35 @@ export class N8NCredentialsManager {
    */
   async testConnection(): Promise<boolean> {
     try {
-      const credentials = await this.getN8NCredentials()
-      
-      const response = await axios.post(
-        `${credentials.baseUrl}/webhook/federation-mission`,
-        {
-          action: 'test_connection',
-          timestamp: new Date().toISOString()
-        },
-        {
-          headers: {
-            'X-N8N-API-KEY': credentials.apiKey,
-            'Content-Type': 'application/json',
-          },
-          timeout: 5000
-        }
-      )
+      if (!this.hasValidCredentials()) {
+        return false;
+      }
 
-      return response.status === 200
+      const response = await fetch(`${this.credentials.baseUrl || 'http://localhost:5678'}/api/v1/workflows`, {
+        headers: this.getAuthHeaders()
+      });
+
+      return response.ok;
     } catch (error) {
-      console.error('N8N connection test failed:', error)
-      return false
+      console.error('N8N connection test failed:', error);
+      return false;
     }
   }
+
+  /**
+   * Get N8N credentials (alias for getCredentials)
+   */
+  getN8NCredentials(): N8NCredentials {
+    return this.getCredentials();
+  }
+
+  /**
+   * Get Supabase credentials (placeholder - this might need separate implementation)
+   */
+  getSupabaseCredentials(): any {
+    // This might need to be implemented separately or moved to a different manager
+    return {};
+  }
 }
+
+export default N8NCredentialsManager;

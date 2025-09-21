@@ -1,64 +1,43 @@
 "use strict";
 /**
- * Universal Alex AI Package
- *
- * Provides universal Alex AI functionality across all major IDEs and editors.
- * This package serves as the core integration layer for multi-IDE support.
+ * Universal Alex AI Package - Ultra Minimal Working Version
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_IDE_SETTINGS = exports.DEFAULT_CONFIG = exports.UniversalSettingsManager = exports.UniversalCodeActions = exports.UniversalChatInterface = exports.VimAdapter = exports.SublimeAdapter = exports.IntelliJAdapter = exports.CursorAdapter = exports.VSCodeAdapter = exports.UniversalAlexAIManager = void 0;
-exports.createUniversalAlexAI = createUniversalAlexAI;
-// Core Universal Alex AI
-var universal_alex_ai_1 = require("./core/universal-alex-ai");
-Object.defineProperty(exports, "UniversalAlexAIManager", { enumerable: true, get: function () { return universal_alex_ai_1.UniversalAlexAIManager; } });
-// Adapters (to be implemented)
-var vscode_adapter_1 = require("./adapters/vscode-adapter");
-Object.defineProperty(exports, "VSCodeAdapter", { enumerable: true, get: function () { return vscode_adapter_1.VSCodeAdapter; } });
-var cursor_adapter_1 = require("./adapters/cursor-adapter");
-Object.defineProperty(exports, "CursorAdapter", { enumerable: true, get: function () { return cursor_adapter_1.CursorAdapter; } });
-var intellij_adapter_1 = require("./adapters/intellij-adapter");
-Object.defineProperty(exports, "IntelliJAdapter", { enumerable: true, get: function () { return intellij_adapter_1.IntelliJAdapter; } });
-var sublime_adapter_1 = require("./adapters/sublime-adapter");
-Object.defineProperty(exports, "SublimeAdapter", { enumerable: true, get: function () { return sublime_adapter_1.SublimeAdapter; } });
-var vim_adapter_1 = require("./adapters/vim-adapter");
-Object.defineProperty(exports, "VimAdapter", { enumerable: true, get: function () { return vim_adapter_1.VimAdapter; } });
-// UI Components (to be implemented)
-var chat_interface_1 = require("./ui/chat-interface");
-Object.defineProperty(exports, "UniversalChatInterface", { enumerable: true, get: function () { return chat_interface_1.UniversalChatInterface; } });
-var code_actions_1 = require("./ui/code-actions");
-Object.defineProperty(exports, "UniversalCodeActions", { enumerable: true, get: function () { return code_actions_1.UniversalCodeActions; } });
-var settings_manager_1 = require("./ui/settings-manager");
-Object.defineProperty(exports, "UniversalSettingsManager", { enumerable: true, get: function () { return settings_manager_1.UniversalSettingsManager; } });
-// Utility functions
-var universal_alex_ai_2 = require("./core/universal-alex-ai");
-Object.defineProperty(exports, "createUniversalAlexAI", { enumerable: true, get: function () { return universal_alex_ai_2.createUniversalAlexAI; } });
-/**
- * Create a new Universal Alex AI instance
- */
-function createUniversalAlexAI() {
-    return new UniversalAlexAIManager();
+exports.CrewConsciousnessCLI = exports.CrewConsciousnessWorkflow = exports.ScenarioAnalysisCLI = exports.ComprehensiveProjectScenarioAnalyzer = exports.N8NWorkflowCLI = exports.CrewWorkflowUpdater = exports.CrewSelfDiscoveryCLI = exports.CrewSelfDiscoverySystem = exports.MinimalAlexAI = void 0;
+class MinimalAlexAI {
+    constructor() {
+        console.log('Alex AI Core initialized');
+    }
+    async initialize() {
+        console.log('Alex AI Core ready');
+    }
+    getStatus() {
+        return {
+            connected: true,
+            ready: true,
+            version: '1.0.0'
+        };
+    }
 }
-/**
- * Default configuration for Universal Alex AI
- */
-exports.DEFAULT_CONFIG = {
-    environment: 'development',
-    enableN8NIntegration: true,
-    enableStealthScraping: true,
-    enableCrewManagement: true,
-    enableTesting: true,
-    logLevel: 'info'
-};
-/**
- * Default IDE settings
- */
-exports.DEFAULT_IDE_SETTINGS = {
-    apiUrl: 'http://localhost:3000',
-    apiKey: '',
-    defaultCrewMember: 'Commander Data',
-    enableContextAwareness: true,
-    maxContextLength: 4000,
-    theme: 'auto',
-    language: 'en'
-};
+exports.MinimalAlexAI = MinimalAlexAI;
+// Crew Self-Discovery System
+var crew_self_discovery_1 = require("./crew-self-discovery");
+Object.defineProperty(exports, "CrewSelfDiscoverySystem", { enumerable: true, get: function () { return crew_self_discovery_1.CrewSelfDiscoverySystem; } });
+var crew_self_discovery_cli_1 = require("./crew-self-discovery-cli");
+Object.defineProperty(exports, "CrewSelfDiscoveryCLI", { enumerable: true, get: function () { return crew_self_discovery_cli_1.CrewSelfDiscoveryCLI; } });
+// N8N Workflow Integration
+var crew_workflow_updater_1 = require("./n8n/crew-workflow-updater");
+Object.defineProperty(exports, "CrewWorkflowUpdater", { enumerable: true, get: function () { return crew_workflow_updater_1.CrewWorkflowUpdater; } });
+var n8n_workflow_cli_1 = require("./n8n/n8n-workflow-cli");
+Object.defineProperty(exports, "N8NWorkflowCLI", { enumerable: true, get: function () { return n8n_workflow_cli_1.N8NWorkflowCLI; } });
+// Scenario Analysis
+var comprehensive_project_scenario_1 = require("./scenario-analysis/comprehensive-project-scenario");
+Object.defineProperty(exports, "ComprehensiveProjectScenarioAnalyzer", { enumerable: true, get: function () { return comprehensive_project_scenario_1.ComprehensiveProjectScenarioAnalyzer; } });
+var scenario_analysis_cli_1 = require("./scenario-analysis/scenario-analysis-cli");
+Object.defineProperty(exports, "ScenarioAnalysisCLI", { enumerable: true, get: function () { return scenario_analysis_cli_1.ScenarioAnalysisCLI; } });
+// Crew Consciousness System
+var crew_consciousness_workflow_1 = require("./crew-consciousness/crew-consciousness-workflow");
+Object.defineProperty(exports, "CrewConsciousnessWorkflow", { enumerable: true, get: function () { return crew_consciousness_workflow_1.CrewConsciousnessWorkflow; } });
+var crew_consciousness_cli_1 = require("./crew-consciousness/crew-consciousness-cli");
+Object.defineProperty(exports, "CrewConsciousnessCLI", { enumerable: true, get: function () { return crew_consciousness_cli_1.CrewConsciousnessCLI; } });
 //# sourceMappingURL=index.js.map

@@ -54,3 +54,5 @@ else
     echo "❌ Installation may have issues"
     echo "Try running: npm run build"
 fi
+
+

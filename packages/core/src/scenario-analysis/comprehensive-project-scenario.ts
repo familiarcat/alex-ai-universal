@@ -505,59 +505,22 @@ export class ComprehensiveProjectScenarioAnalyzer {
   }
 
   /**
-   * Conduct Observation Lounge session
+   * Conduct Observation Lounge session in cinematic screenplay format
    */
   async conductObservationLoungeSession(): Promise<void> {
-    console.log('\n🖖 OBSERVATION LOUNGE - CREW LEARNING DEBRIEF');
-    console.log('=' .repeat(60));
-    console.log('Captain Picard: "Let us gather in the Observation Lounge to discuss what we have learned."');
-    console.log('All crew members: "Aye, Captain!"\n');
+    const { ObservationLoungeScreenplay } = await import('./observation-lounge-screenplay');
+    const screenplay = new ObservationLoungeScreenplay();
+    
+    // Generate screenplay opening
+    console.log(screenplay.generateScreenplayOpening());
 
+    // Generate character segments
     for (const [crewMember, learning] of this.scenario.crewLearning) {
-      console.log(`\n${'='.repeat(60)}`);
-      console.log(`🖖 ${crewMember.toUpperCase()} - LEARNING DEBRIEF`);
-      console.log(`${'='.repeat(60)}`);
-      
-      console.log(`\nProject Insights:`);
-      learning.projectInsights.forEach((insight, index) => {
-        console.log(`  ${index + 1}. ${insight}`);
-      });
-      
-      console.log(`\nTechnical Learnings:`);
-      learning.technicalLearnings.forEach((learning, index) => {
-        console.log(`  ${index + 1}. ${learning}`);
-      });
-      
-      console.log(`\nClient Understanding:`);
-      learning.clientUnderstanding.forEach((understanding, index) => {
-        console.log(`  ${index + 1}. ${understanding}`);
-      });
-      
-      console.log(`\nProject Type Knowledge:`);
-      learning.projectTypeKnowledge.forEach((knowledge, index) => {
-        console.log(`  ${index + 1}. ${knowledge}`);
-      });
-      
-      console.log(`\nCollaboration Insights:`);
-      learning.collaborationInsights.forEach((insight, index) => {
-        console.log(`  ${index + 1}. ${insight}`);
-      });
-      
-      console.log(`\nIntrospection:`);
-      console.log(`  ${learning.introspection}`);
-      
-      console.log(`\nRAG Verification Queries:`);
-      learning.verificationQueries.forEach((query, index) => {
-        console.log(`  ${index + 1}. ${query}`);
-      });
-      
-      console.log(`\nRAG Memories Stored: ${learning.ragMemories.length}`);
+      console.log(screenplay.generateCharacterSegment(crewMember, learning));
     }
 
-    console.log(`\n${'='.repeat(60)}`);
-    console.log('🎯 OBSERVATION LOUNGE SESSION COMPLETE');
-    console.log(`${'='.repeat(60)}`);
-    console.log('Captain Picard: "Excellent work, crew. Our learnings have been documented and stored in our RAG system."');
-    console.log('All crew members: "Aye, Captain! Mission accomplished!"');
+    // Generate screenplay closing
+    console.log(screenplay.generateScreenplayClosing());
   }
 }
+
