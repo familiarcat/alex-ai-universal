@@ -34,6 +34,11 @@
 - [Enterprise Security System](#-enterprise-security-system)
 - [Security Audits & Compliance](#-security-audits--compliance)
 
+### **🛡️ Anti-Hallucination System**
+- [Hallucination Prevention](#-anti-hallucination-system)
+- [Hallucination Monitoring](#-hallucination-monitoring)
+- [Learning & Correction](#-learning--correction)
+
 ### **📊 Monitoring & Maintenance**
 - [Health Monitoring](#-health-monitoring)
 - [Performance Optimization](#-performance-optimization)
@@ -1620,6 +1625,344 @@ alexi security classify -h
 --validate, -v               Validate existing classifications
 --auto-classify, -a          Enable automatic classification
 --verbose, -verbose          Show detailed classification process
+```
+
+---
+
+## 🛡️ **ANTI-HALLUCINATION SYSTEM**
+
+### **Hallucination Prevention**
+
+#### **`alexi anti-hallucination enable`**
+**Purpose**: Enable the anti-hallucination system for crew-based hallucination prevention.
+
+**What it does**:
+- Activates multi-LLM optimization for each crew member
+- Enables universal crew activation for all prompts
+- Sets up hallucination detection and correction workflows
+- Integrates with RAG memory system for learning
+
+**When to use**:
+- **Production environments**: Ensure maximum reliability and accuracy
+- **Critical applications**: When hallucination prevention is essential
+- **Learning systems**: When you want crew members to learn from corrections
+- **Quality assurance**: For maintaining high response quality standards
+
+**Natural Language Examples**:
+```
+"Enable the anti-hallucination system for maximum reliability"
+"Activate crew-based hallucination prevention"
+"Set up multi-LLM validation for all responses"
+"Enable adaptive learning from hallucination corrections"
+```
+
+**CLI Examples**:
+```bash
+# Enable anti-hallucination system
+alexi anti-hallucination enable
+
+# Enable with specific configuration
+alexi anti-hallucination enable --threshold 0.3 --learning-enabled
+
+# Enable for specific crew members
+alexi anti-hallucination enable --crew "Commander Data,Captain Picard"
+```
+
+**Command Options**:
+```bash
+alexi anti-hallucination enable --help
+# or
+alexi anti-hallucination enable -h
+
+# Available options:
+--threshold <value>, -t <value>    Set hallucination detection threshold (0.0-1.0)
+--learning-enabled, -l            Enable adaptive learning from corrections
+--crew <members>, -c <members>    Enable for specific crew members (comma-separated)
+--llm-optimization, -o            Enable dynamic LLM optimization
+--consensus-validation, -v        Enable crew consensus validation
+--output <file>, -f <file>        Save configuration to file
+--verbose, -verbose               Show detailed activation process
+--dry-run, -d                     Show what would be enabled without enabling
+--force, -force                   Force enable even if already active
+```
+
+---
+
+#### **`alexi anti-hallucination test`**
+**Purpose**: Test the anti-hallucination system with sample prompts.
+
+**What it does**:
+- Sends test prompts through the anti-hallucination system
+- Analyzes crew responses and consensus validation
+- Detects and corrects any hallucinations found
+- Reports system performance and accuracy metrics
+
+**When to use**:
+- **System validation**: After enabling anti-hallucination system
+- **Performance testing**: Before deploying to production
+- **Quality assurance**: Regular testing of hallucination prevention
+- **Debugging**: When investigating hallucination detection issues
+
+**Natural Language Examples**:
+```
+"Test the anti-hallucination system with sample prompts"
+"Validate hallucination prevention with test scenarios"
+"Run hallucination detection tests"
+"Check if crew consensus validation is working properly"
+```
+
+**CLI Examples**:
+```bash
+# Basic anti-hallucination test
+alexi anti-hallucination test
+
+# Test with specific prompts
+alexi anti-hallucination test --prompts "test-prompts.json"
+
+# Test with detailed analysis
+alexi anti-hallucination test --detailed --include-corrections
+```
+
+**Command Options**:
+```bash
+alexi anti-hallucination test --help
+# or
+alexi anti-hallucination test -h
+
+# Available options:
+--prompts <file>, -p <file>       Use specific test prompts file
+--detailed, -d                    Show detailed test analysis
+--include-corrections, -c         Include hallucination corrections in output
+--scenarios <list>, -s <list>     Test specific scenarios: technical, creative, factual
+--crew <members>, -crew <members> Test specific crew members (comma-separated)
+--iterations <count>, -i <count>  Number of test iterations to run
+--output <file>, -o <file>        Save test results to file
+--format <type>, -fmt <type>      Output format: text, json, yaml, html
+--benchmark, -b                   Run benchmark performance tests
+--verbose, -v                     Show detailed test process
+```
+
+---
+
+### **Hallucination Monitoring**
+
+#### **`alexi hallucination-dashboard`**
+**Purpose**: Display real-time hallucination monitoring dashboard.
+
+**What it does**:
+- Shows current hallucination detection metrics
+- Displays crew member accuracy statistics
+- Reports LLM performance and optimization results
+- Provides learning effectiveness analytics
+
+**When to use**:
+- **System monitoring**: Regular monitoring of hallucination prevention
+- **Performance analysis**: Understanding system effectiveness
+- **Troubleshooting**: When investigating hallucination issues
+- **Reporting**: Generating hallucination prevention reports
+
+**Natural Language Examples**:
+```
+"Show me the hallucination monitoring dashboard"
+"Display current hallucination prevention metrics"
+"View crew member accuracy statistics"
+"Check LLM performance and optimization results"
+```
+
+**CLI Examples**:
+```bash
+# Basic dashboard
+alexi hallucination-dashboard
+
+# Dashboard with specific time range
+alexi hallucination-dashboard --time-range "last-week"
+
+# Dashboard with detailed metrics
+alexi hallucination-dashboard --detailed --include-trends
+```
+
+**Command Options**:
+```bash
+alexi hallucination-dashboard --help
+# or
+alexi hallucination-dashboard -h
+
+# Available options:
+--time-range <range>, -t <range>  Time range: last-hour, last-day, last-week, last-month
+--detailed, -d                    Show detailed metrics and analysis
+--include-trends, -tr             Include trend analysis and forecasting
+--crew <members>, -c <members>    Filter by specific crew members (comma-separated)
+--format <type>, -fmt <type>      Output format: text, json, html
+--refresh <seconds>, -r <seconds> Auto-refresh interval in seconds
+--output <file>, -o <file>        Save dashboard data to file
+--export, -e                      Export dashboard as report
+--verbose, -v                     Show detailed dashboard generation
+```
+
+---
+
+#### **`alexi hallucination-history`**
+**Purpose**: View hallucination detection and correction history.
+
+**What it does**:
+- Shows historical hallucination detection data
+- Displays correction attempts and success rates
+- Reports learning opportunities and outcomes
+- Provides crew member improvement analytics
+
+**When to use**:
+- **Historical analysis**: Understanding past hallucination patterns
+- **Performance review**: Assessing system improvement over time
+- **Learning analysis**: Reviewing crew member learning progress
+- **Audit purposes**: Compliance and quality assurance reviews
+
+**Natural Language Examples**:
+```
+"Show me the hallucination detection history"
+"Display past hallucination corrections and learning"
+"View crew member improvement over time"
+"Analyze historical hallucination patterns"
+```
+
+**CLI Examples**:
+```bash
+# Basic history view
+alexi hallucination-history
+
+# History for specific crew member
+alexi hallucination-history --crew-member "Commander Data"
+
+# History with detailed analysis
+alexi hallucination-history --detailed --include-learning
+```
+
+**Command Options**:
+```bash
+alexi hallucination-history --help
+# or
+alexi hallucination-history -h
+
+# Available options:
+--crew-member <member>, -c <member> Filter by specific crew member
+--time-range <range>, -t <range>     Time range: last-hour, last-day, last-week, last-month
+--detailed, -d                       Show detailed history analysis
+--include-learning, -l               Include learning opportunities and outcomes
+--format <type>, -fmt <type>         Output format: text, json, csv, html
+--export, -e                         Export history as report
+--filter <criteria>, -f <criteria>   Filter by criteria: corrected, uncorrected, high-deviation
+--output <file>, -o <file>           Save history to file
+--verbose, -v                        Show detailed history generation
+```
+
+---
+
+### **Learning & Correction**
+
+#### **`alexi hallucination-patterns`**
+**Purpose**: Analyze hallucination patterns and learning opportunities.
+
+**What it does**:
+- Identifies recurring hallucination patterns
+- Analyzes crew member learning effectiveness
+- Suggests optimization opportunities
+- Reports improvement recommendations
+
+**When to use**:
+- **Pattern analysis**: Understanding common hallucination types
+- **Optimization**: Improving system performance
+- **Learning assessment**: Evaluating crew member progress
+- **System improvement**: Identifying areas for enhancement
+
+**Natural Language Examples**:
+```
+"Analyze hallucination patterns and learning opportunities"
+"Identify recurring hallucination types"
+"Show me crew member learning effectiveness"
+"Find optimization opportunities for hallucination prevention"
+```
+
+**CLI Examples**:
+```bash
+# Basic pattern analysis
+alexi hallucination-patterns
+
+# Patterns for specific crew member
+alexi hallucination-patterns --crew-member "Captain Picard"
+
+# Patterns with recommendations
+alexi hallucination-patterns --include-recommendations --detailed
+```
+
+**Command Options**:
+```bash
+alexi hallucination-patterns --help
+# or
+alexi hallucination-patterns -h
+
+# Available options:
+--crew-member <member>, -c <member>     Analyze patterns for specific crew member
+--time-range <range>, -t <range>        Time range: last-hour, last-day, last-week, last-month
+--include-recommendations, -r            Include improvement recommendations
+--detailed, -d                           Show detailed pattern analysis
+--format <type>, -fmt <type>             Output format: text, json, yaml, html
+--threshold <value>, -th <value>         Minimum pattern frequency threshold
+--include-learning, -l                   Include learning effectiveness analysis
+--output <file>, -o <file>               Save pattern analysis to file
+--export, -e                             Export patterns as report
+--verbose, -v                            Show detailed analysis process
+```
+
+---
+
+#### **`alexi hallucination-correct`**
+**Purpose**: Manually correct hallucination and update learning system.
+
+**What it does**:
+- Manually identifies and corrects hallucinations
+- Updates crew member learning with corrections
+- Stores correction in RAG memory system
+- Generates learning opportunities for future improvement
+
+**When to use**:
+- **Manual correction**: When automatic detection misses hallucinations
+- **Learning enhancement**: Adding manual corrections to learning system
+- **Quality improvement**: Ensuring high-quality responses
+- **Training**: Teaching the system new correction patterns
+
+**Natural Language Examples**:
+```
+"Correct this hallucination and update the learning system"
+"Manually identify and fix this incorrect response"
+"Add this correction to crew member learning"
+"Store this hallucination correction for future reference"
+```
+
+**CLI Examples**:
+```bash
+# Correct specific hallucination
+alexi hallucination-correct --crew-member "Commander Data" --response "incorrect response"
+
+# Correct with detailed context
+alexi hallucination-correct --context "technical-analysis" --corrected "corrected response"
+```
+
+**Command Options**:
+```bash
+alexi hallucination-correct --help
+# or
+alexi hallucination-correct -h
+
+# Available options:
+--crew-member <member>, -c <member>     Specify crew member to correct
+--response <text>, -r <text>            Original incorrect response
+--corrected <text>, -corr <text>        Corrected response
+--context <context>, -ctx <context>     Context for the correction
+--learning-type <type>, -l <type>       Type of learning: factual, logical, contextual
+--store-learning, -s                    Store correction in learning system
+--update-rag, -u                        Update RAG memory with correction
+--output <file>, -o <file>              Save correction details to file
+--verbose, -v                           Show detailed correction process
+--force, -f                             Force correction even if not detected
 ```
 
 ---
