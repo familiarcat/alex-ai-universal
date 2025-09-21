@@ -74,6 +74,43 @@ export type {
   HallucinationLearning
 } from './anti-hallucination';
 
+// Debugging System
+export { ImageAnalyzer } from './image-analysis/image-analyzer';
+export { CodeAnalyzer } from './code-analysis/code-analyzer';
+export { DebuggingOrchestrator } from './crew-orchestration/debugging-orchestrator';
+export { DebuggingObservationLounge } from './observation-lounge/debugging-observation-lounge';
+export { DebuggingCoordinator } from './debugging/debugging-coordinator';
+
+export type {
+  UIElement,
+  ButtonAnalysis,
+  ImageAnalysisResult
+} from './image-analysis/image-analyzer';
+
+export type {
+  CodeFunction,
+  ClickHandlerMapping,
+  CodeAnalysisResult
+} from './code-analysis/code-analyzer';
+
+export type {
+  CrewMemberResponse,
+  DebuggingSession
+} from './crew-orchestration/debugging-orchestrator';
+
+export type {
+  ObservationLoungeSession,
+  CrewDiscussion,
+  HallucinationAnalysis as DebuggingHallucinationAnalysis,
+  ConsensusBuilding,
+  MemoryStorageDecision
+} from './observation-lounge/debugging-observation-lounge';
+
+export type {
+  DebuggingRequest,
+  DebuggingResponse
+} from './debugging/debugging-coordinator';
+
 
 
 

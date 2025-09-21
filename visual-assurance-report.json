@@ -1,0 +1,708 @@
+{
+  "timestamp": "2025-09-21T05:41:56.670Z",
+  "summary": {
+    "totalWorkflows": 28,
+    "activeWorkflows": 27,
+    "workflowsWithIssues": 1,
+    "interactiveWorkflows": 27
+  },
+  "categoryStats": {
+    "ANTI-HALLUCINATION": {
+      "total": 1,
+      "active": 1,
+      "issues": 0,
+      "interactive": 1
+    },
+    "CREW": {
+      "total": 12,
+      "active": 12,
+      "issues": 0,
+      "interactive": 12
+    },
+    "PROJECT": {
+      "total": 6,
+      "active": 6,
+      "issues": 0,
+      "interactive": 6
+    },
+    "SYSTEM": {
+      "total": 4,
+      "active": 4,
+      "issues": 0,
+      "interactive": 4
+    },
+    "UTILITY": {
+      "total": 3,
+      "active": 2,
+      "issues": 1,
+      "interactive": 2
+    },
+    "COORDINATION": {
+      "total": 2,
+      "active": 2,
+      "issues": 0,
+      "interactive": 2
+    }
+  },
+  "workflowStatus": [
+    {
+      "workflowId": "2yIY7drpyIstYXqk",
+      "workflowName": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "category": "ANTI-HALLUCINATION",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 7,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "36KPle5mPiMaazG6",
+      "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 12,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "58B6WvShXJ7bj8Ni",
+      "workflowName": "PROJECT - Alex AI - Job Opportunities - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "AeoHsSbJAXbWSs8Y",
+      "workflowName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "SYSTEM",
+      "active": true,
+      "nodeCount": 4,
+      "connectionCount": 2,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "BdNHOluRYUw2JxGW",
+      "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "C5Kq9nZTnZEc0EWo",
+      "workflowName": "UTILITY - AI Controller - OpenRouter - Production",
+      "category": "UTILITY",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "FEdNQJgLBjJVh3oP",
+      "workflowName": "PROJECT - Alex AI - Crew Integration - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 6,
+      "connectionCount": 5,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "GhSB8EpZWXLU78LM",
+      "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "IKckCG6TsUvrZd8P",
+      "workflowName": "UTILITY - Crew Management - OpenRouter - Production",
+      "category": "UTILITY",
+      "active": true,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "Imn7p6pVgi6SRvnF",
+      "workflowName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 10,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "KOK1vhGdHKd0c6Em",
+      "workflowName": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "category": "UTILITY",
+      "active": false,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [
+        "Workflow is inactive"
+      ],
+      "recommendations": [
+        "Activate workflow for execution"
+      ]
+    },
+    {
+      "workflowId": "L6K4bzSKlGC36ABL",
+      "workflowName": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 7,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "QJnN7ks2KsQTENDc",
+      "workflowName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "RY8pm6gUFtkTKcpg",
+      "workflowName": "PROJECT - Alex AI - Resume Analysis - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "SXAMupVWdOxZybF6",
+      "workflowName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 12,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "VQDH8tqWvVmigWd1",
+      "workflowName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "SYSTEM",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 5,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "XJeicUzVaGNb8gsB",
+      "workflowName": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "category": "COORDINATION",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "Xbdaf4VdEA4mEuL2",
+      "workflowName": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 6,
+      "connectionCount": 5,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "YIm1VzYzVdphsjb9",
+      "workflowName": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "category": "COORDINATION",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 13,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "aNfs26Wlau80ufmh",
+      "workflowName": "SYSTEM - Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "active": true,
+      "nodeCount": 4,
+      "connectionCount": 2,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "e0UEwyVcXJqeePdj",
+      "workflowName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "eviPmIvTnoJcnaas",
+      "workflowName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "active": true,
+      "nodeCount": 15,
+      "connectionCount": 14,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "gIwrQHHArgrVARjL",
+      "workflowName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 7,
+      "connectionCount": 6,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "geKQAdYcmHJLLTYq",
+      "workflowName": "Anti-Hallucination Crew Workflow (HTTP)",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 7,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "oQTqPZBq8R7Zuza9",
+      "workflowName": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 4,
+      "connectionCount": 3,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "oaSjbIhny5J1sa7E",
+      "workflowName": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "category": "CREW",
+      "active": true,
+      "nodeCount": 8,
+      "connectionCount": 7,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "p0L9kldRFQmexqBx",
+      "workflowName": "PROJECT - Alex AI - MCP Integration - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [],
+      "recommendations": []
+    },
+    {
+      "workflowId": "rLN1eArIA6t3tEwZ",
+      "workflowName": "PROJECT - Alex AI - Contact Management - Production",
+      "category": "PROJECT",
+      "active": true,
+      "nodeCount": 2,
+      "connectionCount": 1,
+      "visualIssues": [],
+      "recommendations": []
+    }
+  ],
+  "interactionResults": [
+    {
+      "workflowId": "2yIY7drpyIstYXqk",
+      "workflowName": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "category": "ANTI-HALLUCINATION",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Function nodes: 5 found",
+        "HTTP request nodes: 1 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook anti-hallucination-http: Status 404"
+      ]
+    },
+    {
+      "workflowId": "36KPle5mPiMaazG6",
+      "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-lieutenant-uhura: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "58B6WvShXJ7bj8Ni",
+      "workflowName": "PROJECT - Alex AI - Job Opportunities - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-job-opportunities: Status 404"
+      ]
+    },
+    {
+      "workflowId": "AeoHsSbJAXbWSs8Y",
+      "workflowName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "SYSTEM",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 2 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook 082503f8-8939-40c4-9620-81e3eff05d82: Status 404"
+      ]
+    },
+    {
+      "workflowId": "BdNHOluRYUw2JxGW",
+      "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-captain-jean-luc-picard: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "C5Kq9nZTnZEc0EWo",
+      "workflowName": "UTILITY - AI Controller - OpenRouter - Production",
+      "category": "UTILITY",
+      "interactive": true,
+      "testResults": [
+        "Webhook enhanced-unified-ai: Accessible",
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "FEdNQJgLBjJVh3oP",
+      "workflowName": "PROJECT - Alex AI - Crew Integration - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 3 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-unified-crew: Status 404"
+      ]
+    },
+    {
+      "workflowId": "GhSB8EpZWXLU78LM",
+      "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-lieutenant-worf: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "IKckCG6TsUvrZd8P",
+      "workflowName": "UTILITY - Crew Management - OpenRouter - Production",
+      "category": "UTILITY",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "Imn7p6pVgi6SRvnF",
+      "workflowName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook crew-commander-william-riker: Status 500"
+      ]
+    },
+    {
+      "workflowId": "KOK1vhGdHKd0c6Em",
+      "workflowName": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "category": "UTILITY",
+      "interactive": false,
+      "testResults": [
+        "HTTP request nodes: 1 found"
+      ],
+      "issues": [
+        "Workflow activation failed: 400"
+      ]
+    },
+    {
+      "workflowId": "L6K4bzSKlGC36ABL",
+      "workflowName": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-quark-optimized: Accessible",
+        "Workflow activation: Already active",
+        "Function nodes: 2 found",
+        "HTTP request nodes: 4 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "QJnN7ks2KsQTENDc",
+      "workflowName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-counselor-deanna-troi: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "RY8pm6gUFtkTKcpg",
+      "workflowName": "PROJECT - Alex AI - Resume Analysis - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-resume-analysis: Status 404"
+      ]
+    },
+    {
+      "workflowId": "SXAMupVWdOxZybF6",
+      "workflowName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-dr-beverly-crusher: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "VQDH8tqWvVmigWd1",
+      "workflowName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "SYSTEM",
+      "interactive": true,
+      "testResults": [
+        "Webhook federation-directive: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "XJeicUzVaGNb8gsB",
+      "workflowName": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "category": "COORDINATION",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Function nodes: 2 found",
+        "HTTP request nodes: 3 found"
+      ],
+      "issues": [
+        "Webhook llm-collaboration: Status 404"
+      ]
+    },
+    {
+      "workflowId": "Xbdaf4VdEA4mEuL2",
+      "workflowName": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 4 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-mcp-enhanced: Status 404"
+      ]
+    },
+    {
+      "workflowId": "YIm1VzYzVdphsjb9",
+      "workflowName": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "category": "COORDINATION",
+      "interactive": true,
+      "testResults": [
+        "Webhook observation-lounge: Accessible",
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "aNfs26Wlau80ufmh",
+      "workflowName": "SYSTEM - Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 2 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook 0283b7ab-c44c-47c2-925a-513054e1105f: Status 404"
+      ]
+    },
+    {
+      "workflowId": "e0UEwyVcXJqeePdj",
+      "workflowName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-lieutenant-commander-geordi-la-forge: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "eviPmIvTnoJcnaas",
+      "workflowName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "interactive": true,
+      "testResults": [
+        "Webhook federation-mission: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 12 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "gIwrQHHArgrVARjL",
+      "workflowName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Webhook crew-commander-data: Accessible",
+        "Workflow activation: Already active",
+        "HTTP request nodes: 5 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": []
+    },
+    {
+      "workflowId": "geKQAdYcmHJLLTYq",
+      "workflowName": "Anti-Hallucination Crew Workflow (HTTP)",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Function nodes: 5 found",
+        "HTTP request nodes: 1 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook anti-hallucination-http: Status 404"
+      ]
+    },
+    {
+      "workflowId": "oQTqPZBq8R7Zuza9",
+      "workflowName": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "HTTP request nodes: 1 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-job-opportunities: Status 404"
+      ]
+    },
+    {
+      "workflowId": "oaSjbIhny5J1sa7E",
+      "workflowName": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "category": "CREW",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Function nodes: 5 found",
+        "HTTP request nodes: 1 found",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook anti-hallucination: Status 404"
+      ]
+    },
+    {
+      "workflowId": "p0L9kldRFQmexqBx",
+      "workflowName": "PROJECT - Alex AI - MCP Integration - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-mcp-request: Status 404"
+      ]
+    },
+    {
+      "workflowId": "rLN1eArIA6t3tEwZ",
+      "workflowName": "PROJECT - Alex AI - Contact Management - Production",
+      "category": "PROJECT",
+      "interactive": true,
+      "testResults": [
+        "Workflow activation: Already active",
+        "Response nodes: 1 found"
+      ],
+      "issues": [
+        "Webhook alex-ai-contacts: Status 404"
+      ]
+    }
+  ]
+}

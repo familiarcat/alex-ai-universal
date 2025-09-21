@@ -1,5 +1,10 @@
 {
+  "createdAt": "2025-08-27T04:28:32.255Z",
+  "updatedAt": "2025-09-21T05:51:15.455Z",
+  "id": "L6K4bzSKlGC36ABL",
   "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+  "active": true,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -12,7 +17,10 @@
       "name": "Quark Directive",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [240, 304]
+      "position": [
+        240,
+        304
+      ]
     },
     {
       "parameters": {
@@ -22,7 +30,10 @@
       "name": "Business Context Analysis",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [464, 304]
+      "position": [
+        464,
+        304
+      ]
     },
     {
       "parameters": {
@@ -34,7 +45,10 @@
       "name": "Quark Memory Retrieval",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [464, 112]
+      "position": [
+        464,
+        112
+      ]
     },
     {
       "parameters": {
@@ -44,7 +58,10 @@
       "name": "LLM Optimization for Quark",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [688, 304]
+      "position": [
+        688,
+        304
+      ]
     },
     {
       "parameters": {
@@ -90,7 +107,10 @@
       "name": "Quark AI Agent (OpenRouter Optimized)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [912, 304]
+      "position": [
+        912,
+        304
+      ]
     },
     {
       "parameters": {
@@ -144,7 +164,10 @@
       "name": "Quark Memory Storage (Optimized)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [912, 112]
+      "position": [
+        912,
+        112
+      ]
     },
     {
       "parameters": {
@@ -190,7 +213,10 @@
       "name": "Observation Lounge - Quark Summary",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [1136, 304]
+      "position": [
+        1136,
+        304
+      ]
     },
     {
       "parameters": {
@@ -202,7 +228,10 @@
       "name": "Quark Response (Optimized)",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1360, 304]
+      "position": [
+        1360,
+        304
+      ]
     }
   ],
   "connections": {
@@ -294,22 +323,22 @@
       ]
     }
   },
-  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "tags": [
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5cb645b4-f082-4250-9475-017f42ad08fe",
+  "triggerCount": 1,
+  "shared": [
     {
-      "createdAt": "2025-01-18T00:00:00.000Z",
-      "updatedAt": "2025-01-18T00:00:00.000Z",
-      "id": "crew-member",
-      "name": "crew-member"
-    },
-    {
-      "createdAt": "2025-01-18T00:00:00.000Z",
-      "updatedAt": "2025-01-18T00:00:00.000Z",
-      "id": "openrouter-optimized",
-      "name": "openrouter-optimized"
+      "createdAt": "2025-08-27T04:28:32.258Z",
+      "updatedAt": "2025-08-27T04:28:32.258Z",
+      "role": "workflow:owner",
+      "workflowId": "L6K4bzSKlGC36ABL",
+      "projectId": "4Pe2tfKPH8e3rX41"
     }
-  ]
+  ],
+  "tags": []
 }

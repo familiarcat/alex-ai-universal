@@ -6,7 +6,7 @@
  */
 
 import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt'; // Optional dependency
 import { EventEmitter } from 'events';
 
 export enum DataClassification {

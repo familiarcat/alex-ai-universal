@@ -1,0 +1,252 @@
+{
+  "createdAt": "2025-09-21T03:21:58.162Z",
+  "updatedAt": "2025-09-21T05:16:04.793Z",
+  "id": "2yIY7drpyIstYXqk",
+  "name": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "anti-hallucination-http",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "prompt-interception",
+      "name": "Prompt Interception",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Analyze prompt context and prepare for crew activation\nconst prompt = $input.first().json.prompt;\nconst timestamp = new Date().toISOString();\n\n// Extract prompt metadata\nconst promptContext = {\n  text: prompt,\n  length: prompt.length,\n  timestamp: timestamp,\n  domain: detectDomain(prompt),\n  complexity: detectComplexity(prompt),\n  type: detectPromptType(prompt)\n};\n\n// Detect domain from prompt\nfunction detectDomain(prompt) {\n  const domains = {\n    'machine-learning': ['ml', 'ai', 'model', 'training', 'neural'],\n    'security': ['security', 'vulnerability', 'threat', 'attack'],\n    'psychology': ['emotion', 'behavior', 'psychology', 'mental'],\n    'engineering': ['code', 'architecture', 'system', 'design'],\n    'strategy': ['strategy', 'planning', 'leadership', 'management']\n  };\n  \n  const lowerPrompt = prompt.toLowerCase();\n  for (const [domain, keywords] of Object.entries(domains)) {\n    if (keywords.some(keyword => lowerPrompt.includes(keyword))) {\n      return domain;\n    }\n  }\n  return 'general';\n}\n\n// Detect complexity level\nfunction detectComplexity(prompt) {\n  const highComplexityKeywords = ['complex', 'advanced', 'sophisticated', 'comprehensive'];\n  const mediumComplexityKeywords = ['explain', 'describe', 'analyze', 'compare'];\n  \n  const lowerPrompt = prompt.toLowerCase();\n  if (highComplexityKeywords.some(keyword => lowerPrompt.includes(keyword))) {\n    return 'high';\n  } else if (mediumComplexityKeywords.some(keyword => lowerPrompt.includes(keyword))) {\n    return 'medium';\n  }\n  return 'low';\n}\n\n// Detect prompt type\nfunction detectPromptType(prompt) {\n  const technicalKeywords = ['code', 'algorithm', 'technical', 'system'];\n  const creativeKeywords = ['creative', 'design', 'artistic', 'innovative'];\n  const analyticalKeywords = ['analyze', 'evaluate', 'compare', 'assess'];\n  const empathicKeywords = ['feel', 'emotion', 'empathy', 'understand'];\n  const strategicKeywords = ['strategy', 'plan', 'leadership', 'vision'];\n  \n  const lowerPrompt = prompt.toLowerCase();\n  if (technicalKeywords.some(keyword => lowerPrompt.includes(keyword))) return 'technical';\n  if (creativeKeywords.some(keyword => lowerPrompt.includes(keyword))) return 'creative';\n  if (analyticalKeywords.some(keyword => lowerPrompt.includes(keyword))) return 'analytical';\n  if (empathicKeywords.some(keyword => lowerPrompt.includes(keyword))) return 'empathic';\n  if (strategicKeywords.some(keyword => lowerPrompt.includes(keyword))) return 'strategic';\n  return 'analytical';\n}\n\nreturn {\n  promptContext,\n  originalPrompt: prompt,\n  processingId: `ah_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`\n};"
+      },
+      "id": "prompt-analysis",
+      "name": "Prompt Analysis",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Split prompt context for crew member processing\nconst promptContext = $input.first().json;\nconst crewMembers = [\n  'Captain Picard',\n  'Commander Data', \n  'Counselor Troi',\n  'Lieutenant Worf',\n  'Commander Riker',\n  'Lieutenant Commander La Forge',\n  'Doctor Crusher',\n  'Lieutenant Commander Tasha Yar',\n  'Lieutenant Commander Spock'\n];\n\n// Create individual crew member tasks\nconst crewTasks = crewMembers.map(crewMember => ({\n  crewMember,\n  promptContext: promptContext.promptContext,\n  originalPrompt: promptContext.originalPrompt,\n  processingId: promptContext.processingId,\n  timestamp: new Date().toISOString()\n}));\n\nreturn crewTasks;"
+      },
+      "id": "crew-splitter",
+      "name": "Crew Splitter",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Optimize LLM selection for crew member\nconst crewTask = $input.first().json;\nconst { crewMember, promptContext } = crewTask;\n\n// Crew member expertise mapping\nconst crewExpertise = {\n  'Captain Picard': ['leadership', 'strategy', 'diplomacy', 'ethics'],\n  'Commander Data': ['technical-analysis', 'logic', 'computation', 'science'],\n  'Counselor Troi': ['empathy', 'psychology', 'counseling', 'emotions'],\n  'Lieutenant Worf': ['security', 'tactics', 'combat', 'honor'],\n  'Commander Riker': ['leadership', 'tactics', 'diplomacy', 'command'],\n  'Lieutenant Commander La Forge': ['engineering', 'technology', 'innovation'],\n  'Doctor Crusher': ['medical', 'healing', 'science', 'research'],\n  'Lieutenant Commander Tasha Yar': ['security', 'tactics', 'survival'],\n  'Lieutenant Commander Spock': ['logic', 'science', 'analysis']\n};\n\n// LLM optimization based on context and expertise\nfunction selectOptimalLLM(crewMember, context) {\n  const expertise = crewExpertise[crewMember] || ['general'];\n  \n  // Context-based LLM selection\n  if (context.type === 'technical' && expertise.includes('technical-analysis')) {\n    return 'openai/gpt-4-turbo';\n  }\n  if (context.type === 'empathic' && expertise.includes('empathy')) {\n    return 'anthropic/claude-3-sonnet';\n  }\n  if (context.type === 'strategic' && expertise.includes('leadership')) {\n    return 'anthropic/claude-3-opus';\n  }\n  if (context.type === 'analytical' && expertise.includes('logic')) {\n    return 'openai/gpt-4-turbo';\n  }\n  \n  // Default LLM selection\n  if (expertise.includes('technical-analysis') || expertise.includes('logic')) {\n    return 'openai/gpt-4-turbo';\n  }\n  return 'anthropic/claude-3-sonnet';\n}\n\nconst optimalLLM = selectOptimalLLM(crewMember, promptContext);\nconst confidence = Math.random() * 0.3 + 0.7; // Simulate confidence between 0.7-1.0\n\nreturn {\n  ...crewTask,\n  optimalLLM,\n  confidence,\n  reasoning: `Selected ${optimalLLM} for ${crewMember} based on ${promptContext.type} context and ${crewExpertise[crewMember].join(', ')} expertise`\n};"
+      },
+      "id": "llm-optimization",
+      "name": "LLM Optimization",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openRouterApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $credentials.openRouterApi.apiKey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "={{ $json.optimalLLM }}"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"system\", \"content\": \"You are {{ $json.crewMember }} from Star Trek: The Next Generation. Provide your perspective on the given prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis.\"}, {\"role\": \"user\", \"content\": \"Original Prompt: {{ $json.originalPrompt }}\\n\\nPlease provide your perspective on this prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis.\"}]"
+            },
+            {
+              "name": "temperature",
+              "value": "0.7"
+            },
+            {
+              "name": "max_tokens",
+              "value": "1000"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "crew-response-generation",
+      "name": "Crew Response Generation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Process crew member response\nconst input = $input.first().json;\nconst crewTask = input.crewTask || input;\nconst llmResponse = input.choices?.[0]?.message?.content || 'No response generated';\n\nreturn {\n  crewMember: crewTask.crewMember,\n  response: llmResponse,\n  llmUsed: crewTask.optimalLLM,\n  confidence: crewTask.confidence,\n  timestamp: new Date().toISOString(),\n  context: crewTask.originalPrompt,\n  optimization: {\n    crewMember: crewTask.crewMember,\n    promptContext: JSON.stringify(crewTask.promptContext),\n    personaSkills: crewTask.promptContext.domain,\n    optimalLLM: crewTask.optimalLLM,\n    confidence: crewTask.confidence,\n    reasoning: crewTask.reasoning,\n    timestamp: crewTask.timestamp\n  }\n};"
+      },
+      "id": "response-processing",
+      "name": "Response Processing",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Collect all crew perspectives and analyze for hallucinations\nconst crewPerspectives = $input.all().map(item => item.json);\n\nif (crewPerspectives.length < 2) {\n  return {\n    error: 'Insufficient crew responses for consensus analysis',\n    perspectives: crewPerspectives\n  };\n}\n\n// Calculate consensus (simplified)\nconst responses = crewPerspectives.map(p => p.response);\nconst consensusResponse = responses[Math.floor(Math.random() * responses.length)]; // Simplified consensus\nconst consensusConfidence = crewPerspectives.reduce((sum, p) => sum + p.confidence, 0) / crewPerspectives.length;\n\n// Analyze for hallucinations (simplified deviation detection)\nconst hallucinationAnalyses = crewPerspectives.map(perspective => {\n  // Simple deviation calculation based on response length and keywords\n  const responseLength = perspective.response.length;\n  const avgLength = responses.reduce((sum, r) => sum + r.length, 0) / responses.length;\n  const lengthDeviation = Math.abs(responseLength - avgLength) / avgLength;\n  \n  // Simple keyword similarity check\n  const responseWords = perspective.response.toLowerCase().split(/\\s+/);\n  const consensusWords = consensusResponse.toLowerCase().split(/\\s+/);\n  const commonWords = responseWords.filter(word => consensusWords.includes(word));\n  const similarity = commonWords.length / Math.max(responseWords.length, consensusWords.length);\n  \n  const deviationScore = (lengthDeviation * 0.3) + ((1 - similarity) * 0.7);\n  const isHallucination = deviationScore > 0.3; // Threshold\n  \n  return {\n    crewMember: perspective.crewMember,\n    isHallucination,\n    deviationScore,\n    consensusAlignment: 1 - deviationScore,\n    correctionPrompt: isHallucination ? `Your response deviated from crew consensus. Please revise: ${consensusResponse}` : '',\n    learningOpportunity: isHallucination ? `Learning opportunity for ${perspective.crewMember}: improve consensus alignment` : '',\n    detectedAt: new Date().toISOString(),\n    severity: deviationScore > 0.7 ? 'high' : deviationScore > 0.5 ? 'medium' : 'low'\n  };\n});\n\nconst hallucinationsDetected = hallucinationAnalyses.filter(a => a.isHallucination);\nconst overallHealth = 1 - (hallucinationsDetected.length / crewPerspectives.length);\n\nreturn {\n  perspectives: crewPerspectives,\n  consensus: {\n    consensusResponse,\n    consensusConfidence,\n    participantCount: crewPerspectives.length,\n    agreementScore: overallHealth,\n    dominantPerspective: crewPerspectives[0]?.crewMember,\n    outlierCount: hallucinationsDetected.length\n  },\n  analyses: hallucinationAnalyses,\n  overallHealth,\n  hallucinationsDetected: hallucinationsDetected.length,\n  processingComplete: true\n};"
+      },
+      "id": "hallucination-analysis",
+      "name": "Hallucination Analysis",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "response-return",
+      "name": "Response Return",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Prompt Interception": {
+      "main": [
+        [
+          {
+            "node": "Prompt Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Analysis": {
+      "main": [
+        [
+          {
+            "node": "Crew Splitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crew Splitter": {
+      "main": [
+        [
+          {
+            "node": "LLM Optimization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Optimization": {
+      "main": [
+        [
+          {
+            "node": "Crew Response Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crew Response Generation": {
+      "main": [
+        [
+          {
+            "node": "Response Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Processing": {
+      "main": [
+        [
+          {
+            "node": "Hallucination Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hallucination Analysis": {
+      "main": [
+        [
+          {
+            "node": "Response Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "a5ffb59d-8c1c-4212-8f10-fa4412ed987c",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-09-21T03:21:58.164Z",
+      "updatedAt": "2025-09-21T03:21:58.164Z",
+      "role": "workflow:owner",
+      "workflowId": "2yIY7drpyIstYXqk",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "tags": []
+}

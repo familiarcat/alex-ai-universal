@@ -357,4 +357,4 @@ export async function deployAntiHallucinationWorkflows(options: {
 }
 
 // Export for use in other modules
-export { N8NWorkflowDeployer };
+// N8NWorkflowDeployer is already exported above as a class

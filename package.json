@@ -21,11 +21,11 @@
     "alex-ai:milestone": "./scripts/alex-ai-enhanced-milestone-push-corrected.sh"
   },
   "devDependencies": {
-    "lerna": "^8.0.0",
-    "typescript": "^5.4.5",
     "@types/node": "^20.12.7",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.5"
+    "lerna": "^8.0.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -44,5 +44,8 @@
     "universal"
   ],
   "author": "Alex AI Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^4.0.3"
+  }
 }

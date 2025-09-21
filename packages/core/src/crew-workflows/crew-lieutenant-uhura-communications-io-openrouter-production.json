@@ -1,0 +1,281 @@
+{
+  "createdAt": "2025-08-27T04:27:24.901Z",
+  "updatedAt": "2025-09-21T05:16:03.993Z",
+  "id": "36KPle5mPiMaazG6",
+  "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-uhura",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "82121549-849d-40b7-9e45-4c5e5c0c5d13",
+      "name": "Lieutenant Uhura Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "bf8250ce-9a8a-4ee3-a934-bc41abc8b1dd"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Lieutenant Uhura",
+        "options": {}
+      },
+      "id": "b57a7a71-c27f-4a73-8cfe-d2c6b75ce550",
+      "name": "Lieutenant Uhura Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "8a44b297-dd95-4dae-9f9b-9fe2443439a6",
+      "name": "LLM Selection Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "7c527b48-4121-4bcb-90a0-aea8bb5e32b0",
+      "name": "Lieutenant Uhura AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "edc393a1-0a8f-4deb-8c73-e04da860ddb6",
+      "name": "Lieutenant Uhura Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "2234d313-0b86-411a-b6b1-571660626cbc",
+      "name": "Observation Lounge Communication",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"crew_member\": \"Lieutenant Uhura\", \"response\": $json.choices[0].message.content, \"timestamp\": new Date().toISOString() } }}",
+        "options": {}
+      },
+      "id": "03b4c2e3-5399-452e-96c5-326e416a06f2",
+      "name": "Lieutenant Uhura Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "82121549-849d-40b7-9e45-4c5e5c0c5d13": {
+      "main": [
+        [
+          {
+            "node": "b57a7a71-c27f-4a73-8cfe-d2c6b75ce550",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8a44b297-dd95-4dae-9f9b-9fe2443439a6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "b57a7a71-c27f-4a73-8cfe-d2c6b75ce550": {
+      "main": [
+        [
+          {
+            "node": "7c527b48-4121-4bcb-90a0-aea8bb5e32b0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8a44b297-dd95-4dae-9f9b-9fe2443439a6": {
+      "main": [
+        [
+          {
+            "node": "7c527b48-4121-4bcb-90a0-aea8bb5e32b0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7c527b48-4121-4bcb-90a0-aea8bb5e32b0": {
+      "main": [
+        [
+          {
+            "node": "edc393a1-0a8f-4deb-8c73-e04da860ddb6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "2234d313-0b86-411a-b6b1-571660626cbc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "edc393a1-0a8f-4deb-8c73-e04da860ddb6": {
+      "main": [
+        [
+          {
+            "node": "03b4c2e3-5399-452e-96c5-326e416a06f2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2234d313-0b86-411a-b6b1-571660626cbc": {
+      "main": [
+        [
+          {
+            "node": "03b4c2e3-5399-452e-96c5-326e416a06f2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Uhura Directive": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Uhura Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Uhura Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Uhura AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Uhura AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Uhura Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Uhura Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Uhura Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "097ada08-298b-4235-91d3-06385519f544",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T04:27:24.902Z",
+      "updatedAt": "2025-08-27T04:27:24.902Z",
+      "role": "workflow:owner",
+      "workflowId": "36KPle5mPiMaazG6",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "tags": []
+}
