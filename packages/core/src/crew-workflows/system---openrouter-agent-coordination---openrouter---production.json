@@ -1,0 +1,247 @@
+{
+  "createdAt": "2025-08-27T02:25:46.380Z",
+  "updatedAt": "2025-09-21T05:16:04.373Z",
+  "id": "VQDH8tqWvVmigWd1",
+  "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "federation-directive",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "federation_directive",
+      "name": "Federation Directive Receiver",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "fce27427-8d66-423d-a527-75766443ebe2"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Federation Crew Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "mission_analysis",
+      "name": "Mission Analysis Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_coordinator",
+      "name": "Crew Coordinator Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Federation Crew Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_lounge",
+      "name": "Observation Lounge Hub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "response_handler",
+      "name": "Federation Response Handler",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Federation Directive Receiver": {
+      "main": [
+        [
+          {
+            "node": "Mission Analysis Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mission Analysis Agent": {
+      "main": [
+        [
+          {
+            "node": "Crew Coordinator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crew Coordinator Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Hub": {
+      "main": [
+        [
+          {
+            "node": "Federation Response Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federation Crew Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Federation Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "aed69d74-9767-47ec-b5bf-3e66f4b63b74",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:46.381Z",
+      "updatedAt": "2025-08-27T02:25:46.381Z",
+      "role": "workflow:owner",
+      "workflowId": "VQDH8tqWvVmigWd1",
+      "projectId": "4Pe2tfKPH8e3rX41",
+      "project": {
+        "createdAt": "2025-08-25T04:21:27.484Z",
+        "updatedAt": "2025-08-25T04:34:05.592Z",
+        "id": "4Pe2tfKPH8e3rX41",
+        "name": "Brady Georgen <brady@pbradygeorgen.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-25T04:21:27.484Z",
+            "updatedAt": "2025-08-25T04:21:27.484Z",
+            "role": "project:personalOwner",
+            "userId": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+            "projectId": "4Pe2tfKPH8e3rX41",
+            "user": {
+              "createdAt": "2025-08-25T04:21:26.701Z",
+              "updatedAt": "2025-09-21T04:00:05.000Z",
+              "id": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+              "email": "brady@pbradygeorgen.com",
+              "firstName": "Brady",
+              "lastName": "Georgen",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-25T04:35:52.493Z",
+                "personalization_survey_n8n_version": "1.107.4",
+                "automationGoalDevops": [
+                  "other"
+                ],
+                "automationGoalDevopsOther": "Experimentation",
+                "companyIndustryExtended": [
+                  "it-industry",
+                  "msp",
+                  "media-industry",
+                  "marketing-industry"
+                ],
+                "companySize": "personalUser",
+                "companyType": "other",
+                "role": "it",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "YIm1VzYzVdphsjb9",
+                "userActivatedAt": 1756858725166,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1757328495060
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-09-21",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

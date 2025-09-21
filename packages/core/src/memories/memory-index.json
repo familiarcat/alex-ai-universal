@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-09-21T08:00:59.575Z",
+  "totalMemories": 51,
+  "crewMembers": [
+    "Dr. Crusher",
+    "All Crew Members",
+    "Captain Picard",
+    "Lieutenant Worf",
+    "Lieutenant Commander Geordi",
+    "Commander Riker",
+    "Commander Data",
+    "Counselor Troi",
+    "Quark",
+    "Lieutenant Uhura",
+    "System-Wide",
+    "Cursor-AI-Integration",
+    "Counselor Deanna Troi",
+    "Lieutenant Commander Geordi La Forge",
+    "Dr. Beverly Crusher",
+    "Commander William Riker",
+    "Captain Jean-Luc Picard"
+  ],
+  "memoryCounts": {
+    "Dr. Crusher": 1,
+    "All Crew Members": 2,
+    "Captain Picard": 5,
+    "Lieutenant Worf": 2,
+    "Lieutenant Commander Geordi": 1,
+    "Commander Riker": 1,
+    "Commander Data": 4,
+    "Counselor Troi": 1,
+    "Quark": 2,
+    "Lieutenant Uhura": 2,
+    "System-Wide": 24,
+    "Cursor-AI-Integration": 1,
+    "Counselor Deanna Troi": 1,
+    "Lieutenant Commander Geordi La Forge": 1,
+    "Dr. Beverly Crusher": 1,
+    "Commander William Riker": 1,
+    "Captain Jean-Luc Picard": 1
+  },
+  "lastSync": "2025-09-21T08:00:59.575Z"
+}

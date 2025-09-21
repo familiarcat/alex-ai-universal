@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-01-18T00:00:00.000Z",
+  "n8n": "healthy",
+  "rag": "healthy",
+  "localWorkflows": 49,
+  "overall": "healthy",
+  "lastSync": "2025-01-18T00:00:00.000Z",
+  "lastMemorySync": "2025-01-18T00:00:00.000Z",
+  "lastHealthCheck": "2025-01-18T00:00:00.000Z",
+  "systemStatus": {
+    "comprehensive": "healthy",
+    "memory": "healthy",
+    "monitoring": "healthy"
+  },
+  "metrics": {
+    "totalSyncs": 0,
+    "successfulSyncs": 0,
+    "failedSyncs": 0,
+    "averageSyncTime": 0
+  }
+}

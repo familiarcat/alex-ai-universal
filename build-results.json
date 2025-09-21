@@ -1,0 +1,95 @@
+{
+  "startTime": "2025-09-21T08:00:50.443Z",
+  "endTime": "2025-09-21T08:00:59.641Z",
+  "packages": {
+    "dependencies": {
+      "success": true,
+      "output": "\nup to date, audited 997 packages in 801ms\n\n163 packages are looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities\n"
+    },
+    "typescript": {
+      "success": true,
+      "output": "TypeScript check completed with warnings",
+      "warnings": true
+    },
+    "linting": {
+      "success": true,
+      "output": "Linting skipped",
+      "warnings": true
+    },
+    "@alex-ai/core": {
+      "package": "@alex-ai/core",
+      "success": true,
+      "output": "\n> @alex-ai/core@1.0.0 build\n> tsc\n\n",
+      "attempt": 1,
+      "warnings": true
+    },
+    "@alex-ai/cli": {
+      "package": "@alex-ai/cli",
+      "success": true,
+      "output": "\n> @alex-ai/cli@1.0.0 build\n> tsc\n\n",
+      "attempt": 1,
+      "warnings": true
+    },
+    "artifacts": {
+      "totalArtifacts": 5,
+      "validArtifacts": 5,
+      "invalidArtifacts": 0,
+      "results": [
+        {
+          "path": "packages/core/dist",
+          "exists": true,
+          "isDirectory": true,
+          "fileCount": 47,
+          "valid": true
+        },
+        {
+          "path": "packages/cli/dist",
+          "exists": true,
+          "isDirectory": true,
+          "fileCount": 36,
+          "valid": true
+        },
+        {
+          "path": "packages/core/src/crew-workflows",
+          "exists": true,
+          "isDirectory": true,
+          "fileCount": 49,
+          "valid": true
+        },
+        {
+          "path": "packages/core/src/memories",
+          "exists": true,
+          "isDirectory": true,
+          "fileCount": 21,
+          "valid": true
+        },
+        {
+          "path": "packages/core/src/config",
+          "exists": true,
+          "isDirectory": true,
+          "fileCount": 7,
+          "valid": true
+        }
+      ]
+    }
+  },
+  "tests": {
+    "endToEnd": {
+      "success": true,
+      "output": "🧪 ALEX AI END-TO-END TEST SYSTEM\n==================================\n\n🚀 Starting end-to-end test execution...\n\n\n📋 Running test suite: N8N Integration\n==================================================\n🧪 Running test: N8N Connection\n  ✅ PASSED (289ms)\n🧪 Running test: Workflow Execution\n  ✅ PASSED (31ms)\n🧪 Running test: Workflow Sync\n  ℹ️  Local has 21 additional workflow files (expected)\n  ✅ PASSED (45ms)\n\n📊 Suite Results: 3 passed, 0 failed\n\n📋 Running test suite: RAG Memory System\n==================================================\n🧪 Running test: RAG Connection\n  ✅ PASSED (217ms)\n🧪 Running test: Memory Retrieval\n  ✅ PASSED (75ms)\n🧪 Running test: Memory Encryption\n  ✅ PASSED (3ms)\n\n📊 Suite Results: 3 passed, 0 failed\n\n📋 Running test suite: System Integration\n==================================================\n🧪 Running test: Crew Workflow Files\n  ✅ PASSED (13ms)\n🧪 Running test: Memory Files\n  ✅ PASSED (2ms)\n🧪 Running test: Configuration Files\n  ✅ PASSED (1ms)\n\n📊 Suite Results: 3 passed, 0 failed\n\n📋 Running test suite: Performance Tests\n==================================================\n🧪 Running test: N8N Performance\n  ✅ PASSED (36ms)\n🧪 Running test: RAG Performance\n  ✅ PASSED (77ms)\n🧪 Running test: Sync Performance\n  ✅ PASSED (2007ms)\n\n📊 Suite Results: 3 passed, 0 failed\n\n🎯 END-TO-END TEST RESULTS\n==========================\n\n📊 OVERALL STATISTICS:\n  Total Tests: 12\n  Passed: 12\n  Failed: 0\n  Success Rate: 100.0%\n  Total Duration: 2797ms\n\n📋 TEST SUITE RESULTS:\n  N8N: 3 passed, 0 failed\n  RAG: 3 passed, 0 failed\n  SYSTEM: 3 passed, 0 failed\n  PERFORMANCE: 3 passed, 0 failed\n\n🏆 FINAL STATUS:\n  ✅ ALL TESTS PASSED - SYSTEM FULLY OPERATIONAL\n\n📄 Test results saved to: /Users/bradygeorgen/Documents/workspace/alex-ai-universal/test-results.json\n"
+    },
+    "performance": {
+      "syncTime": 1827,
+      "memoryTime": 354,
+      "totalTime": 2181,
+      "passed": true
+    }
+  },
+  "errors": [],
+  "summary": {
+    "totalDuration": 9198,
+    "packagesBuilt": 2,
+    "testsPassed": true,
+    "performancePassed": true
+  }
+}
