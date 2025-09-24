@@ -1,0 +1,236 @@
+{
+  "createdAt": "2025-09-07T08:43:07.484Z",
+  "updatedAt": "2025-09-21T05:16:05.122Z",
+  "id": "FEdNQJgLBjJVh3oP",
+  "name": "PROJECT - Alex AI - Crew Integration - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-unified-crew",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "unified_webhook_trigger",
+      "name": "Unified Crew Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "alex_ai_crew_analyzer",
+      "name": "Alex AI Crew Analyzer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "federation_crew_analyzer",
+      "name": "Federation Crew Analyzer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Unified Crew Analysis Aggregator\nconst alexAIResponse = $(\"Alex AI Crew Analyzer\").first().json;\nconst federationResponse = $(\"Federation Crew Analyzer\").first().json;\n\nconst unifiedAnalysis = {\n    timestamp: new Date().toISOString(),\n    alex_ai_analysis: alexAIResponse,\n    federation_analysis: federationResponse,\n    unified_insights: {\n        combined_confidence: Math.round((alexAIResponse.confidence_score + federationResponse.confidence_score) / 2),\n        cross_crew_synergy: \"High\",\n        recommendation_quality: \"Excellent\",\n        unified_recommendations: [\n            \"Leverage both Alex AI and Federation crew expertise\",\n            \"Implement cross-crew collaboration protocols\",\n            \"Maintain unified knowledge base integration\"\n        ]\n    },\n    system_status: \"unified_operational\"\n};\n\nreturn [{ json: unifiedAnalysis }];"
+      },
+      "id": "unified_analysis_aggregator",
+      "name": "Unified Analysis Aggregator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        688,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/alex_ai_crew_memories",
+        "options": {}
+      },
+      "id": "unified_memory_storage",
+      "name": "Unified Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "unified_response",
+      "name": "Unified Crew Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Unified Crew Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Alex AI Crew Analyzer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Federation Crew Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alex AI Crew Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Unified Analysis Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federation Crew Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Unified Analysis Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unified Analysis Aggregator": {
+      "main": [
+        [
+          {
+            "node": "Unified Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unified Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Unified Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "db747813-2d77-4b6c-a9c6-afe8a12cb54a",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-09-07T08:43:07.487Z",
+      "updatedAt": "2025-09-07T08:43:07.487Z",
+      "role": "workflow:owner",
+      "workflowId": "FEdNQJgLBjJVh3oP",
+      "projectId": "4Pe2tfKPH8e3rX41",
+      "project": {
+        "createdAt": "2025-08-25T04:21:27.484Z",
+        "updatedAt": "2025-08-25T04:34:05.592Z",
+        "id": "4Pe2tfKPH8e3rX41",
+        "name": "Brady Georgen <brady@pbradygeorgen.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-25T04:21:27.484Z",
+            "updatedAt": "2025-08-25T04:21:27.484Z",
+            "role": "project:personalOwner",
+            "userId": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+            "projectId": "4Pe2tfKPH8e3rX41",
+            "user": {
+              "createdAt": "2025-08-25T04:21:26.701Z",
+              "updatedAt": "2025-09-21T04:00:05.000Z",
+              "id": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+              "email": "brady@pbradygeorgen.com",
+              "firstName": "Brady",
+              "lastName": "Georgen",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-25T04:35:52.493Z",
+                "personalization_survey_n8n_version": "1.107.4",
+                "automationGoalDevops": [
+                  "other"
+                ],
+                "automationGoalDevopsOther": "Experimentation",
+                "companyIndustryExtended": [
+                  "it-industry",
+                  "msp",
+                  "media-industry",
+                  "marketing-industry"
+                ],
+                "companySize": "personalUser",
+                "companyType": "other",
+                "role": "it",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "YIm1VzYzVdphsjb9",
+                "userActivatedAt": 1756858725166,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1757328495060
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-09-21",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

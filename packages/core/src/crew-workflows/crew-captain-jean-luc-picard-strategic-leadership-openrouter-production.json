@@ -1,0 +1,199 @@
+{
+  "createdAt": "2025-08-27T02:25:47.297Z",
+  "updatedAt": "2025-09-21T05:16:03.466Z",
+  "id": "BdNHOluRYUw2JxGW",
+  "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-captain-jean-luc-picard",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "crew_directive",
+      "name": "Captain Jean-Luc Picard Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "c5ec3bfb-001d-45d5-a6c3-9115c0b0cc0d"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Captain Jean-Luc Picard Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "llm_selector",
+      "name": "LLM Selection Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_ai",
+      "name": "Captain Jean-Luc Picard AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Captain Jean-Luc Picard Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_communication",
+      "name": "Observation Lounge Communication",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "crew_response",
+      "name": "Captain Jean-Luc Picard Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Captain Jean-Luc Picard Directive": {
+      "main": [
+        [
+          {
+            "node": "Captain Jean-Luc Picard Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Captain Jean-Luc Picard AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Captain Jean-Luc Picard AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Captain Jean-Luc Picard Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Captain Jean-Luc Picard Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Captain Jean-Luc Picard Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Captain Jean-Luc Picard Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "c7a6893a-48eb-4bce-bec7-aab3da277309",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:47.298Z",
+      "updatedAt": "2025-08-27T02:25:47.298Z",
+      "role": "workflow:owner",
+      "workflowId": "BdNHOluRYUw2JxGW",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "tags": []
+}

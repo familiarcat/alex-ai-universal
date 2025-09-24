@@ -1,0 +1,91 @@
+{
+  "name": "@alex-ai/vscode",
+  "version": "1.0.0-private",
+  "description": "VSCode extension for Alex AI Universal",
+  "displayName": "Alex AI Universal",
+  "publisher": "alex-ai",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onCommand:alex-ai.engage",
+    "onCommand:alex-ai.status"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "alex-ai.engage",
+        "title": "Engage Alex AI",
+        "category": "Alex AI"
+      },
+      {
+        "command": "alex-ai.status",
+        "title": "Alex AI Status",
+        "category": "Alex AI"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "alex-ai.engage",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "alex-ai.status",
+          "when": "editorTextFocus"
+        }
+      ]
+    },
+    "views": {
+      "alex-ai": [
+        {
+          "id": "alex-ai-crew",
+          "name": "Alex AI Crew"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "package": "vsce package"
+  },
+  "keywords": [
+    "ai",
+    "vscode-extension",
+    "code-assistant",
+    "alex-ai"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT",
+  "dependencies": {
+    "@alex-ai/core": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

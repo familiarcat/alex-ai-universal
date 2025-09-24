@@ -1,0 +1,135 @@
+{
+  "createdAt": "2025-09-12T00:15:01.322Z",
+  "updatedAt": "2025-09-21T05:16:05.996Z",
+  "id": "KOK1vhGdHKd0c6Em",
+  "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "requestMethod": "GET",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Quark",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": false,
+        "options": {},
+        "headerParametersUi": {},
+        "queryParametersUi": {},
+        "infoMessage": ""
+      },
+      "id": "656dfc0f-650f-4355-a1a7-b453f1cfab48",
+      "name": "Quark Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "id": "33908237-4f98-412f-a173-d18dfecf9b0d",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        256,
+        112
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Quark Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "632d8859-ee3d-42e1-bb5f-4db728e0dbdd",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-09-12T00:15:01.350Z",
+      "updatedAt": "2025-09-12T00:15:01.350Z",
+      "role": "workflow:owner",
+      "workflowId": "KOK1vhGdHKd0c6Em",
+      "projectId": "4Pe2tfKPH8e3rX41",
+      "project": {
+        "createdAt": "2025-08-25T04:21:27.484Z",
+        "updatedAt": "2025-08-25T04:34:05.592Z",
+        "id": "4Pe2tfKPH8e3rX41",
+        "name": "Brady Georgen <brady@pbradygeorgen.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-25T04:21:27.484Z",
+            "updatedAt": "2025-08-25T04:21:27.484Z",
+            "role": "project:personalOwner",
+            "userId": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+            "projectId": "4Pe2tfKPH8e3rX41",
+            "user": {
+              "createdAt": "2025-08-25T04:21:26.701Z",
+              "updatedAt": "2025-09-21T04:00:05.000Z",
+              "id": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+              "email": "brady@pbradygeorgen.com",
+              "firstName": "Brady",
+              "lastName": "Georgen",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-25T04:35:52.493Z",
+                "personalization_survey_n8n_version": "1.107.4",
+                "automationGoalDevops": [
+                  "other"
+                ],
+                "automationGoalDevopsOther": "Experimentation",
+                "companyIndustryExtended": [
+                  "it-industry",
+                  "msp",
+                  "media-industry",
+                  "marketing-industry"
+                ],
+                "companySize": "personalUser",
+                "companyType": "other",
+                "role": "it",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "YIm1VzYzVdphsjb9",
+                "userActivatedAt": 1756858725166,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1757328495060
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-09-21",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

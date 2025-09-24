@@ -1,0 +1,280 @@
+{
+  "id": "YIm1VzYzVdphsjb9",
+  "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "observation-lounge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "observation-lounge-trigger",
+      "name": "Observation Lounge Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "observation-lounge-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate and prepare Observation Lounge session\nconst inputData = $input.all()[0].json;\n\n// Validate required fields\nif (!inputData.topic) {\n  throw new Error('topic is required for Observation Lounge session');\n}\n\n// Extract session parameters\nconst topic = inputData.topic;\nconst context = inputData.context || {};\nconst crew_members = inputData.crew_members || 'all';\nconst discussion_type = inputData.discussion_type || 'collaborative';\nconst priority = inputData.priority || 'medium';\n\n// Prepare enhanced session data\nreturn {\n  session_id: `ol_${Date.now()}`,\n  topic: topic,\n  context: context,\n  crew_members: crew_members,\n  discussion_type: discussion_type,\n  priority: priority,\n  timestamp: new Date().toISOString(),\n  session_status: 'initialized',\n  \n  // Discussion framework\n  framework: {\n    objective: 'Collaborative crew decision-making',\n    format: 'Structured department perspectives',\n    output: 'Synthesized recommendations and action plan'\n  },\n  \n  // Crew coordination parameters\n  coordination: {\n    max_response_time: 30000, // 30 seconds\n    require_all_departments: true,\n    enable_synthesis: true,\n    enable_recommendations: true\n  }\n};"
+      },
+      "id": "session-validator",
+      "name": "Session Validator & Coordinator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Route to appropriate crew coordination method\nconst sessionData = $input.all()[0].json;\nconst { discussion_type, crew_members, priority } = sessionData;\n\n// Determine routing strategy\nlet routing_strategy = 'full_crew';\nlet crew_selection = 'all';\nlet coordination_method = 'observation_lounge';\n\nif (discussion_type === 'department_specific') {\n  routing_strategy = 'department_focused';\n  crew_selection = crew_members;\n  coordination_method = 'department_meeting';\n} else if (discussion_type === 'executive') {\n  routing_strategy = 'command_focused';\n  crew_selection = ['captain_picard', 'commander_riker', 'commander_data'];\n  coordination_method = 'command_briefing';\n} else if (discussion_type === 'technical') {\n  routing_strategy = 'technical_focused';\n  crew_selection = ['geordi_la_forge', 'commander_data', 'lieutenant_worf'];\n  coordination_method = 'technical_review';\n} else if (discussion_type === 'strategic') {\n  routing_strategy = 'strategic_focused';\n  crew_selection = ['captain_picard', 'commander_data', 'counselor_troi', 'quark'];\n  coordination_method = 'strategic_planning';\n}\n\n// Priority-based adjustments\nif (priority === 'high') {\n  coordination_method += '_urgent';\n} else if (priority === 'low') {\n  coordination_method += '_standard';\n}\n\nreturn {\n  ...sessionData,\n  routing_strategy: routing_strategy,\n  crew_selection: crew_selection,\n  coordination_method: coordination_method,\n  \n  // Enhanced coordination parameters\n  coordination_enhanced: {\n    method: coordination_method,\n    crew_count: Array.isArray(crew_selection) ? crew_selection.length : 'all',\n    expected_duration: priority === 'high' ? 'fast' : 'standard',\n    synthesis_required: true\n  }\n};"
+      },
+      "id": "crew-routing-engine",
+      "name": "Crew Routing & Coordination Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3"
+      },
+      "id": "observation-lounge-coordinator",
+      "name": "Observation Lounge Coordinator (Python)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process Observation Lounge results and format for Cursor UI\nconst coordinatorOutput = $input.all()[0].json;\nconst sessionData = $input.all()[1].json;\n\n// Check if coordination was successful\nif (coordinatorOutput.error) {\n  return {\n    success: false,\n    error: coordinatorOutput.error,\n    session_id: sessionData.session_id,\n    timestamp: new Date().toISOString(),\n    ui_feedback: {\n      message: 'Observation Lounge session failed - please try again',\n      type: 'error',\n      show_retry: true\n    }\n  };\n}\n\n// Parse the coordinator output\nconst result = JSON.parse(coordinatorOutput.stdout || '{}');\n\nif (result.observation_lounge_session) {\n  // Enhanced Observation Lounge response\n  return {\n    success: true,\n    \n    // Session information\n    session: {\n      id: sessionData.session_id,\n      topic: sessionData.topic,\n      status: result.observation_lounge_session.session_status,\n      participants: result.observation_lounge_session.participants,\n      total_crew: result.observation_lounge_session.total_crew,\n      timestamp: result.observation_lounge_session.timestamp\n    },\n    \n    // Crew insights by department\n    crew_insights: result.crew_insights,\n    \n    // Synthesized discussion results\n    synthesis: result.synthesis,\n    \n    // Actionable outcomes\n    recommendations: result.recommendations || [],\n    next_actions: result.next_actions || [],\n    \n    // UI enhancement data for Cursor\n    ui_enhancements: {\n      // Visual representation of crew participation\n      crew_participation: {\n        total_crew: result.observation_lounge_session.total_crew,\n        active_participants: result.observation_lounge_session.participants,\n        participation_rate: (result.observation_lounge_session.participants / result.observation_lounge_session.total_crew * 100).toFixed(1) + '%',\n        status_icon: '🚀'\n      },\n      \n      // Department insights summary\n      department_summary: Object.values(result.crew_insights || {})\n        .filter(insight => insight.status === 'success')\n        .map(insight => ({\n          department: insight.department,\n          crew_member: insight.crew_member,\n          confidence: insight.confidence,\n          status: 'active'\n        })),\n      \n      // Discussion quality metrics\n      discussion_quality: {\n        synthesis_available: !!result.synthesis,\n        recommendations_count: result.recommendations?.length || 0,\n        actions_count: result.next_actions?.length || 0,\n        quality_score: 'high'\n      }\n    },\n    \n    // Metadata\n    metadata: {\n      coordination_method: sessionData.coordination_method,\n      routing_strategy: sessionData.routing_strategy,\n      priority: sessionData.priority,\n      discussion_type: sessionData.discussion_type\n    }\n  };\n} else {\n  return {\n    success: false,\n    error: 'Invalid Observation Lounge response format',\n    session_id: sessionData.session_id,\n    timestamp: new Date().toISOString(),\n    ui_feedback: {\n      message: 'Observation Lounge response format error',\n      type: 'error',\n      show_retry: true\n    }\n  };\n}"
+      },
+      "id": "observation-lounge-processor",
+      "name": "Observation Lounge Response Processor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "observation-lounge-response",
+      "name": "Observation Lounge Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced logging and monitoring for Observation Lounge sessions\nconst responseData = $input.all()[0].json;\nconst sessionData = $input.all()[1].json;\n\nif (responseData.success) {\n  const { session, crew_insights, synthesis } = responseData;\n  \n  console.log(`🚀 Observation Lounge Session Success:`);\n  console.log(`   Session ID: ${session.id}`);\n  console.log(`   Topic: ${session.topic}`);\n  console.log(`   Participants: ${session.participants}/${session.total_crew}`);\n  console.log(`   Status: ${session.status}`);\n  console.log(`   Timestamp: ${session.timestamp}`);\n  \n  // Log crew participation by department\n  const departmentStats = {};\n  Object.values(crew_insights).forEach(insight => {\n    if (insight.status === 'success') {\n      const dept = insight.department;\n      if (!departmentStats[dept]) departmentStats[dept] = 0;\n      departmentStats[dept]++;\n    }\n  });\n  \n  console.log(`   Department Participation:`);\n  Object.entries(departmentStats).forEach(([dept, count]) => {\n    console.log(`     ${dept}: ${count} crew members`);\n  });\n  \n  // Log synthesis availability\n  if (synthesis) {\n    console.log(`   Synthesis: Available`);\n  } else {\n    console.log(`   Synthesis: Not available`);\n  }\n  \n} else {\n  console.error(`❌ Observation Lounge Session Failed: ${responseData.error}`);\n  console.error(`   Session ID: ${responseData.session_id}`);\n  console.error(`   Timestamp: ${responseData.timestamp}`);\n}\n\n// Pass through the data for potential further processing\nreturn responseData;"
+      },
+      "id": "observation-lounge-logging",
+      "name": "Observation Lounge Logging & Monitoring",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        512
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "observation-lounge-status-updater",
+      "name": "Observation Lounge Status Updater",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1344,
+        512
+      ]
+    }
+  ],
+  "connections": {
+    "observation-lounge-trigger": {
+      "main": [
+        [
+          {
+            "node": "session-validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "session-validator": {
+      "main": [
+        [
+          {
+            "node": "crew-routing-engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "crew-routing-engine": {
+      "main": [
+        [
+          {
+            "node": "observation-lounge-coordinator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "observation-lounge-coordinator": {
+      "main": [
+        [
+          {
+            "node": "observation-lounge-processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "observation-lounge-processor": {
+      "main": [
+        [
+          {
+            "node": "observation-lounge-response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "observation-lounge-logging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "observation-lounge-logging": {
+      "main": [
+        [
+          {
+            "node": "observation-lounge-status-updater",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Trigger": {
+      "main": [
+        [
+          {
+            "node": "Session Validator & Coordinator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Session Validator & Coordinator": {
+      "main": [
+        [
+          {
+            "node": "Crew Routing & Coordination Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crew Routing & Coordination Engine": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Coordinator (Python)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Coordinator (Python)": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Response Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Response Processor": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Logging & Monitoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Logging & Monitoring": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Status Updater",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Status Updater": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ae784fba-c2fb-4512-bd01-1a569a09733c",
+  "triggerCount": 1,
+  "createdAt": "2025-09-03T00:18:30.378Z",
+  "updatedAt": "2025-09-21T21:31:48.976Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.802Z",
+  "_category": "system-workflows",
+  "_source": "remote-n8n"
+}

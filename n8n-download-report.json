@@ -1,0 +1,289 @@
+{
+  "timestamp": "2025-09-21T21:33:26.557Z",
+  "totalRemote": 31,
+  "downloaded": 31,
+  "skipped": 1,
+  "errors": [],
+  "categories": {
+    "anti-hallucination-workflows": {
+      "total": 2,
+      "downloaded": 2,
+      "skipped": 0,
+      "errors": []
+    },
+    "crew-workflows": {
+      "total": 15,
+      "downloaded": 15,
+      "skipped": 0,
+      "errors": []
+    },
+    "project-workflows": {
+      "total": 6,
+      "downloaded": 6,
+      "skipped": 0,
+      "errors": []
+    },
+    "system-workflows": {
+      "total": 6,
+      "downloaded": 6,
+      "skipped": 1,
+      "errors": []
+    },
+    "utility-workflows": {
+      "total": 2,
+      "downloaded": 2,
+      "skipped": 0,
+      "errors": []
+    }
+  },
+  "downloadedWorkflows": [
+    {
+      "id": "2yIY7drpyIstYXqk",
+      "name": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "category": "anti-hallucination-workflows",
+      "active": true,
+      "createdAt": "2025-09-21T03:21:58.162Z",
+      "updatedAt": "2025-09-21T21:31:48.676Z"
+    },
+    {
+      "id": "36KPle5mPiMaazG6",
+      "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T04:27:24.901Z",
+      "updatedAt": "2025-09-21T21:31:48.506Z"
+    },
+    {
+      "id": "58B6WvShXJ7bj8Ni",
+      "name": "PROJECT - Alex AI - Job Opportunities - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-05T09:49:27.281Z",
+      "updatedAt": "2025-09-21T21:31:49.465Z"
+    },
+    {
+      "id": "AeoHsSbJAXbWSs8Y",
+      "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:45.931Z",
+      "updatedAt": "2025-09-21T04:30:50.860Z"
+    },
+    {
+      "id": "BdNHOluRYUw2JxGW",
+      "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:47.297Z",
+      "updatedAt": "2025-09-21T21:31:47.981Z"
+    },
+    {
+      "id": "C5Kq9nZTnZEc0EWo",
+      "name": "UTILITY - AI Controller - OpenRouter - Production",
+      "category": "utility-workflows",
+      "active": true,
+      "createdAt": "2025-09-03T00:07:17.204Z",
+      "updatedAt": "2025-09-21T21:31:50.164Z"
+    },
+    {
+      "id": "F5KLCH4ND7d6D6sQ",
+      "name": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "category": "crew-workflows",
+      "active": false,
+      "createdAt": "2025-09-21T21:31:47.796Z",
+      "updatedAt": "2025-09-21T21:31:47.796Z"
+    },
+    {
+      "id": "FEdNQJgLBjJVh3oP",
+      "name": "PROJECT - Alex AI - Crew Integration - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-09-07T08:43:07.484Z",
+      "updatedAt": "2025-09-21T21:31:49.381Z"
+    },
+    {
+      "id": "GhSB8EpZWXLU78LM",
+      "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:46.157Z",
+      "updatedAt": "2025-09-21T21:31:48.589Z"
+    },
+    {
+      "id": "IKckCG6TsUvrZd8P",
+      "name": "UTILITY - Crew Management - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:47.414Z",
+      "updatedAt": "2025-09-21T21:31:50.251Z"
+    },
+    {
+      "id": "Imn7p6pVgi6SRvnF",
+      "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:33:04.181Z",
+      "updatedAt": "2025-09-21T21:31:48.158Z"
+    },
+    {
+      "id": "KOK1vhGdHKd0c6Em",
+      "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "category": "utility-workflows",
+      "active": false,
+      "createdAt": "2025-09-12T00:15:01.322Z",
+      "updatedAt": "2025-09-21T21:31:50.321Z"
+    },
+    {
+      "id": "L6K4bzSKlGC36ABL",
+      "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T04:28:32.255Z",
+      "updatedAt": "2025-09-21T21:31:49.124Z"
+    },
+    {
+      "id": "QJnN7ks2KsQTENDc",
+      "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:47.178Z",
+      "updatedAt": "2025-09-21T21:31:48.244Z"
+    },
+    {
+      "id": "RY8pm6gUFtkTKcpg",
+      "name": "PROJECT - Alex AI - Resume Analysis - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-05T09:49:27.391Z",
+      "updatedAt": "2025-09-21T21:31:49.809Z"
+    },
+    {
+      "id": "SXAMupVWdOxZybF6",
+      "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T04:24:00.120Z",
+      "updatedAt": "2025-09-21T21:31:48.328Z"
+    },
+    {
+      "id": "VQDH8tqWvVmigWd1",
+      "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:46.380Z",
+      "updatedAt": "2025-09-21T21:31:50.079Z"
+    },
+    {
+      "id": "XJeicUzVaGNb8gsB",
+      "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-08-30T19:57:08.538Z",
+      "updatedAt": "2025-09-21T21:31:48.848Z"
+    },
+    {
+      "id": "Xbdaf4VdEA4mEuL2",
+      "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-07T08:43:29.096Z",
+      "updatedAt": "2025-09-21T21:31:49.639Z"
+    },
+    {
+      "id": "YIm1VzYzVdphsjb9",
+      "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-09-03T00:18:30.378Z",
+      "updatedAt": "2025-09-21T21:31:48.976Z"
+    },
+    {
+      "id": "aNfs26Wlau80ufmh",
+      "name": "SYSTEM - Mission Control - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:47.006Z",
+      "updatedAt": "2025-09-21T21:31:49.971Z"
+    },
+    {
+      "id": "e0UEwyVcXJqeePdj",
+      "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:46.595Z",
+      "updatedAt": "2025-09-21T21:31:48.410Z"
+    },
+    {
+      "id": "eudNA8lttXSkXIa0",
+      "name": "Hallucination Monitoring Dashboard",
+      "category": "anti-hallucination-workflows",
+      "active": false,
+      "createdAt": "2025-09-21T21:31:47.720Z",
+      "updatedAt": "2025-09-21T21:31:47.720Z"
+    },
+    {
+      "id": "eviPmIvTnoJcnaas",
+      "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "category": "system-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:46.038Z",
+      "updatedAt": "2025-09-21T21:31:49.889Z"
+    },
+    {
+      "id": "gIwrQHHArgrVARjL",
+      "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-08-27T02:25:46.487Z",
+      "updatedAt": "2025-09-21T21:31:48.073Z"
+    },
+    {
+      "id": "geKQAdYcmHJLLTYq",
+      "name": "Anti-Hallucination Crew Workflow (HTTP)",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-09-21T05:07:34.029Z",
+      "updatedAt": "2025-09-21T21:31:48.758Z"
+    },
+    {
+      "id": "n2hC4a6TZzkYi6WQ",
+      "name": "Anti-Hallucination Crew Workflow",
+      "category": "crew-workflows",
+      "active": false,
+      "createdAt": "2025-09-21T21:31:47.585Z",
+      "updatedAt": "2025-09-21T21:31:47.585Z"
+    },
+    {
+      "id": "oQTqPZBq8R7Zuza9",
+      "name": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-09T07:37:19.878Z",
+      "updatedAt": "2025-09-21T21:31:49.556Z"
+    },
+    {
+      "id": "oaSjbIhny5J1sa7E",
+      "name": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "category": "crew-workflows",
+      "active": true,
+      "createdAt": "2025-09-21T03:16:28.877Z",
+      "updatedAt": "2025-09-21T21:31:47.869Z"
+    },
+    {
+      "id": "p0L9kldRFQmexqBx",
+      "name": "PROJECT - Alex AI - MCP Integration - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-05T09:49:27.447Z",
+      "updatedAt": "2025-09-21T21:31:49.728Z"
+    },
+    {
+      "id": "rLN1eArIA6t3tEwZ",
+      "name": "PROJECT - Alex AI - Contact Management - Production",
+      "category": "project-workflows",
+      "active": true,
+      "createdAt": "2025-09-05T09:49:27.335Z",
+      "updatedAt": "2025-09-21T21:31:49.235Z"
+    }
+  ]
+}

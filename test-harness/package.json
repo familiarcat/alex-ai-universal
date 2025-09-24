@@ -1,0 +1,34 @@
+{
+  "name": "@alex-ai/test-harness",
+  "version": "1.0.0",
+  "description": "Comprehensive test harness for Alex AI Universal",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "node run-all-tests.js",
+    "test:cli": "node cli-test.js",
+    "test:extensions": "node extension-test.js",
+    "test:web": "node web-interface-test.js",
+    "test:comprehensive": "node alex-ai-test-suite.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "alex-ai",
+    "testing",
+    "test-harness",
+    "cli",
+    "vscode",
+    "cursor",
+    "web-interface"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT"
+}
+
+
+
+

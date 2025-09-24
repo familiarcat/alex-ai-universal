@@ -1,0 +1,195 @@
+{
+  "id": "VQDH8tqWvVmigWd1",
+  "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "federation-directive",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "federation_directive",
+      "name": "Federation Directive Receiver",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "fce27427-8d66-423d-a527-75766443ebe2"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Federation Crew Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "mission_analysis",
+      "name": "Mission Analysis Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_coordinator",
+      "name": "Crew Coordinator Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Federation Crew Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_lounge",
+      "name": "Observation Lounge Hub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "response_handler",
+      "name": "Federation Response Handler",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Federation Directive Receiver": {
+      "main": [
+        [
+          {
+            "node": "Mission Analysis Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mission Analysis Agent": {
+      "main": [
+        [
+          {
+            "node": "Crew Coordinator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crew Coordinator Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Hub": {
+      "main": [
+        [
+          {
+            "node": "Federation Response Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federation Crew Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Federation Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1acc7385-9dcc-40dd-9f6c-bb6b504d33ce",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:46.380Z",
+  "updatedAt": "2025-09-21T21:31:50.079Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.801Z",
+  "_category": "system-workflows",
+  "_source": "remote-n8n",
+  "_localPath": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/n8n-workflows/system-workflows/system-openrouter-agent-coordination-openrouter-production.json",
+  "_localModified": "2025-09-21T21:33:26.802Z",
+  "_localCategory": "system-workflows",
+  "isArchived": false,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:46.381Z",
+      "updatedAt": "2025-08-27T02:25:46.381Z",
+      "role": "workflow:owner",
+      "workflowId": "VQDH8tqWvVmigWd1",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "_lastSyncedAt": "2025-09-21T23:52:43.792Z"
+}

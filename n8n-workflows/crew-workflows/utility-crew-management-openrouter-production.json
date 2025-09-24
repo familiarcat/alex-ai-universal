@@ -1,0 +1,54 @@
+{
+  "id": "IKckCG6TsUvrZd8P",
+  "name": "UTILITY - Crew Management - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "id": "crew_request",
+      "name": "Crew Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "crew_response",
+      "name": "Crew Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Crew Request": {
+      "main": [
+        [
+          {
+            "node": "Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "0830d68d-aa71-4879-9415-99516033d66b",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:47.414Z",
+  "updatedAt": "2025-09-21T21:31:50.251Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.797Z",
+  "_category": "crew-workflows",
+  "_source": "remote-n8n"
+}

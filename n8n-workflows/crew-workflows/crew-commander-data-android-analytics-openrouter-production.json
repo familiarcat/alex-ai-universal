@@ -1,0 +1,192 @@
+{
+  "id": "gIwrQHHArgrVARjL",
+  "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-data",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "crew_directive",
+      "name": "Commander Data Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "15cf8aa6-e83b-46b6-8e61-f76ca7039abf"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Commander Data Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "llm_selector",
+      "name": "LLM Selection Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_ai",
+      "name": "Commander Data AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Commander Data Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_communication",
+      "name": "Observation Lounge Communication",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "crew_response",
+      "name": "Commander Data Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Commander Data Directive": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Commander Data AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander Data AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Commander Data Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander Data Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander Data Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Commander Data Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "ea5b96b2-2851-4727-9a95-ad9e98a8a7af",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:46.487Z",
+  "updatedAt": "2025-09-21T21:31:48.073Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.798Z",
+  "_category": "crew-workflows",
+  "_source": "remote-n8n"
+}

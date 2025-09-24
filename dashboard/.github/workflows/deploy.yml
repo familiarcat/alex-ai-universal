@@ -1,0 +1,66 @@
+name: Deploy Alex AI Dashboard
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths: [ 'dashboard/**' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'dashboard/**' ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: dashboard/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./dashboard
+      run: npm ci
+      
+    - name: Run tests
+      working-directory: ./dashboard
+      run: npm run lint
+      
+    - name: Build dashboard
+      working-directory: ./dashboard
+      run: npm run build
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+        
+    - name: Deploy to AWS Amplify
+      if: github.ref == 'refs/heads/main'
+      working-directory: ./dashboard
+      run: |
+        chmod +x scripts/deploy-aws.sh
+        ./scripts/deploy-aws.sh production
+        
+    - name: Deploy to Staging
+      if: github.ref == 'refs/heads/develop'
+      working-directory: ./dashboard
+      run: |
+        chmod +x scripts/deploy-aws.sh
+        ./scripts/deploy-aws.sh staging
+        
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ ${{ job.status }} == 'success' ]; then
+          echo "✅ Deployment successful!"
+        else
+          echo "❌ Deployment failed!"
+        fi

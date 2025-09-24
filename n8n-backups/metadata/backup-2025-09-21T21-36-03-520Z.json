@@ -1,0 +1,24 @@
+{
+  "backupId": "backup-2025-09-21T21-36-03-520Z",
+  "timestamp": "2025-09-21T21:36:03.879Z",
+  "version": "1.0.0",
+  "config": {
+    "backupDir": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/n8n-backups",
+    "maxBackups": 30,
+    "compressionEnabled": true,
+    "includeMetadata": true,
+    "backupInterval": 86400000,
+    "retentionDays": 30,
+    "autoCleanup": true
+  },
+  "stats": {
+    "remoteWorkflows": 31,
+    "localWorkflows": 30,
+    "totalSize": 720477
+  },
+  "environment": {
+    "nodeVersion": "v20.19.1",
+    "platform": "darwin",
+    "arch": "arm64"
+  }
+}

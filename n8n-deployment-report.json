@@ -1,0 +1,191 @@
+{
+  "timestamp": "2025-09-21T21:31:47.181Z",
+  "totalLocal": 72,
+  "totalRemote": 28,
+  "deployed": 3,
+  "updated": 27,
+  "errors": [],
+  "skipped": [],
+  "deployedWorkflows": [
+    {
+      "name": "Anti-Hallucination Crew Workflow",
+      "category": "ANTI-HALLUCINATION",
+      "file": "anti-hallucination-workflow.json"
+    },
+    {
+      "name": "Hallucination Monitoring Dashboard",
+      "category": "ANTI-HALLUCINATION",
+      "file": "hallucination-monitoring-workflow.json"
+    },
+    {
+      "name": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "category": "UTILITY",
+      "file": "Crew___Quark___Ferengi_Business_Intelligence__OpenRouter_Optimized_.json"
+    }
+  ],
+  "updatedWorkflows": [
+    {
+      "name": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "category": "ANTI-HALLUCINATION",
+      "file": "ANTI_HALLUCINATION___Crew_Detection___OpenRouter___Production.json",
+      "remoteId": "oaSjbIhny5J1sa7E"
+    },
+    {
+      "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-captain-jean-luc-picard-strategic-leadership-openrouter-production.json",
+      "remoteId": "BdNHOluRYUw2JxGW"
+    },
+    {
+      "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-commander-data-android-analytics-openrouter-production.json",
+      "remoteId": "gIwrQHHArgrVARjL"
+    },
+    {
+      "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-commander-william-riker-tactical-execution-openrouter-production.json",
+      "remoteId": "Imn7p6pVgi6SRvnF"
+    },
+    {
+      "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-counselor-deanna-troi-user-experience-openrouter-production.json",
+      "remoteId": "QJnN7ks2KsQTENDc"
+    },
+    {
+      "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-dr-beverly-crusher-health-diagnostics-openrouter-production.json",
+      "remoteId": "SXAMupVWdOxZybF6"
+    },
+    {
+      "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-lieutenant-commander-geordi-la-forge-infrastructure-openrouter-production.json",
+      "remoteId": "e0UEwyVcXJqeePdj"
+    },
+    {
+      "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-lieutenant-uhura-communications-io-openrouter-production.json",
+      "remoteId": "36KPle5mPiMaazG6"
+    },
+    {
+      "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "category": "CREW",
+      "file": "crew-lieutenant-worf-security-compliance-openrouter-production.json",
+      "remoteId": "GhSB8EpZWXLU78LM"
+    },
+    {
+      "name": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "category": "ANTI-HALLUCINATION",
+      "file": "ANTI_HALLUCINATION___HTTP_Handler___OpenRouter___Production.json",
+      "remoteId": "2yIY7drpyIstYXqk"
+    },
+    {
+      "name": "Anti-Hallucination Crew Workflow (HTTP)",
+      "category": "UTILITY",
+      "file": "Anti_Hallucination_Crew_Workflow__HTTP_.json",
+      "remoteId": "geKQAdYcmHJLLTYq"
+    },
+    {
+      "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "category": "COORDINATION",
+      "file": "COORDINATION___Democratic_Collaboration___OpenRouter___Production.json",
+      "remoteId": "XJeicUzVaGNb8gsB"
+    },
+    {
+      "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "category": "COORDINATION",
+      "file": "COORDINATION___Observation_Lounge___OpenRouter___Production.json",
+      "remoteId": "YIm1VzYzVdphsjb9"
+    },
+    {
+      "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "category": "ANTI-HALLUCINATION",
+      "file": "optimized-quark-workflow.json",
+      "remoteId": "L6K4bzSKlGC36ABL"
+    },
+    {
+      "name": "PROJECT - Alex AI - Contact Management - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___Contact_Management___Production.json",
+      "remoteId": "rLN1eArIA6t3tEwZ"
+    },
+    {
+      "name": "PROJECT - Alex AI - Crew Integration - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___Crew_Integration___Production.json",
+      "remoteId": "FEdNQJgLBjJVh3oP"
+    },
+    {
+      "name": "PROJECT - Alex AI - Job Opportunities - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___Job_Opportunities___Production.json",
+      "remoteId": "58B6WvShXJ7bj8Ni"
+    },
+    {
+      "name": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___Job_Opportunities_Live___Production.json",
+      "remoteId": "oQTqPZBq8R7Zuza9"
+    },
+    {
+      "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___MCP_Enhancement___Production.json",
+      "remoteId": "Xbdaf4VdEA4mEuL2"
+    },
+    {
+      "name": "PROJECT - Alex AI - MCP Integration - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___MCP_Integration___Production.json",
+      "remoteId": "p0L9kldRFQmexqBx"
+    },
+    {
+      "name": "PROJECT - Alex AI - Resume Analysis - Production",
+      "category": "PROJECT",
+      "file": "PROJECT___Alex_AI___Resume_Analysis___Production.json",
+      "remoteId": "RY8pm6gUFtkTKcpg"
+    },
+    {
+      "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "file": "SYSTEM___Enhanced_Mission_Control___OpenRouter___Production.json",
+      "remoteId": "eviPmIvTnoJcnaas"
+    },
+    {
+      "name": "SYSTEM - Mission Control - OpenRouter - Production",
+      "category": "SYSTEM",
+      "file": "SYSTEM___Mission_Control___OpenRouter___Production.json",
+      "remoteId": "aNfs26Wlau80ufmh"
+    },
+    {
+      "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "category": "SYSTEM",
+      "file": "SYSTEM___OpenRouter_Agent_Coordination___OpenRouter___Production.json",
+      "remoteId": "VQDH8tqWvVmigWd1"
+    },
+    {
+      "name": "UTILITY - AI Controller - OpenRouter - Production",
+      "category": "UTILITY",
+      "file": "UTILITY___AI_Controller___OpenRouter___Production.json",
+      "remoteId": "C5Kq9nZTnZEc0EWo"
+    },
+    {
+      "name": "UTILITY - Crew Management - OpenRouter - Production",
+      "category": "UTILITY",
+      "file": "UTILITY___Crew_Management___OpenRouter___Production.json",
+      "remoteId": "IKckCG6TsUvrZd8P"
+    },
+    {
+      "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "category": "UTILITY",
+      "file": "UTILITY___Generic_Sub_workflow___OpenRouter___Production.json",
+      "remoteId": "KOK1vhGdHKd0c6Em"
+    }
+  ],
+  "skippedWorkflows": []
+}

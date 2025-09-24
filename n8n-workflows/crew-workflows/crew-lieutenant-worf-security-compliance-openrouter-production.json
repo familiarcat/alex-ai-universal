@@ -1,0 +1,192 @@
+{
+  "id": "GhSB8EpZWXLU78LM",
+  "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-worf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "crew_directive",
+      "name": "Lieutenant Worf Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "7955594c-5cd0-43ff-8ec2-447e078fa8a1"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Lieutenant Worf Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "llm_selector",
+      "name": "LLM Selection Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_ai",
+      "name": "Lieutenant Worf AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Lieutenant Worf Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_communication",
+      "name": "Observation Lounge Communication",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "crew_response",
+      "name": "Lieutenant Worf Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Lieutenant Worf Directive": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Worf AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Worf AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Worf Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Worf Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Worf Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Worf Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "8f18bb1d-9b15-4f35-a326-78a2e4ff025a",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:46.157Z",
+  "updatedAt": "2025-09-21T21:31:48.589Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.797Z",
+  "_category": "crew-workflows",
+  "_source": "remote-n8n"
+}

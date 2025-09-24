@@ -1,0 +1,108 @@
+{
+  "createdAt": "2025-08-27T02:25:47.006Z",
+  "updatedAt": "2025-09-21T05:16:04.288Z",
+  "id": "aNfs26Wlau80ufmh",
+  "name": "SYSTEM - Mission Control - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+        "options": {}
+      },
+      "id": "mission_directive",
+      "name": "Mission Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "0283b7ab-c44c-47c2-925a-513054e1105f"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "AlexAI Optimized Crew Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "AlexAI Optimized Crew Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "mission_response",
+      "name": "Mission Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Mission Directive": {
+      "main": [
+        [
+          {
+            "node": "Mission Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AlexAI Optimized Crew Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "AlexAI Optimized Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "20cc3f99-ea47-48b7-8b1b-e0bf4f673eae",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:47.008Z",
+      "updatedAt": "2025-08-27T02:25:47.008Z",
+      "role": "workflow:owner",
+      "workflowId": "aNfs26Wlau80ufmh",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "tags": []
+}

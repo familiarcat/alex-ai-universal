@@ -1,0 +1,21 @@
+{
+  "name": "@alex-ai/web",
+  "version": "1.0.0-private",
+  "description": "Alex AI Web Platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "ai",
+    "web",
+    "alex-ai"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT"
+}
+

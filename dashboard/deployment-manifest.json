@@ -1,0 +1,25 @@
+{
+  "deployment": {
+    "name": "alex-ai-dashboard",
+    "version": "1.0.0",
+    "timestamp": "2025-09-24T04:24:28Z",
+    "target": "n8n.pbradygeorgen.com/dashboard",
+    "package": "alex-ai-dashboard-n8n.tar.gz",
+    "size": "128K",
+    "files":       22,
+    "checksum": "ec5728803f157f2dead74c1c330c8405d36d805ccc376e2be303f9d79b1fa098"
+  },
+  "features": {
+    "lcr_layout": true,
+    "dark_mode": true,
+    "real_time_data": true,
+    "n8n_integration": true,
+    "supabase_integration": true,
+    "responsive_design": true
+  },
+  "integrations": {
+    "n8n_api": "https://n8n.pbradygeorgen.com/api/v1",
+    "supabase": "enabled",
+    "real_time_updates": "30s_interval"
+  }
+}

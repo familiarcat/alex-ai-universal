@@ -1,0 +1,35 @@
+{
+  "project": {
+    "name": "alex-ai-universal",
+    "type": "unknown",
+    "framework": "unknown",
+    "language": "unknown"
+  },
+  "milestone": {
+    "enabled": true,
+    "script": "./scripts/alex-ai-enhanced-milestone-push-corrected.sh",
+    "features": [
+      "task-tracking",
+      "git-change-analysis",
+      "commit-message-analysis",
+      "todo-completion-tracking",
+      "task-completion-scoring",
+      "enhanced-impact-analysis",
+      "detailed-accomplishment-reporting"
+    ]
+  },
+  "crew": {
+    "enabled": true,
+    "members": [
+      "captain_picard",
+      "commander_data",
+      "lieutenant_geordi",
+      "lieutenant_worf",
+      "dr_crusher",
+      "commander_riker",
+      "counselor_troi",
+      "lieutenant_uhura",
+      "quark"
+    ]
+  }
+}

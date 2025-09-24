@@ -1,0 +1,172 @@
+{
+  "id": "Xbdaf4VdEA4mEuL2",
+  "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-mcp-enhanced",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "mcp_webhook_trigger",
+      "name": "Enhanced MCP Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.github.com/repos/modelcontextprotocol/servers",
+        "options": {}
+      },
+      "id": "github_mcp_scraper",
+      "name": "GitHub MCP Repository Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://modelcontextprotocol.io/docs",
+        "options": {}
+      },
+      "id": "mcp_docs_scraper",
+      "name": "MCP Documentation Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "alex_ai_mcp_analyzer",
+      "name": "Alex AI MCP Knowledge Analyzer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/mcp_knowledge_base",
+        "options": {}
+      },
+      "id": "mcp_knowledge_storage",
+      "name": "MCP Knowledge Base Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "mcp_response",
+      "name": "Enhanced MCP Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Enhanced MCP Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "GitHub MCP Repository Scraper",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MCP Documentation Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub MCP Repository Scraper": {
+      "main": [
+        [
+          {
+            "node": "Alex AI MCP Knowledge Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Documentation Scraper": {
+      "main": [
+        [
+          {
+            "node": "Alex AI MCP Knowledge Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alex AI MCP Knowledge Analyzer": {
+      "main": [
+        [
+          {
+            "node": "MCP Knowledge Base Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Knowledge Base Storage": {
+      "main": [
+        [
+          {
+            "node": "Enhanced MCP Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "468e24c2-d4a4-4322-ab95-78f88a4d3d9c",
+  "triggerCount": 1,
+  "createdAt": "2025-09-07T08:43:29.096Z",
+  "updatedAt": "2025-09-21T21:31:49.639Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.800Z",
+  "_category": "project-workflows",
+  "_source": "remote-n8n"
+}

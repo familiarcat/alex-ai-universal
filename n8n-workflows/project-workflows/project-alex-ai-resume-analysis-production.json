@@ -1,0 +1,64 @@
+{
+  "id": "RY8pm6gUFtkTKcpg",
+  "name": "PROJECT - Alex AI - Resume Analysis - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-resume-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Resume Analysis - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "472dba4b-f118-4141-939d-1792e8545caf",
+  "triggerCount": 1,
+  "createdAt": "2025-09-05T09:49:27.391Z",
+  "updatedAt": "2025-09-21T21:31:49.809Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.800Z",
+  "_category": "project-workflows",
+  "_source": "remote-n8n"
+}

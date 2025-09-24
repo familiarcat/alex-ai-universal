@@ -1,0 +1,192 @@
+{
+  "id": "e0UEwyVcXJqeePdj",
+  "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-commander-geordi-la-forge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "crew_directive",
+      "name": "Lieutenant Commander Geordi La Forge Directive",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "70c17a41-3e31-43ac-851d-3c490da2891b"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Lieutenant Commander Geordi La Forge Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "llm_selector",
+      "name": "LLM Selection Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "crew_ai",
+      "name": "Lieutenant Commander Geordi La Forge AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        688,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Lieutenant Commander Geordi La Forge Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_communication",
+      "name": "Observation Lounge Communication",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "crew_response",
+      "name": "Lieutenant Commander Geordi La Forge Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Lieutenant Commander Geordi La Forge Directive": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Commander Geordi La Forge AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Commander Geordi La Forge AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Commander Geordi La Forge Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Commander Geordi La Forge Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lieutenant Commander Geordi La Forge Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Lieutenant Commander Geordi La Forge Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "7680ef81-45d5-4d25-b8fc-6ec5e2147079",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:46.595Z",
+  "updatedAt": "2025-09-21T21:31:48.410Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.798Z",
+  "_category": "crew-workflows",
+  "_source": "remote-n8n"
+}

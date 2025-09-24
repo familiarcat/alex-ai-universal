@@ -1,0 +1,320 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --alex-blue: #0066CC;
+  --alex-gold: #FFD700;
+  --alex-red: #CC0000;
+  --alex-green: #00CC66;
+  --dark-bg: #0A0A0A;
+  --dark-surface: #1A1A1A;
+  --dark-border: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #0A0A0A 100%);
+  color: #FFFFFF;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A1A1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0066CC;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0088FF;
+}
+
+/* LCRS Layout Components */
+.lcrs-container {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas: 
+    "sidebar header header"
+    "sidebar main right";
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.lcrs-sidebar {
+  grid-area: sidebar;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #333333;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+}
+
+.lcrs-header {
+  grid-area: header;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #333333;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lcrs-main {
+  grid-area: main;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #333333;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.lcrs-right {
+  grid-area: right;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #333333;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Card Components */
+.card {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #0066CC;
+  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
+  transform: translateY(-2px);
+}
+
+.card-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Status Indicators */
+.status-active {
+  color: #00CC66;
+  background: rgba(0, 204, 102, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-warning {
+  color: #FFD700;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-error {
+  color: #CC0000;
+  background: rgba(204, 0, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Performance Bars */
+.performance-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.performance-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0066CC, #00CC66);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.performance-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Crew Member Cards */
+.crew-card {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.crew-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0066CC, #00CC66, #FFD700);
+}
+
+.crew-card:hover {
+  border-color: #0066CC;
+  box-shadow: 0 8px 30px rgba(0, 102, 204, 0.3);
+  transform: translateY(-4px);
+}
+
+/* Integration Status */
+.integration-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.integration-connected {
+  background: rgba(0, 204, 102, 0.1);
+  border: 1px solid #00CC66;
+  color: #00CC66;
+}
+
+.integration-disconnected {
+  background: rgba(204, 0, 0, 0.1);
+  border: 1px solid #CC0000;
+  color: #CC0000;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .lcrs-container {
+    grid-template-columns: 200px 1fr 250px;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .lcrs-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "sidebar"
+      "right";
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .lcrs-sidebar,
+  .lcrs-right {
+    max-height: 300px;
+  }
+}
+
+/* Loading Animation */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #0066CC;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Glitch Effect for Special Elements */
+.glitch {
+  position: relative;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-1 0.5s infinite;
+  color: #0066CC;
+  z-index: -1;
+}
+
+.glitch::after {
+  animation: glitch-2 0.5s infinite;
+  color: #CC0000;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0%, 14%, 15%, 49%, 50%, 99%, 100% {
+    transform: translate(0);
+  }
+  15%, 49% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%, 20%, 21%, 62%, 63%, 99%, 100% {
+    transform: translate(0);
+  }
+  21%, 62% {
+    transform: translate(2px, -2px);
+  }
+}

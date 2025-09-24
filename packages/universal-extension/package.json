@@ -1,0 +1,38 @@
+{
+  "name": "@alex-ai/universal-extension",
+  "version": "1.0.0",
+  "description": "Universal extension core for VSCode and Cursor",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "echo \"No tests specified\"",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "alex-ai",
+    "extension",
+    "vscode",
+    "cursor",
+    "universal"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT",
+  "dependencies": {
+    "@alex-ai/core": "file:../core"
+  },
+  "devDependencies": {
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "package.json",
+    "README.md"
+  ]
+}
+
+
+

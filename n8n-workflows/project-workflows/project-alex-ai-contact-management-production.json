@@ -1,0 +1,64 @@
+{
+  "id": "rLN1eArIA6t3tEwZ",
+  "name": "PROJECT - Alex AI - Contact Management - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-contacts",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Contacts - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "41d15bf9-7970-4142-ae6c-6401ff22c18e",
+  "triggerCount": 1,
+  "createdAt": "2025-09-05T09:49:27.335Z",
+  "updatedAt": "2025-09-21T21:31:49.235Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.801Z",
+  "_category": "project-workflows",
+  "_source": "remote-n8n"
+}

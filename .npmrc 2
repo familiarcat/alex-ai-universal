@@ -1,0 +1,32 @@
+# PNPM Configuration for Alex AI Universal
+# Optimized for monorepo with multiple packages
+
+# Enable hoisting for better compatibility
+shamefully-hoist=true
+
+# Disable strict peer dependencies for easier development
+strict-peer-dependencies=false
+
+# Auto-install peer dependencies
+auto-install-peers=true
+
+# Use npm registry
+registry=https://registry.npmjs.org/
+
+# Enable workspace support
+workspace-concurrency=4
+
+# Store location for better performance
+store-dir=~/.pnpm-store
+
+# Enable strict SSL
+strict-ssl=true
+
+# Enable audit
+audit-level=moderate
+
+# Enable fund
+fund=false
+
+# Enable update-notifier
+update-notifier=false
