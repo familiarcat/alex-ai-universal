@@ -1,0 +1,167 @@
+{
+  "name": "Agent Memory System - Retrieve Memory",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "retrieve-memory",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-retrieve-memory",
+      "name": "Retrieve Memory Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "agent-memory-retrieve"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "agent-name-condition",
+              "leftValue": "={{ $json.agent_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "validate-agent-name",
+      "name": "Validate Agent Name",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://n8n.pbradygeorgen.com/dashboard/api/memories/retrieve",
+        "authentication": "none",
+        "requestMethod": "GET",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "agent_name",
+              "value": "={{ $json.agent_name }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ $json.limit || 10 }}"
+            },
+            {
+              "name": "similarity_threshold",
+              "value": "={{ $json.similarity_threshold || 0.7 }}"
+            },
+            {
+              "name": "memory_type",
+              "value": "={{ $json.memory_type || null }}"
+            },
+            {
+              "name": "include_inactive",
+              "value": "={{ $json.include_inactive || false }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "retrieve-from-supabase",
+      "name": "Retrieve from Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"agent_name\": $json.agent_name, \"total_memories\": $json.total_memories, \"memories\": $json.memories, \"message\": \"Memories retrieved successfully\" } }}"
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input data\", \"message\": \"Missing required field: agent_name\" } }}",
+        "responseCode": 400
+      },
+      "id": "error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 400]
+    }
+  ],
+  "connections": {
+    "Retrieve Memory Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Agent Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Agent Name": {
+      "main": [
+        [
+          {
+            "node": "Retrieve from Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve from Supabase": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-01-24T06:00:00.000Z",
+      "updatedAt": "2025-01-24T06:00:00.000Z",
+      "id": "agent-memory",
+      "name": "Agent Memory"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-24T06:00:00.000Z",
+  "versionId": "1"
+}

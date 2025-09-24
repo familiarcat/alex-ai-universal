@@ -1,0 +1,14 @@
+{
+  "name": "alex-ai-sync-demo",
+  "version": "1.0.0",
+  "description": "Real-time sync demonstration between local and deployed dashboards",
+  "main": "start-sync-demo.js",
+  "scripts": {
+    "start": "node start-sync-demo.js",
+    "start:local": "node local-server.js",
+    "start:deployed": "node deployed-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

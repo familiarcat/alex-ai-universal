@@ -1,24 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  distDir: 'out',
+  // Development configuration - no static export
   env: {
     N8N_API_URL: process.env.N8N_API_URL || 'https://n8n.pbradygeorgen.com/api/v1',
     N8N_API_KEY: process.env.N8N_API_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
   },
-  // Static export optimizations
+  // Development optimizations
   images: {
     unoptimized: true
   },
-  // Disable server-side features for static export
+  // Enable API routes for development
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  // Disable static export for development
+  experimental: {
+    outputFileTracingRoot: undefined,
   }
 };
 

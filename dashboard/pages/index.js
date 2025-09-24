@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import SyncToggle from '../components/SyncToggle';
+import SyncProof from '../components/SyncProof';
 import { 
   Activity, 
   Users, 
@@ -396,6 +398,28 @@ export default function AlexAIDashboard() {
                 </div>
               </div>
             )}
+
+            {/* Real-Time Sync Toggle */}
+            <div className="mt-6">
+              <SyncToggle 
+                environment={process.env.NODE_ENV === 'development' ? 'local' : 'deployed'}
+                onSyncChange={(syncData) => {
+                  console.log('Sync change:', syncData);
+                  // You can add additional sync handling logic here
+                }}
+              />
+            </div>
+
+            {/* Sync Proof Mechanism */}
+            <div className="mt-6">
+              <SyncProof 
+                environment={process.env.NODE_ENV === 'development' ? 'local' : 'deployed'}
+                onSyncProof={(proofData) => {
+                  console.log('Sync proof:', proofData);
+                  // Handle sync proof data
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
