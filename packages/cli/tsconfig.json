@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+<<<<<<< HEAD
     "lib": ["ES2020", "DOM"],
+=======
+    "lib": ["ES2020"],
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -16,8 +20,12 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+<<<<<<< HEAD
     "emitDecoratorMetadata": true,
     "types": ["node"]
+=======
+    "emitDecoratorMetadata": true
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
   },
   "include": [
     "src/**/*"
@@ -31,4 +39,7 @@
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5

@@ -58,4 +58,7 @@ echo "4. Test: npx alexi unified-system query 'Test N8N connection'"
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5

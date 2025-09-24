@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+<<<<<<< HEAD
     "lib": ["ES2020", "DOM"],
+=======
+    "lib": ["ES2020"],
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     "outDir": "./dist",
     "rootDir": "./packages",
     "strict": true,
@@ -16,8 +20,12 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+<<<<<<< HEAD
     "resolveJsonModule": true,
     "types": ["node"]
+=======
+    "resolveJsonModule": true
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
   },
   "include": ["packages/*/src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

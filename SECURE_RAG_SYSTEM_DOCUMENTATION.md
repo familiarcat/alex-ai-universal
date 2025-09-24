@@ -459,4 +459,7 @@ This system ensures Alex AI can learn and provide intelligent assistance while m
 **Secure RAG System Documentation**
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5

@@ -19,7 +19,10 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
+<<<<<<< HEAD
     "axios": "^1.6.0",
+=======
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     "commander": "^12.0.0",
     "fs-extra": "^11.2.0",
     "simple-git": "^3.24.0",
@@ -41,6 +44,10 @@
     "README.md"
   ],
   "publishConfig": {
+<<<<<<< HEAD
     "registry": "https://registry.npmjs.org"
+=======
+    "registry": "https://npm.pkg.github.com"
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
   }
 }

@@ -4,6 +4,7 @@
  * Simple Alex AI CLI - Minimal Working Version
  */
 
+<<<<<<< HEAD
 // Import statements - using require for now to avoid module resolution issues
 const { MinimalAlexAI } = require('@alex-ai/core');
 const { CrewSelfDiscoveryCLI } = require('@alex-ai/core');
@@ -16,6 +17,17 @@ const { DebuggingCLI } = require('./debugging-cli');
 const commander = require('commander');
 const { spawn } = require('child_process');
 const path = require('path');
+=======
+import { MinimalAlexAI } from '@alex-ai/core';
+import { CrewSelfDiscoveryCLI } from '@alex-ai/core';
+import { N8NWorkflowCLI } from '@alex-ai/core';
+import { ScenarioAnalysisCLI } from '@alex-ai/core';
+import { CrewConsciousnessCLI } from '@alex-ai/core';
+import { AntiHallucinationCLI } from './anti-hallucination-cli';
+import { N8NIntegrationCLI } from './n8n-integration-cli';
+import { DebuggingCLI } from './debugging-cli';
+import * as commander from 'commander';
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
 
 const program = new commander.Command();
 const alexAI = new MinimalAlexAI();
@@ -58,7 +70,12 @@ async function handleN8NIntegrationRequest(message: string): Promise<void> {
     console.log('🚀 Starting sync system...');
     
     // Start the sync system
+<<<<<<< HEAD
     const scriptPath = path.join(__dirname, '..', '..', '..', 'scripts', 'truly-unique-bidirectional-sync.js');
+=======
+    const { spawn } = require('child_process');
+    const scriptPath = require('path').join(__dirname, '..', '..', '..', 'scripts', 'truly-unique-bidirectional-sync.js');
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     
     const child = spawn('node', [scriptPath], {
       stdio: 'inherit',

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+<<<<<<< HEAD
 
 /**
  * Simple Alex AI CLI - Minimal Working Version (JavaScript)
@@ -275,6 +276,87 @@ program
   .command('help')
   .description('Show help information')
   .action(() => {
+=======
+"use strict";
+/**
+ * Simple Alex AI CLI - Minimal Working Version
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@alex-ai/core");
+const core_2 = require("@alex-ai/core");
+const core_3 = require("@alex-ai/core");
+const core_4 = require("@alex-ai/core");
+const core_5 = require("@alex-ai/core");
+const anti_hallucination_cli_1 = require("./anti-hallucination-cli");
+const commander = __importStar(require("commander"));
+const program = new commander.Command();
+const alexAI = new core_1.MinimalAlexAI();
+program
+    .name('alex-ai')
+    .description('Alex AI Universal - AI Code Assistant')
+    .version('1.0.0');
+program
+    .command('init')
+    .description('Initialize Alex AI')
+    .action(async () => {
+    console.log('🚀 Initializing Alex AI...');
+    await alexAI.initialize();
+    console.log('✅ Alex AI initialized successfully!');
+});
+program
+    .command('status')
+    .description('Check Alex AI status')
+    .action(() => {
+    console.log('📊 Checking Alex AI status...');
+    const status = alexAI.getStatus();
+    console.log('Status:', status);
+});
+program
+    .command('chat <message>')
+    .description('Chat with Alex AI')
+    .action((message) => {
+    console.log('💬 Chatting with Alex AI...');
+    console.log('Message:', message);
+    console.log('Response: Hello! I am Alex AI, your AI code assistant. How can I help you today?');
+});
+program
+    .command('help')
+    .description('Show help information')
+    .action(() => {
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     console.log('🖖 Alex AI Universal - AI Code Assistant');
     console.log('');
     console.log('Available commands:');
@@ -286,8 +368,11 @@ program
     console.log('  scenario-analysis - Comprehensive project scenario analysis');
     console.log('  crew-consciousness - Crew consciousness and project analysis');
     console.log('  anti-hallucination - Anti-hallucination system management');
+<<<<<<< HEAD
     console.log('  n8n-integration   - N8N bi-directional sync system');
     console.log('  debugging         - Cursor AI debugging system');
+=======
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     console.log('  help              - Show this help');
     console.log('');
     console.log('Examples:');
@@ -302,6 +387,7 @@ program
     console.log('  alex-ai anti-hallucination enable');
     console.log('  alex-ai anti-hallucination test');
     console.log('  alex-ai anti-hallucination dashboard');
+<<<<<<< HEAD
     console.log('  alex-ai n8n-integration sync');
     console.log('  alex-ai n8n-integration status');
     console.log('  alex-ai n8n-integration daemon');
@@ -351,3 +437,28 @@ program.parse();
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
+=======
+});
+// Initialize crew self-discovery CLI
+const crewDiscoveryCLI = new core_2.CrewSelfDiscoveryCLI();
+crewDiscoveryCLI.initializeCommands(program);
+// Initialize N8N workflow CLI
+const n8nWorkflowCLI = new core_3.N8NWorkflowCLI();
+n8nWorkflowCLI.initializeCommands(program);
+// Initialize scenario analysis CLI
+const scenarioAnalysisCLI = new core_4.ScenarioAnalysisCLI();
+scenarioAnalysisCLI.initializeCommands(program);
+// Initialize crew consciousness CLI
+const crewConsciousnessCLI = new core_5.CrewConsciousnessCLI();
+crewConsciousnessCLI.initializeCommands(program);
+// Initialize anti-hallucination CLI
+const antiHallucinationCLI = new anti_hallucination_cli_1.AntiHallucinationCLI();
+antiHallucinationCLI.setupCommands(program);
+// Parse command line arguments
+program.parse();
+// If no command provided, show help
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+}
+//# sourceMappingURL=simple-cli.js.map
+>>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
