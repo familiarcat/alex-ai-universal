@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Production configuration for Amplify
-  output: 'export',
-  distDir: 'out',
-  trailingSlash: true,
   images: {
     unoptimized: true
   },

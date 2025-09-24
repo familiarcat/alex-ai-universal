@@ -44,7 +44,8 @@ export default async function handler(req, res) {
     // Fetch Supabase memory records
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       try {
-        const supabaseResponse = await fetch(`${SUPABASE_URL}/rest/v1/memories?select=*&order=created_at.desc&limit=50`, {
+        // Try agent_memories table first, fallback to memories
+        let supabaseResponse = await fetch(`${SUPABASE_URL}/rest/v1/agent_memories?select=*&order=created_at.desc&limit=50`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
@@ -52,12 +53,29 @@ export default async function handler(req, res) {
           }
         });
         
+        if (!supabaseResponse.ok) {
+          // Fallback to memories table
+          supabaseResponse = await fetch(`${SUPABASE_URL}/rest/v1/memories?select=*&order=created_at.desc&limit=50`, {
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        }
+        
         if (supabaseResponse.ok) {
           supabaseData = await supabaseResponse.json();
           memoryRecords = supabaseData || [];
+        } else {
+          // If both tables don't exist, mark as connected but no data
+          supabaseData = { connected: true, tableMissing: true };
+          memoryRecords = [];
         }
       } catch (error) {
         console.error('Supabase fetch error:', error.message);
+        supabaseData = { connected: false, error: error.message };
+        memoryRecords = [];
       }
     }
 
@@ -156,9 +174,10 @@ export default async function handler(req, res) {
           }))
         },
         supabase: {
-          status: supabaseData ? 'connected' : 'disconnected',
+          status: supabaseData && !supabaseData.error ? 'connected' : 'disconnected',
           lastSync: new Date().toISOString(),
           records: recentMemories,
+          tableStatus: supabaseData?.tableMissing ? 'table_missing' : 'ready',
           recentMemories: memoryRecords.slice(0, 10).map(m => ({
             id: m.id,
             content: m.content?.substring(0, 100) + '...',

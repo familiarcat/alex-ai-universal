@@ -28,8 +28,8 @@ export default function AlexAIDashboard() {
 
   const fetchSystemData = async () => {
     try {
-      // Call N8N server directly for real-time data
-      const response = await fetch('https://n8n.pbradygeorgen.com/api/v1/alex-ai/status');
+      // Call local API endpoint for real-time data
+      const response = await fetch('/api/alex-ai/status');
       const data = await response.json();
       
       setSystemData(data);
