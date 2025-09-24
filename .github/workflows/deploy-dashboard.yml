@@ -1,0 +1,41 @@
+name: Deploy Alex AI Dashboard
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        cd dashboard
+        npm install
+        
+    - name: Build dashboard
+      run: |
+        cd dashboard
+        npm run build
+        
+    - name: Deploy to N8N server
+      run: |
+        cd dashboard
+        chmod +x scripts/simple-cicd-deploy.sh
+        ./scripts/simple-cicd-deploy.sh
+      env:
+        N8N_SERVER_USER: ${{ secrets.N8N_SERVER_USER }}
+        N8N_SERVER_HOST: ${{ secrets.N8N_SERVER_HOST }}
+        N8N_SSH_KEY: ${{ secrets.N8N_SSH_KEY }}

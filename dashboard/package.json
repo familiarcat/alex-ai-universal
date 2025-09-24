@@ -15,8 +15,9 @@
     "deploy:ci-cd": "./scripts/ci-cd-deploy.sh"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
     "autoprefixer": "^10.4.0",
-    "axios": "^1.6.0",
+    "axios": "^1.12.2",
     "lucide-react": "^0.292.0",
     "next": "^14.0.0",
     "postcss": "^8.4.0",
