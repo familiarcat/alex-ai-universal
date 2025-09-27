@@ -149,3 +149,4 @@ echo "3. Monitor deployment in GitHub Actions"
 echo "4. Check deployment status: ./scripts/check-deployment.sh"
 echo ""
 echo "🌐 Dashboard will be available at: https://dashboard.n8n.pbradygeorgen.com"
+

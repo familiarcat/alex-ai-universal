@@ -53,3 +53,4 @@ echo "   4. Configure nginx to proxy /dashboard to the Next.js app"
 
 cd ..
 echo "✅ Deployment script complete!"
+

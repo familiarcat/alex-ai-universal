@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-27T04:28:32.255Z",
-  "updatedAt": "2025-09-21T07:44:34.596Z",
+  "updatedAt": "2025-09-21T21:31:49.124Z",
   "id": "L6K4bzSKlGC36ABL",
   "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
   "active": true,
@@ -323,11 +323,13 @@
       ]
     }
   },
-  "settings": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ce1fcaf8-cc84-4a88-848c-ed21e0e88518",
+  "versionId": "1e150006-06ce-459d-9d81-0625acd2418f",
   "triggerCount": 1,
   "shared": [
     {
@@ -353,7 +355,7 @@
             "projectId": "4Pe2tfKPH8e3rX41",
             "user": {
               "createdAt": "2025-08-25T04:21:26.701Z",
-              "updatedAt": "2025-09-21T04:00:05.000Z",
+              "updatedAt": "2025-09-25T04:00:04.000Z",
               "id": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
               "email": "brady@pbradygeorgen.com",
               "firstName": "Brady",
@@ -389,7 +391,7 @@
               "role": "global:owner",
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2025-09-21",
+              "lastActiveAt": "2025-09-25",
               "isPending": false
             }
           }

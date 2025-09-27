@@ -202,3 +202,4 @@ if (command && !command.startsWith('-')) {
   // Setup mode
   autoInstantiation.setupAutoInstantiation();
 }
+

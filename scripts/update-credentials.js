@@ -133,3 +133,4 @@ updater.updateCredentials().then(() => {
   console.log('   1. Run: source ~/.zshrc');
   console.log('   2. Test: node scripts/credential-manager.js validate');
 }).catch(console.error);
+

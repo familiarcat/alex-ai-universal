@@ -113,3 +113,4 @@ echo "🔗 Amplify Console: https://console.aws.amazon.com/amplify/home#/${APP_N
 rm -f app-info.json deployment-info.json alex-ai-dashboard.tar.gz
 
 echo "✅ Deployment cleanup complete"
+

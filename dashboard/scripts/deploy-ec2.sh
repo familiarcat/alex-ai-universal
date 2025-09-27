@@ -177,3 +177,4 @@ echo "🔄 The dashboard will run alongside your existing n8n application"
 rm -rf ec2-deploy
 
 echo "✅ EC2 deployment package ready for upload"
+

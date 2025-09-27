@@ -234,3 +234,4 @@ switch (command) {
     console.log('');
     console.log('Usage: node credential-manager.js <command>');
 }
+

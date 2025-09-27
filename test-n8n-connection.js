@@ -149,3 +149,4 @@ class N8NConnectionTester {
 // Run diagnostics
 const tester = new N8NConnectionTester();
 tester.runDiagnostics().catch(console.error);
+
