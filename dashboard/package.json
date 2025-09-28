@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:n8n": "./scripts/load-n8n-credentials.sh && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,14 +13,15 @@
     "deploy:staging": "npm run build && ./scripts/deploy-aws.sh staging",
     "deploy:production": "npm run build && ./scripts/deploy-aws.sh production",
     "deploy:n8n": "./scripts/deploy-n8n.sh",
-    "deploy:ci-cd": "./scripts/ci-cd-deploy.sh"
+    "deploy:ci-cd": "./scripts/ci-cd-deploy.sh",
+    "test:n8n": "node -e \"console.log('Testing N8N connection...'); require('./lib/n8n-client').testN8nConnection().then(console.log);\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
     "autoprefixer": "^10.4.0",
     "axios": "^1.12.2",
     "lucide-react": "^0.292.0",
-    "next": "^14.0.0",
+    "next": "^15.0.0",
     "postcss": "^8.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -31,7 +33,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0",
+    "eslint-config-next": "^15.0.0",
     "typescript": "^5.0.0"
   }
 }

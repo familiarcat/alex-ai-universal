@@ -11,7 +11,8 @@ import {
   TrendingUp,
   CheckCircle,
   AlertCircle,
-  XCircle
+  XCircle,
+  Brain
 } from 'lucide-react';
 
 export default function AlexAIDashboard() {
@@ -138,6 +139,24 @@ export default function AlexAIDashboard() {
                     <div className="text-2xl font-bold text-alex-gold">
                       {systemData?.averagePerformance || 95}%
                     </div>
+                  </div>
+                </div>
+
+                <div className="card p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Brain className="w-5 h-5 mr-2 text-alex-purple" />
+                      <span className="text-sm font-medium">Learning</span>
+                    </div>
+                    <a 
+                      href="/learning" 
+                      className="text-xs bg-alex-purple text-white px-2 py-1 rounded hover:bg-alex-purple/80 transition-colors"
+                    >
+                      View
+                    </a>
+                  </div>
+                  <div className="mt-2">
+                    <div className="text-sm text-gray-400">Recursive Intelligence</div>
                   </div>
                 </div>
               </div>

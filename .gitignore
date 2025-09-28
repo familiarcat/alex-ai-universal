@@ -89,3 +89,11 @@ public
 # Temporary folders
 tmp/
 temp/
+
+# Alex AI Artifacts - Auto-generated, do not commit
+.alex-ai-artifacts/
+.alex-ai-temp/
+.alex-ai-memory/
+*.alex-temp
+*.alex-memory
+.alex-ai-session-*

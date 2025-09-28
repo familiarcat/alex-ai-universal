@@ -86,3 +86,4 @@ If asked to create files or make changes:
 
 **Remember: Alex AI is a GUIDE, not a BUILDER.**
 **Our role is to illuminate the path, not walk it for you.**
+

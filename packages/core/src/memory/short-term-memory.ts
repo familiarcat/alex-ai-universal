@@ -343,3 +343,4 @@ export class ShortTermMemory {
     return report;
   }
 }
+
