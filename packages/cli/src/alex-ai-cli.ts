@@ -59,8 +59,11 @@ class NPXCLIHandler {
       } else {
         console.error(`❌ Alex AI Error: ${response.message}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(`❌ NPX engagement failed: ${error.message}`);
+    } finally {
+      // Ensure process exits properly
+      process.exit(0);
     }
   }
 
@@ -118,7 +121,13 @@ program
   .description('Engage Alex AI with the crew')
   .argument('<message>', 'Message to send to Alex AI')
   .action(async (message: string) => {
-    await npxHandler.handleEngagement(message);
+    try {
+      await npxHandler.handleEngagement(message);
+    } catch (error: any) {
+      console.error(`❌ Engagement failed: ${error.message}`);
+    } finally {
+      process.exit(0);
+    }
   });
 
 // Status command
@@ -126,7 +135,13 @@ program
   .command('status')
   .description('Show Alex AI system status')
   .action(async () => {
-    await npxHandler.handleEngagement('Show system status');
+    try {
+      await npxHandler.handleEngagement('Show system status');
+    } catch (error: any) {
+      console.error(`❌ Status check failed: ${error.message}`);
+    } finally {
+      process.exit(0);
+    }
   });
 
 // N8N integration command
@@ -135,7 +150,13 @@ program
   .description('N8N integration and workflow management')
   .argument('<action>', 'N8N action (start, status, sync)')
   .action(async (action: string) => {
-    await npxHandler.handleN8NIntegration(action);
+    try {
+      await npxHandler.handleN8NIntegration(action);
+    } catch (error: any) {
+      console.error(`❌ N8N integration failed: ${error.message}`);
+    } finally {
+      process.exit(0);
+    }
   });
 
 // Interactive mode
@@ -154,7 +175,7 @@ program
     });
 
     const askQuestion = () => {
-      rl.question('You: ', async (input) => {
+      rl.question('You: ', async (input: string) => {
         if (input.toLowerCase() === 'exit') {
           console.log('👋 Goodbye! Live long and prosper! 🖖');
           rl.close();

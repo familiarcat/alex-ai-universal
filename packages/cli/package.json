@@ -1,30 +1,52 @@
 {
   "name": "@alex-ai/cli",
-  "version": "1.0.0-private",
-  "description": "Command-line interface for Alex AI Universal",
-  "main": "src/simple-cli.js",
+  "version": "1.0.0",
+  "description": "Alex AI Universal CLI - NPX command-line interface with Star Trek crew-based AI assistance",
+  "main": "dist/alex-ai-cli.js",
   "bin": {
-    "alex-ai": "src/simple-cli.js",
-    "engage-alex-ai": "src/simple-cli.js"
+    "alex-ai": "dist/alex-ai-cli.js",
+    "engage-alex-ai": "dist/alex-ai-cli.js",
+    "alex": "dist/alex-ai-cli.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "jest",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "ai",
     "cli",
+    "npx",
     "code-assistant",
+    "star-trek",
+    "crew-based",
+    "zero-artifacts",
+    "universal",
     "alex-ai"
   ],
   "author": "Alex AI Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alex-ai-universal/alex-ai-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alex-ai-universal/alex-ai-cli/issues"
+  },
+  "homepage": "https://github.com/alex-ai-universal/alex-ai-cli#readme",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "axios": "^1.6.0",
     "commander": "^12.0.0",
-    "@alex-ai/universal-extension": "file:../universal-extension"
+    "@alex-ai/universal-extension": "^1.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
@@ -36,12 +58,12 @@
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0"
   },
-  "files": [
-    "dist/**/*",
-    "src/**/*",
-    "README.md"
-  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }
