@@ -1,36 +1,63 @@
 {
   "name": "@alex-ai/universal-extension",
   "version": "1.0.0",
-  "description": "Universal extension core for VSCode, Cursor AI, and NPX",
+  "description": "Alex AI Universal Extension Core - Cross-platform AI assistant with zero-artifact guarantee",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "echo \"No tests specified\"",
-    "clean": "rm -rf dist"
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "alex-ai",
-    "extension",
+    "ai",
+    "code-assistant",
+    "universal",
+    "cross-platform",
+    "zero-artifacts",
+    "crew-based",
+    "star-trek",
     "vscode",
     "cursor",
-    "npx",
-    "universal"
+    "npx"
   ],
   "author": "Alex AI Team",
   "license": "MIT",
-  "dependencies": {
-    "@alex-ai/core": "file:../core"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alex-ai-universal/alex-ai-universal-extension.git"
   },
-  "devDependencies": {
-    "@types/node": "16.x",
-    "typescript": "^4.9.4"
+  "bugs": {
+    "url": "https://github.com/alex-ai-universal/alex-ai-universal-extension/issues"
   },
+  "homepage": "https://github.com/alex-ai-universal/alex-ai-universal-extension#readme",
   "files": [
     "dist/**/*",
     "src/**/*",
-    "package.json",
-    "README.md"
-  ]
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@alex-ai/core": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
 }

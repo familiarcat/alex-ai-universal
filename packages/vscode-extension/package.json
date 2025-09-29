@@ -1,5 +1,5 @@
 {
-  "name": "@alex-ai/vscode",
+  "name": "alex-ai-universal",
   "version": "1.0.0",
   "description": "Alex AI Universal VSCode Extension - Star Trek crew-based AI assistant with zero-artifact guarantee",
   "displayName": "Alex AI Universal",
@@ -67,7 +67,7 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
-    "@alex-ai/universal-extension": "^1.0.0"
+    "@alex-ai/universal-extension": "file:../universal-extension"
   },
   "devDependencies": {
     "@types/vscode": "^1.74.0",

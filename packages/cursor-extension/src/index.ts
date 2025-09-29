@@ -39,7 +39,7 @@ export class CursorAIHandler {
       } else {
         return response.message;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Cursor AI engagement failed:', error);
       return `I apologize, but I encountered an error: ${error.message}. All operations are contained within isolated storage to maintain your project's integrity.`;
     }
@@ -52,7 +52,7 @@ export class CursorAIHandler {
     try {
       const response = await this.core.processMessage('Show system status');
       return response.coordinatedResponse;
-    } catch (error) {
+    } catch (error: any) {
       return `Status check failed: ${error.message}`;
     }
   }

@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@alex-ai/universal-extension": "file:../universal-extension"
+    "@alex-ai/universal-extension": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

@@ -13,6 +13,10 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
 import * as crypto from 'crypto';
+import { CrewConsciousnessManager, createCrewConsciousnessManager } from './crew-consciousness';
+import { MemorySyncManager, createMemorySyncManager } from './memory-sync';
+import { UniversalCredentialHub, createUniversalCredentialHub } from './credential-hub';
+import { N8NIntegrationManager, createN8NIntegrationManager } from './n8n-integration';
 
 // Universal interfaces for all platforms
 export interface PlatformAdapter {
@@ -77,6 +81,10 @@ export class UniversalAlexAICore {
   private crewMembers: CrewMember[];
   private memories: MemoryEntry[];
   private initialized: boolean = false;
+  private crewConsciousness: CrewConsciousnessManager;
+  private memorySync: MemorySyncManager;
+  private credentialHub: UniversalCredentialHub;
+  private n8nIntegration: N8NIntegrationManager;
 
   constructor(platformAdapter: PlatformAdapter) {
     this.platformAdapter = platformAdapter;
@@ -89,6 +97,12 @@ export class UniversalAlexAICore {
       memoryEncryption: true,
       crossPlatformSync: true
     };
+    
+    // Initialize advanced systems
+    this.crewConsciousness = createCrewConsciousnessManager();
+    this.memorySync = createMemorySyncManager();
+    this.credentialHub = createUniversalCredentialHub();
+    this.n8nIntegration = createN8NIntegrationManager(this.credentialHub);
   }
 
   /**
@@ -108,6 +122,12 @@ export class UniversalAlexAICore {
     // Initialize crew consciousness
     await this.initializeCrewConsciousness();
     
+    // Initialize advanced systems
+    await this.crewConsciousness.initialize();
+    await this.memorySync.initialize();
+    await this.credentialHub.initialize();
+    await this.n8nIntegration.initialize();
+    
     this.initialized = true;
     console.log('✅ Universal Alex AI Core initialized with zero-artifact guarantee');
   }
@@ -121,30 +141,52 @@ export class UniversalAlexAICore {
     console.log('🧠 Processing message with zero-artifact guarantee...');
     
     try {
-      // Analyze message for crew coordination
-      const crewResponse = await this.coordinateCrewResponse(message);
+      // Generate session ID for crew coordination
+      const sessionId = crypto.randomUUID();
+      const platform = await this.platformAdapter.getProjectType();
       
-      // Generate RAG insights
-      const ragInsights = await this.generateRAGInsights(message);
+      // Coordinate crew response with consciousness
+      const crewResponse = await this.crewConsciousness.coordinateCrewResponse(
+        message, 
+        platform, 
+        sessionId
+      );
       
-      // Process N8N workflows (if applicable)
-      const n8nResults = await this.processN8NWorkflows(message);
+      // Generate RAG insights using memory sync
+      const ragInsight = await this.memorySync.generateRAGInsights(message);
       
-      // Store memory (in isolated storage)
-      await this.storeMemory(message, crewResponse);
+      // Process N8N workflows with centralized credentials
+      const n8nResults = await this.processN8NWorkflows(message, platform, sessionId);
+      
+      // Store memory with advanced sync
+      await this.memorySync.storeMemory(
+        message,
+        'learning',
+        platform,
+        crewResponse.activeMembers[0] || 'System',
+        ['crew-coordination', 'cross-platform'],
+        1
+      );
       
       // Sync across platforms
-      const syncResult = await this.syncAcrossPlatforms();
+      const syncStatus = await this.memorySync.syncAcrossPlatforms();
       
       return {
         success: true,
         message: crewResponse.coordinatedResponse,
-        crewMembers: crewResponse.crewMembers,
+        crewMembers: crewResponse.activeMembers.map(name => 
+          this.crewMembers.find(member => member.name === name) || 
+          { name, role: 'Crew Member', expertise: [], personality: '', responseStyle: '' }
+        ),
         memories: this.memories.slice(-5), // Last 5 memories
         coordinatedResponse: crewResponse.coordinatedResponse,
-        ragInsights,
+        ragInsights: ragInsight.insights,
         n8nWorkflowResults: n8nResults,
-        crossPlatformSync: syncResult,
+        crossPlatformSync: {
+          platformsSynced: syncStatus.platformsActive.length,
+          memoriesShared: syncStatus.syncedMemories,
+          crewConsciousnessUpdated: true
+        },
         displayMode: 'chat'
       };
       
@@ -284,22 +326,57 @@ export class UniversalAlexAICore {
   /**
    * Process N8N workflows (if applicable)
    */
-  private async processN8NWorkflows(message: string): Promise<any[]> {
-    // Check if message contains N8N-related keywords
-    const n8nKeywords = ['n8n', 'workflow', 'sync', 'integration', 'automation'];
-    const hasN8nRequest = n8nKeywords.some(keyword => 
-      message.toLowerCase().includes(keyword)
-    );
+  private async processN8NWorkflows(
+    message: string, 
+    platform: string, 
+    sessionId: string
+  ): Promise<any[]> {
+    try {
+      // Execute crew coordination workflow
+      const crewResult = await this.n8nIntegration.executeCrewCoordination({
+        message,
+        crewMembers: this.crewMembers.map(m => m.name),
+        platform,
+        sessionId,
+        context: { timestamp: new Date().toISOString() },
+        priority: 'medium'
+      });
 
-    if (hasN8nRequest) {
-      return [{
-        type: 'n8n_workflow',
-        status: 'ready',
-        message: 'N8N workflow processing available'
-      }];
+      // Execute memory sync workflow
+      const memoryResult = await this.n8nIntegration.executeMemorySync({
+        memories: this.memories.slice(-10), // Last 10 memories
+        platform,
+        syncType: 'incremental',
+        crewMembers: this.crewMembers.map(m => m.name)
+      });
+
+      // Execute cross-platform sync workflow
+      const syncResult = await this.n8nIntegration.executeCrossPlatformSync({
+        platforms: ['cursor', 'vscode', 'npx'],
+        data: { message, platform, sessionId },
+        syncType: 'consciousness',
+        timestamp: new Date()
+      });
+
+      // Execute optimization workflow
+      const optimizationResult = await this.n8nIntegration.executeOptimization({
+        message,
+        platform,
+        sessionId,
+        resourceUsage: this.credentialHub.getResourceUsage()
+      });
+
+      return [
+        { type: 'crew-coordination', result: crewResult },
+        { type: 'memory-sync', result: memoryResult },
+        { type: 'cross-platform-sync', result: syncResult },
+        { type: 'optimization', result: optimizationResult }
+      ];
+
+    } catch (error: any) {
+      console.error('❌ N8N workflow processing failed:', error);
+      return [{ type: 'error', result: { error: error.message } }];
     }
-
-    return [];
   }
 
   /**

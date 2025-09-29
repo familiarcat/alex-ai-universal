@@ -104,7 +104,7 @@ class ZeroArtifactAlexAICore {
       // Return response for display in Cursor chat (NO file creation)
       return response;
       
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = `I apologize, but I encountered an error: ${error.message}. All operations are contained within isolated storage to maintain your project's integrity.`;
       console.error('❌ Cursor engagement failed:', error);
       return errorMessage;
@@ -177,7 +177,7 @@ class ZeroArtifactAlexAICore {
       const memoryPath = path.join(this.alexAIArtifactsDir, 'memory', `cursor-memory-${Date.now()}.json`);
       await fs.writeFile(memoryPath, JSON.stringify(memoryData, null, 2));
       console.log(`   📁 Memory stored in isolated storage: ${memoryPath}`);
-    } catch (error) {
+    } catch (error: any) {
       console.log(`   ⚠️  Memory storage failed: ${error.message}`);
     }
   }
@@ -305,7 +305,7 @@ class ZeroArtifactAlexAICore {
       'Quark': `From a business intelligence perspective, ${message.substring(0, 50)}... offers opportunities for optimization and resource management. I can identify cost-effective solutions.`
     };
     
-    return responses[crewMember] || `I can assist with ${message.substring(0, 50)}... using my specialized expertise.`;
+    return responses[crewMember as keyof typeof responses] || `I can assist with ${message.substring(0, 50)}... using my specialized expertise.`;
   }
 
   /**
