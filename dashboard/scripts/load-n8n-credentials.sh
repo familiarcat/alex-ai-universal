@@ -28,3 +28,8 @@ fi
 
 echo "🚀 Starting Next.js development server with N8N credentials..."
 
+
+
+
+
+

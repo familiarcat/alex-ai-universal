@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Universal AI Code Assistant - Standalone Repository",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": [],
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
