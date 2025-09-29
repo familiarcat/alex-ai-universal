@@ -40,9 +40,9 @@ export function activate(context: vscode.ExtensionContext) {
                 } else {
                     vscode.window.showErrorMessage(`Alex AI Error: ${response.message}`);
                 }
-            } catch (error) {
-                vscode.window.showErrorMessage(`Alex AI Error: ${error.message}`);
-            }
+        } catch (error: any) {
+          vscode.window.showErrorMessage(`Alex AI Error: ${error.message}`);
+        }
         }
     });
 
@@ -51,8 +51,8 @@ export function activate(context: vscode.ExtensionContext) {
         try {
             const response = await core.processMessage('Show system status');
             vscode.window.showInformationMessage(`Alex AI Status: ${response.coordinatedResponse}`);
-        } catch (error) {
-            vscode.window.showErrorMessage(`Status check failed: ${error.message}`);
+        } catch (error: any) {
+          vscode.window.showErrorMessage(`Status check failed: ${error.message}`);
         }
     });
 
