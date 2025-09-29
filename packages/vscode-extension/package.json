@@ -67,7 +67,8 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
-    "@alex-ai/core": "^1.0.0"
+    "@alex-ai/core": "^1.0.0",
+    "@alex-ai/universal-extension": "file:../universal-extension"
   },
   "devDependencies": {
     "@types/vscode": "^1.74.0",

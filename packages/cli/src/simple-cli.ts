@@ -1,33 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * Simple Alex AI CLI - Minimal Working Version
+ * Alex AI Universal NPX CLI
+ * 
+ * Provides NPX execution for Alex AI with Star Trek crew-based AI assistance
+ * ZERO ARTIFACT GUARANTEE - No files created in user projects
  */
 
-// Import statements - using require for now to avoid module resolution issues
-const { MinimalAlexAI } = require('@alex-ai/core');
-const { CrewSelfDiscoveryCLI } = require('@alex-ai/core');
-const { N8NWorkflowCLI } = require('@alex-ai/core');
-const { ScenarioAnalysisCLI } = require('@alex-ai/core');
-const { CrewConsciousnessCLI } = require('@alex-ai/core');
-const { AntiHallucinationCLI } = require('./anti-hallucination-cli');
-const { N8NIntegrationCLI } = require('./n8n-integration-cli');
-const { DebuggingCLI } = require('./debugging-cli');
-const commander = require('commander');
-const { spawn } = require('child_process');
-const path = require('path');
-import { MinimalAlexAI } from '@alex-ai/core';
-import { CrewSelfDiscoveryCLI } from '@alex-ai/core';
-import { N8NWorkflowCLI } from '@alex-ai/core';
-import { ScenarioAnalysisCLI } from '@alex-ai/core';
-import { CrewConsciousnessCLI } from '@alex-ai/core';
-import { AntiHallucinationCLI } from './anti-hallucination-cli';
-import { N8NIntegrationCLI } from './n8n-integration-cli';
-import { DebuggingCLI } from './debugging-cli';
+import { createNPXExtension } from '@alex-ai/universal-extension';
 import * as commander from 'commander';
+import { spawn } from 'child_process';
+import * as path from 'path';
+
+// Create the universal extension using NPX adapter
+const { core, commands } = createNPXExtension();
 
 const program = new commander.Command();
-const alexAI = new MinimalAlexAI();
 
 // Natural language processing for N8N integration and debugging
 function isN8NIntegrationRequest(message: string): boolean {

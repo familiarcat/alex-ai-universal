@@ -2,103 +2,67 @@
  * Alex AI Universal Cursor Extension
  * 
  * Provides Cursor AI integration for Alex AI with Star Trek crew-based AI assistance
+ * ZERO ARTIFACT GUARANTEE - No files created in user projects
  */
 
-// Cursor AI integration interface
-interface CursorAI {
-  showChat: (message: string) => void;
-  showStatus: (status: string) => void;
-  showError: (error: string) => void;
-  showInput: (prompt: string, placeholder?: string) => Promise<string | undefined>;
-  showQuickPick: (items: string[], placeholder?: string) => Promise<string | undefined>;
-  createDocument: (content: string, language?: string) => Promise<void>;
-  insertText: (text: string) => Promise<void>;
-  getActiveFile: () => Promise<any>;
-  getWorkspacePath: () => Promise<string>;
-  getProjectType: () => Promise<string>;
-  getDependencies: () => Promise<string[]>;
-}
+import { createCursorExtension } from '@alex-ai/universal-extension';
 
-// Create Cursor AI adapter
-const cursorAI: CursorAI = {
-  showChat: (message: string) => console.log(`🤖 Alex AI: ${message}`),
-  showStatus: (status: string) => console.log(`📊 Status: ${status}`),
-  showError: (error: string) => console.error(`❌ Error: ${error}`),
-  showInput: async (prompt: string, placeholder?: string) => {
-    // In a real implementation, this would use Cursor's input API
-    return prompt;
-  },
-  showQuickPick: async (items: string[], placeholder?: string) => {
-    // In a real implementation, this would use Cursor's quick pick API
-    return items[0];
-  },
-  createDocument: async (content: string, language?: string) => {
-    // In a real implementation, this would create a new document in Cursor
-    console.log(`📄 Creating document: ${content.substring(0, 100)}...`);
-  },
-  insertText: async (text: string) => {
-    // In a real implementation, this would insert text at cursor position
-    console.log(`✏️ Inserting text: ${text.substring(0, 50)}...`);
-  },
-  getActiveFile: async () => {
-    // In a real implementation, this would get the active file from Cursor
-    return {
-      path: 'cursor-chat',
-      content: '',
-      language: 'text'
-    };
-  },
-  getWorkspacePath: async () => {
-    // In a real implementation, this would get the workspace path from Cursor
-    return process.cwd();
-  },
-  getProjectType: async () => {
-    // In a real implementation, this would detect the project type
-    return 'cursor';
-  },
-  getDependencies: async () => {
-    // In a real implementation, this would get project dependencies
-    return [];
+// Create the universal extension using Cursor adapter
+const { core, commands } = createCursorExtension();
+
+/**
+ * Cursor AI Integration Handler
+ * Processes "Engage Alex AI" commands with zero-artifact guarantee
+ */
+export class CursorAIHandler {
+  private core = core;
+  private commands = commands;
+
+  constructor() {
+    this.initialize();
   }
-};
-
-// Alex AI Core for Cursor
-class AlexAICore {
-  private initialized = false;
 
   async initialize(): Promise<void> {
-    if (this.initialized) return;
-    
-    console.log('🚀 Alex AI Universal Cursor extension is now active!');
-    cursorAI.showStatus('Alex AI initialized');
-    this.initialized = true;
+    await this.core.initialize();
+    console.log('✅ Cursor AI Extension initialized with zero-artifact guarantee');
   }
 
-  async processMessage(message: string): Promise<string> {
-    cursorAI.showChat(`Processing: ${message}`);
-    return `Alex AI response: ${message}`;
+  /**
+   * Handle Cursor AI engagement without creating project files
+   */
+  async handleEngagement(message: string): Promise<string> {
+    try {
+      const response = await this.core.processMessage(message);
+      
+      if (response.success) {
+        return response.coordinatedResponse;
+      } else {
+        return response.message;
+      }
+    } catch (error) {
+      console.error('❌ Cursor AI engagement failed:', error);
+      return `I apologize, but I encountered an error: ${error.message}. All operations are contained within isolated storage to maintain your project's integrity.`;
+    }
   }
 
-  async getCrewMembers(): Promise<string[]> {
-    return [
-      'Captain Picard',
-      'Commander Data',
-      'Commander Riker',
-      'Lieutenant Commander Geordi',
-      'Lieutenant Worf',
-      'Counselor Troi',
-      'Dr. Crusher',
-      'Lieutenant Uhura',
-      'Quark'
-    ];
+  /**
+   * Get system status without creating project files
+   */
+  async getStatus(): Promise<string> {
+    try {
+      const response = await this.core.processMessage('Show system status');
+      return response.coordinatedResponse;
+    } catch (error) {
+      return `Status check failed: ${error.message}`;
+    }
   }
 }
 
-// Create the core instance
-const alexAI = new AlexAICore();
+// Create the Cursor AI handler instance
+const cursorAIHandler = new CursorAIHandler();
 
 // Export for Cursor AI integration
-export { alexAI };
+export { cursorAIHandler as alexAI };
 
 // Initialize on load
-alexAI.initialize().catch(console.error);
+cursorAIHandler.initialize().catch(console.error);

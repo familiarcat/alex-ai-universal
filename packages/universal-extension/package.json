@@ -1,7 +1,7 @@
 {
   "name": "@alex-ai/universal-extension",
   "version": "1.0.0",
-  "description": "Universal extension core for VSCode and Cursor",
+  "description": "Universal extension core for VSCode, Cursor AI, and NPX",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,6 +15,7 @@
     "extension",
     "vscode",
     "cursor",
+    "npx",
     "universal"
   ],
   "author": "Alex AI Team",
