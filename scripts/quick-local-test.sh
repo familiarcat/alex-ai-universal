@@ -104,6 +104,14 @@ node mock-services/artifact-monitor.js &
 MONITOR_PID=$!
 print_status "Zero-Artifact monitoring started (PID: $MONITOR_PID)"
 
+# Step 4.5: Start Cursor AI prevention
+print_info "Step 4.5: Starting Cursor AI prevention"
+node ../scripts/cursor-artifact-prevention.js &
+PREVENTION_PID=$!
+node ../scripts/cursor-integration-prevention.js &
+INTEGRATION_PID=$!
+print_status "Cursor AI prevention started (PIDs: $PREVENTION_PID, $INTEGRATION_PID)"
+
 # Step 5: Run basic tests
 print_info "Step 5: Running basic tests"
 
@@ -153,6 +161,16 @@ else
     print_info "Artifacts have been backed up and removed from your projects"
 fi
 
+# Test prevention system
+print_info "Testing Cursor AI prevention system..."
+mkdir alex-ai-artifacts 2>/dev/null || true
+sleep 2
+if [ ! -d "alex-ai-artifacts" ]; then
+    print_status "Cursor AI prevention working - alex-ai-artifacts folder was removed"
+else
+    print_warning "Cursor AI prevention may not be working - alex-ai-artifacts folder still exists"
+fi
+
 # Step 7: Display status
 print_info "Step 7: System Status"
 
@@ -169,6 +187,11 @@ echo "🛡️  Zero-Artifact Monitoring:"
 echo "  • Status: Active (PID: $MONITOR_PID)"
 echo "  • Artifacts Detected: $ARTIFACT_COUNT"
 echo "  • Backup Directory: artifact-backups/"
+echo ""
+echo "🚫 Cursor AI Prevention:"
+echo "  • Artifact Prevention: Active (PID: $PREVENTION_PID)"
+echo "  • Integration Prevention: Active (PID: $INTEGRATION_PID)"
+echo "  • Prevention Patterns: $(grep -c 'alex-ai\|cursor-ai\|ai-' ../.gitignore)"
 echo ""
 echo "🤖 Crew Status:"
 echo "  • All 9 crew members active"
@@ -189,7 +212,7 @@ echo "🔍 Monitor Zero-Artifact compliance:"
 echo "  watch -n 1 'ls -la artifact-backups/'"
 echo ""
 echo "🛑 Stop all services:"
-echo "  kill $N8N_PID $SUPABASE_PID $OPENROUTER_PID $MONITOR_PID"
+echo "  kill $N8N_PID $SUPABASE_PID $OPENROUTER_PID $MONITOR_PID $PREVENTION_PID $INTEGRATION_PID"
 echo ""
 echo "📊 Check service health:"
 echo "  curl http://localhost:5678/health"
@@ -198,7 +221,7 @@ echo "  curl http://localhost:3000/health"
 echo ""
 
 # Save PIDs for cleanup
-echo "$N8N_PID $SUPABASE_PID $OPENROUTER_PID $MONITOR_PID" > .pids
+echo "$N8N_PID $SUPABASE_PID $OPENROUTER_PID $MONITOR_PID $PREVENTION_PID $INTEGRATION_PID" > .pids
 
 print_status "Local testing environment setup complete!"
 print_info "Alex AI is ready for testing with Zero-Artifact Guarantee"
