@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Alex AI Demo - Smart Home Automation System",
   "build": {
-    "entry": "./standalone-enhanced-demo.js",
+    "entry": "./src/web-server.js",
     "output": "./dist",
     "publicPath": "/",
     "devServer": {
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "node build-script.js",
-    "dev": "node standalone-enhanced-demo.js",
+    "dev": "node src/web-server.js",
     "start": "npm run dev",
     "test": "node test-runner.js"
   }

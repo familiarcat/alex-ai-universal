@@ -4,10 +4,10 @@
     "heading": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!!!!!",
     "subtitle": "Real-Time Controlled eded Interface",
     "description": "This entireish frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
-    "backgroundColor": "#2E8B57",
+    "backgroundColor": "#2f2e8a",
     "textColor": "#ffffff",
     "accentColor": "#00ff00",
-    "theme": "star-trek",
+    "theme": "dark",
     "layout": "flex",
     "showSidebar": true,
     "showFooter": true,
@@ -112,6 +112,57 @@
     ]
   },
   "commandHistory": [
+    {
+      "timestamp": "2025-10-05T12:21:18.145Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "dark",
+        "timestamp": "2025-10-05T12:21:18.142Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "classic",
+        "newValue": "dark",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T12:21:11.279Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "classic",
+        "timestamp": "2025-10-05T12:21:11.276Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "classic",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T12:20:34.822Z",
+      "command": {
+        "type": "design",
+        "target": "backgroundColor",
+        "value": "#2f2e8a",
+        "timestamp": "2025-10-05T12:20:34.794Z"
+      },
+      "result": {
+        "success": true,
+        "target": "backgroundColor",
+        "oldValue": "#2E8B57",
+        "newValue": "#2f2e8a",
+        "message": "Design updated: backgroundColor"
+      },
+      "connections": 6
+    },
     {
       "timestamp": "2025-10-05T09:18:12.256Z",
       "command": {
@@ -628,5 +679,5 @@
       "connections": 3
     }
   ],
-  "timestamp": "2025-10-05T09:18:12.257Z"
+  "timestamp": "2025-10-05T12:21:18.145Z"
 }
