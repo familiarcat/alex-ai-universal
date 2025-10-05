@@ -1,0 +1,235 @@
+{
+  "name": "Alex AI - Automated Conversation Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily Analysis Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get conversations from Messages Intelligence\nconst conversations = await $input.all();\n\n// Filter for recent conversations (last 24 hours)\nconst recentConversations = conversations.filter(conv => {\n  const lastMessage = new Date(conv.json.lastMessage);\n  const now = new Date();\n  const hoursDiff = (now - lastMessage) / (1000 * 60 * 60);\n  return hoursDiff <= 24 && conv.json.messageCount > 10;\n});\n\n// Return conversations for analysis\nreturn recentConversations.map(conv => ({\n  json: {\n    conversationId: conv.json.id,\n    conversationName: conv.json.name,\n    messageCount: conv.json.messageCount,\n    lastMessage: conv.json.lastMessage,\n    analysisRequested: true\n  }\n}));"
+      },
+      "id": "filter-recent-conversations",
+      "name": "Filter Recent Conversations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/messages-intelligence/analyze",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "crewMember",
+              "value": "Commander Data"
+            },
+            {
+              "name": "analysisType",
+              "value": "technical"
+            },
+            {
+              "name": "conversationId",
+              "value": "={{$json.conversationId}}"
+            },
+            {
+              "name": "dateRange",
+              "value": "last_24_hours"
+            }
+          ]
+        }
+      },
+      "id": "analyze-conversation",
+      "name": "Analyze Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-analysis",
+              "leftValue": "={{$json.analysis}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-analysis-success",
+      "name": "Check Analysis Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "message": "SECURITY PROTOCOL: RAG system integration disabled to maintain Prime Directive compliance. All data processing remains local-only."
+      },
+      "id": "security-notice",
+      "name": "Security Notice - Local Processing Only",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "message": "SECURITY PROTOCOL: External notifications disabled. All processing remains local-only to maintain Prime Directive compliance."
+      },
+      "id": "local-notification",
+      "name": "Local Processing Complete",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "message": "Conversation analysis failed for: {{$json.conversationName}}"
+      },
+      "id": "log-error",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        600
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Daily Analysis Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter Recent Conversations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Recent Conversations": {
+      "main": [
+        [
+          {
+            "node": "Analyze Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Conversation": {
+      "main": [
+        [
+          {
+            "node": "Check Analysis Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Analysis Success": {
+      "main": [
+        [
+          {
+            "node": "Ingest to RAG System",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "alex-ai-universal"
+  },
+  "id": "automated-conversation-analysis",
+  "tags": [
+    {
+      "createdAt": "2025-01-27T00:00:00.000Z",
+      "updatedAt": "2025-01-27T00:00:00.000Z",
+      "id": "alex-ai",
+      "name": "Alex AI"
+    },
+    {
+      "createdAt": "2025-01-27T00:00:00.000Z",
+      "updatedAt": "2025-01-27T00:00:00.000Z",
+      "id": "messages-intelligence",
+      "name": "Messages Intelligence"
+    }
+  ]
+}

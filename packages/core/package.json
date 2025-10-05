@@ -4,13 +4,17 @@
   "description": "Alex AI Universal Core - Star Trek crew-based AI assistant with zero-artifact guarantee",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "alex-ai": "./dist/alex-ai-universal-cli-simple.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "clean": "rm -rf dist",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "alex-ai": "node dist/alex-ai-universal-cli-simple.js"
   },
   "keywords": [
     "ai",
@@ -39,7 +43,11 @@
   ],
   "dependencies": {
     "axios": "^1.6.0",
-    "chokidar": "^4.0.3"
+    "chokidar": "^4.0.3",
+    "@alex-ai/messages-intelligence": "^1.0.0",
+    "@supabase/supabase-js": "^2.58.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

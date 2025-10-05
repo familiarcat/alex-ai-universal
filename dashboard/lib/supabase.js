@@ -1,4 +1,6 @@
-// lib/supabase.js
+
+
+ lib/supabase.js
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
@@ -91,6 +93,7 @@ export const getLearningCategories = async () => {
     return {};
   }
 };
+
 
 
 

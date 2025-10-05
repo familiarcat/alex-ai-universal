@@ -1,0 +1,54 @@
+{
+  "name": "alex-ai-universal",
+  "displayName": "Alex AI Universal",
+  "description": "Star Trek crew-based AI assistant with zero-artifact guarantee",
+  "version": "1.0.0",
+  "publisher": "alex-ai",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "alex-ai.engage",
+        "title": "Alex AI: Engage",
+        "category": "Alex AI"
+      },
+      {
+        "command": "alex-ai.status",
+        "title": "Alex AI: Status",
+        "category": "Alex AI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "alex-ai.engage",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "alex-ai.engage",
+          "when": "true"
+        },
+        {
+          "command": "alex-ai.status",
+          "when": "true"
+        }
+      ]
+    }
+  }
+}
+
+

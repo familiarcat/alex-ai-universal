@@ -23,6 +23,7 @@ code --install-extension alex-ai.vscode
 
 - **Alex AI: Engage** - Start a conversation with the crew
 - **Alex AI: Status** - Check system status and crew consciousness
+ - **Alex AI: Suggest** - Get a focused code suggestion for the current selection or the active line (Apply / Copy / View)
 
 ### Access Methods
 
@@ -74,6 +75,8 @@ Alex AI: "Dr. Crusher: System health analysis shows we need to monitor our appro
 ## Configuration
 
 No configuration required! Alex AI uses centralized credentials, so you get immediate access to all features.
+
+You can optionally set a preferred LLM provider in VSCode Settings: `alexAi.llmProvider` (values: `auto`, `openai`, `anthropic`, `local`).
 
 ## Settings
 

@@ -2,6 +2,43 @@
 
 **Universal AI Code Assistant with Star Trek Crew-Based Intelligence**
 
+## 🚀 **NEW: Universal Integration System**
+
+Alex AI Universal now includes a complete universal integration system that ensures all crew knowledge and capabilities are distributed across every project. Every new project automatically gets access to:
+
+- ✅ **Chat Capturing & Analysis** - Apple Messages integration with crew analysis
+- ✅ **N8N Workflow Synchronization** - Automated workflows for all projects
+- ✅ **Crew AI Capabilities** - All 6 crew members available in every project
+- ✅ **RAG System Integration** - Bidirectional knowledge storage and retrieval
+- ✅ **Universal Monitoring** - Real-time system health across all projects
+- ✅ **Security Compliance** - Prime Directive and Ambiguity Guarantee maintained
+
+### **Quick Start with Universal Integration**
+
+```bash
+# Initialize any project with Alex AI Universal capabilities
+npx @alex-ai/core universal-init
+
+# Sync knowledge across all projects
+alex-ai universal-sync
+
+# Engage crew for analysis
+alex-ai crew-engage --request "Analyze my project architecture"
+
+# Check system status
+alex-ai status
+```
+
+### **Demo Project**
+
+See the complete universal integration in action with our demo project:
+```bash
+cd examples/demo-project
+node index.js
+```
+
+This demonstrates how a text conversation is automatically analyzed by the crew to generate a complete project with recommendations, structure, and full Alex AI capabilities.
+
 [![npm version](https://badge.fury.io/js/%40alex-ai%2Fcli.svg)](https://badge.fury.io/js/%40alex-ai%2Fcli)
 [![VSCode Extension](https://img.shields.io/badge/VSCode-Extension-blue)](https://marketplace.visualstudio.com/items?itemName=alex-ai.alex-ai)
 [![Security Score](https://img.shields.io/badge/Security-Score%3A%2095%2F100-brightgreen)](https://github.com/alex-ai-universal/alex-ai-universal)

@@ -48,6 +48,16 @@ export { ScenarioAnalysisCLI } from './scenario-analysis/scenario-analysis-cli';
 
 // Crew Consciousness System
 export { CrewConsciousnessWorkflow, ProjectAnalysisRequest, CrewConsciousnessSession, CrewMemberAnalysis, CollectiveInsights } from './crew-consciousness/crew-consciousness-workflow';
+
+// N8N Supabase Integration
+export { N8NSupabaseClient, n8nSupabaseClient } from './n8n-supabase-client';
+export { SupabaseN8NMigration, supabaseN8NMigration } from './supabase-n8n-migration';
+
+export type {
+  SupabaseOperationRequest,
+  SupabaseOperationResponse,
+  MigrationStatus
+} from './n8n-supabase-client';
 export { CrewConsciousnessCLI } from './crew-consciousness/crew-consciousness-cli';
 
 // Anti-Hallucination System
@@ -81,6 +91,9 @@ export { DebuggingOrchestrator } from './crew-orchestration/debugging-orchestrat
 export { DebuggingObservationLounge } from './observation-lounge/debugging-observation-lounge';
 export { DebuggingCoordinator } from './debugging/debugging-coordinator';
 
+// Universal Knowledge Distribution System
+export { UniversalKnowledgeDistribution } from './universal-knowledge-distribution-simple';
+
 export type {
   UIElement,
   ButtonAnalysis,
@@ -110,6 +123,25 @@ export type {
   DebuggingRequest,
   DebuggingResponse
 } from './debugging/debugging-coordinator';
+
+export type {
+  UniversalKnowledgeConfig,
+  ProjectCapabilities,
+  UniversalFeatureSet
+} from './universal-knowledge-distribution-simple';
+
+// Messages Intelligence System
+export { AlexAIMessagesIntelligence } from '@alex-ai/messages-intelligence';
+export { MessagesIntelligenceCrewIntegration } from '@alex-ai/messages-intelligence/src/crew-integration';
+
+export type {
+  Message,
+  Conversation,
+  ExportOptions,
+  ExportResult,
+  AnalysisResult,
+  CrewAnalysisRequest
+} from '@alex-ai/messages-intelligence/src/types';
 
 
 
