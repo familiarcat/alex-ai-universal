@@ -462,5 +462,32 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
       'Certification monitoring',
       'Training scheduling'
     ]
+  },
+
+  'crew-responsibilities': {
+    title: '🧠 Crew Responsibilities',
+    description: 'Internal system logic visualization showing how crew members are associated with components. Understand the computer\'s definition of crew responsibilities and component ownership.',
+    status: 'implemented',
+    implementationLevel: 95,
+    requirements: [
+      'Responsibility mapping visualization',
+      'Component assignment logic explanation',
+      'Vector data access documentation',
+      'System architecture insights'
+    ]
+  },
+
+  'emergency-protocols': {
+    title: '🚨 Emergency Protocols',
+    description: 'Emergency crew role swapping and RAG memory inheritance system. Handle crew member failures, infinite loops, and unresponsive states with automatic backup activation and knowledge transfer.',
+    status: 'implemented',
+    implementationLevel: 90,
+    requirements: [
+      'Emergency detection and response protocols',
+      'Automatic role swapping capabilities',
+      'RAG memory inheritance system',
+      'Backup crew activation procedures',
+      'System continuity maintenance'
+    ]
   }
 }

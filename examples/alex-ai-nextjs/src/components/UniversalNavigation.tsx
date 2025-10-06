@@ -425,6 +425,46 @@ export default function UniversalNavigation() {
                 👥 Crew Management
               </Link>
             </HoverTooltip>
+
+            {/* Crew Responsibilities */}
+            <HoverTooltip
+              title={hoverDescriptions['crew-responsibilities'].title}
+              description={hoverDescriptions['crew-responsibilities'].description}
+              status={hoverDescriptions['crew-responsibilities'].status}
+              implementationLevel={hoverDescriptions['crew-responsibilities'].implementationLevel}
+              requirements={hoverDescriptions['crew-responsibilities'].requirements}
+            >
+              <Link
+                href="/crew-responsibilities"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/crew-responsibilities') 
+                    ? 'bg-purple-600 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                🧠 Crew Responsibilities
+              </Link>
+            </HoverTooltip>
+
+            {/* Emergency Protocols */}
+            <HoverTooltip
+              title={hoverDescriptions['emergency-protocols'].title}
+              description={hoverDescriptions['emergency-protocols'].description}
+              status={hoverDescriptions['emergency-protocols'].status}
+              implementationLevel={hoverDescriptions['emergency-protocols'].implementationLevel}
+              requirements={hoverDescriptions['emergency-protocols'].requirements}
+            >
+              <Link
+                href="/emergency-protocols"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/emergency-protocols') 
+                    ? 'bg-red-600 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                🚨 Emergency Protocols
+              </Link>
+            </HoverTooltip>
           </div>
         </div>
 
