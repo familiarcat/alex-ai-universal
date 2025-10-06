@@ -154,6 +154,22 @@ export default function GlobalNavigationSystem({ children }: GlobalNavigationSys
                 Crew
               </a>
               <a 
+                href="/crew-rag-query" 
+                className={`text-xs px-2 py-1 rounded transition-all ${
+                  pathname === '/crew-rag-query' ? 'bg-purple-600 text-white' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                RAG Query
+              </a>
+              <a 
+                href="/crew-response" 
+                className={`text-xs px-2 py-1 rounded transition-all ${
+                  pathname === '/crew-response' ? 'bg-green-600 text-white' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Crew Response
+              </a>
+              <a 
                 href="/emergency-protocols" 
                 className={`text-xs px-2 py-1 rounded transition-all ${
                   pathname === '/emergency-protocols' ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white'

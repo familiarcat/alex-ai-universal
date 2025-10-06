@@ -118,8 +118,8 @@ export function N8NProvider({ children }: N8NProviderProps) {
         ])
       } else {
         setIsConnected(false)
-        setConnectionError('Failed to connect to N8N server')
-        console.error('❌ N8N connection failed')
+        setConnectionError('N8N server not available - running in offline mode')
+        console.warn('⚠️ N8N server not available - running in offline mode')
       }
     } catch (error: any) {
       console.error('N8N initialization error:', error)

@@ -190,7 +190,7 @@ export default function UniversalNavigation() {
             description="Combined Next.js and demo project integration with real-time synchronization"
             status="active"
             implementationLevel="complete"
-            requirements="Next.js 15, WebSocket integration, API bridge"
+            requirements={["Next.js 15", "WebSocket integration", "API bridge"]}
           >
             <Link
               href="/unified"

@@ -181,7 +181,7 @@ export default function HoverTooltip({
             )}
 
             {/* Requirements */}
-            {requirements.length > 0 && (
+            {Array.isArray(requirements) && requirements.length > 0 && (
               <div className="border-t border-white/20 pt-3">
                 <h4 className="text-xs font-bold text-white mb-2">Implementation Requirements:</h4>
                 <ul className="text-xs text-gray-400 space-y-1">
