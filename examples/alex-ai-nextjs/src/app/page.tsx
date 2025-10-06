@@ -39,16 +39,18 @@ export default function Dashboard() {
 
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
           <div className="text-3xl mb-3">⚡</div>
-          <h3 className="text-xl font-bold text-white mb-2">Real-time Updates</h3>
-          <p className="text-gray-300">
+          <h3 className="text-xl font-bold mb-2"
+              style={{ color: 'var(--theme-accent)' }}>Real-time Updates</h3>
+          <p style={{ color: 'var(--theme-enhancements)' }}>
             Live synchronization across all connected clients with WebSocket technology.
           </p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
           <div className="text-3xl mb-3">🧠</div>
-          <h3 className="text-xl font-bold text-white mb-2">RAG Memory</h3>
-          <p className="text-gray-300">
+          <h3 className="text-xl font-bold mb-2"
+              style={{ color: 'var(--theme-accent)' }}>RAG Memory</h3>
+          <p style={{ color: 'var(--theme-enhancements)' }}>
             Advanced retrieval-augmented generation system for intelligent knowledge management.
           </p>
         </div>
@@ -56,7 +58,8 @@ export default function Dashboard() {
 
       {/* Crew Grid */}
       <div>
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-center"
+            style={{ color: 'var(--theme-accent)' }}>
           🖖 Alex AI Crew Status
         </h2>
         <CrewGrid />
@@ -64,19 +67,21 @@ export default function Dashboard() {
 
       {/* System Status */}
       <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h3 className="text-2xl font-bold text-white mb-4">🔧 System Status</h3>
+        <h3 className="text-2xl font-bold mb-4"
+            style={{ color: 'var(--theme-accent)' }}>🔧 System Status</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-400">Online</div>
-            <div className="text-gray-300">Server Status</div>
+            <div className="text-2xl font-bold"
+                 style={{ color: 'var(--theme-role)' }}>Online</div>
+            <div style={{ color: 'var(--theme-enhancements)' }}>Server Status</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-400">9</div>
-            <div className="text-gray-300">Crew Members</div>
+            <div style={{ color: 'var(--theme-enhancements)' }}>Crew Members</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-purple-400">Real-time</div>
-            <div className="text-gray-300">Updates</div>
+            <div style={{ color: 'var(--theme-enhancements)' }}>Updates</div>
           </div>
         </div>
       </div>

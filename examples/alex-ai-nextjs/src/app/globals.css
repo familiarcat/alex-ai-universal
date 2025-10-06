@@ -20,25 +20,13 @@
   }
 
   /* Theme-specific styles */
-  .theme-light {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  .theme-background {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    color: var(--theme-accent);
+    transition: all 0.3s ease;
   }
 
-  .theme-dark {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  }
-
-  .theme-star-trek {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-  }
-
-  .theme-neon {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-  }
-
-  .theme-ocean {
-    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
-  }
+  /* Dynamic theme classes are now handled by ThemeContext and CSS variables */
 }
 
 @layer components {
@@ -78,10 +66,26 @@
     border-radius: 0.75rem;
     padding: 1.5rem;
     transition: all 0.3s ease;
+    color: var(--theme-accent);
   }
   
   .card:hover {
     background: rgba(255, 255, 255, 0.15);
+  }
+
+  .theme-card {
+    background: color-mix(in srgb, var(--theme-primary) 90%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--theme-accent) 20%, transparent);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    color: var(--theme-accent);
+  }
+  
+  .theme-card:hover {
+    background: color-mix(in srgb, var(--theme-primary) 95%, transparent);
+    border-color: color-mix(in srgb, var(--theme-accent) 30%, transparent);
   }
   
   .status-indicator {
@@ -111,19 +115,21 @@
   }
   
   .nav-link-active {
-    background: #3b82f6;
-    color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    background: var(--theme-component);
+    color: var(--theme-primary);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--theme-component) 40%, transparent);
   }
   
   .nav-link-inactive {
-    background: rgba(255, 255, 255, 0.1);
-    color: #d1d5db;
+    background: color-mix(in srgb, var(--theme-accent) 10%, transparent);
+    color: var(--theme-accent);
+    border: 1px solid color-mix(in srgb, var(--theme-accent) 20%, transparent);
   }
   
   .nav-link-inactive:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: color-mix(in srgb, var(--theme-accent) 20%, transparent);
+    color: var(--theme-accent);
+    border-color: color-mix(in srgb, var(--theme-accent) 30%, transparent);
   }
   
   .crew-card {

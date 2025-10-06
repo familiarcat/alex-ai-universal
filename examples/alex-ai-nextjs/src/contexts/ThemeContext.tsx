@@ -20,14 +20,14 @@ export const availableThemes: Theme[] = [
   {
     id: 'light',
     name: 'Light Mode',
-    description: 'Clean and bright interface for daytime use',
+    description: 'Clean and bright interface with WCAG AA compliant contrast',
     colors: {
-      primary: '#f8fafc',
-      secondary: '#e2e8f0',
-      accent: '#1e293b',
-      role: '#1a5a1a',
-      component: '#8b4513',
-      enhancements: '#374151'
+      primary: '#ffffff',
+      secondary: '#f8fafc',
+      accent: '#0f172a',
+      role: '#065f46',
+      component: '#92400e',
+      enhancements: '#111827'
     }
   },
   {

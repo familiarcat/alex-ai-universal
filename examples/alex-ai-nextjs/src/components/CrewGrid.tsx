@@ -139,25 +139,31 @@ export default function CrewGrid() {
           className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105"
         >
           <div className="mb-4">
-            <h3 className="text-lg font-bold text-white mb-2">
+            <h3 className="text-lg font-bold mb-2"
+                style={{ color: 'var(--theme-accent)' }}>
               {member.name}
             </h3>
-            <div className="text-sm font-medium text-green-400 mb-2">
+            <div className="text-sm font-medium mb-2"
+                 style={{ color: 'var(--theme-role)' }}>
               {member.role}
             </div>
-            <div className="text-sm text-yellow-400 mb-3">
+            <div className="text-sm mb-3"
+                 style={{ color: 'var(--theme-component)' }}>
               Component: {member.component}
             </div>
           </div>
 
           <div className="mb-4">
-            <div className="text-sm font-medium text-white mb-2">
+            <div className="text-sm font-medium mb-2"
+                 style={{ color: 'var(--theme-accent)' }}>
               Enhancement Recommendations:
             </div>
             <ul className="space-y-1">
               {member.enhancements.map((enhancement, index) => (
-                <li key={index} className="text-sm text-gray-300 flex items-start">
-                  <span className="text-green-400 mr-2">→</span>
+                <li key={index} className="text-sm flex items-start"
+                    style={{ color: 'var(--theme-enhancements)' }}>
+                  <span className="mr-2"
+                        style={{ color: 'var(--theme-role)' }}>→</span>
                   {enhancement}
                 </li>
               ))}

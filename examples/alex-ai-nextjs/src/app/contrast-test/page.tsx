@@ -6,14 +6,14 @@ const themes = [
   {
     id: 'light',
     name: 'Light Mode',
-    description: 'Clean and bright interface',
+    description: 'Clean and bright interface with WCAG AA compliant contrast',
     colors: {
-      primary: '#f8fafc',
-      secondary: '#e2e8f0',
-      accent: '#1e293b',
-      role: '#1a5a1a',
-      component: '#8b4513',
-      enhancements: '#374151'
+      primary: '#ffffff',
+      secondary: '#f8fafc',
+      accent: '#0f172a',
+      role: '#065f46',
+      component: '#92400e',
+      enhancements: '#111827'
     }
   },
   {
@@ -104,8 +104,18 @@ export default function ContrastTest() {
                   background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`
                 }}
               ></div>
-              <h3 className="text-white font-bold">{theme.name}</h3>
-              <p className="text-sm text-gray-300">{theme.description}</p>
+              <h3 
+                className="font-bold"
+                style={{ color: theme.id === 'light' ? '#0f172a' : '#ffffff' }}
+              >
+                {theme.name}
+              </h3>
+              <p 
+                className="text-sm"
+                style={{ color: theme.id === 'light' ? '#374151' : '#d1d5db' }}
+              >
+                {theme.description}
+              </p>
             </button>
           ))}
         </div>
@@ -239,9 +249,17 @@ export default function ContrastTest() {
                 </div>
               </div>
 
-              <div className="mt-6 p-3 rounded bg-green-500/20 border border-green-500/30">
-                <div className="text-green-400 font-medium">✅ WCAG Compliant</div>
-                <div className="text-sm text-green-300 mt-1">
+              <div className="mt-6 p-3 rounded border-2"
+                   style={{
+                     backgroundColor: selectedTheme.id === 'light' ? '#dcfce7' : 'rgba(34, 197, 94, 0.2)',
+                     borderColor: selectedTheme.id === 'light' ? '#16a34a' : 'rgba(34, 197, 94, 0.3)'
+                   }}>
+                <div className="font-medium"
+                     style={{ color: selectedTheme.id === 'light' ? '#166534' : '#22c55e' }}>
+                  ✅ WCAG Compliant
+                </div>
+                <div className="text-sm mt-1"
+                     style={{ color: selectedTheme.id === 'light' ? '#15803d' : '#4ade80' }}>
                   All text elements meet accessibility standards with proper contrast ratios
                 </div>
               </div>

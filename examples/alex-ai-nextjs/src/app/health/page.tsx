@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useHealth } from '@/contexts/HealthContext'
 
 interface HealthStatus {
   server: 'online' | 'offline'
@@ -12,6 +13,7 @@ interface HealthStatus {
 }
 
 export default function HealthCheck() {
+  const { metrics, alerts, isMonitoring, dismissAlert, clearAllAlerts } = useHealth()
   const [healthStatus, setHealthStatus] = useState<HealthStatus>({
     server: 'online',
     database: 'connected',
@@ -137,7 +139,8 @@ export default function HealthCheck() {
           </div>
           
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-400 mb-2">{healthStatus.uptime}</div>
+            <div className="text-3xl font-bold mb-2"
+                 style={{ color: 'var(--theme-role)' }}>{healthStatus.uptime}</div>
             <div className="text-gray-300">Uptime</div>
             <div className="text-sm text-gray-400 mt-1">Since last restart</div>
           </div>
@@ -236,7 +239,7 @@ export default function HealthCheck() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-300">Error Rate:</span>
-                <span className="text-green-400">0.1%</span>
+                <span style={{ color: 'var(--theme-role)' }}>0.1%</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-300">Active Connections:</span>

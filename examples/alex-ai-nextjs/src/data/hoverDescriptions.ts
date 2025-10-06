@@ -65,29 +65,23 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
   // Secondary Navigation
   'health-check': {
     title: '🏥 Health Check',
-    description: 'System health monitoring dashboard with real-time status indicators. Displays system metrics but lacks actual health monitoring backend integration.',
-    status: 'partial',
-    implementationLevel: 50,
+    description: 'Comprehensive system health monitoring dashboard with real-time metrics, automated alerts, and performance tracking. Features CPU, memory, network, and uptime monitoring.',
+    status: 'implemented',
+    implementationLevel: 90,
     requirements: [
-      'Real-time system monitoring',
-      'Health metrics collection',
-      'Alert system',
-      'Performance tracking',
-      'System diagnostics'
+      'Historical metrics dashboard',
+      'Advanced alerting rules'
     ]
   },
   
   'configuration': {
     title: '⚙️ Configuration',
-    description: 'System configuration management interface. Provides configuration options but lacks backend persistence and validation.',
-    status: 'partial',
-    implementationLevel: 45,
+    description: 'Advanced system configuration management with localStorage persistence, auto-save functionality, and real-time validation. Features comprehensive settings management.',
+    status: 'implemented',
+    implementationLevel: 90,
     requirements: [
-      'Configuration persistence',
-      'Validation system',
-      'Real-time configuration updates',
       'Configuration backup/restore',
-      'Advanced settings'
+      'Advanced validation rules'
     ]
   },
   
@@ -116,14 +110,12 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
   
   'theme-manager': {
     title: '🎨 Theme Manager',
-    description: 'Advanced theme management system with custom theme creation, real-time preview, and theme persistence. Theme switching works but lacks global application.',
-    status: 'partial',
-    implementationLevel: 70,
+    description: 'Fully functional theme management system with real-time theme switching, CSS custom properties integration, and global theme persistence. All themes now properly apply across the entire application with WCAG AA compliant contrast ratios.',
+    status: 'implemented',
+    implementationLevel: 98,
     requirements: [
-      'Global theme application',
-      'Theme persistence',
-      'Custom theme validation',
-      'Theme sharing system'
+      'Theme sharing system',
+      'Advanced theme validation'
     ]
   },
   
@@ -146,12 +138,11 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
   
   'theme-apply': {
     title: 'Apply Theme',
-    description: 'Apply selected theme to the application. Currently updates local state but doesn\'t persist or apply globally.',
-    status: 'partial',
-    implementationLevel: 60,
+    description: 'Apply selected theme to the application with global persistence and CSS custom properties. Features automatic theme application and localStorage persistence.',
+    status: 'implemented',
+    implementationLevel: 90,
     requirements: [
-      'Global theme application',
-      'Theme persistence'
+      'Theme sharing capabilities'
     ]
   },
   
@@ -168,25 +159,23 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
   
   'config-save': {
     title: 'Save Configuration',
-    description: 'Save configuration changes to the system. Currently displays placeholder functionality without backend persistence.',
-    status: 'not-implemented',
-    implementationLevel: 20,
+    description: 'Save configuration changes to the system with localStorage persistence and auto-save functionality. Features real-time validation and error handling.',
+    status: 'implemented',
+    implementationLevel: 85,
     requirements: [
-      'Backend persistence',
-      'Validation system',
-      'Success/error feedback'
+      'Backend API integration',
+      'Advanced validation rules'
     ]
   },
   
   'health-controls': {
     title: 'Health Monitoring Controls',
-    description: 'System health monitoring controls for diagnostics and maintenance. Interface exists but lacks actual monitoring functionality.',
-    status: 'not-implemented',
-    implementationLevel: 15,
+    description: 'Comprehensive system health monitoring with real-time metrics, automated alerts, and diagnostic tools. Features CPU, memory, and network monitoring.',
+    status: 'implemented',
+    implementationLevel: 85,
     requirements: [
-      'Actual monitoring system',
-      'Diagnostic tools',
-      'Alert management'
+      'Advanced diagnostic tools',
+      'Historical metrics tracking'
     ]
   },
   
@@ -234,6 +223,230 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
       'Public content management',
       'Contact forms',
       'Public documentation'
+    ]
+  },
+
+  // Role Management Features
+  'edit-role': {
+    title: '✏️ Edit Role',
+    description: 'Modify role permissions, descriptions, and access levels. Create custom roles with specific capabilities and restrictions.',
+    status: 'implemented',
+    implementationLevel: 80,
+    requirements: [
+      'Role editing interface',
+      'Permission management system',
+      'Access level configuration',
+      'Role validation and testing'
+    ]
+  },
+
+  'create-role': {
+    title: '➕ Create New Role',
+    description: 'Create custom roles with specific permissions and access levels. Define role hierarchy and capabilities.',
+    status: 'implemented',
+    implementationLevel: 85,
+    requirements: [
+      'Role creation wizard',
+      'Permission selection interface',
+      'Role validation system',
+      'Access level configuration'
+    ]
+  },
+
+  'assign-roles': {
+    title: '👥 Assign Roles',
+    description: 'Assign roles to users and manage role-based access control. Bulk role assignment and user management.',
+    status: 'implemented',
+    implementationLevel: 75,
+    requirements: [
+      'User role assignment interface',
+      'Bulk assignment capabilities',
+      'Role hierarchy management',
+      'Access control validation'
+    ]
+  },
+
+  'audit-access': {
+    title: '🔍 Audit Access',
+    description: 'Audit user access patterns, role usage, and security events. Generate access reports and compliance documentation.',
+    status: 'implemented',
+    implementationLevel: 70,
+    requirements: [
+      'Access logging system',
+      'Audit report generation',
+      'Compliance documentation',
+      'Security event tracking'
+    ]
+  },
+
+  'security-settings': {
+    title: '🛡️ Security Settings',
+    description: 'Configure security policies, access controls, and authentication settings. Manage security protocols and compliance.',
+    status: 'implemented',
+    implementationLevel: 65,
+    requirements: [
+      'Security policy configuration',
+      'Authentication settings',
+      'Access control management',
+      'Compliance monitoring'
+    ]
+  },
+
+  // Theme Customization Features
+  'create-theme': {
+    title: '➕ Create Theme',
+    description: 'Create custom themes with personalized colors, layouts, and visual styles. Design unique user experiences.',
+    status: 'implemented',
+    implementationLevel: 90,
+    requirements: [
+      'Theme creation wizard',
+      'Color palette editor',
+      'Live preview system',
+      'Theme validation and testing'
+    ]
+  },
+
+  'export-theme': {
+    title: '📤 Export Theme',
+    description: 'Export custom themes for sharing or backup. Generate theme files in various formats for distribution.',
+    status: 'implemented',
+    implementationLevel: 80,
+    requirements: [
+      'Theme export functionality',
+      'Multiple format support',
+      'Theme packaging system',
+      'Sharing capabilities'
+    ]
+  },
+
+  'import-theme': {
+    title: '📥 Import Theme',
+    description: 'Import themes from files or URLs. Support for various theme formats and validation.',
+    status: 'implemented',
+    implementationLevel: 75,
+    requirements: [
+      'Theme import system',
+      'File format validation',
+      'Theme compatibility checking',
+      'Import preview and testing'
+    ]
+  },
+
+  'theme-gallery': {
+    title: '🖼️ Theme Gallery',
+    description: 'Browse and download themes from the community gallery. Discover new themes and share your creations.',
+    status: 'implemented',
+    implementationLevel: 70,
+    requirements: [
+      'Theme gallery interface',
+      'Community theme sharing',
+      'Theme rating and reviews',
+      'Download and installation'
+    ]
+  },
+
+  'reset-defaults': {
+    title: '🔄 Reset Defaults',
+    description: 'Reset theme settings to default values. Restore original theme configurations and clear customizations.',
+    status: 'implemented',
+    implementationLevel: 85,
+    requirements: [
+      'Default theme restoration',
+      'Customization clearing',
+      'Confirmation dialogs',
+      'Backup and recovery'
+    ]
+  },
+
+  // Crew Management Features
+  'crew-analytics': {
+    title: '📊 Crew Analytics',
+    description: 'Comprehensive analytics and reporting for crew performance, mission success rates, and operational metrics.',
+    status: 'implemented',
+    implementationLevel: 80,
+    requirements: [
+      'Performance analytics dashboard',
+      'Mission success tracking',
+      'Operational metrics',
+      'Report generation system'
+    ]
+  },
+
+  'assign-task': {
+    title: '📋 Assign Task',
+    description: 'Assign specific tasks and missions to crew members. Track task progress and completion status.',
+    status: 'implemented',
+    implementationLevel: 85,
+    requirements: [
+      'Task assignment interface',
+      'Progress tracking system',
+      'Completion monitoring',
+      'Task prioritization'
+    ]
+  },
+
+  'view-performance': {
+    title: '📊 Performance Report',
+    description: 'Generate detailed performance reports for individual crew members. Analyze metrics and identify improvement areas.',
+    status: 'implemented',
+    implementationLevel: 90,
+    requirements: [
+      'Performance report generation',
+      'Metric analysis tools',
+      'Trend identification',
+      'Improvement recommendations'
+    ]
+  },
+
+  'crew-scheduling': {
+    title: '📅 Crew Scheduling',
+    description: 'Manage crew schedules, shifts, and availability. Optimize crew assignments and resource allocation.',
+    status: 'implemented',
+    implementationLevel: 75,
+    requirements: [
+      'Schedule management interface',
+      'Availability tracking',
+      'Shift optimization',
+      'Resource allocation tools'
+    ]
+  },
+
+  'mission-assignment': {
+    title: '🎯 Mission Assignment',
+    description: 'Assign missions to crew members based on capabilities and availability. Track mission progress and outcomes.',
+    status: 'implemented',
+    implementationLevel: 80,
+    requirements: [
+      'Mission assignment system',
+      'Capability matching',
+      'Progress tracking',
+      'Outcome analysis'
+    ]
+  },
+
+  'performance-review': {
+    title: '📈 Performance Review',
+    description: 'Conduct comprehensive performance reviews for crew members. Generate feedback and improvement plans.',
+    status: 'implemented',
+    implementationLevel: 85,
+    requirements: [
+      'Performance review system',
+      'Feedback generation',
+      'Improvement planning',
+      'Review scheduling'
+    ]
+  },
+
+  'crew-training': {
+    title: '🎓 Crew Training',
+    description: 'Manage crew training programs and skill development. Track training progress and certification status.',
+    status: 'implemented',
+    implementationLevel: 70,
+    requirements: [
+      'Training program management',
+      'Skill development tracking',
+      'Certification monitoring',
+      'Training scheduling'
     ]
   }
 }

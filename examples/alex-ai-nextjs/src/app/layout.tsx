@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import UniversalNavigation from '@/components/UniversalNavigation'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { ConfigProvider } from '@/contexts/ConfigContext'
+import { HealthProvider } from '@/contexts/HealthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,12 +22,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
-          <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-            <UniversalNavigation />
-            <main className="container mx-auto px-4 py-8">
-              {children}
-            </main>
-          </div>
+          <ConfigProvider>
+            <HealthProvider>
+              <div className="min-h-screen theme-background">
+                <UniversalNavigation />
+                <main className="container mx-auto px-4 py-8">
+                  {children}
+                </main>
+              </div>
+            </HealthProvider>
+          </ConfigProvider>
         </ThemeProvider>
       </body>
     </html>

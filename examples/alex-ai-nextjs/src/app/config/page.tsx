@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useConfig } from '@/contexts/ConfigContext'
 
 interface Configuration {
   title: string
@@ -31,6 +32,7 @@ interface Configuration {
 }
 
 export default function Configuration() {
+  const { config: appConfig, updateConfig, saveConfig, resetConfig, isDirty } = useConfig()
   const [config, setConfig] = useState<Configuration>({
     title: 'Alex AI Universal Demo',
     subtitle: 'Enhanced Interactive Dashboard',
@@ -64,15 +66,20 @@ export default function Configuration() {
 
   const saveConfiguration = async () => {
     setIsSaving(true)
-    // Simulate save operation
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setLastSaved(new Date().toLocaleTimeString())
-    setIsSaving(false)
-    console.log('Configuration saved:', config)
+    try {
+      await saveConfig()
+      setLastSaved(new Date().toLocaleTimeString())
+      console.log('Configuration saved:', config)
+    } catch (error) {
+      console.error('Failed to save configuration:', error)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const resetConfiguration = () => {
     if (confirm('Are you sure you want to reset all configuration to defaults?')) {
+      resetConfig()
       setConfig({
         title: 'Alex AI Universal Demo',
         subtitle: 'Enhanced Interactive Dashboard',

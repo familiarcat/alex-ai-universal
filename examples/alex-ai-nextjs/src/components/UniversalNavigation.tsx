@@ -91,25 +91,29 @@ export default function UniversalNavigation() {
   const isPublic = userRole === 'public'
 
   return (
-    <nav className="bg-gradient-to-r from-blue-800 to-purple-800 border-b border-blue-600/30 backdrop-blur-sm relative z-[10000]">
+    <nav className="theme-background backdrop-blur-sm relative z-[10000]"
+         style={{ borderBottom: `1px solid var(--theme-enhancements)` }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center space-x-3">
             <span className="text-2xl">🖖</span>
-            <h1 className="text-xl font-bold text-white">Alex AI Universal</h1>
+            <h1 className="text-xl font-bold"
+                style={{ color: 'var(--theme-accent)' }}>Alex AI Universal</h1>
           </div>
           
           <div className="flex items-center space-x-4">
             {/* Role Badge */}
             <div className="flex items-center space-x-2">
               {isAdmin && (
-                <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                <span className="px-3 py-1 rounded-full text-xs font-bold"
+                      style={{ backgroundColor: '#dc2626', color: 'var(--theme-accent)' }}>
                   ADMIN
                 </span>
               )}
               {isPublic && (
-                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                <span className="px-3 py-1 rounded-full text-xs font-bold"
+                      style={{ backgroundColor: 'var(--theme-role)', color: 'var(--theme-primary)' }}>
                   PUBLIC
                 </span>
               )}
@@ -117,14 +121,17 @@ export default function UniversalNavigation() {
             
             {/* Connection Status */}
             <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
-              <span className="text-sm text-gray-300">
+              <div className="w-2 h-2 rounded-full animate-pulse"
+                   style={{ backgroundColor: isConnected ? 'var(--theme-role)' : '#dc2626' }}></div>
+              <span className="text-sm"
+                    style={{ color: 'var(--theme-enhancements)' }}>
                 {isConnected ? 'Connected' : 'Disconnected'}
               </span>
             </div>
             
             {/* Crew Count */}
-            <div className="flex items-center space-x-1 text-gray-300">
+            <div className="flex items-center space-x-1"
+                 style={{ color: 'var(--theme-enhancements)' }}>
               <span className="text-sm">👥</span>
               <span className="text-sm font-medium">{crewMembers.length}</span>
             </div>
@@ -143,14 +150,14 @@ export default function UniversalNavigation() {
             implementationLevel={hoverDescriptions.dashboard.implementationLevel}
             requirements={hoverDescriptions.dashboard.requirements}
           >
-            <Link
-              href="/"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                isActive('/') 
-                  ? 'bg-blue-500 text-white shadow-lg' 
-                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
-              }`}
-            >
+                    <Link
+                      href="/"
+                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
+                        isActive('/') 
+                          ? 'nav-link-active' 
+                          : 'nav-link-inactive'
+                      }`}
+                    >
               🎛️ Dashboard
             </Link>
           </HoverTooltip>
@@ -164,10 +171,10 @@ export default function UniversalNavigation() {
           >
             <Link
               href="/live"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
                 isActive('/live') 
-                  ? 'bg-blue-500 text-white shadow-lg' 
-                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
+                  ? 'nav-link-active' 
+                  : 'nav-link-inactive'
               }`}
             >
               🌐 Live Frontend
@@ -184,10 +191,10 @@ export default function UniversalNavigation() {
             >
               <Link
                 href="/admin"
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
                   isActive('/admin') 
-                    ? 'bg-blue-500 text-white shadow-lg' 
-                    : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
+                    ? 'nav-link-active' 
+                    : 'nav-link-inactive'
                 }`}
               >
                 🔐 Admin Panel
@@ -204,10 +211,10 @@ export default function UniversalNavigation() {
           >
             <Link
               href="/public"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
                 isActive('/public') 
-                  ? 'bg-blue-500 text-white shadow-lg' 
-                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
+                  ? 'nav-link-active' 
+                  : 'nav-link-inactive'
               }`}
             >
               👁️ Public View
@@ -217,7 +224,7 @@ export default function UniversalNavigation() {
 
         {/* Secondary Navigation */}
         <div className="border-t border-blue-600/30 pt-4 pb-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
             <HoverTooltip
               title={hoverDescriptions['health-check'].title}
               description={hoverDescriptions['health-check'].description}
@@ -227,10 +234,10 @@ export default function UniversalNavigation() {
             >
               <Link
                 href="/health"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   isActive('/health') 
-                    ? 'bg-green-500 text-white shadow-lg' 
-                    : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                    ? 'nav-link-active' 
+                    : 'nav-link-inactive'
                 }`}
               >
                 🏥 Health Check
@@ -246,10 +253,10 @@ export default function UniversalNavigation() {
             >
               <Link
                 href="/config"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   isActive('/config') 
-                    ? 'bg-green-500 text-white shadow-lg' 
-                    : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                    ? 'nav-link-active' 
+                    : 'nav-link-inactive'
                 }`}
               >
                 ⚙️ Configuration
@@ -265,10 +272,10 @@ export default function UniversalNavigation() {
             >
               <Link
                 href="/crew-status"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   isActive('/crew-status') 
-                    ? 'bg-green-500 text-white shadow-lg' 
-                    : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                    ? 'nav-link-active' 
+                    : 'nav-link-inactive'
                 }`}
               >
                 👥 Crew Status
@@ -284,10 +291,10 @@ export default function UniversalNavigation() {
             >
               <Link
                 href="/contrast-test"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   isActive('/contrast-test') 
-                    ? 'bg-green-500 text-white shadow-lg' 
-                    : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                    ? 'nav-link-active' 
+                    : 'nav-link-inactive'
                 }`}
               >
                 🎨 Contrast Test
@@ -305,10 +312,10 @@ export default function UniversalNavigation() {
                 >
                   <Link
                     href="/themes"
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                       isActive('/themes') 
-                        ? 'bg-green-500 text-white shadow-lg' 
-                        : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                        ? 'nav-link-active' 
+                        : 'nav-link-inactive'
                     }`}
                   >
                     🎨 Theme Manager
@@ -324,10 +331,10 @@ export default function UniversalNavigation() {
                 >
                   <Link
                     href="/navigation-demo"
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                       isActive('/navigation-demo') 
-                        ? 'bg-green-500 text-white shadow-lg' 
-                        : 'bg-black/20 text-gray-300 hover:bg-black/30 hover:text-white'
+                        ? 'nav-link-active' 
+                        : 'nav-link-inactive'
                     }`}
                   >
                     🧭 Navigation Demo
@@ -335,13 +342,75 @@ export default function UniversalNavigation() {
                 </HoverTooltip>
               </>
             )}
+            
+            {/* Role Management */}
+            <HoverTooltip
+              title={hoverDescriptions['edit-role'].title}
+              description={hoverDescriptions['edit-role'].description}
+              status={hoverDescriptions['edit-role'].status}
+              implementationLevel={hoverDescriptions['edit-role'].implementationLevel}
+              requirements={hoverDescriptions['edit-role'].requirements}
+            >
+              <Link
+                href="/role-management"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/role-management') 
+                    ? 'bg-red-500 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                🔐 Role Management
+              </Link>
+            </HoverTooltip>
+
+            {/* Theme Customization */}
+            <HoverTooltip
+              title={hoverDescriptions['create-theme'].title}
+              description={hoverDescriptions['create-theme'].description}
+              status={hoverDescriptions['create-theme'].status}
+              implementationLevel={hoverDescriptions['create-theme'].implementationLevel}
+              requirements={hoverDescriptions['create-theme'].requirements}
+            >
+              <Link
+                href="/theme-customization"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/theme-customization') 
+                    ? 'bg-purple-500 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                🎨 Theme Studio
+              </Link>
+            </HoverTooltip>
+
+            {/* Crew Management */}
+            <HoverTooltip
+              title={hoverDescriptions['crew-analytics'].title}
+              description={hoverDescriptions['crew-analytics'].description}
+              status={hoverDescriptions['crew-analytics'].status}
+              implementationLevel={hoverDescriptions['crew-analytics'].implementationLevel}
+              requirements={hoverDescriptions['crew-analytics'].requirements}
+            >
+              <Link
+                href="/crew-management"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/crew-management') 
+                    ? 'bg-blue-500 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                👥 Crew Management
+              </Link>
+            </HoverTooltip>
           </div>
         </div>
 
         {/* Role Switcher (for demo purposes) */}
-        <div className="border-t border-blue-600/30 pt-4 pb-4">
+        <div className="pt-4 pb-4"
+             style={{ borderTop: `1px solid var(--theme-enhancements)` }}>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-300">Role:</span>
+            <span className="text-sm"
+                  style={{ color: 'var(--theme-enhancements)' }}>Role:</span>
             <div className="flex space-x-2">
               <HoverTooltip
                 title={hoverDescriptions['role-switcher'].title}
@@ -352,11 +421,21 @@ export default function UniversalNavigation() {
               >
                 <button
                   onClick={() => setUserRole('public')}
-                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${
-                    userRole === 'public' 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
-                  }`}
+                  className="px-3 py-1 rounded text-xs font-medium transition-all"
+                  style={{
+                    backgroundColor: userRole === 'public' ? 'var(--theme-role)' : 'var(--theme-enhancements)',
+                    color: userRole === 'public' ? 'var(--theme-primary)' : 'var(--theme-accent)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (userRole !== 'public') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (userRole !== 'public') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
+                    }
+                  }}
                 >
                   Public
                 </button>
@@ -370,11 +449,21 @@ export default function UniversalNavigation() {
               >
                 <button
                   onClick={() => setUserRole('user')}
-                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${
-                    userRole === 'user' 
-                      ? 'bg-blue-500 text-white' 
-                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
-                  }`}
+                  className="px-3 py-1 rounded text-xs font-medium transition-all"
+                  style={{
+                    backgroundColor: userRole === 'user' ? 'var(--theme-component)' : 'var(--theme-enhancements)',
+                    color: userRole === 'user' ? 'var(--theme-primary)' : 'var(--theme-accent)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (userRole !== 'user') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (userRole !== 'user') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
+                    }
+                  }}
                 >
                   User
                 </button>
@@ -388,11 +477,21 @@ export default function UniversalNavigation() {
               >
                 <button
                   onClick={() => setUserRole('admin')}
-                  className={`px-3 py-1 rounded text-xs font-medium transition-all ${
-                    userRole === 'admin' 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
-                  }`}
+                  className="px-3 py-1 rounded text-xs font-medium transition-all"
+                  style={{
+                    backgroundColor: userRole === 'admin' ? '#dc2626' : 'var(--theme-enhancements)',
+                    color: userRole === 'admin' ? 'var(--theme-accent)' : 'var(--theme-accent)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (userRole !== 'admin') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (userRole !== 'admin') {
+                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
+                    }
+                  }}
                 >
                   Admin
                 </button>

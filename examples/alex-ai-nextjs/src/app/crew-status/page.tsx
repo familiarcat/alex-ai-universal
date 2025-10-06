@@ -208,7 +208,8 @@ export default function CrewStatus() {
           <div className="text-gray-300">Total Members</div>
         </div>
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-green-400">{activeMembers}</div>
+          <div className="text-2xl font-bold"
+               style={{ color: 'var(--theme-role)' }}>{activeMembers}</div>
           <div className="text-gray-300">Active</div>
         </div>
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
@@ -271,7 +272,8 @@ export default function CrewStatus() {
 
             {/* Role and Status */}
             <div className="mb-4">
-              <div className="text-sm font-medium text-green-400 mb-1">{member.role}</div>
+              <div className="text-sm font-medium mb-1"
+                   style={{ color: 'var(--theme-role)' }}>{member.role}</div>
               <div className="text-xs text-gray-400">Last active: {member.lastActivity}</div>
             </div>
 
@@ -314,7 +316,8 @@ export default function CrewStatus() {
                   <div className="text-xs text-gray-400">Tasks</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-green-400">{member.performance.successRate}%</div>
+                  <div className="text-lg font-bold"
+                       style={{ color: 'var(--theme-role)' }}>{member.performance.successRate}%</div>
                   <div className="text-xs text-gray-400">Success</div>
                 </div>
                 <div>
@@ -338,7 +341,8 @@ export default function CrewStatus() {
             <div className="text-gray-300">Average Success Rate</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-400 mb-2">
+            <div className="text-3xl font-bold mb-2"
+                 style={{ color: 'var(--theme-role)' }}>
               {crewMembers.reduce((acc, m) => acc + m.performance.tasksCompleted, 0)}
             </div>
             <div className="text-gray-300">Total Tasks Completed</div>
