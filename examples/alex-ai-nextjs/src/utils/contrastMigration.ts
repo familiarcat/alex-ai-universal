@@ -170,3 +170,5 @@ export const WCAG_COMPLIANCE_CHECKLIST = [
   'High contrast mode support',
   'Reduced motion preferences respected',
 ]
+
+

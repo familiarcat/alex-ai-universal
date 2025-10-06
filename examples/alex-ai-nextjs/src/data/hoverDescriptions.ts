@@ -489,5 +489,20 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
       'Backup crew activation procedures',
       'System continuity maintenance'
     ]
+  },
+
+  'n8n-integration': {
+    title: '🖖 N8N Integration',
+    description: 'Real-time workflow management and system integration with N8N server. Execute workflows, monitor executions, and manage Alex AI crew coordination through automated workflows.',
+    status: 'implemented',
+    implementationLevel: 85,
+    requirements: [
+      'Real-time N8N server connection',
+      'Workflow execution and monitoring',
+      'Crew coordination workflow integration',
+      'Memory sync automation',
+      'Emergency protocol execution',
+      'Live execution status tracking'
+    ]
   }
 }

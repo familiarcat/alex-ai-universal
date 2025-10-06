@@ -286,3 +286,4 @@ async function runContactIntegrationTests() {
 
 // Run the tests
 runContactIntegrationTests().catch(console.error);
+

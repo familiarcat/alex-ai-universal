@@ -61,3 +61,4 @@ export interface CrewAnalysisRequest {
   dateRange?: { start: Date; end: Date };
   specificQuestions?: string[];
 }
+

@@ -366,3 +366,5 @@ try {
 
 // Export singleton instance
 export const supabaseN8NMigration = new SupabaseN8NMigration();
+
+

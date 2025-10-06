@@ -28,6 +28,7 @@
     "clean-dashboard": "node src/clean-dashboard-frontend-server.js",
     "fixed-dashboard": "node src/fixed-dashboard-frontend-server.js",
     "enhanced-dashboard": "node src/enhanced-dashboard-with-live-preview.js",
+    "unified-api": "node src/unified-api-server.js",
     "dev": "node dev-environment.js",
     "dev:web": "NODE_ENV=development node src/dynamic-web-server.js",
     "dev:dashboard": "NODE_ENV=development node src/enhanced-dashboard-server.js",

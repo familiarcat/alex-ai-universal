@@ -97,7 +97,6 @@ export default function AdminDashboard() {
               📦 Update System
             </ContrastButton>
           </div>
-        </div>
 
         {/* Security Controls */}
         <ContrastCard variant="elevated">
@@ -133,8 +132,6 @@ export default function AdminDashboard() {
               🔐 Reset Security
             </ContrastButton>
           </div>
-        </div>
-      </div>
 
       {/* Advanced Configuration */}
       <ContrastCard variant="elevated">

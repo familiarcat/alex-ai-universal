@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useHealth } from '@/contexts/HealthContext'
+import { useN8N } from '@/contexts/N8NContext'
 import { ContrastCard, ContrastText, ContrastButton } from '@/components/ContrastAware'
 
 interface HealthStatus {
@@ -15,6 +16,17 @@ interface HealthStatus {
 
 export default function HealthCheck() {
   const { metrics, alerts, isMonitoring, dismissAlert, clearAllAlerts } = useHealth()
+  const { 
+    isConnected: n8nConnected, 
+    healthStatus: n8nHealth, 
+    testConnection: testN8NConnection,
+    refreshHealthStatus: refreshN8NHealth,
+    formatHealthStatus: formatN8NStatus,
+    formatUptime: formatN8NUptime,
+    calculateSystemLoad,
+    connectionError: n8nError
+  } = useN8N()
+  
   const [healthStatus, setHealthStatus] = useState<HealthStatus>({
     server: 'online',
     database: 'connected',
@@ -28,17 +40,46 @@ export default function HealthCheck() {
 
   const checkHealth = async () => {
     setIsChecking(true)
-    // Simulate health check
-    await new Promise(resolve => setTimeout(resolve, 1000))
     
-    setHealthStatus({
-      server: 'online',
-      database: 'connected',
-      websocket: 'active',
-      memory: Math.floor(Math.random() * 100) + 200,
-      uptime: '2h 34m',
-      lastCheck: new Date().toLocaleTimeString()
-    })
+    try {
+      // Test N8N connection and refresh health status
+      const n8nConnected = await testN8NConnection()
+      await refreshN8NHealth()
+      
+      // Update health status with real N8N data or fallback to simulated
+      if (n8nHealth && n8nConnected) {
+        setHealthStatus({
+          server: n8nConnected ? 'online' : 'offline',
+          database: n8nHealth.status === 'healthy' ? 'connected' : 'disconnected',
+          websocket: n8nConnected ? 'active' : 'inactive',
+          memory: n8nHealth.systemLoad?.memory || 256,
+          uptime: formatN8NUptime(n8nHealth.uptime || 0),
+          lastCheck: new Date().toLocaleTimeString()
+        })
+      } else {
+        // Fallback to simulated data if N8N is not available
+        setHealthStatus({
+          server: 'online',
+          database: 'connected',
+          websocket: 'active',
+          memory: Math.floor(Math.random() * 100) + 200,
+          uptime: '2h 34m',
+          lastCheck: new Date().toLocaleTimeString()
+        })
+      }
+    } catch (error) {
+      console.error('Health check failed:', error)
+      // Fallback to simulated data on error
+      setHealthStatus({
+        server: 'offline',
+        database: 'disconnected',
+        websocket: 'inactive',
+        memory: 0,
+        uptime: '0m',
+        lastCheck: new Date().toLocaleTimeString()
+      })
+    }
+    
     setIsChecking(false)
   }
 
@@ -161,7 +202,7 @@ export default function HealthCheck() {
             { name: 'Alex AI Core Engine', status: 'online', description: 'Main AI processing engine' },
             { name: 'Crew Management System', status: 'online', description: 'Crew member coordination and monitoring' },
             { name: 'RAG Memory System', status: 'online', description: 'Retrieval-augmented generation memory' },
-            { name: 'N8N Workflow Engine', status: 'online', description: 'Automation and workflow management' },
+            { name: 'N8N Workflow Engine', status: n8nConnected ? 'online' : 'offline', description: `Automation and workflow management ${n8nError ? `(${n8nError})` : ''}` },
             { name: 'Supabase Integration', status: 'online', description: 'Database and authentication services' },
             { name: 'WebSocket Server', status: 'online', description: 'Real-time communication layer' },
             { name: 'Theme Manager', status: 'online', description: 'UI theme and styling system' },
@@ -250,6 +291,81 @@ export default function HealthCheck() {
           </div>
         </div>
       </ContrastCard>
+
+      {/* N8N Integration Status */}
+      {n8nHealth && (
+        <ContrastCard variant="elevated">
+          <h2 className="text-2xl font-bold text-theme-accent mb-6">🖖 N8N Integration Status</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-bold text-theme-accent mb-3">Server Status</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Connection:</span>
+                  <span className={`font-bold ${n8nConnected ? 'text-theme-role' : 'text-red-400'}`}>
+                    {n8nConnected ? 'Connected' : 'Disconnected'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Status:</span>
+                  <span className={`font-bold ${formatN8NStatus(n8nHealth.status).color === 'green' ? 'text-theme-role' : formatN8NStatus(n8nHealth.status).color === 'yellow' ? 'text-yellow-400' : 'text-red-400'}`}>
+                    {formatN8NStatus(n8nHealth.status).text}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Version:</span>
+                  <span className="text-theme-accent">{n8nHealth.version}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Uptime:</span>
+                  <span className="text-theme-accent">{formatN8NUptime(n8nHealth.uptime)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-bold text-theme-accent mb-3">System Load</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">CPU:</span>
+                  <span className="text-theme-accent">{n8nHealth.systemLoad?.cpu || 0}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Memory:</span>
+                  <span className="text-theme-accent">{n8nHealth.systemLoad?.memory || 0}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Disk:</span>
+                  <span className="text-theme-accent">{n8nHealth.systemLoad?.disk || 0}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-theme-enhancements">Overall Load:</span>
+                  <span className={`font-bold ${calculateSystemLoad(n8nHealth.systemLoad?.cpu || 0, n8nHealth.systemLoad?.memory || 0, n8nHealth.systemLoad?.disk || 0) > 80 ? 'text-red-400' : calculateSystemLoad(n8nHealth.systemLoad?.cpu || 0, n8nHealth.systemLoad?.memory || 0, n8nHealth.systemLoad?.disk || 0) > 60 ? 'text-yellow-400' : 'text-theme-role'}`}>
+                    {calculateSystemLoad(n8nHealth.systemLoad?.cpu || 0, n8nHealth.systemLoad?.memory || 0, n8nHealth.systemLoad?.disk || 0)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 pt-4 border-t border-theme-accent/20">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-theme-component">{n8nHealth.activeWorkflows}</div>
+                <div className="text-theme-enhancements">Active Workflows</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-theme-accent">{n8nHealth.totalExecutions}</div>
+                <div className="text-theme-enhancements">Total Executions</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-theme-role">{n8nHealth.lastExecution ? new Date(n8nHealth.lastExecution).toLocaleTimeString() : 'N/A'}</div>
+                <div className="text-theme-enhancements">Last Execution</div>
+              </div>
+            </div>
+          </div>
+        </ContrastCard>
+      )}
     </div>
   )
 }

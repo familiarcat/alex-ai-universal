@@ -354,3 +354,4 @@ ${analysis.insights.actionItems.map(item => `- ${item}`).join('\n')}
 `;
   }
 }
+

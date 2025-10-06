@@ -474,3 +474,5 @@ ${this.registry.members.map(member => `- **${member.name}** (${member.role}) - $
 
 // Export singleton instance
 export const crewSync = new BidirectionalCrewSync();
+
+

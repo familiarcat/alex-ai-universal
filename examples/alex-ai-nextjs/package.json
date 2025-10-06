@@ -10,7 +10,10 @@
     "alex-ai:demo": "npm run dev",
     "alex-ai:build": "npm run build",
     "alex-ai:start": "npm run start",
-    "alex-ai:production": "npm run build && npm run start"
+    "alex-ai:production": "npm run build && npm run start",
+    "alex-ai:load-secrets": "node scripts/load-alex-ai-secrets.js",
+    "alex-ai:dev": "npm run alex-ai:load-secrets && npm run dev",
+    "alex-ai:global-nav": "npm run alex-ai:load-secrets && npm run dev"
   },
   "dependencies": {
     "react": "19.1.0",

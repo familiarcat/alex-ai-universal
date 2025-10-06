@@ -378,3 +378,5 @@ if (require.main === module) {
 }
 
 module.exports = { SimpleUniversalKnowledgeDistribution, SimpleCrewAnalysis };
+
+

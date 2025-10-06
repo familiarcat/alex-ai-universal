@@ -427,3 +427,5 @@ export class N8NSupabaseClient {
 
 // Export singleton instance
 export const n8nSupabaseClient = new N8NSupabaseClient();
+
+

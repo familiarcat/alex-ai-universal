@@ -186,6 +186,25 @@ export default function UniversalNavigation() {
           </HoverTooltip>
           
           <HoverTooltip
+            title="Unified Dashboard"
+            description="Combined Next.js and demo project integration with real-time synchronization"
+            status="active"
+            implementationLevel="complete"
+            requirements="Next.js 15, WebSocket integration, API bridge"
+          >
+            <Link
+              href="/unified"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
+                isActive('/unified') 
+                  ? 'nav-link-active' 
+                  : 'nav-link-inactive'
+              }`}
+            >
+              🖖 Unified Dashboard
+            </Link>
+          </HoverTooltip>
+          
+          <HoverTooltip
             title={hoverDescriptions['agentic-system'].title}
             description={hoverDescriptions['agentic-system'].description}
             status={hoverDescriptions['agentic-system'].status}
@@ -463,6 +482,26 @@ export default function UniversalNavigation() {
                 }`}
               >
                 🚨 Emergency Protocols
+              </Link>
+            </HoverTooltip>
+
+            {/* N8N Integration */}
+            <HoverTooltip
+              title={hoverDescriptions['n8n-integration'].title}
+              description={hoverDescriptions['n8n-integration'].description}
+              status={hoverDescriptions['n8n-integration'].status}
+              implementationLevel={hoverDescriptions['n8n-integration'].implementationLevel}
+              requirements={hoverDescriptions['n8n-integration'].requirements}
+            >
+              <Link
+                href="/n8n-integration"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  isActive('/n8n-integration') 
+                    ? 'bg-blue-600 text-white shadow-lg' 
+                    : 'nav-link-inactive'
+                }`}
+              >
+                🖖 N8N Integration
               </Link>
             </HoverTooltip>
           </div>

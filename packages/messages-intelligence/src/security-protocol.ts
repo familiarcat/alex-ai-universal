@@ -335,3 +335,4 @@ export class SecurityProtocol {
 
 // Export singleton instance
 export const securityProtocol = new SecurityProtocol();
+

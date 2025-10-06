@@ -41,3 +41,5 @@
 - Supabase vector database integration
 - Real-time vector data synchronization
 - Crew specialization optimization
+
+
