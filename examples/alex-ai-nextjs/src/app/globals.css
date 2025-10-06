@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+:root {
+  --theme-primary: #0f172a;
+  --theme-secondary: #1e293b;
+  --theme-accent: #f1f5f9;
+  --theme-role: #4ade80;
+  --theme-component: #fbbf24;
+  --theme-enhancements: #e5e7eb;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -7,6 +16,28 @@
   
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    transition: all 0.3s ease;
+  }
+
+  /* Theme-specific styles */
+  .theme-light {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+
+  .theme-dark {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+
+  .theme-star-trek {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  }
+
+  .theme-neon {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  }
+
+  .theme-ocean {
+    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
   }
 }
 
@@ -205,6 +236,29 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Custom scrollbar for hover tooltips */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* Focus styles for accessibility */

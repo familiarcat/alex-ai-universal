@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import HoverTooltip from '@/components/HoverTooltip'
+import { hoverDescriptions } from '@/data/hoverDescriptions'
 
 export default function NavigationDemo() {
   const [selectedRole, setSelectedRole] = useState<'public' | 'user' | 'admin'>('user')
@@ -263,20 +265,52 @@ export default function NavigationDemo() {
       <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
         <h2 className="text-2xl font-bold text-white mb-6">Try Different Views</h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
-            🎛️ View Dashboard
-          </button>
-          <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
-            🌐 View Live Frontend
-          </button>
-          {selectedRole === 'admin' && (
-            <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
-              🔐 View Admin Panel
+          <HoverTooltip
+            title={hoverDescriptions['view-dashboard'].title}
+            description={hoverDescriptions['view-dashboard'].description}
+            status={hoverDescriptions['view-dashboard'].status}
+            implementationLevel={hoverDescriptions['view-dashboard'].implementationLevel}
+            requirements={hoverDescriptions['view-dashboard'].requirements}
+          >
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
+              🎛️ View Dashboard
             </button>
+          </HoverTooltip>
+          <HoverTooltip
+            title={hoverDescriptions['view-live-frontend'].title}
+            description={hoverDescriptions['view-live-frontend'].description}
+            status={hoverDescriptions['view-live-frontend'].status}
+            implementationLevel={hoverDescriptions['view-live-frontend'].implementationLevel}
+            requirements={hoverDescriptions['view-live-frontend'].requirements}
+          >
+            <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
+              🌐 View Live Frontend
+            </button>
+          </HoverTooltip>
+          {selectedRole === 'admin' && (
+            <HoverTooltip
+              title={hoverDescriptions['view-admin-panel'].title}
+              description={hoverDescriptions['view-admin-panel'].description}
+              status={hoverDescriptions['view-admin-panel'].status}
+              implementationLevel={hoverDescriptions['view-admin-panel'].implementationLevel}
+              requirements={hoverDescriptions['view-admin-panel'].requirements}
+            >
+              <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
+                🔐 View Admin Panel
+              </button>
+            </HoverTooltip>
           )}
-          <button className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
-            👁️ View Public Page
-          </button>
+          <HoverTooltip
+            title={hoverDescriptions['view-public-page'].title}
+            description={hoverDescriptions['view-public-page'].description}
+            status={hoverDescriptions['view-public-page'].status}
+            implementationLevel={hoverDescriptions['view-public-page'].implementationLevel}
+            requirements={hoverDescriptions['view-public-page'].requirements}
+          >
+            <button className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all">
+              👁️ View Public Page
+            </button>
+          </HoverTooltip>
         </div>
       </div>
     </div>

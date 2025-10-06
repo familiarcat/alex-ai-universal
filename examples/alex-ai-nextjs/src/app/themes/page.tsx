@@ -1,77 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-
-const availableThemes = [
-  {
-    id: 'light',
-    name: 'Light Mode',
-    description: 'Clean and bright interface for daytime use',
-    colors: {
-      primary: '#f8fafc',
-      secondary: '#e2e8f0',
-      accent: '#1e293b',
-      role: '#1a5a1a',
-      component: '#8b4513',
-      enhancements: '#374151'
-    }
-  },
-  {
-    id: 'dark',
-    name: 'Dark Mode',
-    description: 'Dark and sleek interface for low-light environments',
-    colors: {
-      primary: '#0f172a',
-      secondary: '#1e293b',
-      accent: '#f1f5f9',
-      role: '#4ade80',
-      component: '#fbbf24',
-      enhancements: '#e5e7eb'
-    }
-  },
-  {
-    id: 'star-trek',
-    name: 'Star Trek',
-    description: 'Classic Star Trek inspired theme with blue and gold',
-    colors: {
-      primary: '#1e3a8a',
-      secondary: '#3b82f6',
-      accent: '#dbeafe',
-      role: '#00ff88',
-      component: '#ffd700',
-      enhancements: '#ffffff'
-    }
-  },
-  {
-    id: 'neon',
-    name: 'Neon Cyber',
-    description: 'Futuristic neon theme with high contrast',
-    colors: {
-      primary: '#0a0a0a',
-      secondary: '#1a1a1a',
-      accent: '#00ff88',
-      role: '#00ff88',
-      component: '#ffff00',
-      enhancements: '#ffffff'
-    }
-  },
-  {
-    id: 'ocean',
-    name: 'Ocean Blue',
-    description: 'Calming ocean-inspired theme with blue tones',
-    colors: {
-      primary: '#0c4a6e',
-      secondary: '#0369a1',
-      accent: '#e0f2fe',
-      role: '#00d4ff',
-      component: '#ffd700',
-      enhancements: '#e0f2fe'
-    }
-  }
-]
+import { useTheme } from '@/contexts/ThemeContext'
+import HoverTooltip from '@/components/HoverTooltip'
 
 export default function Themes() {
-  const [currentTheme, setCurrentTheme] = useState(availableThemes[1]) // Default to dark theme
+  const { currentTheme, setTheme, availableThemes } = useTheme()
   const [customTheme, setCustomTheme] = useState({
     name: '',
     description: '',
@@ -86,8 +20,7 @@ export default function Themes() {
   })
 
   const applyTheme = (theme: typeof availableThemes[0]) => {
-    setCurrentTheme(theme)
-    // In a real application, you would apply the theme globally
+    setTheme(theme.id)
     console.log('Applied theme:', theme)
   }
 
@@ -192,15 +125,22 @@ export default function Themes() {
         <h2 className="text-2xl font-bold text-white mb-6">Available Themes</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {availableThemes.map((theme) => (
-            <div
+            <HoverTooltip
               key={theme.id}
-              className={`rounded-lg p-6 border-2 transition-all duration-300 cursor-pointer ${
-                currentTheme.id === theme.id
-                  ? 'border-blue-400 bg-blue-500/20'
-                  : 'border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30'
-              }`}
-              onClick={() => applyTheme(theme)}
+              title={`Apply ${theme.name}`}
+              description={`Switch to ${theme.name} theme. ${theme.description}`}
+              status="implemented"
+              implementationLevel={100}
+              requirements={[]}
             >
+              <div
+                className={`rounded-lg p-6 border-2 transition-all duration-300 cursor-pointer ${
+                  currentTheme.id === theme.id
+                    ? 'border-blue-400 bg-blue-500/20'
+                    : 'border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30'
+                }`}
+                onClick={() => applyTheme(theme)}
+              >
               <div 
                 className="h-20 rounded mb-4 border"
                 style={{
@@ -252,7 +192,8 @@ export default function Themes() {
               >
                 {currentTheme.id === theme.id ? 'Active' : 'Apply Theme'}
               </button>
-            </div>
+              </div>
+            </HoverTooltip>
           ))}
         </div>
       </div>
