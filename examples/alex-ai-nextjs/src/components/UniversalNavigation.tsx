@@ -91,15 +91,19 @@ export default function UniversalNavigation() {
   const isPublic = userRole === 'public'
 
   return (
-    <nav className="theme-background backdrop-blur-sm relative z-[10000]"
-         style={{ borderBottom: `1px solid var(--theme-enhancements)` }}>
+    <nav className="nav-enhanced backdrop-blur-sm relative z-[10000]"
+         style={{ 
+           background: 'var(--nav-bg-color)',
+           color: 'var(--nav-text-color)',
+           borderBottom: `2px solid var(--nav-border-color)` 
+         }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center space-x-3">
             <span className="text-2xl">🖖</span>
             <h1 className="text-xl font-bold"
-                style={{ color: 'var(--theme-accent)' }}>Alex AI Universal</h1>
+                style={{ color: 'var(--nav-text-color)' }}>Alex AI Universal</h1>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -123,15 +127,15 @@ export default function UniversalNavigation() {
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full animate-pulse"
                    style={{ backgroundColor: isConnected ? 'var(--theme-role)' : '#dc2626' }}></div>
-              <span className="text-sm"
-                    style={{ color: 'var(--theme-enhancements)' }}>
+              <span className="text-sm font-medium"
+                    style={{ color: 'var(--nav-text-color)' }}>
                 {isConnected ? 'Connected' : 'Disconnected'}
               </span>
             </div>
             
             {/* Crew Count */}
             <div className="flex items-center space-x-1"
-                 style={{ color: 'var(--theme-enhancements)' }}>
+                 style={{ color: 'var(--nav-text-color)' }}>
               <span className="text-sm">👥</span>
               <span className="text-sm font-medium">{crewMembers.length}</span>
             </div>
@@ -178,6 +182,25 @@ export default function UniversalNavigation() {
               }`}
             >
               🌐 Live Frontend
+            </Link>
+          </HoverTooltip>
+          
+          <HoverTooltip
+            title={hoverDescriptions['agentic-system'].title}
+            description={hoverDescriptions['agentic-system'].description}
+            status={hoverDescriptions['agentic-system'].status}
+            implementationLevel={hoverDescriptions['agentic-system'].implementationLevel}
+            requirements={hoverDescriptions['agentic-system'].requirements}
+          >
+            <Link
+              href="/agentic-system"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
+                isActive('/agentic-system') 
+                  ? 'nav-link-active' 
+                  : 'nav-link-inactive'
+              }`}
+            >
+              🖖 Agentic System
             </Link>
           </HoverTooltip>
           
@@ -405,12 +428,12 @@ export default function UniversalNavigation() {
           </div>
         </div>
 
-        {/* Role Switcher (for demo purposes) */}
-        <div className="pt-4 pb-4"
-             style={{ borderTop: `1px solid var(--theme-enhancements)` }}>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm"
-                  style={{ color: 'var(--theme-enhancements)' }}>Role:</span>
+            {/* Role Switcher (for demo purposes) */}
+            <div className="pt-4 pb-4"
+                 style={{ borderTop: `2px solid var(--nav-border-color)` }}>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium"
+                      style={{ color: 'var(--nav-text-color)' }}>Role:</span>
             <div className="flex space-x-2">
               <HoverTooltip
                 title={hoverDescriptions['role-switcher'].title}
@@ -419,26 +442,29 @@ export default function UniversalNavigation() {
                 implementationLevel={hoverDescriptions['role-switcher'].implementationLevel}
                 requirements={hoverDescriptions['role-switcher'].requirements}
               >
-                <button
-                  onClick={() => setUserRole('public')}
-                  className="px-3 py-1 rounded text-xs font-medium transition-all"
-                  style={{
-                    backgroundColor: userRole === 'public' ? 'var(--theme-role)' : 'var(--theme-enhancements)',
-                    color: userRole === 'public' ? 'var(--theme-primary)' : 'var(--theme-accent)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (userRole !== 'public') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (userRole !== 'public') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
-                    }
-                  }}
-                >
-                  Public
-                </button>
+                    <button
+                      onClick={() => setUserRole('public')}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all border-2"
+                      style={{
+                        backgroundColor: userRole === 'public' ? 'var(--nav-active-bg)' : 'transparent',
+                        color: userRole === 'public' ? 'var(--nav-active-text)' : 'var(--nav-text-color)',
+                        borderColor: userRole === 'public' ? 'var(--nav-active-bg)' : 'var(--nav-border-color)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (userRole !== 'public') {
+                          e.currentTarget.style.backgroundColor = 'var(--nav-hover-bg)'
+                          e.currentTarget.style.borderColor = 'var(--nav-text-color)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (userRole !== 'public') {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                          e.currentTarget.style.borderColor = 'var(--nav-border-color)'
+                        }
+                      }}
+                    >
+                      Public
+                    </button>
               </HoverTooltip>
               <HoverTooltip
                 title={hoverDescriptions['role-switcher'].title}
@@ -447,26 +473,29 @@ export default function UniversalNavigation() {
                 implementationLevel={hoverDescriptions['role-switcher'].implementationLevel}
                 requirements={hoverDescriptions['role-switcher'].requirements}
               >
-                <button
-                  onClick={() => setUserRole('user')}
-                  className="px-3 py-1 rounded text-xs font-medium transition-all"
-                  style={{
-                    backgroundColor: userRole === 'user' ? 'var(--theme-component)' : 'var(--theme-enhancements)',
-                    color: userRole === 'user' ? 'var(--theme-primary)' : 'var(--theme-accent)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (userRole !== 'user') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (userRole !== 'user') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
-                    }
-                  }}
-                >
-                  User
-                </button>
+                    <button
+                      onClick={() => setUserRole('user')}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all border-2"
+                      style={{
+                        backgroundColor: userRole === 'user' ? 'var(--nav-active-bg)' : 'transparent',
+                        color: userRole === 'user' ? 'var(--nav-active-text)' : 'var(--nav-text-color)',
+                        borderColor: userRole === 'user' ? 'var(--nav-active-bg)' : 'var(--nav-border-color)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (userRole !== 'user') {
+                          e.currentTarget.style.backgroundColor = 'var(--nav-hover-bg)'
+                          e.currentTarget.style.borderColor = 'var(--nav-text-color)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (userRole !== 'user') {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                          e.currentTarget.style.borderColor = 'var(--nav-border-color)'
+                        }
+                      }}
+                    >
+                      User
+                    </button>
               </HoverTooltip>
               <HoverTooltip
                 title={hoverDescriptions['role-switcher'].title}
@@ -475,26 +504,29 @@ export default function UniversalNavigation() {
                 implementationLevel={hoverDescriptions['role-switcher'].implementationLevel}
                 requirements={hoverDescriptions['role-switcher'].requirements}
               >
-                <button
-                  onClick={() => setUserRole('admin')}
-                  className="px-3 py-1 rounded text-xs font-medium transition-all"
-                  style={{
-                    backgroundColor: userRole === 'admin' ? '#dc2626' : 'var(--theme-enhancements)',
-                    color: userRole === 'admin' ? 'var(--theme-accent)' : 'var(--theme-accent)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (userRole !== 'admin') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-secondary)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (userRole !== 'admin') {
-                      e.currentTarget.style.backgroundColor = 'var(--theme-enhancements)'
-                    }
-                  }}
-                >
-                  Admin
-                </button>
+                    <button
+                      onClick={() => setUserRole('admin')}
+                      className="px-3 py-1 rounded text-xs font-medium transition-all border-2"
+                      style={{
+                        backgroundColor: userRole === 'admin' ? '#dc2626' : 'transparent',
+                        color: userRole === 'admin' ? '#ffffff' : 'var(--nav-text-color)',
+                        borderColor: userRole === 'admin' ? '#dc2626' : 'var(--nav-border-color)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (userRole !== 'admin') {
+                          e.currentTarget.style.backgroundColor = 'var(--nav-hover-bg)'
+                          e.currentTarget.style.borderColor = 'var(--nav-text-color)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (userRole !== 'admin') {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                          e.currentTarget.style.borderColor = 'var(--nav-border-color)'
+                        }
+                      }}
+                    >
+                      Admin
+                    </button>
               </HoverTooltip>
             </div>
           </div>

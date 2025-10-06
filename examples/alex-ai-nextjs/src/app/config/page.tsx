@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useConfig } from '@/contexts/ConfigContext'
+import { ContrastCard, ContrastText, ContrastButton } from '@/components/ContrastAware'
 
 interface Configuration {
   title: string
@@ -113,44 +114,46 @@ export default function Configuration() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">
+        <h1 className="text-4xl font-bold text-theme-accent mb-4">
           ⚙️ Configuration Center
         </h1>
-        <p className="text-xl text-gray-300">
+        <p className="text-xl text-theme-enhancements">
           Manage system configuration and application settings
         </p>
       </div>
 
       {/* Save Controls */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+      <ContrastCard variant="elevated">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-white">Configuration Management</h3>
+            <h3 className="text-lg font-bold text-theme-accent">Configuration Management</h3>
             {lastSaved && (
-              <p className="text-gray-300">Last saved: {lastSaved}</p>
+              <p className="text-theme-enhancements">Last saved: {lastSaved}</p>
             )}
           </div>
           <div className="flex space-x-3">
-            <button
+            <ContrastButton
               onClick={resetConfiguration}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              variant="enhancements"
+              className="px-4 py-2"
             >
               🔄 Reset
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={saveConfiguration}
               disabled={isSaving}
-              className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 text-white px-6 py-2 rounded-lg font-medium transition-all"
+              variant="component"
+              className="px-6 py-2"
             >
               {isSaving ? '💾 Saving...' : '💾 Save Configuration'}
-            </button>
+            </ContrastButton>
           </div>
         </div>
-      </div>
+      </ContrastCard>
 
       {/* Application Settings */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">Application Settings</h2>
+      <ContrastCard variant="elevated">
+        <h2 className="text-2xl font-bold text-theme-accent mb-6">Application Settings</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-white font-medium mb-2">Title</label>
@@ -213,9 +216,10 @@ export default function Configuration() {
         </div>
       </div>
 
-      {/* Server Configuration */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">Server Configuration</h2>
+      <div>
+        {/* Server Configuration */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+          <h2 className="text-2xl font-bold text-white mb-6">Server Configuration</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-white font-medium mb-2">Port</label>
@@ -413,6 +417,7 @@ export default function Configuration() {
             </select>
           </div>
         </div>
+      </div>
       </div>
 
       {/* Configuration Preview */}

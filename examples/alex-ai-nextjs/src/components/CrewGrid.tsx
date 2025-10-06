@@ -1,5 +1,7 @@
 'use client'
 
+import { ContrastCard, ContrastText } from './ContrastAware'
+
 interface CrewMember {
   id: string
   name: string
@@ -134,36 +136,27 @@ export default function CrewGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {crewMembers.map((member) => (
-        <div
-          key={member.id}
-          className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105"
-        >
+        <ContrastCard key={member.id} variant="elevated" className="hover:scale-105">
           <div className="mb-4">
-            <h3 className="text-lg font-bold mb-2"
-                style={{ color: 'var(--theme-accent)' }}>
+            <h3 className="text-lg font-bold mb-2 text-theme-accent">
               {member.name}
             </h3>
-            <div className="text-sm font-medium mb-2"
-                 style={{ color: 'var(--theme-role)' }}>
+            <div className="text-sm font-medium mb-2 text-theme-role">
               {member.role}
             </div>
-            <div className="text-sm mb-3"
-                 style={{ color: 'var(--theme-component)' }}>
+            <div className="text-sm mb-3 text-theme-component">
               Component: {member.component}
             </div>
           </div>
 
           <div className="mb-4">
-            <div className="text-sm font-medium mb-2"
-                 style={{ color: 'var(--theme-accent)' }}>
+            <div className="text-sm font-medium mb-2 text-theme-accent">
               Enhancement Recommendations:
             </div>
             <ul className="space-y-1">
               {member.enhancements.map((enhancement, index) => (
-                <li key={index} className="text-sm flex items-start"
-                    style={{ color: 'var(--theme-enhancements)' }}>
-                  <span className="mr-2"
-                        style={{ color: 'var(--theme-role)' }}>→</span>
+                <li key={index} className="text-sm flex items-start text-theme-enhancements">
+                  <span className="mr-2 text-theme-role">→</span>
                   {enhancement}
                 </li>
               ))}
@@ -173,17 +166,17 @@ export default function CrewGrid() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className={`w-2 h-2 rounded-full ${
-                member.status === 'active' ? 'bg-green-400' : 'bg-red-400'
+                member.status === 'active' ? 'bg-theme-role' : 'bg-red-400'
               }`}></div>
-              <span className="text-sm text-gray-300 capitalize">
+              <span className="text-sm text-theme-enhancements capitalize">
                 {member.status}
               </span>
             </div>
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-theme-enhancements">
               {member.specialization.length} specializations
             </div>
           </div>
-        </div>
+        </ContrastCard>
       ))}
     </div>
   )

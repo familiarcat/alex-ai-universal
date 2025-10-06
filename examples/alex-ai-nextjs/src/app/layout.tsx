@@ -5,6 +5,7 @@ import UniversalNavigation from '@/components/UniversalNavigation'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { ConfigProvider } from '@/contexts/ConfigContext'
 import { HealthProvider } from '@/contexts/HealthContext'
+import { AgenticProvider } from '@/contexts/AgenticContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,12 +25,14 @@ export default function RootLayout({
         <ThemeProvider>
           <ConfigProvider>
             <HealthProvider>
-              <div className="min-h-screen theme-background">
-                <UniversalNavigation />
-                <main className="container mx-auto px-4 py-8">
-                  {children}
-                </main>
-              </div>
+              <AgenticProvider>
+                <div className="min-h-screen theme-background">
+                  <UniversalNavigation />
+                  <main className="container mx-auto px-4 py-8">
+                    {children}
+                  </main>
+                </div>
+              </AgenticProvider>
             </HealthProvider>
           </ConfigProvider>
         </ThemeProvider>

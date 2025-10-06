@@ -47,6 +47,20 @@ export const hoverDescriptions: Record<string, HoverDescription> = {
       'Database management tools'
     ]
   },
+
+  'agentic-system': {
+    title: '🖖 Agentic System',
+    description: 'Enhanced agentic architecture with Ship\'s Computer interface and individual crew member access to Supabase vector data. Features Majel Barrett voice responses and unified crew coordination.',
+    status: 'implemented',
+    implementationLevel: 90,
+    requirements: [
+      'Ship\'s Computer interface with voice responses',
+      'Individual crew vector data access',
+      'Unified crew coordination system',
+      'Supabase vector database integration',
+      'Real-time crew status monitoring'
+    ]
+  },
   
   'public-view': {
     title: '👁️ Public View',

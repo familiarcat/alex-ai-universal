@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ContrastCard, ContrastText, ContrastButton } from '@/components/ContrastAware'
 
 export default function AdminDashboard() {
   const [systemMetrics, setSystemMetrics] = useState({
@@ -43,113 +44,125 @@ export default function AdminDashboard() {
 
       {/* System Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-green-400">{systemMetrics.uptime}</div>
-          <div className="text-gray-300">Uptime</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-blue-400">{systemMetrics.connections}</div>
-          <div className="text-gray-300">Connections</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-purple-400">{systemMetrics.memory}MB</div>
-          <div className="text-gray-300">Memory</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-yellow-400">{systemMetrics.crewMembers}</div>
-          <div className="text-gray-300">Crew Members</div>
-        </div>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-role">{systemMetrics.uptime}</div>
+          <div className="text-theme-enhancements">Uptime</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-component">{systemMetrics.connections}</div>
+          <div className="text-theme-enhancements">Connections</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-accent">{systemMetrics.memory}MB</div>
+          <div className="text-theme-enhancements">Memory</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-component">{systemMetrics.crewMembers}</div>
+          <div className="text-theme-enhancements">Crew Members</div>
+        </ContrastCard>
       </div>
 
       {/* Admin Controls */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* System Controls */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6">🎛️ System Controls</h2>
+        <ContrastCard variant="elevated">
+          <h2 className="text-2xl font-bold text-theme-accent mb-6">🎛️ System Controls</h2>
           <div className="space-y-4">
-            <button
+            <ContrastButton
               onClick={() => performAdminAction('Restart Server')}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="component"
+              className="w-full px-4 py-3"
             >
               🔄 Restart Server
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Clear Logs')}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="enhancements"
+              className="w-full px-4 py-3"
             >
               🗑️ Clear Logs
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Backup Configuration')}
-              className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="role"
+              className="w-full px-4 py-3"
             >
               💾 Backup Configuration
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Update System')}
-              className="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="accent"
+              className="w-full px-4 py-3"
             >
               📦 Update System
-            </button>
+            </ContrastButton>
           </div>
         </div>
 
         {/* Security Controls */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6">🔒 Security Controls</h2>
+        <ContrastCard variant="elevated">
+          <h2 className="text-2xl font-bold text-theme-accent mb-6">🔒 Security Controls</h2>
           <div className="space-y-4">
-            <button
+            <ContrastButton
               onClick={() => performAdminAction('Security Scan')}
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="component"
+              className="w-full px-4 py-3"
             >
               🔍 Security Scan
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Audit Access')}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="component"
+              className="w-full px-4 py-3"
             >
               📋 Audit Access
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Emergency Stop')}
-              className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="enhancements"
+              className="w-full px-4 py-3"
+              style={{ backgroundColor: '#dc2626', borderColor: '#dc2626' }}
             >
               🛑 Emergency Stop
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Reset Security')}
-              className="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-3 rounded-lg font-medium transition-all"
+              variant="accent"
+              className="w-full px-4 py-3"
             >
               🔐 Reset Security
-            </button>
+            </ContrastButton>
           </div>
         </div>
       </div>
 
       {/* Advanced Configuration */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">🔧 Advanced Configuration</h2>
+      <ContrastCard variant="elevated">
+        <h2 className="text-2xl font-bold text-theme-accent mb-6">🔧 Advanced Configuration</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-white">Theme Management</h3>
-            <button
+            <h3 className="text-lg font-bold text-theme-accent">Theme Management</h3>
+            <ContrastButton
               onClick={() => performAdminAction('Reset Theme')}
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              variant="accent"
+              className="w-full px-4 py-2"
             >
               🎨 Reset Theme
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Export Theme')}
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              variant="accent"
+              className="w-full px-4 py-2"
             >
               📤 Export Theme
-            </button>
-            <button
+            </ContrastButton>
+            <ContrastButton
               onClick={() => performAdminAction('Import Theme')}
-              className="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              variant="accent"
+              className="w-full px-4 py-2"
             >
               📥 Import Theme
-            </button>
+            </ContrastButton>
           </div>
 
           <div className="space-y-4">

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ContrastCard, ContrastText, ContrastButton } from '@/components/ContrastAware'
 
 interface CrewMember {
   id: string
@@ -193,44 +194,43 @@ export default function CrewStatus() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">
+        <h1 className="text-4xl font-bold text-theme-accent mb-4">
           👥 Crew Status Monitor
         </h1>
-        <p className="text-xl text-gray-300">
+        <p className="text-xl text-theme-enhancements">
           Real-time monitoring of all Alex AI crew members and their current status
         </p>
       </div>
 
       {/* Status Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-white">{totalMembers}</div>
-          <div className="text-gray-300">Total Members</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold"
-               style={{ color: 'var(--theme-role)' }}>{activeMembers}</div>
-          <div className="text-gray-300">Active</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-yellow-400">{busyMembers}</div>
-          <div className="text-gray-300">Busy</div>
-        </div>
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-red-400">{offlineMembers}</div>
-          <div className="text-gray-300">Offline</div>
-        </div>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-accent">{totalMembers}</div>
+          <div className="text-theme-enhancements">Total Members</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-role">{activeMembers}</div>
+          <div className="text-theme-enhancements">Active</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold text-theme-component">{busyMembers}</div>
+          <div className="text-theme-enhancements">Busy</div>
+        </ContrastCard>
+        <ContrastCard variant="elevated" className="text-center">
+          <div className="text-2xl font-bold" style={{ color: '#dc2626' }}>{offlineMembers}</div>
+          <div className="text-theme-enhancements">Offline</div>
+        </ContrastCard>
       </div>
 
       {/* Filters and Controls */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+      <ContrastCard variant="elevated">
         <div className="flex flex-wrap items-center gap-4">
           <div>
-            <label className="block text-white font-medium mb-2">Filter by Status</label>
+            <label className="block text-theme-accent font-medium mb-2">Filter by Status</label>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as 'all' | 'active' | 'busy' | 'inactive')}
-              className="px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-blue-400"
+              className="contrast-input px-3 py-2 text-theme-accent"
             >
               <option value="all">All Members</option>
               <option value="active">Active</option>
@@ -240,11 +240,11 @@ export default function CrewStatus() {
           </div>
           
           <div>
-            <label className="block text-white font-medium mb-2">Sort by</label>
+            <label className="block text-theme-accent font-medium mb-2">Sort by</label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'name' | 'status' | 'performance')}
-              className="px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-blue-400"
+              className="contrast-input px-3 py-2 text-theme-accent"
             >
               <option value="name">Name</option>
               <option value="status">Status</option>
@@ -252,36 +252,36 @@ export default function CrewStatus() {
             </select>
           </div>
         </div>
-      </div>
+      </ContrastCard>
 
       {/* Crew Members Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedMembers.map((member) => (
-          <div
+          <ContrastCard
             key={member.id}
-            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300"
+            variant="elevated"
+            className="hover:scale-105 transition-all duration-300"
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 rounded-full ${getStatusColor(member.status)}`}></div>
-                <span className="text-lg font-bold text-white">{member.name}</span>
+                <span className="text-lg font-bold text-theme-accent">{member.name}</span>
               </div>
               <span className="text-2xl">{getStatusIcon(member.status)}</span>
             </div>
 
             {/* Role and Status */}
             <div className="mb-4">
-              <div className="text-sm font-medium mb-1"
-                   style={{ color: 'var(--theme-role)' }}>{member.role}</div>
-              <div className="text-xs text-gray-400">Last active: {member.lastActivity}</div>
+              <div className="text-sm font-medium mb-1 text-theme-role">{member.role}</div>
+              <div className="text-xs text-theme-enhancements opacity-75">Last active: {member.lastActivity}</div>
             </div>
 
             {/* Current Task */}
             {member.currentTask && (
               <div className="mb-4">
-                <div className="text-xs font-medium text-gray-300 mb-1">Current Task:</div>
-                <div className="text-sm text-white bg-white/5 rounded p-2">
+                <div className="text-xs font-medium text-theme-enhancements mb-1">Current Task:</div>
+                <div className="text-sm text-theme-accent bg-theme-secondary/20 rounded p-2">
                   {member.currentTask}
                 </div>
               </div>
@@ -289,18 +289,18 @@ export default function CrewStatus() {
 
             {/* Specializations */}
             <div className="mb-4">
-              <div className="text-xs font-medium text-gray-300 mb-2">Specializations:</div>
+              <div className="text-xs font-medium text-theme-enhancements mb-2">Specializations:</div>
               <div className="flex flex-wrap gap-1">
                 {member.specialization.slice(0, 3).map((spec, index) => (
                   <span
                     key={index}
-                    className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded"
+                    className="text-xs bg-theme-component/20 text-theme-component px-2 py-1 rounded"
                   >
                     {spec}
                   </span>
                 ))}
                 {member.specialization.length > 3 && (
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-theme-enhancements opacity-75">
                     +{member.specialization.length - 3} more
                   </span>
                 )}
@@ -308,53 +308,51 @@ export default function CrewStatus() {
             </div>
 
             {/* Performance Metrics */}
-            <div className="border-t border-white/10 pt-4">
-              <div className="text-xs font-medium text-gray-300 mb-2">Performance</div>
+            <div className="border-t border-theme-accent/10 pt-4">
+              <div className="text-xs font-medium text-theme-enhancements mb-2">Performance</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <div className="text-lg font-bold text-white">{member.performance.tasksCompleted}</div>
-                  <div className="text-xs text-gray-400">Tasks</div>
+                  <div className="text-lg font-bold text-theme-accent">{member.performance.tasksCompleted}</div>
+                  <div className="text-xs text-theme-enhancements opacity-75">Tasks</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold"
-                       style={{ color: 'var(--theme-role)' }}>{member.performance.successRate}%</div>
-                  <div className="text-xs text-gray-400">Success</div>
+                  <div className="text-lg font-bold text-theme-role">{member.performance.successRate}%</div>
+                  <div className="text-xs text-theme-enhancements opacity-75">Success</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-blue-400">{member.performance.responseTime}ms</div>
-                  <div className="text-xs text-gray-400">Response</div>
+                  <div className="text-lg font-bold text-theme-component">{member.performance.responseTime}ms</div>
+                  <div className="text-xs text-theme-enhancements opacity-75">Response</div>
                 </div>
               </div>
             </div>
-          </div>
+          </ContrastCard>
         ))}
       </div>
 
       {/* Performance Summary */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">Performance Summary</h2>
+      <ContrastCard variant="elevated">
+        <h2 className="text-2xl font-bold text-theme-accent mb-6">Performance Summary</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-400 mb-2">
+            <div className="text-3xl font-bold text-theme-component mb-2">
               {Math.round(crewMembers.reduce((acc, m) => acc + m.performance.successRate, 0) / crewMembers.length)}%
             </div>
-            <div className="text-gray-300">Average Success Rate</div>
+            <div className="text-theme-enhancements">Average Success Rate</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold mb-2"
-                 style={{ color: 'var(--theme-role)' }}>
+            <div className="text-3xl font-bold mb-2 text-theme-role">
               {crewMembers.reduce((acc, m) => acc + m.performance.tasksCompleted, 0)}
             </div>
-            <div className="text-gray-300">Total Tasks Completed</div>
+            <div className="text-theme-enhancements">Total Tasks Completed</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">
+            <div className="text-3xl font-bold text-theme-accent mb-2">
               {Math.round(crewMembers.reduce((acc, m) => acc + m.performance.responseTime, 0) / crewMembers.length)}ms
             </div>
-            <div className="text-gray-300">Average Response Time</div>
+            <div className="text-theme-enhancements">Average Response Time</div>
           </div>
         </div>
-      </div>
+      </ContrastCard>
     </div>
   )
 }

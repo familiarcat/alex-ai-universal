@@ -1,90 +1,86 @@
 import CrewGrid from '@/components/CrewGrid'
+import { ContrastText, ContrastCard } from '@/components/ContrastAware'
 
 export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">
+        <h1 className="text-4xl font-bold text-theme-accent mb-4">
           🖖 Alex AI Universal Dashboard
         </h1>
-        <p className="text-xl text-gray-300 mb-2">
+        <p className="text-xl text-theme-enhancements mb-2">
           Enhanced Interactive Dashboard with Crew Intelligence
         </p>
-        <p className="text-lg text-gray-400">
+        <p className="text-lg text-theme-enhancements">
           Advanced control panel with crew intelligence monitoring and real-time updates
         </p>
-        <div className="mt-4 inline-block bg-green-500 text-black px-4 py-2 rounded-lg font-bold">
-          DEVELOPMENT MODE - ENHANCED DASHBOARD READY! 🚀
+        <div className="mt-4 inline-block contrast-button variant-role">
+          <ContrastText variant="component">DEVELOPMENT MODE - ENHANCED DASHBOARD READY! 🚀</ContrastText>
         </div>
       </div>
 
       {/* Main Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+        <ContrastCard variant="elevated">
           <div className="text-3xl mb-3">🚀</div>
-          <h3 className="text-xl font-bold text-white mb-2">Enhanced Dashboard</h3>
-          <p className="text-gray-300">
+          <h3 className="text-xl font-bold text-theme-accent mb-2">Enhanced Dashboard</h3>
+          <p className="text-theme-enhancements">
             Advanced control panel with real-time monitoring and crew intelligence integration.
           </p>
-        </div>
+        </ContrastCard>
 
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+        <ContrastCard variant="elevated">
           <div className="text-3xl mb-3">👥</div>
-          <h3 className="text-xl font-bold text-white mb-2">Crew Integration</h3>
-          <p className="text-gray-300">
+          <h3 className="text-xl font-bold text-theme-accent mb-2">Crew Integration</h3>
+          <p className="text-theme-enhancements">
             Full integration with Alex AI crew members for specialized task execution and analysis.
           </p>
-        </div>
+        </ContrastCard>
 
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+        <ContrastCard variant="elevated">
           <div className="text-3xl mb-3">⚡</div>
-          <h3 className="text-xl font-bold mb-2"
-              style={{ color: 'var(--theme-accent)' }}>Real-time Updates</h3>
-          <p style={{ color: 'var(--theme-enhancements)' }}>
+          <h3 className="text-xl font-bold text-theme-accent mb-2">Real-time Updates</h3>
+          <p className="text-theme-enhancements">
             Live synchronization across all connected clients with WebSocket technology.
           </p>
-        </div>
+        </ContrastCard>
 
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+        <ContrastCard variant="elevated">
           <div className="text-3xl mb-3">🧠</div>
-          <h3 className="text-xl font-bold mb-2"
-              style={{ color: 'var(--theme-accent)' }}>RAG Memory</h3>
-          <p style={{ color: 'var(--theme-enhancements)' }}>
+          <h3 className="text-xl font-bold text-theme-accent mb-2">RAG Memory</h3>
+          <p className="text-theme-enhancements">
             Advanced retrieval-augmented generation system for intelligent knowledge management.
           </p>
-        </div>
+        </ContrastCard>
       </div>
 
       {/* Crew Grid */}
       <div>
-        <h2 className="text-3xl font-bold mb-6 text-center"
-            style={{ color: 'var(--theme-accent)' }}>
+        <h2 className="text-3xl font-bold mb-6 text-center text-theme-accent">
           🖖 Alex AI Crew Status
         </h2>
         <CrewGrid />
       </div>
 
       {/* System Status */}
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-        <h3 className="text-2xl font-bold mb-4"
-            style={{ color: 'var(--theme-accent)' }}>🔧 System Status</h3>
+      <ContrastCard variant="elevated">
+        <h3 className="text-2xl font-bold mb-4 text-theme-accent">🔧 System Status</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold"
-                 style={{ color: 'var(--theme-role)' }}>Online</div>
-            <div style={{ color: 'var(--theme-enhancements)' }}>Server Status</div>
+            <div className="text-2xl font-bold text-theme-role">Online</div>
+            <div className="text-theme-enhancements">Server Status</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">9</div>
-            <div style={{ color: 'var(--theme-enhancements)' }}>Crew Members</div>
+            <div className="text-2xl font-bold text-theme-accent">9</div>
+            <div className="text-theme-enhancements">Crew Members</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-purple-400">Real-time</div>
-            <div style={{ color: 'var(--theme-enhancements)' }}>Updates</div>
+            <div className="text-2xl font-bold text-theme-component">Real-time</div>
+            <div className="text-theme-enhancements">Updates</div>
           </div>
         </div>
-      </div>
+      </ContrastCard>
     </div>
   )
 }
