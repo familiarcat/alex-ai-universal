@@ -38,6 +38,8 @@
     "crew:roster": "./scripts/sync-crew-roster.sh",
     "crew:list": "./scripts/sync-crew-roster.sh",
     "crew:sync": "./scripts/sync-crew-roster.sh",
+    "start:all": "./start-all-servers.sh",
+    "dev:all": "./start-all-servers.sh",
     "ai-learning": "cd examples/ai-learning-platform && node index.js",
     "ai-learning:dev": "cd examples/ai-learning-platform && npm run dev",
     "ai-learning:build": "cd examples/ai-learning-platform && npm run build",
