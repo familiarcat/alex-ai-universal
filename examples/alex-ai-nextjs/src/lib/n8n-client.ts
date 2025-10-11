@@ -5,9 +5,10 @@
  * for real-time workflow execution, crew coordination, and system monitoring.
  */
 
-// Environment configuration
+// Environment configuration - Use proxy for CORS handling
 const N8N_BASE_URL = process.env.NEXT_PUBLIC_N8N_BASE_URL || 'https://n8n.pbradygeorgen.com'
 const N8N_API_KEY = process.env.NEXT_PUBLIC_N8N_API_KEY || ''
+const USE_PROXY = true // Use Next.js API proxy to handle CORS
 
 // Types
 export interface N8NWorkflow {
@@ -112,12 +113,19 @@ export class N8NClient {
     endpoint: string, 
     options: RequestInit = {}
   ): Promise<N8NApiResponse<T>> {
-    const url = `${this.baseUrl}${endpoint}`
+    // Use proxy for CORS handling in browser environment
+    const url = USE_PROXY 
+      ? `/api/n8n-proxy?endpoint=${endpoint}`
+      : `${this.baseUrl}${endpoint}`
     
     const defaultHeaders = {
       'Content-Type': 'application/json',
-      'X-N8N-API-KEY': this.apiKey,
       'User-Agent': 'Alex-AI-Universal/1.0',
+    }
+
+    // Only add API key header if not using proxy (proxy handles auth)
+    if (!USE_PROXY) {
+      defaultHeaders['X-N8N-API-KEY'] = this.apiKey
     }
 
     const requestOptions: RequestInit = {

@@ -165,6 +165,9 @@ export class CrewRAGQuery {
         })
         .slice(0, limit);
 
+      // Capture this interaction in the knowledge system
+      await this.captureKnowledgeInteraction(crewMemberId, query, relevantChunks);
+
       return {
         chunks: relevantChunks,
         totalResults: relevantChunks.length,

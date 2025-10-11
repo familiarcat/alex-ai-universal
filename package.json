@@ -34,6 +34,7 @@
     "demo:simple": "cd examples/demo-project && node simple-demo.js",
             "demo:web": "cd examples/demo-project && node src/web-server.js",
             "demo:dashboard": "cd examples/demo-project && node src/dashboard-server.js",
+    "demo:live-preview": "cd examples/demo-project && node src/live-preview-server.js",
     "ai-learning": "cd examples/ai-learning-platform && node index.js",
     "ai-learning:dev": "cd examples/ai-learning-platform && npm run dev",
     "ai-learning:build": "cd examples/ai-learning-platform && npm run build",
