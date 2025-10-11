@@ -424,8 +424,6 @@ export default function Configuration() {
         <pre className="bg-black/20 p-4 rounded-lg text-sm text-gray-300 overflow-x-auto">
           {JSON.stringify(config, null, 2)}
         </pre>
-      </div>
-      </div>
     </div>
   )
 }

@@ -175,3 +175,5 @@ The Emergency Protocols System ensures that **no single point of failure** can b
 *Crew responsibilities visualization is available at `/crew-responsibilities` with detailed system logic.*
 
 
+
+

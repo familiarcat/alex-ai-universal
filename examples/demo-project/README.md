@@ -44,7 +44,10 @@ This project was initialized using Alex AI Universal Integration, starting from 
 ### Technical Stack
 - **backend:** Node.js + TypeScript
 - **frontend:** React + Next.js
-- **database:** PostgreSQL + Redis
+- **database:** Supabase (PostgreSQL + pgvector) + Redis
+- **storage:** Supabase Storage
+- **rag:** Supabase Vector Store (pgvector)
+- **workflows:** n8n.pbradygeorgen.com
 - **ml:** TensorFlow.js
 - **iot:** MQTT + WebSocket
 - **deployment:** Docker + Kubernetes

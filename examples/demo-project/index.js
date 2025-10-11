@@ -46,18 +46,24 @@ class UniversalKnowledgeDistribution {
         enabled: true,
         members: [
           'Captain Picard',
+          'Commander Riker',
           'Commander Data',
           'Commander La Forge',
-          'Lieutenant Commander Worf',
+          'Lieutenant Worf',
           'Counselor Troi',
+          'Dr. Crusher',
+          'Lieutenant Uhura',
           'Quark'
         ],
         knowledgeBase: [
           'strategic-planning',
+          'tactical-execution',
           'technical-architecture',
           'engineering-optimization',
           'security-protocols',
           'user-experience-design',
+          'system-health-diagnostics',
+          'communications-integration',
           'cost-efficiency-analysis'
         ]
       },
