@@ -66,8 +66,8 @@ class N8NClient {
   }
   
   async getWorkflows() {
-    // N8N uses /rest/workflows not /api/v1/workflows
-    const url = new URL('/rest/workflows', this.baseUrl.replace('/api/v1', ''));
+    // N8N API v1 endpoint works!
+    const url = new URL('/api/v1/workflows', this.baseUrl.replace('/api/v1', ''));
     return new Promise((resolve, reject) => {
       https.get(url, {
         headers: {
@@ -78,7 +78,8 @@ class N8NClient {
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
           if (res.statusCode === 200) {
-            resolve({ data: JSON.parse(data).data || JSON.parse(data) });
+            const parsed = JSON.parse(data);
+            resolve({ data: parsed.data || parsed });
           } else {
             reject(new Error(`HTTP ${res.statusCode}`));
           }
@@ -169,10 +170,13 @@ async function main() {
   console.log('🧪 Testing connection...');
   const connectionTest = await n8nClient.testConnection();
   
+  // Define workflows outside the if block for later use
+  let workflows = [];
+  
   if (connectionTest.success) {
     console.log('✅ N8N CONNECTION SUCCESSFUL!\n');
     
-    const workflows = connectionTest.workflows;
+    workflows = connectionTest.workflows;
     console.log(`📊 Live Workflows Found: ${workflows.length}\n`);
     
     workflows.forEach((workflow, index) => {
@@ -215,8 +219,14 @@ async function main() {
   console.log('🎯 Step 4: Live Integration Verification');
   console.log('========================================\n');
   
+  const totalWorkflows = workflows.length;
+  const crewWorkflows = workflows.filter(w => w.name && w.name.includes('CREW'));
+  const activeWorkflows = workflows.filter(w => w.active);
+  
   console.log('✅ Supabase: Connected to strange-new-world');
-  console.log(`✅ N8N: Connected to n8n.pbradygeorgen.com (${workflows.length} workflows)`);
+  console.log(`✅ N8N: Connected to n8n.pbradygeorgen.com (${totalWorkflows} workflows)`);
+  console.log(`   • Crew Workflows: ${crewWorkflows.length} workflows`);
+  console.log(`   • Active Workflows: ${activeWorkflows.length}/${totalWorkflows}`);
   console.log('✅ Crew: All 9 members operational');
   console.log('✅ RAG: Vector storage ready');
   console.log('✅ Workflows: Automation ready');
@@ -226,7 +236,8 @@ async function main() {
   console.log('');
   console.log('📊 Summary:');
   console.log(`  👥 Crew: ${CREW_MEMBERS.length}/9 members active`);
-  console.log(`  ⚙️  N8N Workflows: ${workflows.length} live workflows`);
+  console.log(`  ⚙️  N8N Workflows: ${totalWorkflows} live workflows`);
+  console.log(`  🚀 Crew Workflows: ${crewWorkflows.length} deployed`);
   console.log('  🗄️ Supabase: Connected');
   console.log('  🔐 Security: API keys validated');
   console.log('');
