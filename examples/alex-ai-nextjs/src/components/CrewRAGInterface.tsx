@@ -144,7 +144,7 @@ export default function CrewRAGInterface() {
   }
 
   return (
-    <div className={`space-y-6 p-6 rounded-lg shadow-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+    <div className="space-y-6 p-6">
       <div className="text-center">
         <h2 className="text-3xl font-bold text-theme-accent mb-2">🖖 Crew RAG Query Interface</h2>
         <p className="text-theme-enhancements">Query documentation using crew member expertise</p>
@@ -190,10 +190,21 @@ export default function CrewRAGInterface() {
             <select
               value={selectedCrewMember}
               onChange={(e) => setSelectedCrewMember(e.target.value)}
-              className="w-full p-3 rounded-lg border border-theme-component bg-theme-background text-theme-text"
+              className="w-full p-3 rounded-lg border border-theme-component bg-theme-secondary text-theme-accent focus:border-theme-component focus:ring-2 focus:ring-theme-component/20"
+              style={{
+                backgroundColor: 'var(--theme-secondary)',
+                color: 'var(--theme-accent)'
+              }}
             >
               {crewMembers.map((member) => (
-                <option key={member.id} value={member.id}>
+                <option 
+                  key={member.id} 
+                  value={member.id}
+                  style={{
+                    backgroundColor: 'var(--theme-secondary)',
+                    color: 'var(--theme-accent)'
+                  }}
+                >
                   {member.name} - {member.role}
                 </option>
               ))}
@@ -234,7 +245,7 @@ export default function CrewRAGInterface() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask a question related to this crew member's expertise..."
-              className="w-full p-3 rounded-lg border border-theme-component bg-theme-background text-theme-text"
+              className="w-full p-3 rounded-lg border border-theme-component bg-theme-secondary text-theme-accent focus:border-theme-component focus:ring-2 focus:ring-theme-component/20"
               rows={3}
             />
           </div>
@@ -243,7 +254,7 @@ export default function CrewRAGInterface() {
           <button
             onClick={handleQuery}
             disabled={loading || !selectedCrewMember || !query.trim()}
-            className="w-full bg-theme-accent hover:bg-theme-accent/80 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            className="w-full bg-theme-component hover:bg-theme-component/80 disabled:bg-theme-enhancements/50 text-theme-primary font-bold py-3 px-6 rounded-lg transition-colors"
           >
             {loading ? '🔄 Querying...' : '🔍 Query Documentation'}
           </button>
@@ -252,7 +263,7 @@ export default function CrewRAGInterface() {
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4">
+        <div className="contrast-card variant-outlined border-red-500/50 bg-red-500/10">
           <div className="text-red-400 font-medium">❌ Error</div>
           <div className="text-red-300 text-sm mt-1">{error}</div>
         </div>
