@@ -9,6 +9,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { WebSocketServer } = require('ws');
+const CrewManagementAPI = require('./crew-api');
 
 class AlexAIDashboardServer {
   constructor(port = 3001) {
@@ -18,8 +19,25 @@ class AlexAIDashboardServer {
     this.connectedClients = new Set();
     this.configurationStore = new Map();
     this.crewMembers = new Map();
+    this.crewAPI = new CrewManagementAPI();
     
     this.initializeCrewMembers();
+    this.initializeCrewRoster();
+  }
+  
+  /**
+   * Initialize live crew roster from API
+   */
+  async initializeCrewRoster() {
+    try {
+      const roster = await this.crewAPI.getCrewRoster();
+      if (roster.success) {
+        console.log(`📋 Loaded ${roster.totalActive} active crew members from ${roster.source}`);
+        this.liveCrewRoster = roster;
+      }
+    } catch (error) {
+      console.error('Error initializing crew roster:', error.message);
+    }
   }
 
   /**
@@ -186,6 +204,20 @@ class AlexAIDashboardServer {
       this.getDashboardData(req, res);
     } else if (pathname === '/api/crew') {
       this.getCrewData(req, res);
+    } else if (pathname === '/api/crew/roster') {
+      this.getLiveCrewRoster(req, res);
+    } else if (pathname === '/api/crew/knowledge' && req.method === 'GET') {
+      this.getCrewKnowledge(req, res);
+    } else if (pathname === '/api/projects' && req.method === 'GET') {
+      this.getProjects(req, res);
+    } else if (pathname === '/api/projects' && req.method === 'POST') {
+      this.createProject(req, res);
+    } else if (pathname === '/api/projects/recommend') {
+      this.getProjectRecommendations(req, res);
+    } else if (pathname === '/api/orchestrate' && req.method === 'POST') {
+      this.orchestrateCrew(req, res);
+    } else if (pathname === '/api/system/status') {
+      this.getSystemStatus(req, res);
     } else if (pathname === '/api/configurations') {
       this.getConfigurations(req, res);
     } else if (pathname === '/api/update' && req.method === 'POST') {
@@ -950,6 +982,146 @@ class AlexAIDashboardServer {
       res.writeHead(200, { 'Content-Type': contentType });
       res.end(data);
     });
+  }
+
+  /**
+   * Get live crew roster
+   */
+  async getLiveCrewRoster(req, res) {
+    try {
+      const roster = await this.crewAPI.getCrewRoster();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(roster));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
+  }
+
+  /**
+   * Get crew knowledge insights
+   */
+  async getCrewKnowledge(req, res) {
+    try {
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const crewId = url.searchParams.get('crewId');
+      
+      if (!crewId) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'crewId parameter required' }));
+        return;
+      }
+      
+      const knowledge = await this.crewAPI.getCrewKnowledge(crewId);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(knowledge));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
+  }
+
+  /**
+   * Get projects
+   */
+  getProjects(req, res) {
+    try {
+      const projects = this.crewAPI.getProjects();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(projects));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
+  }
+
+  /**
+   * Create new project
+   */
+  createProject(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', () => {
+      try {
+        const projectData = JSON.parse(body);
+        const result = this.crewAPI.createProject(projectData);
+        
+        // Broadcast project creation to all clients
+        this.broadcastUpdate({
+          type: 'project_created',
+          project: result.project
+        });
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (error) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message }));
+      }
+    });
+  }
+
+  /**
+   * Get project recommendations
+   */
+  getProjectRecommendations(req, res) {
+    try {
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const projectType = url.searchParams.get('type') || 'web-app';
+      
+      const recommendations = this.crewAPI.getRecommendedCrew(projectType);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(recommendations));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
+  }
+
+  /**
+   * Orchestrate crew for a task
+   */
+  orchestrateCrew(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+      try {
+        const { projectId, task } = JSON.parse(body);
+        const orchestration = await this.crewAPI.orchestrateCrew(projectId, task);
+        
+        // Broadcast orchestration to all clients
+        this.broadcastUpdate({
+          type: 'crew_orchestrated',
+          orchestration
+        });
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(orchestration));
+      } catch (error) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message }));
+      }
+    });
+  }
+
+  /**
+   * Get system status
+   */
+  async getSystemStatus(req, res) {
+    try {
+      const status = await this.crewAPI.getSystemStatus();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(status));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
   }
 
   /**
