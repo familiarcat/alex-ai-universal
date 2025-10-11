@@ -139,7 +139,7 @@ class AlexAIDashboardServer {
           // Send initial dashboard data
           ws.send(JSON.stringify({
             type: 'dashboard_initialized',
-            data: this.getDashboardData()
+            data: this.getDashboardDataObject()
           }));
         });
 
@@ -793,16 +793,22 @@ class AlexAIDashboardServer {
   }
 
   /**
-   * Get dashboard data
+   * Get dashboard data object (for WebSocket)
    */
-  getDashboardData(req, res) {
-    const data = {
+  getDashboardDataObject() {
+    return {
       status: 'active',
       crewMembers: Array.from(this.crewMembers.values()),
       configurations: Array.from(this.configurationStore.values()),
       timestamp: new Date().toISOString()
     };
+  }
 
+  /**
+   * Get dashboard data
+   */
+  getDashboardData(req, res) {
+    const data = this.getDashboardDataObject();
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(data));
   }
