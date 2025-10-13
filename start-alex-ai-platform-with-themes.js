@@ -13,6 +13,7 @@ const projectRoot = path.join(__dirname, 'examples/demo-project');
 const { Server: SocketIO } = require(path.join(projectRoot, 'node_modules/socket.io'));
 const MultiProjectManager = require('./examples/demo-project/src/multi-project-manager');
 const UniversalThemeManager = require('./universal-theme-system/theme-manager');
+const EnhancedProjectServer = require('./managed-projects/enhanced-project-server');
 
 class AlexAIPlatform {
   constructor() {
@@ -91,20 +92,10 @@ class AlexAIPlatform {
   }
 
   async startProject(project) {
-    return new Promise((resolve) => {
-      const server = http.createServer((req, res) => {
-        this.handleProjectRequest(req, res, project);
-      });
-
-      server.listen(project.port, () => {
-        const themeName = this.themeManager.getThemeDefinition(
-          this.themeManager.getProjectTheme(project.id)
-        )?.name || 'Default';
-        console.log(`🚀 ${project.name} started on port ${project.port} (${themeName} theme)`);
-        this.servers.set(project.id, server);
-        resolve();
-      });
-    });
+    const themeId = this.themeManager.getProjectTheme(project.id);
+    const projectServer = new EnhancedProjectServer(project, themeId);
+    await projectServer.start();
+    this.servers.set(project.id, projectServer);
   }
 
   handleDashboardRequest(req, res) {
