@@ -559,3 +559,5 @@ echo "      - ARS: curl ${N8N_BASE_URL}/webhook/lcars-ars-webhook"
 echo ""
 echo -e "${BLUE}🖖 LCARS is ready for deployment!${NC}"
 
+
+

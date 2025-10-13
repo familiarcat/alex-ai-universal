@@ -79,19 +79,25 @@ jobs:
           echo "✅ Verifying Supabase recommendations..."
           npm run demo 2>&1 | grep -A 5 "Recommended Technical Stack:" || echo "ℹ️  Could not verify stack"
       
-      - name: Test N8N Connection (if enabled)
-        if: ${{ secrets.N8N_API_KEY != '' }}
+      - name: Test N8N Connection
         run: |
           echo "🔗 Testing N8N connection..."
-          curl -f -H "X-N8N-API-KEY: ${{ secrets.N8N_API_KEY }}" \
-            https://n8n.pbradygeorgen.com/api/v1/workflows || echo "⚠️  N8N connection test failed"
+          if [ -n "${{ secrets.N8N_API_KEY }}" ]; then
+            curl -f -H "X-N8N-API-KEY: ${{ secrets.N8N_API_KEY }}" \
+              https://n8n.pbradygeorgen.com/api/v1/workflows || echo "⚠️  N8N connection test failed"
+          else
+            echo "ℹ️  N8N API key not configured, skipping connection test"
+          fi
       
-      - name: Test Supabase Connection (if enabled)
-        if: ${{ secrets.SUPABASE_ANON_KEY != '' }}
+      - name: Test Supabase Connection
         run: |
           echo "🔗 Testing Supabase connection..."
-          curl -f "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" || echo "⚠️  Supabase connection test failed"
+          if [ -n "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            curl -f "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+              -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" || echo "⚠️  Supabase connection test failed"
+          else
+            echo "ℹ️  Supabase API key not configured, skipping connection test"
+          fi
       
       - name: Integration Summary
         if: always()
@@ -107,8 +113,16 @@ jobs:
           echo ""
           echo "📊 Integration Status:"
           echo "  - Offline Demo: Working"
-          echo "  - N8N: ${{ secrets.N8N_API_KEY != '' && 'Configured' || 'Not configured' }}"
-          echo "  - Supabase: ${{ secrets.SUPABASE_ANON_KEY != '' && 'Configured' || 'Not configured' }}"
+          if [ -n "${{ secrets.N8N_API_KEY }}" ]; then
+            echo "  - N8N: Configured"
+          else
+            echo "  - N8N: Not configured"
+          fi
+          if [ -n "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "  - Supabase: Configured"
+          else
+            echo "  - Supabase: Not configured"
+          fi
           echo ""
 
   deploy-ready:
@@ -127,4 +141,5 @@ jobs:
           echo "✅ Environment properly set up"
           echo ""
           echo "🖖 Make it so!"
+
 

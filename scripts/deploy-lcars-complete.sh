@@ -264,3 +264,5 @@ echo "  • Schema file: /tmp/lcars-supabase-schema.sql"
 echo "  • Deployment guide: /tmp/lcars-n8n-deployment-guide.md"
 echo ""
 
+
+

@@ -477,3 +477,5 @@ export class CrewKnowledgeCaptureSystem {
 }
 
 export default CrewKnowledgeCaptureSystem
+
+
