@@ -1,18 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // Enable Next.js 15 features
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
-  // Enable static exports for deployment
-  output: 'export',
+  // Enable static exports for deployment (commented out for dev)
+  // output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
