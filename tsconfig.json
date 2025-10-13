@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["ES2020", "DOM"],
     "outDir": "./dist",
-    "rootDir": "./packages",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,8 +17,21 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./packages/*/node_modules/@types"]
+    "typeRoots": ["./node_modules/@types", "./packages/*/node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@domains/*": ["src/domains/*"],
+      "@crew/*": ["src/domains/crew-management/*"],
+      "@projects/*": ["src/domains/project-management/*"],
+      "@knowledge/*": ["src/domains/knowledge-management/*"],
+      "@workflows/*": ["src/domains/workflow-orchestration/*"],
+      "@themes/*": ["src/domains/theme-system/*"],
+      "@dashboard/*": ["src/domains/dashboard-ui/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@shared/*": ["src/shared/*"],
+      "@application/*": ["src/application/*"]
+    }
   },
-  "include": ["packages/*/src/**/*"],
+  "include": ["packages/*/src/**/*", "src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
