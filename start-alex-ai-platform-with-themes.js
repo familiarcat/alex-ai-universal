@@ -16,6 +16,8 @@ const UniversalThemeManager = require('./universal-theme-system/theme-manager');
 const EnhancedProjectServer = require('./managed-projects/enhanced-project-server');
 const ThemeGalleryServer = require('./universal-theme-system/theme-gallery-server');
 const CompleteDashboardServer = require('./examples/demo-project/src/complete-dashboard-server');
+const VibeQuizServer = require('./universal-theme-system/vibe-quiz-server');
+const CrewWizardServer = require('./universal-theme-system/crew-wizard-server');
 
 class AlexAIPlatform {
   constructor() {
@@ -38,18 +40,27 @@ class AlexAIPlatform {
     // Start theme gallery
     await this.startThemeGallery();
     
+    // Start vibe quiz
+    await this.startVibeQuiz();
+    
+    // Start crew wizard
+    await this.startCrewWizard();
+    
     // Start all projects
     await this.startAllProjects();
 
     console.log('\n🎉 ====================================');
     console.log('   ALL SYSTEMS OPERATIONAL!');
+    console.log('   Vibe Coding Platform Ready!');
     console.log('====================================\n');
-    console.log('🎨 Dashboard:      http://localhost:3001 (Midnight Dark 🌙)');
-    console.log('🖼️  Theme Gallery:  http://localhost:3010 (View All 10 Themes)');
+    console.log('🎨 Dashboard:      http://localhost:3001 (Project Management)');
+    console.log('🖼️  Theme Gallery:  http://localhost:3010 (View All 10 Vibes)');
+    console.log('🎯 Vibe Quiz:      http://localhost:3020 (Find Your Perfect Vibe)');
+    console.log('🎭 Crew Wizard:    http://localhost:3030 (Guided Project Creation)');
     console.log('🛒 Project Alpha:  http://localhost:3000 (Gradient Fusion 🌈)');
     console.log('🏥 Project Beta:   http://localhost:3002 (Pastel Minimalism 🌸)');
     console.log('📊 Project Gamma:  http://localhost:3003 (Cyberpunk Neon 🔮)');
-    console.log('\n👥 9 Crew Members | 💰 $50K Portfolio | 🎨 10 Theme Options');
+    console.log('\n👥 9 Crew Sub-Agents | 💰 $50K Portfolio | 🎨 10 Vibes | ⚡ Parallel Execution');
     console.log('\n🔄 Press Ctrl+C to stop all services\n');
   }
 
@@ -57,6 +68,18 @@ class AlexAIPlatform {
     const gallery = new ThemeGalleryServer(3010);
     await gallery.start();
     this.themeGallery = gallery;
+  }
+
+  async startVibeQuiz() {
+    const quiz = new VibeQuizServer(3020);
+    await quiz.start();
+    this.vibeQuiz = quiz;
+  }
+
+  async startCrewWizard() {
+    const wizard = new CrewWizardServer(3030);
+    await wizard.start();
+    this.crewWizard = wizard;
   }
 
   async startDashboard() {
