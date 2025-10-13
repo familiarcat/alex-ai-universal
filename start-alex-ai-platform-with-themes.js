@@ -15,6 +15,7 @@ const MultiProjectManager = require('./examples/demo-project/src/multi-project-m
 const UniversalThemeManager = require('./universal-theme-system/theme-manager');
 const EnhancedProjectServer = require('./managed-projects/enhanced-project-server');
 const ThemeGalleryServer = require('./universal-theme-system/theme-gallery-server');
+const CompleteDashboardServer = require('./examples/demo-project/src/complete-dashboard-server');
 
 class AlexAIPlatform {
   constructor() {
@@ -59,39 +60,9 @@ class AlexAIPlatform {
   }
 
   async startDashboard() {
-    return new Promise((resolve) => {
-      const server = http.createServer((req, res) => {
-        this.handleDashboardRequest(req, res);
-      });
-
-      this.io = new SocketIO(server, { cors: { origin: '*' } });
-      
-      this.io.on('connection', (socket) => {
-        console.log('📡 Dashboard client connected');
-        
-        socket.on('change-project-theme', (data) => {
-          this.themeManager.setProjectTheme(data.projectId, data.themeId);
-          this.io.emit('theme-updated', { projectId: data.projectId, themeId: data.themeId });
-          console.log(`🎨 ${data.projectId} theme changed to ${data.themeId}`);
-        });
-
-        socket.on('start-project', async (data) => {
-          const project = await this.projectManager.startProject(data.projectId);
-          this.io.emit('project-updated', project);
-        });
-
-        socket.on('stop-project', async (data) => {
-          const project = await this.projectManager.stopProject(data.projectId);
-          this.io.emit('project-updated', project);
-        });
-      });
-
-      server.listen(3001, () => {
-        console.log('🎨 Dashboard started on port 3001 (Midnight Dark theme)');
-        this.dashboardServer = server;
-        resolve();
-      });
-    });
+    const dashboard = new CompleteDashboardServer(3001);
+    await dashboard.start();
+    this.dashboardServer = dashboard;
   }
 
   async startAllProjects() {
