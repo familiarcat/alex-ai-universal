@@ -14,6 +14,7 @@ const { Server: SocketIO } = require(path.join(projectRoot, 'node_modules/socket
 const MultiProjectManager = require('./examples/demo-project/src/multi-project-manager');
 const UniversalThemeManager = require('./universal-theme-system/theme-manager');
 const EnhancedProjectServer = require('./managed-projects/enhanced-project-server');
+const ThemeGalleryServer = require('./universal-theme-system/theme-gallery-server');
 
 class AlexAIPlatform {
   constructor() {
@@ -33,18 +34,28 @@ class AlexAIPlatform {
     // Start dashboard
     await this.startDashboard();
     
+    // Start theme gallery
+    await this.startThemeGallery();
+    
     // Start all projects
     await this.startAllProjects();
 
     console.log('\n🎉 ====================================');
     console.log('   ALL SYSTEMS OPERATIONAL!');
     console.log('====================================\n');
-    console.log('🎨 Dashboard:   http://localhost:3001 (Midnight Dark 🌙)');
+    console.log('🎨 Dashboard:      http://localhost:3001 (Midnight Dark 🌙)');
+    console.log('🖼️  Theme Gallery:  http://localhost:3010 (View All 10 Themes)');
     console.log('🛒 Project Alpha:  http://localhost:3000 (Gradient Fusion 🌈)');
     console.log('🏥 Project Beta:   http://localhost:3002 (Pastel Minimalism 🌸)');
     console.log('📊 Project Gamma:  http://localhost:3003 (Cyberpunk Neon 🔮)');
     console.log('\n👥 9 Crew Members | 💰 $50K Portfolio | 🎨 10 Theme Options');
     console.log('\n🔄 Press Ctrl+C to stop all services\n');
+  }
+
+  async startThemeGallery() {
+    const gallery = new ThemeGalleryServer(3010);
+    await gallery.start();
+    this.themeGallery = gallery;
   }
 
   async startDashboard() {
@@ -349,17 +360,21 @@ class AlexAIPlatform {
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <h1>🖖 Alex AI Multi-Project Dashboard</h1>
-                <div class="theme-selector">
-                    <span style="opacity: 0.8; font-size: 14px;">Dashboard Theme:</span>
-                    <button class="btn btn-secondary" onclick="openThemeSelector('dashboard')" style="padding: 8px 16px;">
+                <div>
+                    <h1>🖖 Alex AI Multi-Project Dashboard</h1>
+                    <p style="margin-top: 10px; opacity: 0.8; font-size: 16px;">
+                        Single source of truth for managing multiple web deployments
+                    </p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="btn btn-secondary" onclick="window.open('http://localhost:3010', '_blank')" style="padding: 10px 20px;">
+                        🖼️ View Theme Gallery
+                    </button>
+                    <button class="btn btn-secondary" onclick="openThemeSelector('dashboard')" style="padding: 10px 20px;">
                         ${this.themeManager.getThemeDefinition(themeId).icon} Change Theme
                     </button>
                 </div>
             </div>
-            <p style="margin-top: 15px; opacity: 0.8; font-size: 16px;">
-                Single source of truth for managing multiple web deployments
-            </p>
         </div>
 
         <div class="stats-grid" id="statsGrid">
