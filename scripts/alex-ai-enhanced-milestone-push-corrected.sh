@@ -19,39 +19,39 @@ NC='\033[0m' # No Color
 
 # Crew member functions
 captain_picard() {
-    echo -e "${BLUE}👨‍✈️ Captain Picard: $1${NC}"
+    echo -e "${BLUE}👨‍✈️ Captain Picard: $1${NC}" >&2
 }
 
 commander_data() {
-    echo -e "${CYAN}🤖 Commander Data: $1${NC}"
+    echo -e "${CYAN}🤖 Commander Data: $1${NC}" >&2
 }
 
 lieutenant_geordi() {
-    echo -e "${YELLOW}⚙️ Lieutenant Commander Geordi: $1${NC}"
+    echo -e "${YELLOW}⚙️ Lieutenant Commander Geordi: $1${NC}" >&2
 }
 
 lieutenant_worf() {
-    echo -e "${RED}⚔️ Lieutenant Worf: $1${NC}"
+    echo -e "${RED}⚔️ Lieutenant Worf: $1${NC}" >&2
 }
 
 dr_crusher() {
-    echo -e "${PURPLE}🏥 Dr. Crusher: $1${NC}"
+    echo -e "${PURPLE}🏥 Dr. Crusher: $1${NC}" >&2
 }
 
 commander_riker() {
-    echo -e "${GREEN}⚡ Commander Riker: $1${NC}"
+    echo -e "${GREEN}⚡ Commander Riker: $1${NC}" >&2
 }
 
 counselor_troi() {
-    echo -e "${WHITE}💭 Counselor Troi: $1${NC}"
+    echo -e "${WHITE}💭 Counselor Troi: $1${NC}" >&2
 }
 
 lieutenant_uhura() {
-    echo -e "${BLUE}📡 Lieutenant Uhura: $1${NC}"
+    echo -e "${BLUE}📡 Lieutenant Uhura: $1${NC}" >&2
 }
 
 quark() {
-    echo -e "${YELLOW}💰 Quark: $1${NC}"
+    echo -e "${YELLOW}💰 Quark: $1${NC}" >&2
 }
 
 # Task tracking functions

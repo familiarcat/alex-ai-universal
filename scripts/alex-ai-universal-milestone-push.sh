@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Delegate to the enhanced milestone push script for consolidation
+exec "$(dirname "$0")/alex-ai-enhanced-milestone-push-corrected.sh" "$@"
+
 # Alex AI Universal Milestone Push System
 # ======================================
 # This script can be executed from any Alex AI instance
