@@ -20,32 +20,83 @@ const crypto = require('crypto');
 
 // Configuration
 const DOCS_TO_INGEST = [
+  // DDD Architecture Documentation (CRITICAL)
   {
-    file: 'CREW_CODE_REVIEW_NEXTJS_INTEGRATION.md',
-    title: 'Next.js 15 Architecture - Crew Code Review',
-    tags: ['architecture', 'code-review', 'nextjs', 'crew-consensus', 'typescript'],
+    file: 'docs/active/architecture/DDD_ARCHITECTURE_GUIDE.md',
+    title: 'DDD Architecture Guide - Complete Standards',
+    tags: ['ddd', 'architecture', 'bounded-contexts', 'aggregates', 'domain-driven-design'],
     priority: 'critical',
     anti_hallucination_score: 100
   },
   {
-    file: 'MILESTONE_NEXTJS_ARCHITECTURE_2025_10_13.md',
-    title: 'Milestone: Next.js 15 Unified Architecture Design',
-    tags: ['milestone', 'architecture', 'nextjs', 'phase-1', 'design'],
+    file: 'docs/active/architecture/DDD_MIGRATION_COMPLETE.md',
+    title: 'DDD Migration Complete - Technical Summary',
+    tags: ['ddd', 'migration', 'complete', 'architecture', 'achievement'],
+    priority: 'critical',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/archive/milestones/MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md',
+    title: 'Milestone: DDD Architecture Migration Complete',
+    tags: ['milestone', 'ddd', 'achievement', 'crew-consensus', 'roi'],
+    priority: 'critical',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/domain-model/ubiquitous-language.md',
+    title: 'Ubiquitous Language - Domain Vocabulary',
+    tags: ['ddd', 'ubiquitous-language', 'terminology', 'domains', 'reference'],
     priority: 'high',
     anti_hallucination_score: 100
   },
   {
-    file: 'NEXT_STEPS_NEXTJS_INTEGRATION.md',
-    title: 'Next.js Implementation Guide - 45 Minute Plan',
-    tags: ['implementation', 'guide', 'nextjs', 'step-by-step', 'troubleshooting'],
+    file: 'docs/context-maps/bounded-contexts.md',
+    title: 'Bounded Context Map - Domain Relationships',
+    tags: ['ddd', 'context-map', 'bounded-contexts', 'domain-relationships'],
     priority: 'high',
     anti_hallucination_score: 100
   },
   {
-    file: 'SESSION_SUMMARY_2025_10_13.md',
-    title: 'Session Summary: Next.js Architecture Phase 1',
-    tags: ['session-summary', 'retrospective', 'lessons-learned', 'metrics'],
+    file: 'docs/active/architecture/AUTONOMOUS_CREW_CAPABILITIES.md',
+    title: 'Autonomous Crew Capabilities',
+    tags: ['crew', 'autonomous', 'capabilities', 'n8n', 'automation'],
+    priority: 'high',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/active/guides/RAG_INTEGRATION_GUIDE.md',
+    title: 'RAG Integration Guide',
+    tags: ['rag', 'integration', 'knowledge-base', 'vector-search', 'guide'],
+    priority: 'high',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/active/guides/N8N_RAG_DEPLOYMENT_STEPS.md',
+    title: 'N8N RAG Deployment Steps',
+    tags: ['n8n', 'rag', 'deployment', 'workflow', 'guide'],
     priority: 'medium',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/active/references/DOCUMENTATION_WORKFLOW_QUICK_REF.md',
+    title: 'Documentation Workflow Quick Reference',
+    tags: ['documentation', 'workflow', 'organization', 'pruning', 'reference'],
+    priority: 'medium',
+    anti_hallucination_score: 100
+  },
+  // Crew Consensus Documents (IMPORTANT)
+  {
+    file: 'docs/archive/crew-meetings/CREW_CONSENSUS_DDD_REFACTORING.md',
+    title: 'Crew Consensus: DDD Refactoring (9/9 Approval)',
+    tags: ['crew', 'consensus', 'ddd', 'refactoring', 'decision'],
+    priority: 'high',
+    anti_hallucination_score: 100
+  },
+  {
+    file: 'docs/archive/crew-meetings/CREW_PARALLEL_DDD_ASSIGNMENT.md',
+    title: 'Crew Parallel DDD Assignment Strategy',
+    tags: ['crew', 'parallel', 'ddd', 'assignment', 'strategy'],
+    priority: 'high',
     anti_hallucination_score: 100
   }
 ];

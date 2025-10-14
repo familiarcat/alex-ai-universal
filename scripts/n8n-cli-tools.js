@@ -142,15 +142,34 @@ class N8NClient {
   }
 
   async updateWorkflow(id, workflowData) {
-    return this.request('PATCH', `/api/v1/workflows/${id}`, workflowData);
+    // N8N API uses PUT for updates, not PATCH
+    return this.request('PUT', `/api/v1/workflows/${id}`, workflowData);
   }
 
   async activateWorkflow(id) {
-    return this.request('PATCH', `/api/v1/workflows/${id}`, { active: true });
+    // N8N v1 API: Use POST to /activate endpoint
+    try {
+      return await this.request('POST', `/api/v1/workflows/${id}/activate`, {});
+    } catch (error) {
+      // Fallback: try PATCH with full workflow
+      if (error.message.includes('404')) {
+        const workflow = await this.getWorkflow(id);
+        workflow.active = true;
+        return await this.request('PUT', `/api/v1/workflows/${id}`, workflow);
+      }
+      throw error;
+    }
   }
 
   async deactivateWorkflow(id) {
-    return this.request('PATCH', `/api/v1/workflows/${id}`, { active: false });
+    try {
+      return await this.request('PATCH', `/api/v1/workflows/${id}`, { active: false });
+    } catch (error) {
+      if (error.message.includes('405') || error.message.includes('not allowed')) {
+        return await this.request('PUT', `/api/v1/workflows/${id}`, { active: false });
+      }
+      throw error;
+    }
   }
 
   async deleteWorkflow(id) {
@@ -180,6 +199,15 @@ async function importWorkflow(client, workflowPath) {
   
   const workflowData = JSON.parse(fs.readFileSync(workflowPath, 'utf8'));
   
+  // Strip read-only properties that N8N API doesn't accept
+  const cleanWorkflowData = {
+    name: workflowData.name,
+    nodes: workflowData.nodes,
+    connections: workflowData.connections,
+    settings: workflowData.settings || {},
+    staticData: workflowData.staticData || null,
+  };
+  
   // Check if workflow with same name exists
   const existing = await client.listWorkflows();
   const duplicate = existing.data?.find(w => w.name === workflowData.name);
@@ -187,12 +215,12 @@ async function importWorkflow(client, workflowPath) {
   if (duplicate) {
     log.warn(`Workflow "${workflowData.name}" already exists (ID: ${duplicate.id})`);
     log.info('Updating existing workflow...');
-    const updated = await client.updateWorkflow(duplicate.id, workflowData);
+    const updated = await client.updateWorkflow(duplicate.id, cleanWorkflowData);
     log.success(`Workflow updated: ${duplicate.id}`);
     return { workflow: updated, isNew: false };
   }
   
-  const created = await client.createWorkflow(workflowData);
+  const created = await client.createWorkflow(cleanWorkflowData);
   log.success(`Workflow imported: ${created.id}`);
   return { workflow: created, isNew: true };
 }
@@ -200,7 +228,17 @@ async function importWorkflow(client, workflowPath) {
 async function activateAndGetWebhook(client, workflowId, workflowData) {
   log.crew('La Forge', `Activating workflow ${workflowId}...`);
   
-  await client.activateWorkflow(workflowId);
+  // N8N requires full workflow data with active: true
+  const activationData = {
+    name: workflowData.name,
+    nodes: workflowData.nodes,
+    connections: workflowData.connections,
+    settings: workflowData.settings || {},
+    staticData: workflowData.staticData || null,
+    active: true
+  };
+  
+  await client.updateWorkflow(workflowId, activationData);
   log.success('Workflow activated!');
   
   // Extract webhook path from workflow
@@ -288,8 +326,13 @@ async function deployRAGSystem() {
   const client = new N8NClient(creds.url, creds.apiKey);
   
   try {
-    // Step 1: Import workflow
-    const workflowPath = path.join(process.cwd(), 'n8n-workflows/knowledge-base-rag-ingestion.json');
+    // Step 1: Import workflow (try clean version first)
+    let workflowPath = path.join(process.cwd(), 'n8n-workflows/knowledge-base-rag-ingestion-clean.json');
+    
+    if (!fs.existsSync(workflowPath)) {
+      log.warn('Clean workflow not found, trying original...');
+      workflowPath = path.join(process.cwd(), 'n8n-workflows/knowledge-base-rag-ingestion.json');
+    }
     const { workflow, isNew } = await importWorkflow(client, workflowPath);
     
     log.info(`Workflow ${isNew ? 'created' : 'updated'}: ${workflow.id}`);
