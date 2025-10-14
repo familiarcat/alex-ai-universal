@@ -5,7 +5,7 @@
  * Comprehensive validation and testing for all N8N workflows
  */
 
-const axios = require('axios');
+// Use native fetch (Node >=18)
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -54,10 +54,9 @@ class N8NWorkflowValidationSystem {
 
   async getAllWorkflows() {
     try {
-      const response = await axios.get(`${this.n8nBaseUrl}/api/v1/workflows`, {
-        headers: this.headers
-      });
-      return response.data;
+      const res = await fetch(`${this.n8nBaseUrl}/api/v1/workflows`, { headers: this.headers });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
     } catch (error) {
       this.log(`Failed to fetch workflows: ${error.message}`, 'ERROR');
       throw error;
@@ -66,10 +65,9 @@ class N8NWorkflowValidationSystem {
 
   async getWorkflow(workflowId) {
     try {
-      const response = await axios.get(`${this.n8nBaseUrl}/api/v1/workflows/${workflowId}`, {
-        headers: this.headers
-      });
-      return response.data;
+      const res = await fetch(`${this.n8nBaseUrl}/api/v1/workflows/${workflowId}`, { headers: this.headers });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
     } catch (error) {
       this.log(`Failed to fetch workflow ${workflowId}: ${error.message}`, 'ERROR');
       throw error;
@@ -78,14 +76,12 @@ class N8NWorkflowValidationSystem {
 
   async getWorkflowExecutions(workflowId, limit = 10) {
     try {
-      const response = await axios.get(`${this.n8nBaseUrl}/api/v1/executions`, {
-        headers: this.headers,
-        params: {
-          workflowId,
-          limit
-        }
-      });
-      return response.data;
+      const url = new URL(`${this.n8nBaseUrl}/api/v1/executions`);
+      url.searchParams.set('workflowId', workflowId);
+      url.searchParams.set('limit', String(limit));
+      const res = await fetch(url, { headers: this.headers });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
     } catch (error) {
       this.log(`Failed to fetch executions for workflow ${workflowId}: ${error.message}`, 'ERROR');
       return { data: [] };
@@ -203,15 +199,19 @@ class N8NWorkflowValidationSystem {
       const payload = { ...defaultTestData, ...testData };
 
       // Execute workflow
-      const response = await axios.post(webhookUrl, payload, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 30000 // 30 second timeout
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
-
+      clearTimeout(timeout);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json().catch(() => ({}));
       testResult.success = true;
-      testResult.response = response.data;
+      testResult.response = data;
       testResult.executionTime = Date.now() - startTime;
 
       this.log(`Workflow ${workflowId} executed successfully in ${testResult.executionTime}ms`, 'SUCCESS');
@@ -228,7 +228,8 @@ class N8NWorkflowValidationSystem {
   async validateAllWorkflows() {
     this.log('Starting comprehensive workflow validation...', 'INFO');
     
-    const workflows = await this.getAllWorkflows();
+    const workflowsResp = await this.getAllWorkflows();
+    const workflows = Array.isArray(workflowsResp) ? workflowsResp : (workflowsResp.data || []);
     const validationResults = {
       timestamp: new Date().toISOString(),
       totalWorkflows: workflows.length,
@@ -274,8 +275,9 @@ class N8NWorkflowValidationSystem {
   async performEndToEndTesting() {
     this.log('Performing end-to-end workflow testing...', 'INFO');
     
-    const workflows = await this.getAllWorkflows();
-    const crewWorkflows = workflows.filter(w => w.name.includes('CREW -'));
+    const workflowsResp = await this.getAllWorkflows();
+    const workflows = Array.isArray(workflowsResp) ? workflowsResp : (workflowsResp.data || []);
+    const crewWorkflows = workflows.filter((w) => (w.name || '').includes('CREW -'));
     
     const testResults = {
       timestamp: new Date().toISOString(),
@@ -326,7 +328,8 @@ class N8NWorkflowValidationSystem {
   async checkWorkflowHealth() {
     this.log('Checking workflow health and performance...', 'INFO');
     
-    const workflows = await this.getAllWorkflows();
+    const workflowsResp = await this.getAllWorkflows();
+    const workflows = Array.isArray(workflowsResp) ? workflowsResp : (workflowsResp.data || []);
     const healthReport = {
       timestamp: new Date().toISOString(),
       workflowHealth: [],

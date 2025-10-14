@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+IFS=$'\n\t'
 
 # Automates:
 # 1) Ensure SSH access via ~/.ssh with EC2 Instance Connect fallback
@@ -29,17 +30,30 @@ if ! ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev
 fi
 
 echo "🔎 Detecting remote n8n container via SSH"
-CONTAINER=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$PRIVKEY" "$SSH_USER@$SSH_HOST" \
-  "docker ps --format '{{.Names}} {{.Image}}' | awk '/n8n/ {print \$1; exit}'" || true)
+CONTAINER=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$PRIVKEY" "$SSH_USER@$SSH_HOST" \
+  "docker ps --format '{{.Names}} {{.Image}}' | awk '/n8nio\\/n8n|n8n/ {print \\$1; exit}'" || true)
 if [ -z "$CONTAINER" ]; then
   echo "❌ No n8n container detected on remote host"
   exit 1
 fi
 echo "📦 Remote container: $CONTAINER"
 
-echo "🚀 Activating workflow $WF_ID on remote (SSH + docker exec)"
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$PRIVKEY" "$SSH_USER@$SSH_HOST" \
-  "set -e; docker exec '$CONTAINER' n8n update:workflow --id '$WF_ID' --active=true || true; docker restart '$CONTAINER' >/dev/null"
+echo "🚀 Activating all workflows on remote (SSH + docker exec)"
+WF_IDS=$(curl --fail --silent --show-error "$N8N_URL/api/v1/workflows" -H "X-N8N-API-KEY: $N8N_API_KEY" | jq -r '.data[].id')
+ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$PRIVKEY" "$SSH_USER@$SSH_HOST" bash <<EOF
+set -euo pipefail
+C="$CONTAINER"
+echo "Container: \$C"
+while read -r id; do
+  [ -n "\$id" ] || continue
+  echo "Activate: \$id"
+  docker exec "\$C" n8n update:workflow --id "\$id" --active=true || true
+done <<'IDS'
+$WF_IDS
+IDS
+echo "Restart: \$C"
+docker restart "\$C" >/dev/null
+EOF
 
 echo "🧪 Running local e2e verification"
 node scripts/n8n-e2e-control.js || true
