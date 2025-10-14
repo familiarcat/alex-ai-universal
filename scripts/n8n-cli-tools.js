@@ -192,6 +192,51 @@ class N8NClient {
   async getExecutions(workflowId) {
     return this.request('GET', `/api/v1/executions?workflowId=${workflowId}`);
   }
+
+  async callWebhook(absoluteUrl, payload) {
+    return new Promise((resolve, reject) => {
+      try {
+        const urlObj = new URL(absoluteUrl);
+        const isHttps = urlObj.protocol === 'https:';
+        const client = isHttps ? https : http;
+
+        const bodyString = JSON.stringify(payload);
+
+        const options = {
+          hostname: urlObj.hostname,
+          port: urlObj.port || (isHttps ? 443 : 80),
+          path: urlObj.pathname + urlObj.search,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(bodyString)
+          }
+        };
+
+        const req = client.request(options, (res) => {
+          let data = '';
+          res.on('data', (chunk) => data += chunk);
+          res.on('end', () => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              try {
+                resolve(JSON.parse(data));
+              } catch {
+                resolve({ raw: data });
+              }
+            } else {
+              reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+            }
+          });
+        });
+
+        req.on('error', reject);
+        req.write(bodyString);
+        req.end();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 // ============================================================================

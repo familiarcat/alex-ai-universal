@@ -12,8 +12,18 @@
 set -e
 
 # Configuration
-N8N_SERVER="n8n.pbradygeorgen.com"
+N8N_SERVER="${N8N_SSH_HOST:-n8n.pbradygeorgen.com}"
+N8N_SSH_USER="${N8N_SSH_USER:-}"
+N8N_SSH_PORT="${N8N_SSH_PORT:-}"
+N8N_SSH_KEY="${N8N_SSH_KEY:-}"
 WORKFLOW_ID="${1:-d9EJA1Q0uPsgX5H3}"
+
+# Build SSH command with optional parameters
+SSH_CMD=(ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null)
+if [ -n "$N8N_SSH_KEY" ]; then SSH_CMD+=( -i "$N8N_SSH_KEY" ); fi
+if [ -n "$N8N_SSH_PORT" ]; then SSH_CMD+=( -p "$N8N_SSH_PORT" ); fi
+TARGET="$N8N_SERVER"
+if [ -n "$N8N_SSH_USER" ]; then TARGET="$N8N_SSH_USER@$N8N_SERVER"; fi
 
 echo "🖖 N8N Workflow Activation - SSH Method"
 echo "=============================================="
@@ -32,17 +42,17 @@ echo ""
 # Check if we can SSH to the server
 echo "🔍 Checking SSH access to N8N server..."
 
-if ssh -q "$N8N_SERVER" exit 2>/dev/null; then
+if "${SSH_CMD[@]}" -q "$TARGET" exit 2>/dev/null; then
     echo "✅ SSH access confirmed"
     echo ""
     
     echo "🚀 Activating workflow via n8n CLI..."
-    ssh "$N8N_SERVER" "n8n update:workflow --id=$WORKFLOW_ID --active=true"
+    "${SSH_CMD[@]}" "$TARGET" "n8n update:workflow --id=$WORKFLOW_ID --active=true"
     
     echo ""
     echo "✅ Workflow activated successfully!"
     echo "🔄 Restarting n8n (if needed)..."
-    ssh "$N8N_SERVER" "pm2 restart n8n || systemctl restart n8n || echo 'Manual restart may be needed'"
+    "${SSH_CMD[@]}" "$TARGET" "pm2 restart n8n || systemctl restart n8n || echo 'Manual restart may be needed'"
     
     echo ""
     echo "🎉 Activation complete!"

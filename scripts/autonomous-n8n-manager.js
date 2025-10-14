@@ -32,7 +32,7 @@ const log = {
 
 class AutonomousN8NManager {
   constructor(url, apiKey) {
-    this.client = new N8NClient({ url, apiKey });
+    this.client = new N8NClient(url, apiKey);
     this.baseUrl = url.replace(/\/$/, '');
   }
 
