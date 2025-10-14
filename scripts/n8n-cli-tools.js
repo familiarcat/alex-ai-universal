@@ -147,29 +147,37 @@ class N8NClient {
   }
 
   async activateWorkflow(id) {
-    // N8N v1 API: Use POST to /activate endpoint
-    try {
-      return await this.request('POST', `/api/v1/workflows/${id}/activate`, {});
-    } catch (error) {
-      // Fallback: try PATCH with full workflow
-      if (error.message.includes('404')) {
-        const workflow = await this.getWorkflow(id);
-        workflow.active = true;
-        return await this.request('PUT', `/api/v1/workflows/${id}`, workflow);
-      }
-      throw error;
-    }
+    // N8N API: GET workflow, modify active flag, PUT back
+    const workflow = await this.getWorkflow(id);
+    
+    // Create clean update payload
+    const updatePayload = {
+      name: workflow.name,
+      nodes: workflow.nodes,
+      connections: workflow.connections,
+      settings: workflow.settings || {},
+      staticData: workflow.staticData || null,
+      active: true // This is the key change!
+    };
+    
+    return await this.request('PUT', `/api/v1/workflows/${id}`, updatePayload);
   }
 
   async deactivateWorkflow(id) {
-    try {
-      return await this.request('PATCH', `/api/v1/workflows/${id}`, { active: false });
-    } catch (error) {
-      if (error.message.includes('405') || error.message.includes('not allowed')) {
-        return await this.request('PUT', `/api/v1/workflows/${id}`, { active: false });
-      }
-      throw error;
-    }
+    // N8N API: GET workflow, modify active flag, PUT back
+    const workflow = await this.getWorkflow(id);
+    
+    // Create clean update payload
+    const updatePayload = {
+      name: workflow.name,
+      nodes: workflow.nodes,
+      connections: workflow.connections,
+      settings: workflow.settings || {},
+      staticData: workflow.staticData || null,
+      active: false // Deactivate
+    };
+    
+    return await this.request('PUT', `/api/v1/workflows/${id}`, updatePayload);
   }
 
   async deleteWorkflow(id) {
