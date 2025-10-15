@@ -13,6 +13,7 @@ export interface ProjectContent {
   subheadline: string;
   description: string;
   theme: string;
+  updatedAt: number;
 }
 
 export interface AppState {
@@ -36,19 +37,22 @@ export function StateProvider({ children }: { children: ReactNode }) {
         headline: '✨ Discover Your Next Obsession',
         subheadline: 'Curated collections of premium streetwear and creative essentials',
         description: 'Limited edition drops and exclusive designs you won\'t find anywhere else. New releases every Friday.',
-        theme: 'gradient'
+        theme: 'gradient',
+        updatedAt: Date.now()
       },
       beta: {
         headline: 'Compassionate Care, When You Need It Most',
         subheadline: 'Board-certified providers dedicated to your health and wellness',
         description: 'Professional healthcare services with telemedicine, patient portal, and HIPAA-compliant security.',
-        theme: 'pastel'
+        theme: 'pastel',
+        updatedAt: Date.now()
       },
       gamma: {
         headline: '⚡ Unlock the Power of Your Data',
         subheadline: 'Real-time analytics and ML-powered insights for modern teams',
         description: 'Advanced dashboards, custom reports, powerful API access, and predictive analytics.',
-        theme: 'cyberpunk'
+        theme: 'cyberpunk',
+        updatedAt: Date.now()
       }
     },
     globalTheme: 'midnight'
@@ -76,7 +80,8 @@ export function StateProvider({ children }: { children: ReactNode }) {
           ...prevState.projects,
           [projectId]: {
             ...prevState.projects[projectId],
-            [field]: value
+            [field]: value,
+            updatedAt: Date.now()
           }
         }
       };

@@ -6,10 +6,8 @@
 
 import type { Metadata } from 'next';
 import { StateProvider } from '@/lib/state-manager';
-import DevNavigation from '@/components/DevNavigation';
+import DashboardChrome from '@/components/DashboardChrome';
 import './globals.css';
-import CommandPalette from '@/components/CommandPalette';
-import StatusRibbon from '@/components/StatusRibbon';
 import GlobalThemeStyles from '@/components/GlobalThemeStyles';
 
 export const metadata: Metadata = {
@@ -27,10 +25,8 @@ export default function RootLayout({
       <body>
         <StateProvider>
           <GlobalThemeStyles />
-          <DevNavigation />
-          <StatusRibbon />
-          <CommandPalette />
-          <main style={{ paddingTop: '80px' }}>
+          <DashboardChrome />
+          <main>
             {children}
           </main>
         </StateProvider>

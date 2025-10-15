@@ -200,34 +200,26 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* Right: Live Preview */}
+                {/* Right: Live Preview (Isolated) */}
                 <div>
                   <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
-                    👁️ Live Preview (Real-Time!)
+                    👁️ Live Preview (Isolated, Real-Time)
                   </h3>
-                  <div className="card" style={{
+                  <div style={{
                     border: 'var(--border)',
                     borderRadius: 'var(--radius)',
-                    padding: '30px',
-                    minHeight: '300px'
+                    overflow: 'hidden',
+                    boxShadow: 'var(--shadow)'
                   }}>
-                    <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '12px', color: 'var(--accent)' }}>
-                      {content.headline}
-                    </h1>
-                    <p className="text-muted" style={{ fontSize: '16px', marginBottom: '12px' }}>
-                      {content.subheadline}
-                    </p>
-                    <p style={{ fontSize: '14px', opacity: 0.9, lineHeight: 1.6 }}>
-                      {content.description}
-                    </p>
-                    <div style={{ marginTop: '20px', padding: '15px', background: 'var(--card-alt)', borderRadius: 'var(--radius)' }}>
-                      <div className="text-muted" style={{ fontSize: '12px' }}>
-                        Theme: {content.theme} | Port: {meta.port} | 
-                        <Link href={`/projects/${projectId}`} style={{ color: 'var(--accent)', marginLeft: '10px' }}>
-                          View Live →
-                        </Link>
-                      </div>
-                    </div>
+                    <iframe
+                      key={`${projectId}-${content.theme}`}
+                      src={`/projects/${projectId}`}
+                      title={`${projectId}-preview`}
+                      style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
+                    />
+                  </div>
+                  <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
+                    Preview is fully isolated to reflect the project's own theme and tokens.
                   </div>
                 </div>
               </div>
