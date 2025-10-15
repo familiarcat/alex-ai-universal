@@ -31,24 +31,22 @@ export default function DashboardPage() {
   return (
     <div style={{ 
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
-      color: '#d0d0d0',
+      color: 'var(--text)',
       padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{
-          background: 'rgba(0, 255, 170, 0.05)',
-          backdropFilter: 'blur(10px)',
+        <div className="card" style={{
+          backdropFilter: 'blur(var(--blur))',
           padding: '30px',
-          borderRadius: '16px',
+          borderRadius: 'var(--radius)',
           marginBottom: '30px',
-          border: '1px solid rgba(0, 255, 170, 0.2)'
+          border: 'var(--border)'
         }}>
-          <h1 style={{ fontSize: '36px', color: '#00ffaa', marginBottom: '10px' }}>
+          <h1 style={{ fontSize: '36px', color: 'var(--accent)', marginBottom: '10px' }}>
             🖖 Alex AI Dashboard - REAL Integration
           </h1>
-          <p style={{ opacity: 0.9 }}>
+          <p className="text-muted">
             Edit content here, see updates LIVE on project pages! Open projects in new tabs to test.
           </p>
         </div>
@@ -58,27 +56,26 @@ export default function DashboardPage() {
           const meta = projectMeta[projectId as keyof typeof projectMeta];
           
           return (
-            <div key={projectId} style={{
-              background: 'rgba(0, 255, 170, 0.03)',
-              border: '2px solid rgba(0, 255, 170, 0.2)',
-              borderRadius: '16px',
+            <div key={projectId} className="card" style={{
+              border: 'var(--border)',
+              borderRadius: 'var(--radius)',
               overflow: 'hidden',
               marginBottom: '30px'
             }}>
               {/* Project Header */}
               <div style={{
-                background: 'rgba(0, 255, 170, 0.1)',
+                background: 'var(--card-alt)',
                 padding: '20px 30px',
-                borderBottom: '1px solid rgba(0, 255, 170, 0.2)',
+                borderBottom: 'var(--border)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}>
                 <div>
-                  <h2 style={{ fontSize: '24px', color: '#00ffaa' }}>
+                  <h2 style={{ fontSize: '24px', color: 'var(--accent)' }}>
                     {meta.icon} {meta.name}
                   </h2>
-                  <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '5px' }}>
+                  <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }}>
                     Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}
                   </div>
                 </div>
@@ -86,10 +83,10 @@ export default function DashboardPage() {
                   href={`/projects/${projectId}`}
                   target="_blank"
                   style={{
-                    background: '#00ffaa',
+                    background: 'var(--accent)',
                     color: '#0a0015',
                     padding: '12px 24px',
-                    borderRadius: '8px',
+                    borderRadius: 'var(--radius)',
                     textDecoration: 'none',
                     fontWeight: 600
                   }}
@@ -107,12 +104,12 @@ export default function DashboardPage() {
               }}>
                 {/* Left: Editor */}
                 <div>
-                  <h3 style={{ color: '#00ffaa', marginBottom: '20px' }}>
+                  <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     ✏️ Content Editor (Updates Live!)
                   </h3>
                   
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#00ffaa' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
                       Headline
                     </label>
                     <input
@@ -122,17 +119,17 @@ export default function DashboardPage() {
                       style={{
                         width: '100%',
                         padding: '12px',
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        border: '1px solid rgba(0, 255, 170, 0.3)',
-                        borderRadius: '6px',
-                        color: '#d0d0d0',
+                        background: 'var(--card-alt)',
+                        border: 'var(--border)',
+                        borderRadius: 'var(--radius)',
+                        color: 'var(--text)',
                         fontSize: '14px'
                       }}
                     />
                   </div>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#00ffaa' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
                       Subheadline
                     </label>
                     <input
@@ -142,17 +139,17 @@ export default function DashboardPage() {
                       style={{
                         width: '100%',
                         padding: '12px',
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        border: '1px solid rgba(0, 255, 170, 0.3)',
-                        borderRadius: '6px',
-                        color: '#d0d0d0',
+                        background: 'var(--card-alt)',
+                        border: 'var(--border)',
+                        borderRadius: 'var(--radius)',
+                        color: 'var(--text)',
                         fontSize: '14px'
                       }}
                     />
                   </div>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#00ffaa' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
                       Description
                     </label>
                     <textarea
@@ -161,10 +158,10 @@ export default function DashboardPage() {
                       style={{
                         width: '100%',
                         padding: '12px',
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        border: '1px solid rgba(0, 255, 170, 0.3)',
-                        borderRadius: '6px',
-                        color: '#d0d0d0',
+                        background: 'var(--card-alt)',
+                        border: 'var(--border)',
+                        borderRadius: 'var(--radius)',
+                        color: 'var(--text)',
                         fontSize: '14px',
                         minHeight: '100px',
                         fontFamily: 'inherit',
@@ -174,7 +171,7 @@ export default function DashboardPage() {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', marginBottom: '10px', fontSize: '13px', color: '#00ffaa' }}>
+                    <label style={{ display: 'block', marginBottom: '10px', fontSize: '13px', color: 'var(--accent)' }}>
                       🎨 Theme
                     </label>
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' as const }}>
@@ -185,13 +182,13 @@ export default function DashboardPage() {
                           style={{
                             padding: '10px 16px',
                             background: content.theme === theme.id 
-                              ? 'rgba(0, 255, 170, 0.2)' 
-                              : 'rgba(0, 0, 0, 0.3)',
+                              ? 'var(--subtle)'
+                              : 'var(--card-alt)',
                             border: content.theme === theme.id
-                              ? '2px solid #00ffaa'
-                              : '1px solid rgba(0, 255, 170, 0.2)',
-                            borderRadius: '8px',
-                            color: '#d0d0d0',
+                              ? '2px solid var(--accent)'
+                              : 'var(--border)',
+                            borderRadius: 'var(--radius)',
+                            color: 'var(--text)',
                             cursor: 'pointer',
                             fontSize: '13px'
                           }}
@@ -205,29 +202,28 @@ export default function DashboardPage() {
 
                 {/* Right: Live Preview */}
                 <div>
-                  <h3 style={{ color: '#00ffaa', marginBottom: '20px' }}>
+                  <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     👁️ Live Preview (Real-Time!)
                   </h3>
-                  <div style={{
-                    background: 'rgba(0, 0, 0, 0.5)',
-                    border: '1px solid rgba(0, 255, 170, 0.2)',
-                    borderRadius: '12px',
+                  <div className="card" style={{
+                    border: 'var(--border)',
+                    borderRadius: 'var(--radius)',
                     padding: '30px',
                     minHeight: '300px'
                   }}>
-                    <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '12px', color: '#00ffaa' }}>
+                    <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '12px', color: 'var(--accent)' }}>
                       {content.headline}
                     </h1>
-                    <p style={{ fontSize: '16px', opacity: 0.9, marginBottom: '12px' }}>
+                    <p className="text-muted" style={{ fontSize: '16px', marginBottom: '12px' }}>
                       {content.subheadline}
                     </p>
-                    <p style={{ fontSize: '14px', opacity: 0.8, lineHeight: 1.6 }}>
+                    <p style={{ fontSize: '14px', opacity: 0.9, lineHeight: 1.6 }}>
                       {content.description}
                     </p>
-                    <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(0, 255, 170, 0.05)', borderRadius: '8px' }}>
-                      <div style={{ fontSize: '12px', opacity: 0.7 }}>
+                    <div style={{ marginTop: '20px', padding: '15px', background: 'var(--card-alt)', borderRadius: 'var(--radius)' }}>
+                      <div className="text-muted" style={{ fontSize: '12px' }}>
                         Theme: {content.theme} | Port: {meta.port} | 
-                        <Link href={`/projects/${projectId}`} style={{ color: '#00ffaa', marginLeft: '10px' }}>
+                        <Link href={`/projects/${projectId}`} style={{ color: 'var(--accent)', marginLeft: '10px' }}>
                           View Live →
                         </Link>
                       </div>
