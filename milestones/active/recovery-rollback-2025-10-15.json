@@ -1,0 +1,35 @@
+{
+  "milestone_id": "RECOVERY_ROLLBACK_2025_10_15",
+  "timestamp": "2025-10-15T00:00:00Z",
+  "status": "COMPLETED",
+  "title": "Recovery + Rollback to Stable Baseline",
+  "summary": "Restored dashboard styling/navigation and validated local env by checking out stable commit 4cb788d, clearing ports, and launching on 3000.",
+  "changes": {
+    "repo": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal",
+    "commit": "4cb788d",
+    "ports_cleared": [3000,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010],
+    "server_url": "http://localhost:3000"
+  },
+  "failures": [
+    "Lost Tailwind import and navigation visibility",
+    "Multiple dev servers on ports 3001/3002",
+    "Empty .git/HEAD prevented normal git operations",
+    "Yarn ${GITHUB_TOKEN} env error when auto-installing types"
+  ],
+  "fixes": [
+    "Checked out stable commit 4cb788d",
+    "Freed ports 3000–3010 and relaunched on 3000",
+    "Repaired .git/HEAD and used remote history",
+    "Used npm tooling exclusively"
+  ],
+  "recommendations": [
+    "Add preflight: kill ports 3000–3010 before dev",
+    "Validate git repo state before automation",
+    "Prefer npm over yarn for this project",
+    "Add n8n health check to `dev:n8n` script"
+  ],
+  "validated_by": ["crusher", "data", "la_forge"],
+  "confidence": 0.98
+}
+
+
