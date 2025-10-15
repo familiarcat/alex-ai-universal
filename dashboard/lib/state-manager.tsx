@@ -19,8 +19,12 @@ export interface AppState {
   projects: {
     [key: string]: ProjectContent;
   };
+  globalTheme: string;
   updateProject: (projectId: string, field: string, value: string) => void;
   updateTheme: (projectId: string, themeId: string) => void;
+  updateGlobalTheme: (themeId: string) => void;
+  // alias used by some demo components
+  setGlobalTheme?: (themeId: string) => void;
 }
 
 const StateContext = createContext<AppState | null>(null);
@@ -46,7 +50,8 @@ export function StateProvider({ children }: { children: ReactNode }) {
         description: 'Advanced dashboards, custom reports, powerful API access, and predictive analytics.',
         theme: 'cyberpunk'
       }
-    }
+    },
+    globalTheme: 'midnight'
   });
 
   // Real-time WebSocket synchronization
@@ -93,8 +98,20 @@ export function StateProvider({ children }: { children: ReactNode }) {
     updateProject(projectId, 'theme', themeId);
   };
 
+  const updateGlobalTheme = (themeId: string) => {
+    setState(prevState => {
+      const newState = { ...prevState, globalTheme: themeId } as typeof prevState;
+      localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'alex-ai-state',
+        newValue: JSON.stringify(newState)
+      }));
+      return newState;
+    });
+  };
+
   return (
-    <StateContext.Provider value={{ ...state, updateProject, updateTheme }}>
+    <StateContext.Provider value={{ ...state, updateProject, updateTheme, updateGlobalTheme, setGlobalTheme: updateGlobalTheme }}>
       {children}
     </StateContext.Provider>
   );

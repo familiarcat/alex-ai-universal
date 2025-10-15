@@ -8,6 +8,9 @@ import type { Metadata } from 'next';
 import { StateProvider } from '@/lib/state-manager';
 import DevNavigation from '@/components/DevNavigation';
 import './globals.css';
+import CommandPalette from '@/components/CommandPalette';
+import StatusRibbon from '@/components/StatusRibbon';
+import GlobalThemeStyles from '@/components/GlobalThemeStyles';
 
 export const metadata: Metadata = {
   title: 'Alex AI - Vibe Coding Platform',
@@ -23,8 +26,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <StateProvider>
+          <GlobalThemeStyles />
           <DevNavigation />
-          <main style={{ paddingTop: '60px' }}>
+          <StatusRibbon />
+          <CommandPalette />
+          <main style={{ paddingTop: '80px' }}>
             {children}
           </main>
         </StateProvider>

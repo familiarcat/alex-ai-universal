@@ -1,5 +1,22 @@
 /* Alex AI Platform Global Styles */
 
+:root {
+  /* fallback defaults */
+  --bg: #0b0b10;
+  --text: #e5e7eb;
+  --text-muted: #a1a1aa;
+  --card: rgba(255,255,255,0.04);
+  --card-alt: rgba(255,255,255,0.06);
+  --accent: #00ffaa;
+  --subtle: rgba(0,255,170,0.18);
+  --border: 1px solid rgba(255,255,255,0.12);
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.18);
+  --elevation: 0 6px 18px rgba(0,0,0,0.22);
+  --blur: 0px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,9 +29,11 @@ html, body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* Focus styles for accessibility */
@@ -34,4 +53,15 @@ body {
 .no-transition {
   transition: none !important;
 }
+
+/* Helpers */
+.card {
+  background: var(--card);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--blur));
+}
+
+.text-muted { color: var(--text-muted); }
 

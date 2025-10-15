@@ -16,13 +16,13 @@ export default function WizardPage() {
   const [theme, setTheme] = useState('gradient');
 
   return (
-    <main style={{ padding: '90px 24px 40px' }}>
-      <h1 style={{ color: '#00ffaa', fontSize: 28, marginBottom: 10 }}>🎭 Setup Wizard</h1>
+    <main style={{ padding: '90px 24px 40px', color: 'var(--text)' }}>
+      <h1 style={{ color: 'var(--accent)', fontSize: 28, marginBottom: 10 }}>🎭 Setup Wizard</h1>
       {step === 0 && (
-        <div style={{ border: '1px solid rgba(0,255,170,0.2)', padding: 16, borderRadius: 12 }}>
+        <div style={{ border: '1px solid var(--subtle)', padding: 16, borderRadius: 12, background: 'var(--card)' }}>
           <div style={{ marginBottom: 10 }}>Your name</div>
           <input value={name} onChange={(e) => setName(e.target.value)} style={{
-            width: '100%', padding: 10, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+            width: '100%', padding: 10, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
           }} />
           <div style={{ marginTop: 12 }}>
             <button onClick={() => setStep(1)} disabled={!name} style={{
@@ -33,10 +33,10 @@ export default function WizardPage() {
         </div>
       )}
       {step === 1 && (
-        <div style={{ border: '1px solid rgba(0,255,170,0.2)', padding: 16, borderRadius: 12 }}>
+        <div style={{ border: '1px solid var(--subtle)', padding: 16, borderRadius: 12, background: 'var(--card)' }}>
           <div style={{ marginBottom: 10 }}>Pick project</div>
           <select value={project} onChange={(e) => setProject(e.target.value)} style={{
-            padding: 10, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+            padding: 10, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
           }}>
             <option value="alpha">Alpha</option>
             <option value="beta">Beta</option>
@@ -49,20 +49,20 @@ export default function WizardPage() {
         </div>
       )}
       {step === 2 && (
-        <div style={{ border: '1px solid rgba(0,255,170,0.2)', padding: 16, borderRadius: 12 }}>
+        <div style={{ border: '1px solid var(--subtle)', padding: 16, borderRadius: 12, background: 'var(--card)' }}>
           <div style={{ marginBottom: 10 }}>Customize content for {project}</div>
           <div style={{ display: 'grid', gap: 10 }}>
             <input placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} style={{
-              padding: 10, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+              padding: 10, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
             }} />
             <input placeholder="Subheadline" value={subheadline} onChange={(e) => setSubheadline(e.target.value)} style={{
-              padding: 10, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+              padding: 10, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
             }} />
             <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} style={{
-              padding: 10, minHeight: 100, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+              padding: 10, minHeight: 100, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
             }} />
             <select value={theme} onChange={(e) => setTheme(e.target.value)} style={{
-              padding: 10, background: 'rgba(0,0,0,0.3)', color: '#d0d0d0', border: '1px solid rgba(0,255,170,0.3)', borderRadius: 8
+              padding: 10, background: 'rgba(0,0,0,0.3)', color: 'var(--text)', border: '1px solid var(--subtle)', borderRadius: 8
             }}>
               <option value="gradient">Gradient</option>
               <option value="pastel">Pastel</option>
