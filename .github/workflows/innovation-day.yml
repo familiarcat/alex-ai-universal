@@ -1,0 +1,27 @@
+name: Innovation Day Plan
+
+on:
+  schedule:
+    - cron: '0 2 */14 * *' # every 2 weeks at 02:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate plan
+        run: bash scripts/innovation-day-runner.sh
+      - name: Commit plan artifact
+        run: |
+          git config user.name "automation-bot"
+          git config user.email "automation@example.com"
+          git add crew-memories/active/innovation-day-plan-*.json
+          git commit -m "chore: add innovation day plan artifact [skip ci]" || echo "no changes"
+          git push || true
+
+

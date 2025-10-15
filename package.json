@@ -53,7 +53,9 @@
     "universal-demo": "node UNIVERSAL_INTEGRATION_DEMO.js",
     "alex-ai:init": "cd packages/core && npm run alex-ai universal-init",
     "alex-ai:sync": "cd packages/core && npm run alex-ai universal-sync",
-    "alex-ai:status": "cd packages/core && npm run alex-ai status"
+    "alex-ai:status": "cd packages/core && npm run alex-ai status",
+    "milestone:push": "bash ./scripts/preflight-ship-health.sh --free-ports && bash ./scripts/milestone-push.sh",
+    "innovation:plan": "bash ./scripts/innovation-day-runner.sh"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

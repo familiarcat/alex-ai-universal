@@ -203,6 +203,21 @@ Alex AI implements military-grade security controls that meet and exceed DOD and
 ---
 
 ## 🧠 **ENHANCED MEMORY SYSTEM**
+### Innovation Day
+Run a crew-wide research plan with tight budgets and shared deliverables.
+
+```bash
+bash scripts/innovation-day-runner.sh
+```
+
+Execute findings (dry run by default):
+
+```bash
+node scripts/innovation-day-executor.js --plan latest
+# Set OPENROUTER_API_KEY and unset INNOVATION_DRY_RUN to spend real tokens.
+```
+
+The workflow `.github/workflows/innovation-day.yml` schedules this every two weeks.
 
 ### **Intelligent Memory Contribution**
 - **Crew Specialization**: Routes memories to appropriate crew members
@@ -256,6 +271,15 @@ npm run milestone:universal "Milestone Name"
 npm run milestone "Milestone Name"
 npm run milestone:help
 ```
+
+### **Lean Milestone Push (single commit + tag)**
+```bash
+npm run milestone:push -- \
+  -s "Recovery + LCARS nav + immersive pages" \
+  -n recovery-2025-10-15 \
+  -f "gallery search/filter/sort; quiz recommendation CTA; wizard updates content+theme"
+```
+This creates a single milestone commit (if staged changes exist) and an annotated tag (`milestone-YYYY-MM-DD-<slug>`), then pushes both to origin.
 
 ### **Key Features**
 - **🤖 Crew Coordination**: Full Star Trek crew personality integration
