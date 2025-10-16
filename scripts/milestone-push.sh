@@ -62,7 +62,7 @@ if ! git diff --cached --quiet; then
       IFS=';' read -ra arr <<< "$features"
       for f in "${arr[@]}"; do
         trimmed=$(echo "$f" | sed -E 's/^\s+|\s+$//g')
-        [[ -n "$trimmed" ]] && printf "- %s\n" "$trimmed"
+        [[ -n "$trimmed" ]] && printf -- "- %s\n" "$trimmed"
       done
       printf "\n"
     fi
