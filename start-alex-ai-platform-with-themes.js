@@ -165,6 +165,41 @@ class AlexAIPlatform {
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 36px; color: var(--accent, #00ff88); }
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 16px;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .top-nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+        .brand .logo { font-size: 18px; }
+        .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            transition: opacity .2s, transform .2s;
+        }
+        .nav-link:hover { opacity: 0.85; transform: translateY(-1px); }
         .theme-selector {
             display: flex;
             gap: 10px;
@@ -342,6 +377,23 @@ class AlexAIPlatform {
     </style>
 </head>
 <body>
+    <div class="container">
+        <nav class="top-nav">
+            <div class="top-nav-inner">
+                <div class="brand">
+                    <span class="logo">🖖</span>
+                    <span>Alex AI Dashboard</span>
+                </div>
+                <div class="nav-links">
+                    <a class="nav-link" href="/">Dashboard</a>
+                    <a class="nav-link" href="http://localhost:3010" target="_blank" rel="noopener">Theme Gallery</a>
+                    <a class="nav-link" href="http://localhost:3020" target="_blank" rel="noopener">Vibe Quiz</a>
+                    <a class="nav-link" href="http://localhost:3030" target="_blank" rel="noopener">Crew Wizard</a>
+                    <a class="nav-link" href="#projectsGrid">Projects</a>
+                </div>
+            </div>
+        </nav>
+    </div>
     <div class="overlay" id="overlay" onclick="closeThemeSelector()"></div>
     <div class="theme-selector-panel" id="themeSelectorPanel">
         <h2 style="margin-bottom: 20px; color: var(--accent, #00ff88);">Select Theme</h2>

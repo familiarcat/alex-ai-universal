@@ -7,9 +7,7 @@ import { usePathname } from 'next/navigation';
 
 export default function DashboardChrome() {
   const pathname = usePathname() || '';
-  const isProjectRoute = pathname.startsWith('/projects/');
-
-  if (isProjectRoute) return null;
+  // Always render navigation and ribbons across routes (including project pages)
 
   return (
     <>
@@ -21,5 +19,6 @@ export default function DashboardChrome() {
     </>
   );
 }
+
 
 

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import GlobalThemeSwitcher from '@/components/GlobalThemeSwitcher';
+import IntentThemeSwitcher from '@/components/IntentThemeSwitcher';
 
 export default function DevNavigation() {
   const pathname = usePathname();
@@ -142,6 +143,7 @@ export default function DevNavigation() {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <IntentThemeSwitcher />
           <GlobalThemeSwitcher />
           <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>
         </div>

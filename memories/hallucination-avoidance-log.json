@@ -1,0 +1,14 @@
+{
+  "timestamp": "${DATE}",
+  "context": "UI theming controls",
+  "issue": "Displayed Quark/Troi rationale panel to end users in dev navigation",
+  "action": "Removed DebatePanel, gated intent switcher behind explicit Apply",
+  "policy_note": "Only update UI on explicit user action; avoid surfacing model rationale in UI",
+  "next_steps": [
+    "Sync this entry to n8n/Supabase pipeline",
+    "Add CI check to prevent rationale panels in production routes"
+  ]
+}
+
+
+

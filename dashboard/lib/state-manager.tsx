@@ -60,6 +60,14 @@ export function StateProvider({ children }: { children: ReactNode }) {
 
   // Real-time WebSocket synchronization
   useEffect(() => {
+    // Hydrate from localStorage if present
+    try {
+      const saved = localStorage.getItem('alex-ai-state');
+      if (saved) {
+        setState(JSON.parse(saved));
+      }
+    } catch {}
+
     // In production, this would connect to WebSocket server
     // For now, we use localStorage for cross-tab sync
     const handleStorageChange = (e: StorageEvent) => {
