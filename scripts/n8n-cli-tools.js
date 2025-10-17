@@ -147,37 +147,12 @@ class N8NClient {
   }
 
   async activateWorkflow(id) {
-    // N8N API: GET workflow, modify active flag, PUT back
-    const workflow = await this.getWorkflow(id);
-    
-    // Create clean update payload
-    const updatePayload = {
-      name: workflow.name,
-      nodes: workflow.nodes,
-      connections: workflow.connections,
-      settings: workflow.settings || {},
-      staticData: workflow.staticData || null,
-      active: true // This is the key change!
-    };
-    
-    return await this.request('PUT', `/api/v1/workflows/${id}`, updatePayload);
+    // Modern n8n exposes dedicated endpoints for activation
+    return this.request('POST', `/api/v1/workflows/${id}/activate`);
   }
 
   async deactivateWorkflow(id) {
-    // N8N API: GET workflow, modify active flag, PUT back
-    const workflow = await this.getWorkflow(id);
-    
-    // Create clean update payload
-    const updatePayload = {
-      name: workflow.name,
-      nodes: workflow.nodes,
-      connections: workflow.connections,
-      settings: workflow.settings || {},
-      staticData: workflow.staticData || null,
-      active: false // Deactivate
-    };
-    
-    return await this.request('PUT', `/api/v1/workflows/${id}`, updatePayload);
+    return this.request('POST', `/api/v1/workflows/${id}/deactivate`);
   }
 
   async deleteWorkflow(id) {
@@ -577,7 +552,62 @@ if (require.main === module) {
   });
 }
 
-module.exports = { N8NClient, importWorkflow, ingestKnowledgeToN8N };
+// Helper: ensure or update a simple GET lounge-latest webhook workflow
+async function ensureLoungeLatestWorkflow() {
+  const creds = loadN8NCredentials();
+  if (!creds.url || !creds.apiKey) {
+    log.error('N8N credentials not configured');
+    process.exit(1);
+  }
+  const client = new N8NClient(creds.url, creds.apiKey);
+  const workflows = await client.listWorkflows();
+  const existing = (workflows.data || workflows).find(w => w.name === 'Alex AI Lounge Latest');
+
+  const loungeWorkflow = {
+    name: 'Alex AI Lounge Latest',
+    nodes: [
+      {
+        parameters: { httpMethod: 'GET', path: 'lounge-latest', responseMode: 'responseNode', options: {} },
+        id: 'webhook', name: 'Webhook', type: 'n8n-nodes-base.webhook', typeVersion: 1, position: [240, 300]
+      },
+      {
+        parameters: {
+          operation: 'executeQuery',
+          query: `with ranked as (
+  select crew_member, title, summary, key_findings, conclusions, recommendations, timestamp,
+         row_number() over (partition by crew_member order by timestamp desc) rn
+  from crew_memories)
+select crew_member, title, summary, key_findings, conclusions, recommendations, timestamp
+from ranked where rn = 1;`
+        },
+        id: 'sql', name: 'Select Latest Per Crew', type: 'n8n-nodes-base.postgres', typeVersion: 1, position: [520, 300]
+      },
+      {
+        parameters: { respondWith: 'json', responseBody: '={{ { crew: $items().map(i => i.json) } }}', options: {} },
+        id: 'respond', name: 'Respond', type: 'n8n-nodes-base.respondToWebhook', typeVersion: 1, position: [800, 300]
+      }
+    ],
+    connections: {
+      Webhook: { main: [[ { node: 'Select Latest Per Crew', type: 'main', index: 0 } ]] },
+      'Select Latest Per Crew': { main: [[ { node: 'Respond', type: 'main', index: 0 } ]] }
+    },
+    settings: { executionOrder: 'v1' }
+  };
+
+  if (!existing) {
+    log.info('Creating lounge-latest workflow...');
+    const created = await client.createWorkflow(loungeWorkflow);
+    await client.activateWorkflow(created.id || created.data?.id);
+    log.success('Lounge workflow created and activated');
+  } else {
+    log.info('Updating lounge-latest workflow...');
+    const updated = await client.updateWorkflow(existing.id, loungeWorkflow);
+    if (!updated.active) await client.activateWorkflow(existing.id);
+    log.success('Lounge workflow updated and active');
+  }
+}
+
+module.exports = { N8NClient, importWorkflow, ingestKnowledgeToN8N, ensureLoungeLatestWorkflow };
 
 /**
  * Code Review - Lieutenant Uhura:

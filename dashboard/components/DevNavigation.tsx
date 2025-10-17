@@ -78,6 +78,10 @@ export default function DevNavigation() {
           🎭 Wizard
         </Link>
         
+        <Link href="/observation-lounge" style={linkStyle(isActive('/observation-lounge'))}>
+          🛸 Observation Lounge
+        </Link>
+        
         <div style={{ position: 'relative' }}>
           <button
             onClick={() => setProjectsOpen(!projectsOpen)}
