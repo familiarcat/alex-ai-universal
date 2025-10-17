@@ -174,8 +174,8 @@ const THEME_DEFINITIONS = {
       '--secondary': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       '--accent': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
       '--background': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-      '--surface': 'rgba(255, 255, 255, 0.95)',
-      '--text': '#2d3748',
+      '--surface': '#ffffff',
+      '--text': '#1a202c',
       '--text-muted': 'rgba(45,55,72,0.85)',
       '--border': 'transparent',
       '--shadow': '0 10px 40px rgba(102, 126, 234, 0.3)'

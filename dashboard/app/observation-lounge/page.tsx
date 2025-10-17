@@ -310,6 +310,7 @@ export default function ObservationLounge() {
             flex: 1, minWidth: 240, background: 'rgba(255,255,255,0.06)', color: '#e6fff7',
             border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, padding: '8px 10px'
           }}
+          className="a11y-focus"
         />
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, opacity: 0.9 }}>
           <input type="checkbox" checked={compact} onChange={(e) => setCompact(e.target.checked)} /> Compact
@@ -328,7 +329,7 @@ export default function ObservationLounge() {
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16 }}>
-          <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 8 }}>Active Crew Updates</div>
+          <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 8 }} className="a11y-muted">Active Crew Updates</div>
           {groups.activeCrew.map(({ meta, memory }) => (
             <div key={meta.id} style={{ border: '1px solid rgba(0,255,170,0.25)', borderRadius: 12, background: 'rgba(0,255,170,0.04)', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
@@ -361,7 +362,7 @@ export default function ObservationLounge() {
           ))}
 
           {groups.inactiveCrew.length > 0 && (
-            <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 12 }}>Crew — No recent findings</div>
+            <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Crew — No recent findings</div>
           )}
           {groups.inactiveCrew.map(({ meta, memory }) => (
             <div key={meta.id} style={{ border: '1px dashed rgba(255,255,255,0.25)', borderRadius: 12, background: 'rgba(255,255,255,0.03)', padding: 16 }}>
@@ -387,7 +388,7 @@ export default function ObservationLounge() {
           ))}
 
           {groups.systems.length > 0 && (
-            <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 12 }}>Systems & Operations</div>
+            <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Systems & Operations</div>
           )}
           {groups.systems.map(({ meta, memory }) => (
             <div key={meta.id} style={{ border: '1px solid rgba(100,180,255,0.25)', borderRadius: 12, background: 'rgba(100,180,255,0.05)', padding: 16 }}>
