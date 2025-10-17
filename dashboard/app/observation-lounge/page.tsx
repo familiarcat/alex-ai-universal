@@ -39,6 +39,7 @@ type CrewMeta = {
   defaultGoals?: string[];
   purpose?: string;
   defaultModel?: string;
+  kind?: 'crew' | 'system';
 };
 const crewDirectory: CrewMeta[] = [
   {
@@ -46,62 +47,70 @@ const crewDirectory: CrewMeta[] = [
     aliases: ['captain picard', 'jean-luc picard'],
     defaultGoals: ['Set mission intent and constraints', 'Resolve conflicts and make final decisions', 'Uphold ethics and safety throughout operations'],
     purpose: 'Leads strategy, sets intent, and arbitrates trade-offs across the crew.',
-    defaultModel: 'gpt-4o'
+    defaultModel: 'gpt-4o',
+    kind: 'crew'
   },
   {
     id: 'riker', name: 'riker', displayName: 'Commander William Riker', role: 'First Officer', emoji: '🖖',
     aliases: ['commander riker', 'will riker'],
     defaultGoals: ['Translate mission intent into actionable plans', 'Coordinate cross-crew execution', 'Escalate risks and unblock progress'],
     purpose: 'Turns strategy into execution plans and coordinates cross-functional delivery.',
-    defaultModel: 'gpt-4o-mini'
+    defaultModel: 'gpt-4o-mini',
+    kind: 'crew'
   },
   {
     id: 'data', name: 'data', displayName: 'Lieutenant Commander Data', role: 'Operations & Analysis', emoji: '🤖',
     aliases: ['commander data'],
     defaultGoals: ['Perform rigorous analysis and validation', 'Synthesize learnings into reusable patterns', 'Measure outcomes and surface insights'],
     purpose: 'Analyzes telemetry, validates assumptions, and codifies patterns for reuse.',
-    defaultModel: 'gpt-4.1'
+    defaultModel: 'gpt-4.1',
+    kind: 'crew'
   },
   {
     id: 'la-forge', name: 'la forge', displayName: 'Lieutenant Commander Geordi La Forge', role: 'Chief Engineer', emoji: '🛠️',
     aliases: ['geordi', 'geordi la forge', 'lieutenant commander geordi la forge'],
     defaultGoals: ['Ensure systems reliability and performance', 'Automate workflows and integrations', 'Eliminate bottlenecks in the toolchain'],
     purpose: 'Builds and maintains reliable, observable integrations and infrastructure.',
-    defaultModel: 'gpt-4o'
+    defaultModel: 'gpt-4o',
+    kind: 'crew'
   },
   {
     id: 'worf', name: 'worf', displayName: 'Lieutenant Worf', role: 'Security', emoji: '🛡️',
     aliases: ['lieutenant worf'],
     defaultGoals: ['Harden security boundaries', 'Protect data and credentials', 'Monitor and respond to threats'],
     purpose: 'Owns security posture, threat modeling, and incident response hygiene.',
-    defaultModel: 'gpt-4o-mini'
+    defaultModel: 'gpt-4o-mini',
+    kind: 'crew'
   },
   {
     id: 'crusher', name: 'dr. beverly crusher', displayName: 'Doctor Beverly Crusher', role: 'Medical', emoji: '🩺',
     aliases: ['beverly crusher', 'dr crusher'],
     defaultGoals: ['Safeguard system health', 'Promote resilient practises', 'Triage and stabilize critical incidents'],
     purpose: 'Monitors system health and reliability, curates resilient operating practices.',
-    defaultModel: 'gpt-4o-mini'
+    defaultModel: 'gpt-4o-mini',
+    kind: 'crew'
   },
   {
     id: 'troi', name: 'counselor deanna troi', displayName: 'Counselor Deanna Troi', role: 'Counselor', emoji: '🧠',
     aliases: ['deanna troi', 'counselor troi'],
     defaultGoals: ['Improve UX clarity and empathy', 'Reduce cognitive load in workflows', 'Guide decisions with human-centered perspective'],
     purpose: 'Advocates for human-centered UX, clarity, and cognitive load reduction.',
-    defaultModel: 'gpt-4o'
+    defaultModel: 'gpt-4o',
+    kind: 'crew'
   },
   {
     id: 'uhura', name: 'lieutenant uhura', displayName: 'Lieutenant Uhura', role: 'Communications', emoji: '📡',
     aliases: ['uhura'],
     defaultGoals: ['Establish reliable integrations', 'Ensure API hygiene and observability', 'Maintain secure credential handling'],
     purpose: 'Manages APIs, credentials, and observability for integrations (e.g., n8n/Supabase).',
-    defaultModel: 'gpt-4o'
+    defaultModel: 'gpt-4o',
+    kind: 'crew'
   },
-  { id: 'quark', name: 'quark', displayName: 'Quark', role: 'Commerce', emoji: '💰', defaultGoals: ['Optimize business value', 'Prioritize ROI-driven features', 'Leverage partnerships and marketplaces'], purpose: 'Aligns delivery with ROI and market opportunities.', defaultModel: 'gpt-4o-mini' },
+  { id: 'quark', name: 'quark', displayName: 'Quark', role: 'Commerce', emoji: '💰', defaultGoals: ['Optimize business value', 'Prioritize ROI-driven features', 'Leverage partnerships and marketplaces'], purpose: 'Aligns delivery with ROI and market opportunities.', defaultModel: 'gpt-4o-mini', kind: 'crew' },
   // Project/system identities often writing memories
-  { id: 'collective-milestone-memory', name: 'collective-milestone-memory', displayName: 'Collective Milestones', role: 'Project Memory', emoji: '🧩', defaultGoals: ['Record canonical achievements', 'Eliminate duplication', 'Surface knowledge for reuse'], purpose: 'Holds canonical project milestones and summaries.', defaultModel: 'gpt-4o' },
-  { id: 'n8n-automation-solution-2025-10-13', name: 'n8n-automation-solution-2025-10-13', displayName: 'N8N Automation Solution', role: 'Automation', emoji: '⚙️', purpose: 'Automates ingestion and mediation between UI and Supabase via n8n.', defaultModel: 'gpt-4o-mini' },
-  { id: 'ddd-migration-and-doc-workflow-2025-10-13', name: 'ddd-migration-and-doc-workflow-2025-10-13', displayName: 'DDD Migration & Documentation Workflow', role: 'Architecture', emoji: '🧱', purpose: 'Owns domain-driven design alignment and doc workflows.', defaultModel: 'gpt-4o-mini' },
+  { id: 'collective-milestone-memory', name: 'collective-milestone-memory', displayName: 'Collective Milestones', role: 'Project Memory', emoji: '🧩', defaultGoals: ['Record canonical achievements', 'Eliminate duplication', 'Surface knowledge for reuse'], purpose: 'Holds canonical project milestones and summaries.', defaultModel: 'gpt-4o', kind: 'system' },
+  { id: 'n8n-automation-solution-2025-10-13', name: 'n8n-automation-solution-2025-10-13', displayName: 'N8N Automation Solution', role: 'Automation', emoji: '⚙️', purpose: 'Automates ingestion and mediation between UI and Supabase via n8n.', defaultModel: 'gpt-4o-mini', kind: 'system' },
+  { id: 'ddd-migration-and-doc-workflow-2025-10-13', name: 'ddd-migration-and-doc-workflow-2025-10-13', displayName: 'DDD Migration & Documentation Workflow', role: 'Architecture', emoji: '🧱', purpose: 'Owns domain-driven design alignment and doc workflows.', defaultModel: 'gpt-4o-mini', kind: 'system' },
 ];
 
 export default function ObservationLounge() {
@@ -126,7 +135,7 @@ export default function ObservationLounge() {
     return () => { cancelled = true; };
   }, []);
 
-  const sortedAndFiltered = useMemo(() => {
+  const groups = useMemo(() => {
     const normalized = (s: string) => (s || '').toLowerCase();
     const q = normalized(query);
 
@@ -193,24 +202,54 @@ export default function ObservationLounge() {
       return { meta, memory: found } as { meta: typeof meta; memory: CrewMemory };
     });
 
-    let result = roster
+    // Compute activity score and partition
+    function activityScore(m: CrewMemory) {
+      const k = (m.key_findings?.length || 0) * 3;
+      const c = (m.conclusions?.length || 0) * 2;
+      const r = (m.recommendations?.length || 0) * 2;
+      const s = (m.summary && m.summary.trim() ? 1 : 0);
+      return k + c + r + s;
+    }
+
+    let filteredRoster = roster
       // If searching, include members that match by meta or memory text
       .filter(({ meta, memory }) => {
         if (!q) return true;
         const fields = [meta.name, meta.role, memory.crew_member, memory.title, memory.summary].join(' ').toLowerCase();
         return fields.includes(q);
       })
-      // Sort by recency where available
+      ;
+
+    const activeCrew = filteredRoster
+      .filter(({ meta }) => (meta.kind || 'crew') === 'crew')
+      .filter(({ memory }) => isSubstantive(memory))
       .sort((a, b) => {
+        const sa = activityScore(a.memory);
+        const sb = activityScore(b.memory);
+        if (sa !== sb) return sb - sa; // more activity first
         const ta = Date.parse(a.memory.timestamp || '');
         const tb = Date.parse(b.memory.timestamp || '');
         if (!isNaN(ta) && !isNaN(tb)) return tb - ta;
         if (!isNaN(ta)) return -1;
         if (!isNaN(tb)) return 1;
-        return a.meta.name.localeCompare(b.meta.name);
+        return a.meta.displayName.localeCompare(b.meta.displayName);
       });
 
-    return result;
+    const inactiveCrew = filteredRoster
+      .filter(({ meta }) => (meta.kind || 'crew') === 'crew')
+      .filter(({ memory }) => !isSubstantive(memory))
+      .sort((a, b) => a.meta.displayName.localeCompare(b.meta.displayName));
+
+    const systems = filteredRoster
+      .filter(({ meta }) => (meta.kind || 'crew') === 'system')
+      .sort((a, b) => {
+        const ta = Date.parse(a.memory.timestamp || '');
+        const tb = Date.parse(b.memory.timestamp || '');
+        if (!isNaN(ta) && !isNaN(tb)) return tb - ta;
+        return a.meta.displayName.localeCompare(b.meta.displayName);
+      });
+
+    return { activeCrew, inactiveCrew, systems };
   }, [crew, query]);
 
   function formatWhen(ts: string) {
@@ -283,13 +322,14 @@ export default function ObservationLounge() {
         </div>
       )}
 
-      {sortedAndFiltered.length === 0 ? (
+      {groups.activeCrew.length + groups.inactiveCrew.length + groups.systems.length === 0 ? (
         <div style={{ opacity: 0.8, padding: 16, border: '1px dashed rgba(255,255,255,0.25)', borderRadius: 12 }}>
           No latest briefings available yet. Once the n8n lounge webhook is live or local crew memories are added, updates will appear here.
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16 }}>
-          {sortedAndFiltered.map(({ meta, memory }) => (
+          <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 8 }}>Active Crew Updates</div>
+          {groups.activeCrew.map(({ meta, memory }) => (
             <div key={meta.id} style={{ border: '1px solid rgba(0,255,170,0.25)', borderRadius: 12, background: 'rgba(0,255,170,0.04)', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
                 <h2 style={{ color: '#00ffaa', fontSize: 18, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
@@ -317,6 +357,50 @@ export default function ObservationLounge() {
               <Section title="Key Findings" items={memory.key_findings || []} defaultOpen={!compact} />
               <Section title="Conclusions" items={memory.conclusions || []} />
               <Section title="Recommendations" items={memory.recommendations || []} />
+            </div>
+          ))}
+
+          {groups.inactiveCrew.length > 0 && (
+            <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 12 }}>Crew — No recent findings</div>
+          )}
+          {groups.inactiveCrew.map(({ meta, memory }) => (
+            <div key={meta.id} style={{ border: '1px dashed rgba(255,255,255,0.25)', borderRadius: 12, background: 'rgba(255,255,255,0.03)', padding: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+                <h2 style={{ color: '#c2fff0', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
+                <span style={{ fontSize: 12, opacity: 0.6 }}>{formatWhen(memory.timestamp)}</span>
+              </div>
+              {(meta.purpose || meta.defaultModel) && (
+                <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 8 }}>
+                  {meta.purpose && <span>{meta.purpose}</span>}
+                  {meta.purpose && meta.defaultModel && <span> · </span>}
+                  {meta.defaultModel && <span>Default model: {meta.defaultModel}</span>}
+                </div>
+              )}
+              <div style={{ fontSize: 13, opacity: 0.85 }}>
+                {memory.summary && memory.summary.trim().length > 0
+                  ? memory.summary
+                  : (meta.defaultGoals && meta.defaultGoals.length
+                      ? `Agent goals: ${meta.defaultGoals.join(' · ')}`
+                      : 'No recent briefing yet.')}
+              </div>
+            </div>
+          ))}
+
+          {groups.systems.length > 0 && (
+            <div style={{ gridColumn: '1 / -1', opacity: 0.9, fontWeight: 700, marginTop: 12 }}>Systems & Operations</div>
+          )}
+          {groups.systems.map(({ meta, memory }) => (
+            <div key={meta.id} style={{ border: '1px solid rgba(100,180,255,0.25)', borderRadius: 12, background: 'rgba(100,180,255,0.05)', padding: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+                <h2 style={{ color: '#8fd1ff', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
+                <span style={{ fontSize: 12, opacity: 0.6 }}>{formatWhen(memory.timestamp)}</span>
+              </div>
+              <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 8 }}>
+                {meta.purpose}
+                {meta.defaultModel && <span> · Default model: {meta.defaultModel}</span>}
+              </div>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>{(memory.title || '').trim() && (memory.title || '').toLowerCase() !== 'latest briefing' ? memory.title : 'Latest Briefing'}</div>
+              <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 10 }}>{memory.summary || 'Operational notes pending.'}</div>
             </div>
           ))}
         </div>
