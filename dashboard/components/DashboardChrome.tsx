@@ -7,15 +7,15 @@ import { usePathname } from 'next/navigation';
 
 export default function DashboardChrome() {
   const pathname = usePathname() || '';
-  // Always render navigation and ribbons across routes (including project pages)
+  const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === '1';
 
   return (
     <>
-      <DevNavigation />
-      <StatusRibbon />
-      <CommandPalette />
+      {!isEmbed && <DevNavigation />}
+      {!isEmbed && <StatusRibbon />}
+      {!isEmbed && <CommandPalette />}
       {/* spacer for fixed nav height */}
-      <div style={{ height: 80 }} />
+      {!isEmbed && <div style={{ height: 80 }} />}
     </>
   );
 }

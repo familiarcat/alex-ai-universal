@@ -213,7 +213,7 @@ export default function DashboardPage() {
                   }}>
                     <iframe
                       key={`${projectId}-${content.theme}`}
-                      src={`/projects/${projectId}`}
+                      src={`/projects/${projectId}?embed=1`}
                       title={`${projectId}-preview`}
                       style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
                     />

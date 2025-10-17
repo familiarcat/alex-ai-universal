@@ -1,0 +1,11 @@
+{
+  "css": {
+    "--heading": "#1f2d3d",
+    "--text": "#1f2d3d",
+    "--text-muted": "rgba(31,45,61,0.8)",
+    "--border": "rgba(31,45,61,0.15)",
+    "--on-primary": "#ffffff"
+  }
+}
+
+

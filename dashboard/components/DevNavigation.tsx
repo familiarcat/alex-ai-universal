@@ -27,12 +27,11 @@ export default function DevNavigation() {
     top: 0,
     left: 0,
     right: 0,
-    background: 'rgba(10, 0, 21, 0.95)',
+    background: 'var(--surface)',
     backdropFilter: 'blur(10px)',
     padding: '12px 30px',
     zIndex: 9999,
-    borderBottom: '2px solid rgba(0, 255, 170, 0.3)',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
+    borderBottom: '1px solid var(--border)'
   };
 
   const containerStyle = {
@@ -44,21 +43,22 @@ export default function DevNavigation() {
   };
 
   const linkStyle = (active: boolean) => ({
-    color: active ? '#00ff88' : 'white',
+    color: active ? 'var(--heading, var(--text))' : 'var(--text)',
     textDecoration: 'none',
-    opacity: active ? 1 : 0.8,
+    opacity: active ? 1 : 0.9,
     fontWeight: active ? 600 : 400,
     fontSize: '14px',
     transition: 'all 0.2s',
     padding: '8px 12px',
     borderRadius: '6px',
-    background: active ? 'rgba(0, 255, 136, 0.1)' : 'transparent'
+    background: 'transparent',
+    border: active ? '1px solid var(--border)' : '1px solid transparent'
   });
 
   return (
     <nav style={navStyle}>
       <div style={containerStyle}>
-        <span style={{ fontWeight: 700, color: '#00ff88', fontSize: '15px' }}>
+        <span style={{ fontWeight: 700, color: 'var(--heading, var(--text))', fontSize: '15px' }}>
           🖖 ALEX AI DEV MODE
         </span>
         
@@ -103,19 +103,21 @@ export default function DevNavigation() {
               top: '100%',
               left: 0,
               marginTop: '8px',
-              background: 'rgba(10, 0, 21, 0.98)',
-              border: '1px solid rgba(0, 255, 136, 0.3)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
               borderRadius: '8px',
               padding: '8px',
               minWidth: '200px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)'
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)'
             }}>
               <Link 
                 href="/projects/alpha" 
                 style={{
                   ...linkStyle(isActive('/projects/alpha')),
                   display: 'block',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
+                  paddingLeft: '16px',
+                  borderLeft: '3px solid var(--border)'
                 }}
                 onClick={() => setProjectsOpen(false)}
               >
@@ -126,7 +128,8 @@ export default function DevNavigation() {
                 style={{
                   ...linkStyle(isActive('/projects/beta')),
                   display: 'block',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
+                  paddingLeft: '24px'
                 }}
                 onClick={() => setProjectsOpen(false)}
               >
@@ -136,7 +139,8 @@ export default function DevNavigation() {
                 href="/projects/gamma" 
                 style={{
                   ...linkStyle(isActive('/projects/gamma')),
-                  display: 'block'
+                  display: 'block',
+                  paddingLeft: '32px'
                 }}
                 onClick={() => setProjectsOpen(false)}
               >
