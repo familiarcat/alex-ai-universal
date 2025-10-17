@@ -12,6 +12,9 @@
   --dark-bg: #0A0A0A;
   --dark-surface: #1A1A1A;
   --dark-border: #333333;
+  --text-strong: #FFFFFF;
+  --text-muted: rgba(255,255,255,0.85);
+  --focus-ring: 0 0 0 3px rgba(0, 150, 255, 0.6);
 }
 
 * {
@@ -23,7 +26,7 @@
 body {
   font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
   background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #0A0A0A 100%);
-  color: #FFFFFF;
+  color: var(--text-strong);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -114,6 +117,10 @@ body {
   box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
   transform: translateY(-2px);
 }
+
+/* Accessibility helpers */
+.a11y-muted { color: var(--text-muted); }
+.a11y-focus:focus { outline: none; box-shadow: var(--focus-ring); }
 
 .card-glow {
   animation: glow 2s ease-in-out infinite alternate;

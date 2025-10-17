@@ -5,6 +5,12 @@
  */
 
 const THEME_DEFINITIONS = {
+  // Shared accessibility tokens
+  _a11y: {
+    minContrastAA: 4.5, // WCAG AA body text
+    minContrastAAA: 7.0, // WCAG AAA
+    focusRing: '0 0 0 3px rgba(0, 150, 255, 0.6)'
+  },
   glassmorphism: {
     name: 'Glassmorphism Modern',
     icon: '🪟',
@@ -17,6 +23,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
       '--surface': 'rgba(255, 255, 255, 0.1)',
       '--text': '#ffffff',
+      '--text-muted': 'rgba(255,255,255,0.8)',
       '--border': 'rgba(255, 255, 255, 0.2)',
       '--shadow': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
       '--blur': '10px'
@@ -41,6 +48,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #e0e5ec 0%, #d1d9e6 100%)',
       '--surface': '#e0e5ec',
       '--text': '#2c3e50',
+      '--text-muted': 'rgba(44,62,80,0.85)',
       '--border': 'transparent',
       '--shadow-light': 'rgba(255, 255, 255, 0.9)',
       '--shadow-dark': 'rgba(0, 0, 0, 0.1)',
@@ -66,6 +74,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)',
       '--surface': '#ffffff',
       '--text': '#1a1a1a',
+      '--text-muted': 'rgba(26,26,26,0.8)',
       '--border': '#000000',
       '--border-width': '4px',
       '--shadow': 'none'
@@ -91,6 +100,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
       '--surface': '#ffffff',
       '--text': '#1c1b1f',
+      '--text-muted': 'rgba(28,27,31,0.8)',
       '--border': 'rgba(0, 0, 0, 0.12)',
       '--shadow': '0 2px 4px rgba(0, 0, 0, 0.1)',
       '--elevation-1': '0 1px 2px rgba(0, 0, 0, 0.08)',
@@ -117,6 +127,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #0a0a0f 0%, #121218 100%)',
       '--surface': '#1a1a24',
       '--text': '#e0e0e0',
+      '--text-muted': 'rgba(224,224,224,0.85)',
       '--border': 'rgba(0, 255, 255, 0.2)',
       '--shadow': '0 0 20px rgba(0, 255, 255, 0.3)',
       '--glow': '0 0 10px currentColor'
@@ -141,6 +152,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)',
       '--surface': '#ffffff',
       '--text': '#4a4a4a',
+      '--text-muted': 'rgba(74,74,74,0.85)',
       '--border': 'rgba(0, 0, 0, 0.05)',
       '--shadow': '0 2px 8px rgba(0, 0, 0, 0.05)'
     },
@@ -164,6 +176,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
       '--surface': 'rgba(255, 255, 255, 0.95)',
       '--text': '#2d3748',
+      '--text-muted': 'rgba(45,55,72,0.85)',
       '--border': 'transparent',
       '--shadow': '0 10px 40px rgba(102, 126, 234, 0.3)'
     },
@@ -187,6 +200,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #f0f4f8 0%, #e1e8ed 100%)',
       '--surface': '#ffffff',
       '--text': '#2d3748',
+      '--text-muted': 'rgba(45,55,72,0.85)',
       '--border': '#cbd5e0',
       '--shadow': '0 1px 3px rgba(0, 0, 0, 0.12)'
     },
@@ -210,6 +224,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #f0ebe3 0%, #e8e1d7 100%)',
       '--surface': '#f7f4f0',
       '--text': '#3e3632',
+      '--text-muted': 'rgba(62,54,50,0.85)',
       '--border': '#c8bfb3',
       '--shadow': '0 2px 8px rgba(62, 54, 50, 0.1)'
     },
@@ -233,6 +248,7 @@ const THEME_DEFINITIONS = {
       '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
       '--surface': '#1a0f2e',
       '--text': '#00ffff',
+      '--text-muted': 'rgba(0,255,255,0.85)',
       '--border': '#ff00ff',
       '--shadow': '0 0 20px #ff00ff',
       '--glow': '0 0 30px currentColor',
