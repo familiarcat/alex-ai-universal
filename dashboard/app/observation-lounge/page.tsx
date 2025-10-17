@@ -275,17 +275,18 @@ export default function ObservationLounge() {
           onClick={() => setOpen((v) => !v)}
           style={{
             display: 'flex', justifyContent: 'space-between', width: '100%',
-            background: 'transparent', color: '#e6fff7', border: '1px solid rgba(0,255,170,0.25)',
-            borderRadius: 8, padding: '6px 10px', cursor: 'pointer'
+            background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)',
+            borderRadius: 8, padding: '8px 10px', cursor: 'pointer'
           }}
+          className="a11y-focus"
         >
           <span style={{ fontWeight: 600 }}>{title}</span>
-          <span style={{ opacity: 0.75, fontSize: 12 }}>{items.length}{open ? ' ▲' : ' ▼'}</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{items.length}{open ? ' ▲' : ' ▼'}</span>
         </button>
         {open && (
           <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
             {visible.map((v, i) => (
-              <li key={i} style={{ fontSize: 13 }}>{v}</li>
+              <li key={i} style={{ fontSize: 13, color: 'var(--text)' }}>{v}</li>
             ))}
             {compact && items.length > visible.length && (
               <li style={{ fontSize: 12, opacity: 0.8 }}>+ {items.length - visible.length} more</li>
@@ -298,7 +299,7 @@ export default function ObservationLounge() {
 
   return (
     <main style={{ padding: '90px 24px 40px' }}>
-      <h1 style={{ color: '#00ffaa', fontSize: 28, marginBottom: 8 }}>🛸 Observation Lounge</h1>
+      <h1 style={{ color: 'var(--heading, var(--text))', fontSize: 28, marginBottom: 8 }}>🛸 Observation Lounge</h1>
       <p style={{ opacity: 0.85, marginBottom: 12 }}>Cinematic briefing – each crew member’s latest understanding and skill emphasis.</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
@@ -307,8 +308,10 @@ export default function ObservationLounge() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search crew, titles, summaries"
           style={{
-            flex: 1, minWidth: 240, background: 'rgba(255,255,255,0.06)', color: '#e6fff7',
-            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, padding: '8px 10px'
+            flex: 1, minWidth: 240,
+            background: 'var(--surface)',
+            color: 'var(--text)',
+            border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px'
           }}
           className="a11y-focus"
         />
@@ -331,13 +334,13 @@ export default function ObservationLounge() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16 }}>
           <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 8 }} className="a11y-muted">Active Crew Updates</div>
           {groups.activeCrew.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px solid rgba(0,255,170,0.25)', borderRadius: 12, background: 'rgba(0,255,170,0.04)', padding: 16 }}>
+            <div key={meta.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: '#00ffaa', fontSize: 18, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
+                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 18, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
                 <span style={{ fontSize: 12, opacity: 0.7 }}>{formatWhen(memory.timestamp)}</span>
               </div>
               {(meta.purpose || meta.defaultModel) && (
-                <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 8 }}>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
                   {meta.purpose && <span>{meta.purpose}</span>}
                   {meta.purpose && meta.defaultModel && <span> · </span>}
                   {meta.defaultModel && <span>Default model: {meta.defaultModel}</span>}
@@ -365,13 +368,13 @@ export default function ObservationLounge() {
             <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Crew — No recent findings</div>
           )}
           {groups.inactiveCrew.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px dashed rgba(255,255,255,0.25)', borderRadius: 12, background: 'rgba(255,255,255,0.03)', padding: 16 }}>
+            <div key={meta.id} style={{ border: '1px dashed var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: '#c2fff0', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
-                <span style={{ fontSize: 12, opacity: 0.6 }}>{formatWhen(memory.timestamp)}</span>
+                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{formatWhen(memory.timestamp)}</span>
               </div>
               {(meta.purpose || meta.defaultModel) && (
-                <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 8 }}>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
                   {meta.purpose && <span>{meta.purpose}</span>}
                   {meta.purpose && meta.defaultModel && <span> · </span>}
                   {meta.defaultModel && <span>Default model: {meta.defaultModel}</span>}
@@ -391,12 +394,12 @@ export default function ObservationLounge() {
             <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Systems & Operations</div>
           )}
           {groups.systems.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px solid rgba(100,180,255,0.25)', borderRadius: 12, background: 'rgba(100,180,255,0.05)', padding: 16 }}>
+            <div key={meta.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: '#8fd1ff', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
-                <span style={{ fontSize: 12, opacity: 0.6 }}>{formatWhen(memory.timestamp)}</span>
+                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{formatWhen(memory.timestamp)}</span>
               </div>
-              <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 8 }}>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
                 {meta.purpose}
                 {meta.defaultModel && <span> · Default model: {meta.defaultModel}</span>}
               </div>
