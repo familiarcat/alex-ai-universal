@@ -49,8 +49,13 @@ function buildSharedQueries(assignments) {
 }
 
 function pickModel(models) {
-  // Prefer a cheaper model if available
+  // Prefer Claude Haiku 3.5 (configurable) for parallel, cost-efficient runs
+  const preferred = process.env.PREFERRED_AGENT_MODEL || 'anthropic/claude-3-5-haiku';
+  if (models.includes(preferred)) return preferred;
+
+  // Fallback order
   const order = [
+    preferred,
     'openai/gpt-4o-mini',
     'google/gemini-1.5-pro',
     'meta/llama-3.1-70b-instruct',

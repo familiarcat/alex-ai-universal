@@ -92,17 +92,17 @@ const crewMember = "${crewMember}";
 
 // Standardize crew mapping to Anthropic Claude 3.5 Haiku for fast, cost-efficient parallel runs
 const llmMapping = {
-  "Captain Jean-Luc Picard": "anthropic/claude-3-5-haiku",
-  "Commander Data": "anthropic/claude-3-5-haiku",
-  "Commander William Riker": "anthropic/claude-3-5-haiku",
-  "Dr. Beverly Crusher": "anthropic/claude-3-5-haiku",
-  "Counselor Deanna Troi": "anthropic/claude-3-5-haiku",
-  "Lieutenant Uhura": "anthropic/claude-3-5-haiku",
-  "Lieutenant Worf": "anthropic/claude-3-5-haiku",
-  "Lieutenant Commander Geordi La Forge": "anthropic/claude-3-5-haiku"
+  "Captain Jean-Luc Picard": "anthropic/claude-3.5-haiku",
+  "Commander Data": "anthropic/claude-3.5-haiku",
+  "Commander William Riker": "anthropic/claude-3.5-haiku",
+  "Dr. Beverly Crusher": "anthropic/claude-3.5-haiku",
+  "Counselor Deanna Troi": "anthropic/claude-3.5-haiku",
+  "Lieutenant Uhura": "anthropic/claude-3.5-haiku",
+  "Lieutenant Worf": "anthropic/claude-3.5-haiku",
+  "Lieutenant Commander Geordi La Forge": "anthropic/claude-3.5-haiku"
 };
 
-const optimalLLM = llmMapping[crewMember] || "anthropic/claude-3-5-haiku";
+const optimalLLM = llmMapping[crewMember] || "anthropic/claude-3.5-haiku";
 
 return {
   crewMember,

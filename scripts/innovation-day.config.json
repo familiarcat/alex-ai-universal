@@ -3,6 +3,7 @@
   "durationMinutes": 120,
   "openrouter": {
     "models": [
+      "anthropic/claude-3.5-haiku",
       "google/gemini-1.5-pro",
       "openai/gpt-4o-mini",
       "openai/gpt-4o",
