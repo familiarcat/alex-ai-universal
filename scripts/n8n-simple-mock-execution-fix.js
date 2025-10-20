@@ -90,19 +90,19 @@ class N8NSimpleMockExecutionFix {
 const input = $input.first().json;
 const crewMember = "${crewMember}";
 
-// Simple LLM selection based on crew member
+// Standardize crew mapping to Anthropic Claude 3.5 Haiku for fast, cost-efficient parallel runs
 const llmMapping = {
-  "Captain Jean-Luc Picard": "anthropic/claude-3-opus",
-  "Commander Data": "openai/gpt-4-turbo", 
-  "Commander William Riker": "anthropic/claude-3-sonnet",
-  "Dr. Beverly Crusher": "anthropic/claude-3-sonnet",
-  "Counselor Deanna Troi": "anthropic/claude-3-sonnet",
-  "Lieutenant Uhura": "anthropic/claude-3-haiku",
-  "Lieutenant Worf": "anthropic/claude-3-sonnet",
-  "Lieutenant Commander Geordi La Forge": "openai/gpt-4-turbo"
+  "Captain Jean-Luc Picard": "anthropic/claude-3-5-haiku",
+  "Commander Data": "anthropic/claude-3-5-haiku",
+  "Commander William Riker": "anthropic/claude-3-5-haiku",
+  "Dr. Beverly Crusher": "anthropic/claude-3-5-haiku",
+  "Counselor Deanna Troi": "anthropic/claude-3-5-haiku",
+  "Lieutenant Uhura": "anthropic/claude-3-5-haiku",
+  "Lieutenant Worf": "anthropic/claude-3-5-haiku",
+  "Lieutenant Commander Geordi La Forge": "anthropic/claude-3-5-haiku"
 };
 
-const optimalLLM = llmMapping[crewMember] || "anthropic/claude-3-sonnet";
+const optimalLLM = llmMapping[crewMember] || "anthropic/claude-3-5-haiku";
 
 return {
   crewMember,
