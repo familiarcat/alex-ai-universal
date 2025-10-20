@@ -1,9 +1,12 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function ObservationLoungeReport() {
-  const now = useMemo(() => new Date().toLocaleString(), []);
+  const [now, setNow] = useState<string | null>(null);
+  useEffect(() => {
+    setNow(new Date().toLocaleString());
+  }, []);
 
   return (
     <div style={{ padding: 24 }}>
@@ -55,7 +58,7 @@ export default function ObservationLoungeReport() {
       }}>
         <div style={{ fontFamily: 'Courier, monospace', color: 'var(--text)' }}>
           <header style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, letterSpacing: 2, opacity: 0.85 }}>STARDATE: {now}</div>
+            <div style={{ fontSize: 12, letterSpacing: 2, opacity: 0.85 }} suppressHydrationWarning>STARDATE: {now ?? ''}</div>
             <div style={{ fontSize: 18, fontWeight: 700, textAlign: 'center', marginTop: 8 }}>OBSERVATION LOUNGE — PROJECT STATUS SCREENPLAY</div>
           </header>
 
@@ -79,9 +82,9 @@ export default function ObservationLoungeReport() {
           </section>
 
           <section style={{ margin: '18px 0' }}>
-            <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>GEORDI</div>
+            <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>LA FORGE</div>
             <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
-              Global tokenized theming is in. Dashboard uses global tokens; projects render with their own themes in isolated iframes. Chrome hidden on project routes.
+              Global tokenized theming is in. Dashboard uses global tokens; projects render with their own themes in isolated iframes. Chrome hidden on project routes. Live Preview uses iframes per project; global tokens no longer override. Themes reflect in real-time.
             </div>
           </section>
 
@@ -120,12 +123,7 @@ export default function ObservationLoungeReport() {
             </div>
           </section>
 
-          <section style={{ margin: '18px 0' }}>
-            <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>LA FORGE</div>
-            <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
-              Live Preview uses iframes per project; global tokens no longer override. Themes reflect in real-time.
-            </div>
-          </section>
+          
 
           <section style={{ margin: '18px 0' }}>
             <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>DATA</div>

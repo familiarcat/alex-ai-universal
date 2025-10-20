@@ -83,6 +83,37 @@ export async function GET() {
         }
         const seen = new Set<string>();
         const crew: any[] = [];
+
+        const aliasToSlug: Record<string, string> = {
+          // Geordi variants
+          'geordi': 'la-forge',
+          'geordi la forge': 'la-forge',
+          'lt. cmdr. geordi': 'la-forge',
+          'lieutenant commander geordi la forge': 'la-forge',
+          'la forge': 'la-forge',
+          // Common others (defensive)
+          'picard': 'picard',
+          'captain jean-luc picard': 'picard',
+          'data': 'data',
+          'commander data': 'data',
+          'worf': 'worf',
+          'deanna troi': 'troi',
+          't roi': 'troi',
+          'crusher': 'crusher',
+          'beverly crusher': 'crusher',
+          'riker': 'riker',
+          'william riker': 'riker',
+          'uhura': 'uhura'
+        };
+
+        const toSlug = (name: string): string => {
+          const raw = String(name || '').trim().toLowerCase();
+          if (!raw) return '';
+          const mapped = aliasToSlug[raw] || raw;
+          return mapped
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        };
         for (const dir of candidates) {
           if (!fs.existsSync(dir)) continue;
           const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
@@ -91,10 +122,12 @@ export async function GET() {
             try {
               const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
               const member = json.crew_member || json.member || json.name || path.basename(file, '.json');
-              if (seen.has(member)) continue;
-              seen.add(member);
+              const slug = toSlug(member);
+              if (seen.has(slug)) continue;
+              seen.add(slug);
               crew.push({
                 crew_member: String(member || ''),
+                agent_id: slug,
                 title: String(json.title || json.topic || 'Latest Briefing'),
                 summary: String(json.summary || json.brief || ''),
                 key_findings: Array.isArray(json.key_findings) ? json.key_findings.map(String) : [],
