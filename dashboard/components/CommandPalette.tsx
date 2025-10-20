@@ -31,7 +31,7 @@ export default function CommandPalette() {
       { label: 'Quiz', href: '/quiz', keywords: 'recommendation' },
       { label: 'Wizard', href: '/wizard', keywords: 'setup' },
       { label: 'Projects', href: '/projects', keywords: 'index' },
-      { label: 'Observation Lounge', href: '/observation-lounge', keywords: 'briefing findings' },
+      { label: 'Observation Lounge', href: '/reports/observation-lounge', keywords: 'briefing findings' },
       { label: 'Project Alpha', href: '/projects/alpha' },
       { label: 'Project Beta', href: '/projects/beta' },
       { label: 'Project Gamma', href: '/projects/gamma' }

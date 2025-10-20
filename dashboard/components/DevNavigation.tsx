@@ -78,7 +78,7 @@ export default function DevNavigation() {
           🎭 Wizard
         </Link>
         
-        <Link href="/observation-lounge" style={linkStyle(isActive('/observation-lounge'))}>
+        <Link href="/reports/observation-lounge" style={linkStyle(isActive('/reports/observation-lounge'))}>
           🛸 Observation Lounge
         </Link>
         

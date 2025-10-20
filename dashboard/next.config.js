@@ -13,6 +13,11 @@ const nextConfig = {
         source: '/api/:path*',
         destination: '/api/:path*',
       },
+      // Back-compat for old Observation Lounge route
+      {
+        source: '/observation-lounge',
+        destination: '/reports/observation-lounge'
+      }
     ];
   },
   // Environment variables
