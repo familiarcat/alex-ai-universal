@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { THEME_DEFINITIONS } from '@/../../universal-theme-system/theme-definitions';
+import { THEME_DEFINITIONS } from '../../../../../../universal-theme-system/theme-definitions';
 import fs from 'fs';
 import path from 'path';
 
@@ -20,5 +20,7 @@ export async function GET(_req: Request, { params }: { params: { theme: string }
   const merged = { ...base, ...overrideCss };
   return NextResponse.json({ theme: themeId, tokens: merged });
 }
+
+
 
 

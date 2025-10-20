@@ -45,7 +45,25 @@ function colorToHex({ r, g, b }) {
   return `#${to(r)}${to(g)}${to(b)}`;
 }
 
-function mapVariablesToTokens(vars) {
+function getScopePrefixes(themeArg) {
+  // Allow explicit comma-separated prefixes via env
+  const fromEnv = (process.env.FIGMA_SCOPE_PREFIX || '').trim();
+  if (fromEnv) return fromEnv.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+
+  const t = (themeArg || '').trim().toLowerCase();
+  if (!t) return [];
+  // Heuristic prefixes so one .fig can host all themes, e.g., "gradient/primary", "gradient-primary"
+  return [
+    `${t}/`,
+    `${t}-`,
+    `${t}_`,
+    `color/${t}/`,
+    `colors/${t}/`,
+    `theme/${t}/`,
+  ];
+}
+
+function mapVariablesToTokens(vars, prefixes) {
   const tokens = {};
   const setToken = (name, value) => {
     if (value == null) return;
@@ -53,6 +71,11 @@ function mapVariablesToTokens(vars) {
   };
   for (const v of vars || []) {
     if (!v || !v.name || !v.valuesByMode) continue;
+    const nLower = v.name.toLowerCase();
+    if (prefixes && prefixes.length > 0) {
+      const match = prefixes.some((p) => nLower.startsWith(p));
+      if (!match) continue;
+    }
     const anyMode = Object.values(v.valuesByMode)[0];
     let value = null;
     // Color
@@ -63,7 +86,7 @@ function mapVariablesToTokens(vars) {
     } else if (anyMode && typeof anyMode === 'object' && 'value' in anyMode) {
       value = anyMode.value;
     }
-    const n = v.name.toLowerCase();
+    const n = nLower;
     // Color tokens
     if (n.includes('surface')) setToken('--surface', value);
     else if (n.includes('border')) setToken('--border', value);
@@ -97,10 +120,11 @@ function mapVariablesToTokens(vars) {
 (async () => {
   try {
     const variables = await figmaGet(`/files/${FILE_KEY}/variables/local`);
-    const merged = mapVariablesToTokens(variables?.meta?.variables);
+    const theme = process.argv[2] || 'gradient';
+    const prefixes = getScopePrefixes(theme);
+    const merged = mapVariablesToTokens(variables?.meta?.variables, prefixes);
     const outDir = path.join(process.cwd(), 'universal-theme-system', 'overrides');
     fs.mkdirSync(outDir, { recursive: true });
-    const theme = process.argv[2] || 'gradient';
     const outFile = path.join(outDir, `${theme}.json`);
     fs.writeFileSync(outFile, JSON.stringify({ css: merged }, null, 2));
     console.log('FIGMA_SYNC_OK', outFile);

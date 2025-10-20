@@ -1,0 +1,54 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "midnight",
+      "name": "midnight",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "type": "color",
+        "value": "#e0e0e0"
+      },
+      "heading": {
+        "type": "color",
+        "value": "#ffffff"
+      },
+      "text-muted": {
+        "type": "color",
+        "value": "rgba(224,224,224,0.85)"
+      },
+      "surface": {
+        "type": "color",
+        "value": "#1a1a24"
+      },
+      "border": {
+        "type": "color",
+        "value": "rgba(0, 255, 255, 0.2)"
+      },
+      "primary": {
+        "type": "color",
+        "value": "#4dffff"
+      },
+      "on-primary": {
+        "type": "color",
+        "value": "#0a0a0a"
+      },
+      "scrim": {
+        "type": "color",
+        "value": "rgba(0,0,0,0.35)"
+      }
+    }
+  }
+}

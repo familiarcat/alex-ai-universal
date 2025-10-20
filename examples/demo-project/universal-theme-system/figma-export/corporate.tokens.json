@@ -1,0 +1,46 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "corporate",
+      "name": "corporate",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "$type": "color",
+        "$value": "#2d3748"
+      },
+      "heading": {
+        "$type": "color",
+        "$value": "#1a202c"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": "rgba(45,55,72,0.85)"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#cbd5e0"
+      },
+      "primary": {
+        "$type": "color",
+        "$value": "#0073e6"
+      }
+    }
+  }
+}

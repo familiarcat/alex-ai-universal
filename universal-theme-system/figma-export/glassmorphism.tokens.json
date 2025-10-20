@@ -1,0 +1,54 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "glassmorphism",
+      "name": "glassmorphism",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "type": "color",
+        "value": "#0f172a"
+      },
+      "heading": {
+        "type": "color",
+        "value": "#0b1220"
+      },
+      "text-muted": {
+        "type": "color",
+        "value": "rgba(15,23,42,0.8)"
+      },
+      "surface": {
+        "type": "color",
+        "value": "rgba(255, 255, 255, 0.1)"
+      },
+      "border": {
+        "type": "color",
+        "value": "rgba(0, 0, 0, 0.2)"
+      },
+      "primary": {
+        "type": "color",
+        "value": "#974dff"
+      },
+      "on-primary": {
+        "type": "color",
+        "value": "#0a0a0a"
+      },
+      "scrim": {
+        "type": "color",
+        "value": "rgba(0,0,0,0.35)"
+      }
+    }
+  }
+}

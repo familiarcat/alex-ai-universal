@@ -1,0 +1,46 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "neumorphism",
+      "name": "neumorphism",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "$type": "color",
+        "$value": "#1f2d3d"
+      },
+      "heading": {
+        "$type": "color",
+        "$value": "#1f2d3d"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": "rgba(31,45,61,0.8)"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "#e6ebf3"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "rgba(31,45,61,0.15)"
+      },
+      "primary": {
+        "$type": "color",
+        "$value": "#a3adc2"
+      }
+    }
+  }
+}

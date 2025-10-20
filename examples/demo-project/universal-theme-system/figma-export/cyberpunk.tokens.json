@@ -1,0 +1,46 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "cyberpunk",
+      "name": "cyberpunk",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "$type": "color",
+        "$value": "#00ffff"
+      },
+      "heading": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": "rgba(0,255,255,0.85)"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "#1a0f2e"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#ff00ff"
+      },
+      "primary": {
+        "$type": "color",
+        "$value": "#ff00ff"
+      }
+    }
+  }
+}

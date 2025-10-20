@@ -1,0 +1,46 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "material",
+      "name": "material",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "type": "color",
+        "value": "#1c1b1f"
+      },
+      "heading": {
+        "type": "color",
+        "value": "#1c1b1f"
+      },
+      "text-muted": {
+        "type": "color",
+        "value": "rgba(28,27,31,0.8)"
+      },
+      "surface": {
+        "type": "color",
+        "value": "#ffffff"
+      },
+      "border": {
+        "type": "color",
+        "value": "rgba(0, 0, 0, 0.12)"
+      },
+      "primary": {
+        "type": "color",
+        "value": "#0505fa"
+      }
+    }
+  }
+}

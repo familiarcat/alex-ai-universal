@@ -1,0 +1,46 @@
+{
+  "$schema": "https://tokens.studio/schemas/figma.tokens.json",
+  "$metadata": {
+    "tokenSetOrder": [
+      "global"
+    ]
+  },
+  "$themes": [
+    {
+      "id": "neubrutalism",
+      "name": "neubrutalism",
+      "selectedTokenSets": {
+        "global": "enabled"
+      },
+      "$figmaStyleReferences": {}
+    }
+  ],
+  "global": {
+    "color": {
+      "text": {
+        "type": "color",
+        "value": "#1a1a1a"
+      },
+      "heading": {
+        "type": "color",
+        "value": "#1a1a1a"
+      },
+      "text-muted": {
+        "type": "color",
+        "value": "rgba(26,26,26,0.8)"
+      },
+      "surface": {
+        "type": "color",
+        "value": "#ffffff"
+      },
+      "border": {
+        "type": "color",
+        "value": "#000000"
+      },
+      "primary": {
+        "type": "color",
+        "value": "#7300e6"
+      }
+    }
+  }
+}
