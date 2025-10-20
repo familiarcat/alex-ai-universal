@@ -123,6 +123,95 @@ async function queryOpenRouter(model, prompt, system) {
   };
 }
 
+async function postFindingsToN8N(result) {
+  const base = process.env.N8N_BASE_URL || process.env.N8N_URL || '';
+  if (!base) {
+    console.warn('N8N_BASE_URL/N8N_URL not set; skipping n8n storage webhook.');
+    return { skipped: true };
+  }
+  const endpoint = process.env.N8N_COLLAB_COMPLETE_WEBHOOK 
+    || process.env.N8N_COLLABORATION_WEBHOOK 
+    || `${String(base).replace(/\/$/, '')}/webhook/collaboration-complete`;
+
+  // Derive per-crew memory items from findings for easier ingestion downstream
+  const crew_memories = [];
+  const ts = result.timestamp || new Date().toISOString();
+  for (const f of result.findings || []) {
+    const crews = Array.isArray(f.shared_by) ? f.shared_by : [];
+    for (const crew of crews) {
+      crew_memories.push({
+        crew_member: String(crew),
+        topic: String(f.topic || ''),
+        content: String(f.content || ''),
+        cost_cents_estimate: Number(f.cost_cents_estimate || 0),
+        model: String(result.model || ''),
+        plan_id: String(result.plan_id || ''),
+        timestamp: ts
+      });
+    }
+  }
+
+  const body = {
+    collaboration_result: result,
+    crew_memories
+  };
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '');
+      console.warn(`n8n webhook error ${res.status}: ${txt}`);
+      return { ok: false, status: res.status, body: txt };
+    }
+    const json = await res.json().catch(() => ({}));
+    return { ok: true, response: json };
+  } catch (e) {
+    console.warn(`n8n webhook failed: ${e.message || e}`);
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+function toCrewSlug(name) {
+  return String(name || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+async function fanoutCrewMemoriesToN8N(crew_memories) {
+  const base = process.env.N8N_BASE_URL || process.env.N8N_URL || '';
+  if (!base) return { skipped: true };
+  const baseUrl = String(base).replace(/\/$/, '');
+  let sent = 0; let ok = 0; let errors = 0;
+  for (const mem of crew_memories) {
+    const slug = toCrewSlug(mem.crew_member || '');
+    if (!slug) continue;
+    const path = `crew-${slug}`;
+    const url = `${baseUrl}/webhook/${path}`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mem)
+      });
+      sent++;
+      if (res.ok) ok++; else errors++;
+    } catch {
+      sent++; errors++;
+    }
+  }
+  return { ok: ok > 0, sent, okCount: ok, errorCount: errors };
+}
+
 async function main() {
   const planArgIdx = process.argv.indexOf('--plan');
   let planPath = planArgIdx > -1 ? process.argv[planArgIdx + 1] : '';
@@ -179,6 +268,27 @@ async function main() {
   const outFile = path.join(outDir, `innovation-day-findings-${new Date().toISOString().replace(/[:.]/g,'-')}.json`);
   fs.writeFileSync(outFile, JSON.stringify(out, null, 2));
   console.log(`✅ Innovation Day findings -> ${outFile}`);
+
+  // Post to n8n so Supabase memory system can store per-crew findings
+  const n8nPost = await postFindingsToN8N(out);
+  if (n8nPost?.ok || n8nPost?.skipped) {
+    console.log('✅ Findings delivered to n8n storage webhook');
+  } else {
+    console.log('⚠️  Findings not confirmed by n8n storage webhook');
+    // Attempt per-crew fanout to existing crew webhooks to persist memories
+    const crewFanout = await fanoutCrewMemoriesToN8N(
+      (out.findings || []).flatMap(f => (Array.isArray(f.shared_by) ? f.shared_by : []).map(crew => ({
+        crew_member: String(crew),
+        topic: String(f.topic || ''),
+        content: String(f.content || ''),
+        cost_cents_estimate: Number(f.cost_cents_estimate || 0),
+        model: String(out.model || ''),
+        plan_id: String(out.plan_id || ''),
+        timestamp: out.timestamp
+      })))
+    );
+    console.log(`ℹ️  Crew fanout: sent=${crewFanout.sent || 0}, ok=${crewFanout.okCount || 0}, errors=${crewFanout.errorCount || 0}`);
+  }
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
