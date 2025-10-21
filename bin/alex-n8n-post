@@ -13,7 +13,7 @@ if [ ! -f "$REPO_ROOT/$DOC_PATH" ]; then
   exit 1
 fi
 
-# Always use zsh to load ~/.zshrc env for N8N_* vars
-ZDOTDIR="$HOME" /bin/zsh -lc "cd '$REPO_ROOT' && ./scripts/n8n-post-collaboration.sh '$PLAN_ID' '$DOC_PATH'"
+# Always use zsh to load ~/.zshrc env for N8N_* vars (avoid nested path quirks)
+ZDOTDIR="$HOME" /bin/zsh -lc "cd '$REPO_ROOT'; /Users/bradygeorgen/Documents/workspace/alex-ai-universal/scripts/n8n-post-collaboration.sh '$PLAN_ID' '$DOC_PATH'"
 
 
