@@ -151,6 +151,16 @@ export default function ObservationLoungeReport() {
             </div>
           </section>
 
+          {/* Preview Policy */}
+          <section style={{ margin: '24px 0' }}>
+            <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>PREVIEW POLICY</div>
+            <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', opacity: 0.9 }}>
+              Live Preview is production‑faithful and isolated. No development chrome or overlays are displayed.
+              Previews use deterministic data snapshots and do not connect to development state unless explicitly
+              requested. Embeds are rendered via <code>?embed=1</code> and must not alter application routing or global tokens.
+            </div>
+          </section>
+
           <div style={{ textAlign: 'right', marginTop: 28, fontWeight: 700 }}>FADE TO STARS.</div>
 
           <footer style={{ marginTop: 28, opacity: 0.75, fontSize: 12 }}>

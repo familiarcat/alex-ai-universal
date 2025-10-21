@@ -1,19 +1,22 @@
 'use client';
 
+import { useAppState } from '@/lib/state-manager';
+import { useParams, useSearchParams } from 'next/navigation';
+
+
 /**
  * Dynamic Project Page - Updates in Real-Time
  * When dashboard edits, THIS page updates automatically via shared state
  * Reviewed by: Lt. Cmdr. La Forge (Implementation) & Lieutenant Worf (Security)
  */
 
-import { useAppState } from '@/lib/state-manager';
-import { useParams } from 'next/navigation';
-
 export default function ProjectPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { projects } = useAppState();
   const projectId = params.projectId as string;
   const content = projects[projectId];
+  const isEmbed = (searchParams?.get('embed') === '1') || false;
 
   if (!content) {
     return (
@@ -49,6 +52,16 @@ export default function ProjectPage() {
       background: 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
       textColor: '#d0d0d0',
       accentColor: '#00ffaa'
+    },
+    midnight: {
+      background: 'linear-gradient(135deg, #0a0a0f 0%, #121218 100%)',
+      textColor: '#e0e0e0',
+      accentColor: '#00ffff'
+    },
+    glass: {
+      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      textColor: '#e6e6e6',
+      accentColor: '#667eea'
     }
   };
 
@@ -102,34 +115,7 @@ export default function ProjectPage() {
           </p>
         </div>
 
-        {/* Dev Mode Info */}
-        {process.env.NODE_ENV === 'development' && (
-          <div style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            background: 'rgba(0, 0, 0, 0.9)',
-            backdropFilter: 'blur(10px)',
-            padding: '15px 20px',
-            borderRadius: '12px',
-            border: '1px solid rgba(0, 255, 170, 0.3)',
-            fontSize: '13px',
-            maxWidth: '300px',
-            zIndex: 9998
-          }}>
-            <div style={{ color: '#00ffaa', fontWeight: 600, marginBottom: '8px' }}>
-              🖖 Dev Mode Info
-            </div>
-            <div style={{ opacity: 0.9 }}>
-              Project: {projectId}<br/>
-              Theme: {content.theme}<br/>
-              Updates: Real-time via shared state<br/>
-              <a href="/dashboard" style={{ color: '#00ffaa', marginTop: '8px', display: 'inline-block' }}>
-                ← Back to Dashboard
-              </a>
-            </div>
-          </div>
-        )}
+        {/* Dev Mode Info removed for production-faithful previews */}
       </div>
     </div>
   );

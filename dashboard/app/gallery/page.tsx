@@ -100,7 +100,7 @@ export default function GalleryPage() {
                   Theme: {p.theme} • Updated: {p.updatedAt ? new Date(p.updatedAt).toLocaleTimeString() : '—'}
                 </div>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-                  <Link href={`/projects/${p.id}`} aria-label={`View ${p.id}`} style={{
+                  <Link href={`/projects/${p.id}?embed=1`} aria-label={`View ${p.id}`} style={{
                     background: 'var(--accent)', color: '#0b1020', padding: '8px 12px', borderRadius: 10, textDecoration: 'none', fontSize: 12, fontWeight: 600
                   }}>View</Link>
                   <Link href={`/dashboard?project=${p.id}`} aria-label={`Edit ${p.id}`} style={{

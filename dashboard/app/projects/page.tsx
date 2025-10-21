@@ -11,7 +11,7 @@ export default function ProjectsIndexPage() {
       <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px,1fr))', gap: 12 }}>
         {Object.keys(projects).map((id) => (
           <li key={id}>
-            <Link href={`/projects/${id}`} style={{
+            <Link href={`/projects/${id}?embed=1`} style={{
               display: 'block', padding: 14, borderRadius: 10,
               border: '1px solid rgba(0,255,170,0.25)', background: 'rgba(0,255,170,0.05)', color: '#d0d0d0', textDecoration: 'none'
             }}>
