@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# If not running in zsh, re-invoke via zsh so sourcing ~/.zshrc works (zstyle etc.)
+if [ -z "${ZSH_VERSION:-}" ] && command -v zsh >/dev/null 2>&1; then
+  exec /bin/zsh -lc "ZDOTDIR=\"$HOME\" '$PWD/${BASH_SOURCE[0]}' $*"
+fi
+
 # Source ~/.zshrc so N8N_* envs are available
 if [ -f "$HOME/.zshrc" ]; then
   set +u
