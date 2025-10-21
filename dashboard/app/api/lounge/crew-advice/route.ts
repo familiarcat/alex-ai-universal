@@ -1,0 +1,30 @@
+import { NextResponse } from 'next/server';
+
+function adviceWebhook(): string | null {
+  const explicit = process.env.N8N_CREW_ADVICE_WEBHOOK || process.env.NEXT_PUBLIC_N8N_CREW_ADVICE_WEBHOOK;
+  const base = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL;
+  if (explicit) {
+    if (/^https?:\/\//i.test(explicit)) return explicit;
+    if (explicit.startsWith('/')) return base ? `${base.replace(/\/$/, '')}${explicit}` : null;
+  }
+  return base ? `${base.replace(/\/$/, '')}/webhook/crew-advice` : null;
+}
+
+export async function POST(req: Request) {
+  try {
+    const url = adviceWebhook();
+    const input = await req.json().catch(() => ({ question: '' }));
+    if (!url) return NextResponse.json({ answers: [], error: 'n8n not configured' }, { status: 200 });
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: String(input.question || '') }) });
+    if (!res.ok) {
+      return NextResponse.json({ answers: [], error: `n8n ${res.status}` }, { status: 200 });
+    }
+    const data = await res.json().catch(() => ({ answers: [] }));
+    const answers = Array.isArray((data || {}).answers) ? (data || {}).answers : [];
+    return NextResponse.json({ answers }, { status: 200 });
+  } catch (e: any) {
+    return NextResponse.json({ answers: [], error: e?.message || 'failed' }, { status: 200 });
+  }
+}
+
+

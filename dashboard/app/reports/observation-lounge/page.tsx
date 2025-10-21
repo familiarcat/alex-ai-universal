@@ -1,11 +1,39 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import CrewAvatarCard from '@/components/CrewAvatarCard';
 
 export default function ObservationLoungeReport() {
   const [now, setNow] = useState<string | null>(null);
+  const [findings, setFindings] = useState<{ model: string | null; timestamp: string | null; findings: any[] }>({ model: null, timestamp: null, findings: [] });
+  const [crewBriefs, setCrewBriefs] = useState<any[]>([]);
+  const [crewStatus, setCrewStatus] = useState<any[]>([]);
+  const [avatars, setAvatars] = useState<Record<string, string>>({});
   useEffect(() => {
     setNow(new Date().toLocaleString());
+    let canceled = false;
+    async function load() {
+      try {
+        const [f, l, s, a] = await Promise.all([
+          fetch('/api/lounge/findings', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ findings: [], model: null, timestamp: null })),
+          fetch('/api/lounge/latest', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ crew: [] })),
+          fetch('/api/lounge/crew-status', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ crew: [] })),
+          fetch('/api/lounge/avatars', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ avatars: [] })),
+        ]);
+        if (!canceled) {
+          setFindings({ model: f.model || null, timestamp: f.timestamp || null, findings: f.findings || [] });
+          setCrewBriefs(Array.isArray(l.crew) ? l.crew : []);
+          setCrewStatus(Array.isArray(s.crew) ? s.crew : []);
+          const map: Record<string, string> = {};
+          (Array.isArray(a.avatars) ? a.avatars : []).forEach((v: any) => {
+            map[String(v.name || '').toLowerCase()] = String(v.url || '');
+          });
+          setAvatars(map);
+        }
+      } catch {}
+    }
+    load();
+    return () => { canceled = true; };
   }, []);
 
   return (
@@ -60,7 +88,39 @@ export default function ObservationLoungeReport() {
           <header style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 12, letterSpacing: 2, opacity: 0.85 }} suppressHydrationWarning>STARDATE: {now ?? ''}</div>
             <div style={{ fontSize: 18, fontWeight: 700, textAlign: 'center', marginTop: 8 }}>OBSERVATION LOUNGE — PROJECT STATUS SCREENPLAY</div>
+            <div style={{ textAlign: 'center', marginTop: 8 }}>
+              <a href="https://memory-alpha.fandom.com/wiki/Portal:Main" target="_blank" rel="noopener" style={{ fontSize: 12 }}>
+                Reference: Memory Alpha (crew background and canon)
+              </a>
+            </div>
           </header>
+
+          {/* Crew Interaction Deck */}
+          <section style={{ margin: '24px 0' }}>
+            <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 10 }}>CREW INTERACTION DECK</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 12 }}>
+              {(crewStatus.length ? crewStatus.map((m: any) => m.crew_member) : ['Captain Jean-Luc Picard','Commander Data','Lieutenant Commander Geordi La Forge','Deanna Troi','Worf','Beverly Crusher','William T. Riker','Nyota Uhura','Quark']).map((name: string, idx: number) => {
+                const status = crewStatus.find((s: any) => String(s.crew_member || '').toLowerCase() === name.toLowerCase());
+                const avatar = avatars[name.toLowerCase()] || '';
+                return <CrewAvatarCard key={idx} member={name} status={{ history: status?.history, suggestions: status?.suggestions }} avatarUrl={avatar} />;
+              })}
+            </div>
+          </section>
+
+          {/* Combined Conclusions */}
+          {Array.isArray(findings.findings) && findings.findings.length > 0 && (
+            <section style={{ margin: '16px 0' }}>
+              <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>COMBINED CONCLUSIONS</div>
+              <div style={{ display: 'grid', gap: 10 }}>
+                {findings.findings.slice(0, 3).map((f: any, i: number) => (
+                  <div key={i} style={{ border: 'var(--border)', borderRadius: 12, padding: 16, background: 'var(--surface, rgba(0,0,0,0.1))' }}>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>{f.topic || 'Finding'}</div>
+                    <div style={{ opacity: 0.9, whiteSpace: 'pre-wrap' }}>{(f.content || '').slice(0, 1200)}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section style={{ marginBottom: 16 }}>
             <div style={{ fontWeight: 700, letterSpacing: 2 }}>INT. OBSERVATION LOUNGE — NIGHT</div>
@@ -160,6 +220,41 @@ export default function ObservationLoungeReport() {
               requested. Embeds are rendered via <code>?embed=1</code> and must not alter application routing or global tokens.
             </div>
           </section>
+
+          {/* Live Crew Status */}
+          {crewStatus.length > 0 && (
+            <section style={{ margin: '24px 0' }}>
+              <div style={{ textAlign: 'center', fontWeight: 700, marginBottom: 6 }}>LIVE CREW STATUS</div>
+              <div style={{ display: 'grid', gap: 12 }}>
+                {crewStatus.map((m: any, idx: number) => {
+                  const urlFor = (name: string): string | null => {
+                    const n = (name || '').toLowerCase();
+                    if (n.includes('picard')) return 'https://memory-alpha.fandom.com/wiki/Jean-Luc_Picard';
+                    if (n.includes('data')) return 'https://memory-alpha.fandom.com/wiki/Data';
+                    if (n.includes('la forge') || n.includes('geordi')) return 'https://memory-alpha.fandom.com/wiki/Geordi_La_Forge';
+                    if (n.includes('troi')) return 'https://memory-alpha.fandom.com/wiki/Deanna_Troi';
+                    if (n.includes('worf')) return 'https://memory-alpha.fandom.com/wiki/Worf';
+                    if (n.includes('crusher')) return 'https://memory-alpha.fandom.com/wiki/Beverly_Crusher';
+                    if (n.includes('riker')) return 'https://memory-alpha.fandom.com/wiki/William_T._Riker';
+                    if (n.includes('uhura')) return 'https://memory-alpha.fandom.com/wiki/Nyota_Uhura';
+                    if (n.includes('quark')) return 'https://memory-alpha.fandom.com/wiki/Quark';
+                    return null;
+                  };
+                  const canon = urlFor(m.crew_member);
+                  return (
+                    <div key={idx}>
+                      <CrewAvatarCard member={m.crew_member} status={{ history: m.history, suggestions: m.suggestions }} />
+                      {canon && (
+                        <div style={{ fontSize: 12, marginTop: 4 }}>
+                          <a href={canon} target="_blank" rel="noopener">Memory Alpha profile</a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           <div style={{ textAlign: 'right', marginTop: 28, fontWeight: 700 }}>FADE TO STARS.</div>
 
