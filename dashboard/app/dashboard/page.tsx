@@ -9,6 +9,7 @@
 import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
 import { useState } from 'react';
+import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 
 export default function DashboardPage() {
   const { projects, updateProject, updateTheme } = useAppState();
@@ -108,117 +109,13 @@ export default function DashboardPage() {
                   <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     ✏️ Content Editor (Updates Live!)
                   </h3>
-                  
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
-                      Headline
-                    </label>
-                    <input
-                      type="text"
-                      value={content.headline}
-                      onChange={(e) => updateProject(projectId, 'headline', e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        background: 'var(--card-alt)',
-                        border: 'var(--border)',
-                        borderRadius: 'var(--radius)',
-                        color: 'var(--text)',
-                        fontSize: '14px'
-                      }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
-                      Subheadline
-                    </label>
-                    <input
-                      type="text"
-                      value={content.subheadline}
-                      onChange={(e) => updateProject(projectId, 'subheadline', e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        background: 'var(--card-alt)',
-                        border: 'var(--border)',
-                        borderRadius: 'var(--radius)',
-                        color: 'var(--text)',
-                        fontSize: '14px'
-                      }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
-                      Description
-                    </label>
-                    <textarea
-                      value={content.description}
-                      onChange={(e) => updateProject(projectId, 'description', e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        background: 'var(--card-alt)',
-                        border: 'var(--border)',
-                        borderRadius: 'var(--radius)',
-                        color: 'var(--text)',
-                        fontSize: '14px',
-                        minHeight: '100px',
-                        fontFamily: 'inherit',
-                        resize: 'vertical' as const
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '10px', fontSize: '13px', color: 'var(--accent)' }}>
-                      🎨 Theme
-                    </label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
-                      {/* Dropdown (matches nav behavior) */}
-                      <select
-                        value={content.theme}
-                        onChange={(e) => updateTheme(projectId, e.target.value)}
-                        style={{
-                          padding: '10px 14px',
-                          background: 'var(--card-alt)',
-                          color: 'var(--text)',
-                          border: '2px solid var(--accent)',
-                          borderRadius: 'var(--radius)'
-                        }}
-                      >
-                        {themes.map((t) => (
-                          <option key={t.id} value={t.id}>{t.name}</option>
-                        ))}
-                      </select>
-
-                      {/* Quick-pick buttons remain for fast testing */}
-                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' as const }}>
-                        {themes.map(theme => (
-                          <button
-                            key={theme.id}
-                            onClick={() => updateTheme(projectId, theme.id)}
-                            style={{
-                              padding: '10px 16px',
-                              background: content.theme === theme.id 
-                                ? 'var(--subtle)'
-                                : 'var(--card-alt)',
-                              border: content.theme === theme.id
-                                ? '2px solid var(--accent)'
-                                : 'var(--border)',
-                              borderRadius: 'var(--radius)',
-                              color: 'var(--text)',
-                              cursor: 'pointer',
-                              fontSize: '13px'
-                            }}
-                          >
-                            {theme.icon} {theme.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <ProjectEditorTabs
+                    projectId={projectId}
+                    content={content}
+                    themes={themes}
+                    onUpdate={(field, value) => updateProject(projectId, field, value)}
+                    onTheme={(themeId) => updateTheme(projectId, themeId)}
+                  />
                 </div>
 
                 {/* Right: Live Preview (Isolated) */}

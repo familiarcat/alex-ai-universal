@@ -1,0 +1,21 @@
+{
+  "documents": [
+    {
+      "doc_type": "video",
+      "audience": "all",
+      "category": "ai-best-practices",
+      "title": "n8n vs Make.com AI Agents: Which One Is Better?",
+      "summary": "👉 Get all of our blueprints and learn how to customize them https://www.theaiautomators.com/?utm_source=youtube\\u0026utm_medium=video\\u0026utm_campaign=tutorial\\u0026utm_content=n8nvsmake\n\nIn this video, I compare the brand new (beta) AI Agent system from Make.com against the more established AI Agents in N8N. \n\nChoosing the right platform is crucial for building powerful AI automations, so I bre",
+      "content": "Title: n8n vs Make.com AI Agents: Which One Is Better?\n\nAuthor: The AI Automators\n\nThumbnail: https://i.ytimg.com/vi/C7hYdp9VlnY/hqdefault.jpg\n\nDescription:\n👉 Get all of our blueprints and learn how to customize them https://www.theaiautomators.com/?utm_source=youtube\\u0026utm_medium=video\\u0026utm_campaign=tutorial\\u0026utm_content=n8nvsmake\n\nIn this video, I compare the brand new (beta) AI Agent system from Make.com against the more established AI Agents in N8N. \n\nChoosing the right platform is crucial for building powerful AI automations, so I break down the key differences side-by-side across numerous categories to help you decide which system best suits your needs. \n\nl explore everything from setup and usability to advanced features like RAG and multi-agent capabilities.\n\nI evaluate them across key areas including:\n\nUser Experience (UX) \\u0026 Ease of Setup\nInterfaces \\u0026 Triggers (including Chatbots)\nLLM Support \\u0026 Reasoning Capabilities\nTool Integration \\u0026 Flexibility\nMemory \\u0026 Session Handling\nKnowledge Retrieval (RAG) Functionality\nStructured Output Formats\nDebugging \\u0026 Error Handling\nDeployment Options \\u0026 Privacy\nPricing \\u0026 Value\nAnd more!\nWhether you're a Make.com power user exploring their new AI features, an N8N automation pro, or just deciding which platform to learn for AI agents, you'll get a clear, unbiased comparison of their strengths and weaknesses right now.\n\n🔗 Related Links:\nMake.com: https://www.make.com/\nN8N: https://n8n.io/\nOur N8N Multi-Agent HAL 9001 Video: https://youtu.be/7mmJYk5b59U?si=kcWJ5IPQCQ858mC-\n\nTimestamps\n00:00 1: User Experience (UX)\n9:28 2: Interfaces and Triggers\n14:51 3: LLMs and Reasoning\n17:41 4: Prompt Engineering\n20:20 5: Tools\n22:19 6: Memory and Sessions\n24:14 7: Knowledge and RAG\n28:26 8: Output Formats\n30:00 9: Multi-Agent Teams\n32:37 10: Debugging and Error Handling\n35:56 11: Deployment and Privacy\n36:54 12: MCP\n37:45 13: Pricing\n39:04 The Results!",
+      "keywords": [
+        "youtube",
+        "ai",
+        "agentic",
+        "best-practices"
+      ],
+      "source_type": "youtube",
+      "source_url": "https://www.youtube.com/watch?v=C7hYdp9VlnY&list=WL&index=10&pp=gAQBiAQB0gcJCQYKAYcqIYzv",
+      "is_current": true
+    }
+  ]
+}

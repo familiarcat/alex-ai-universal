@@ -1,5 +1,65 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
+interface ObservationItem {
+  id: string;
+  title?: string;
+  summary?: string;
+  date?: string;
+  tags?: string[];
+}
+
+export default function ObservationLoungePage() {
+  const [items, setItems] = useState<ObservationItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/crew/observations');
+        const json = await res.json();
+        setItems(json.items || []);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  return (
+    <div style={{ padding: '80px 24px 24px' }}>
+      <h1 style={{ fontSize: 28, marginBottom: 12 }}>🛸 Observation Lounge</h1>
+      <p style={{ opacity: 0.8, marginBottom: 24 }}>Recent crew observations, milestones, and findings.</p>
+
+      {loading && <div>Loading crew thoughts…</div>}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: 16 }}>
+        {items.map((it) => (
+          <article key={it.id} style={{
+            border: '1px solid var(--border)',
+            borderRadius: 12,
+            background: 'var(--card, rgba(255,255,255,0.05))',
+            padding: 16
+          }}>
+            <h3 style={{ marginBottom: 8 }}>{it.title}</h3>
+            {it.date && <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 8 }}>{it.date}</div>}
+            <p style={{ fontSize: 14, lineHeight: 1.5 }}>{it.summary || '—'}</p>
+            {it.tags && it.tags.length > 0 && (
+              <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {it.tags.map((t) => (
+                  <span key={t} style={{ fontSize: 12, padding: '4px 8px', border: '1px solid var(--border)', borderRadius: 999 }}>{t}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import CrewAvatarCard from '@/components/CrewAvatarCard';
 

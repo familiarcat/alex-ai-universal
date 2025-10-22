@@ -16,9 +16,8 @@ function loadThemeDefinitions(): any {
 
 const THEME_DEFINITIONS: any = loadThemeDefinitions();
 
-export async function GET(_req: Request, { params }: { params: Promise<{ theme: string }> }) {
-  const { theme } = await params;
-  const themeId = theme || 'gradient';
+export async function GET(_req: Request, { params }: { params: { theme: string } }) {
+  const themeId = params?.theme || 'gradient';
   const base = (THEME_DEFINITIONS as any)[themeId]?.css || {};
 
   // Load override if present
