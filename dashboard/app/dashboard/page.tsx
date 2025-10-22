@@ -25,7 +25,8 @@ export default function DashboardPage() {
     { id: 'pastel', icon: '🌸', name: 'Pastel' },
     { id: 'cyberpunk', icon: '🔮', name: 'Cyberpunk' },
     { id: 'glassmorphism', icon: '🪟', name: 'Glass' },
-    { id: 'midnight', icon: '🌙', name: 'Midnight' }
+    { id: 'midnight', icon: '🌙', name: 'Midnight' },
+    { id: 'offworld', icon: '🛸', name: 'Offworld Panel' }
   ];
 
   return (

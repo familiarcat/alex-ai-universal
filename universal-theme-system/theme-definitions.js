@@ -280,6 +280,37 @@ const THEME_DEFINITIONS = {
       highTech: true
     }
   }
+  ,
+  offworld: {
+    name: 'Offworld Panel',
+    icon: '🛸',
+    description: 'Dark nebula backdrop, glass panels, neon-accent UI (enhanced dashboard aesthetic)',
+    category: 'futuristic',
+    css: {
+      '--primary': '165 100% 65%',
+      '--secondary': '285 80% 72%',
+      '--accent': '#00ffaa',
+      '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
+      '--surface': 'rgba(0, 255, 170, 0.05)',
+      '--text': '#d0d0d0',
+      '--heading': '#00ffaa',
+      '--text-muted': 'rgba(208,208,208,0.8)',
+      '--border': '1px solid rgba(0, 255, 170, 0.2)',
+      '--shadow': '0 10px 30px rgba(0, 255, 170, 0.12)',
+      '--blur': '10px',
+      '--panel': 'rgba(0, 255, 170, 0.03)',
+      '--panel-strong': 'rgba(0, 255, 170, 0.1)',
+      '--glow': '0 0 16px rgba(0, 255, 170, 0.6)',
+      '--on-primary': '#0a0a0a',
+      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.0))'
+    },
+    features: {
+      glassPanels: true,
+      neonAccents: true,
+      blurBackdrops: true,
+      highContrastDark: true
+    }
+  }
 };
 
 module.exports = { THEME_DEFINITIONS };
