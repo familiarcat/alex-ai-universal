@@ -2,7 +2,6 @@
 
 import { useAppState } from '@/lib/state-manager';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 
 /**
@@ -18,7 +17,6 @@ export default function ProjectPage() {
   const projectId = params.projectId as string;
   const content = projects[projectId];
   const isEmbed = (searchParams?.get('embed') === '1') || false;
-  const [themeTokens, setThemeTokens] = useState<Record<string, string>>({});
 
   if (!content) {
     return (
@@ -38,33 +36,45 @@ export default function ProjectPage() {
     );
   }
 
-  // Fetch CSS tokens for the selected theme to keep preview in sync with dashboard/theme system
-  useEffect(() => {
-    let cancelled = false;
-    async function loadTokens() {
-      try {
-        const res = await fetch(`/api/themes/${content.theme}/tokens`);
-        const json = await res.json();
-        if (!cancelled) setThemeTokens(json?.tokens || {});
-      } catch {
-        if (!cancelled) setThemeTokens({});
-      }
-    }
-    loadTokens();
-    return () => { cancelled = true; };
-  }, [content.theme]);
+  // Stable local theme rendering – no external token fetch
 
-  // Derive styles from tokens with sensible fallbacks
-  const background = themeTokens['--background'] || 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)';
-  const textColor = themeTokens['--text'] || '#ffffff';
-  const accentColor = themeTokens['--accent'] || '#f093fb';
+  // Theme-specific styling (local, stable, no API dependency)
+  const themeStyles = {
+    gradient: {
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      textColor: '#ffffff',
+      accentColor: '#f093fb'
+    },
+    pastel: {
+      background: 'linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)',
+      textColor: '#4a4a4a',
+      accentColor: '#f5576c'
+    },
+    cyberpunk: {
+      background: 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
+      textColor: '#d0d0d0',
+      accentColor: '#00ffaa'
+    },
+    midnight: {
+      background: 'linear-gradient(135deg, #0a0a0f 0%, #121218 100%)',
+      textColor: '#e0e0e0',
+      accentColor: '#00ffff'
+    },
+    glass: {
+      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      textColor: '#e6e6e6',
+      accentColor: '#667eea'
+    }
+  } as const;
+
+  const style = themeStyles[content.theme as keyof typeof themeStyles] || themeStyles.gradient;
 
   // THIS CONTENT UPDATES IN REAL-TIME!
   return (
     <div style={{ 
       minHeight: '100vh',
-      background,
-      color: textColor,
+      background: style.background,
+      color: style.textColor,
       padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -82,8 +92,7 @@ export default function ProjectPage() {
             fontSize: '56px', 
             fontWeight: 800, 
             marginBottom: '20px',
-            lineHeight: 1.2,
-            color: 'var(--heading, currentColor)'
+            lineHeight: 1.2
           }}>
             {content.headline}
           </h1>
@@ -108,14 +117,7 @@ export default function ProjectPage() {
           </p>
         </div>
 
-        {/* Accent divider using theme accent token if present */}
-        <div style={{
-          height: 2,
-          marginTop: 24,
-          background: accentColor,
-          opacity: 0.4,
-          borderRadius: 2
-        }} />
+        {/* Dev Mode Info removed for production-faithful previews */}
       </div>
     </div>
   );

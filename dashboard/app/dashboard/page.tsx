@@ -175,28 +175,48 @@ export default function DashboardPage() {
                     <label style={{ display: 'block', marginBottom: '10px', fontSize: '13px', color: 'var(--accent)' }}>
                       🎨 Theme
                     </label>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' as const }}>
-                      {themes.map(theme => (
-                        <button
-                          key={theme.id}
-                          onClick={() => updateTheme(projectId, theme.id)}
-                          style={{
-                            padding: '10px 16px',
-                            background: content.theme === theme.id 
-                              ? 'var(--subtle)'
-                              : 'var(--card-alt)',
-                            border: content.theme === theme.id
-                              ? '2px solid var(--accent)'
-                              : 'var(--border)',
-                            borderRadius: 'var(--radius)',
-                            color: 'var(--text)',
-                            cursor: 'pointer',
-                            fontSize: '13px'
-                          }}
-                        >
-                          {theme.icon} {theme.name}
-                        </button>
-                      ))}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
+                      {/* Dropdown (matches nav behavior) */}
+                      <select
+                        value={content.theme}
+                        onChange={(e) => updateTheme(projectId, e.target.value)}
+                        style={{
+                          padding: '10px 14px',
+                          background: 'var(--card-alt)',
+                          color: 'var(--text)',
+                          border: '2px solid var(--accent)',
+                          borderRadius: 'var(--radius)'
+                        }}
+                      >
+                        {themes.map((t) => (
+                          <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                      </select>
+
+                      {/* Quick-pick buttons remain for fast testing */}
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' as const }}>
+                        {themes.map(theme => (
+                          <button
+                            key={theme.id}
+                            onClick={() => updateTheme(projectId, theme.id)}
+                            style={{
+                              padding: '10px 16px',
+                              background: content.theme === theme.id 
+                                ? 'var(--subtle)'
+                                : 'var(--card-alt)',
+                              border: content.theme === theme.id
+                                ? '2px solid var(--accent)'
+                                : 'var(--border)',
+                              borderRadius: 'var(--radius)',
+                              color: 'var(--text)',
+                              cursor: 'pointer',
+                              fontSize: '13px'
+                            }}
+                          >
+                            {theme.icon} {theme.name}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
