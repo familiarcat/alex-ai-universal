@@ -15,6 +15,7 @@ import IntentThemeSwitcher from '@/components/IntentThemeSwitcher';
 export default function DevNavigation() {
   const pathname = usePathname();
   const [projectsOpen, setProjectsOpen] = useState(false);
+  const isNarrow = typeof window !== 'undefined' && window.innerWidth < 1200;
 
   // Only show in development
   const isDev = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_DEV_MODE === 'true';
@@ -38,8 +39,9 @@ export default function DevNavigation() {
     maxWidth: '1800px',
     margin: '0 auto',
     display: 'flex',
-    gap: '30px',
-    alignItems: 'center'
+    gap: '18px',
+    alignItems: 'center',
+    flexWrap: 'wrap' as const
   };
 
   const linkStyle = (active: boolean) => ({
@@ -153,7 +155,7 @@ export default function DevNavigation() {
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
           <IntentThemeSwitcher />
           <GlobalThemeSwitcher />
-          <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>
+          {!isNarrow && <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>}
         </div>
       </div>
     </nav>

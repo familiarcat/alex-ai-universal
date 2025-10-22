@@ -12,7 +12,8 @@ const THEMES = [
   { id: 'gradient', label: 'Gradient' },
   { id: 'corporate', label: 'Corporate' },
   { id: 'organic', label: 'Organic' },
-  { id: 'cyberpunk', label: 'Cyberpunk' }
+  { id: 'cyberpunk', label: 'Cyberpunk' },
+  { id: 'offworld', label: 'Offworld Panel' }
 ];
 
 export default function GlobalThemeSwitcher() {
