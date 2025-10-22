@@ -330,55 +330,47 @@ const dashboardHTML = `<!DOCTYPE html>
             Object.values(crewData).forEach(crew => {
                 const crewElement = document.createElement('div');
                 crewElement.className = 'crew-member';
-                crewElement.innerHTML = `
-                    <div class="crew-header">
-                        <div class="crew-name">${crew.name}</div>
-                        <div class="crew-status">${crew.status}</div>
-                    </div>
-                    <div class="crew-department">Department: ${crew.department}</div>
-                    <div class="crew-role">Role: ${crew.role}</div>
-                    
-                    <div class="performance">
-                        <div class="performance-bar" style="width: ${crew.performance}%"></div>
-                    </div>
-                    <div class="performance-text">Performance: ${crew.performance}%</div>
-                    
-                    <div class="crew-details">
-                        <div class="detail-section">
-                            <div class="detail-label">Persona:</div>
-                            <div class="detail-content persona">${crew.persona}</div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-label">Skills:</div>
-                            <div class="skills">
-                                ${crew.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-label">LLM Agent:</div>
-                            <div class="detail-content llm-agent">${crew.llmAgent}</div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-label">Current Mission:</div>
-                            <div class="detail-content mission-status">${crew.currentMission}</div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-label">Expertise:</div>
-                            <div class="detail-content expertise">${crew.expertise}</div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-label">Recent Memories:</div>
-                            <div class="memories">
-                                ${crew.recentMemories.map(memory => `<div class="memory-item">${memory}</div>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
+                crewElement.innerHTML =
+                    '<div class="crew-header">' +
+                        '<div class="crew-name">' + crew.name + '</div>' +
+                        '<div class="crew-status">' + crew.status + '</div>' +
+                    '</div>' +
+                    '<div class="crew-department">Department: ' + crew.department + '</div>' +
+                    '<div class="crew-role">Role: ' + crew.role + '</div>' +
+                    '<div class="performance">' +
+                        '<div class="performance-bar" style="width: ' + crew.performance + '%"></div>' +
+                    '</div>' +
+                    '<div class="performance-text">Performance: ' + crew.performance + '%</div>' +
+                    '<div class="crew-details">' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">Persona:</div>' +
+                            '<div class="detail-content persona">' + crew.persona + '</div>' +
+                        '</div>' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">Skills:</div>' +
+                            '<div class="skills">' +
+                                crew.skills.map(function(skill){ return '<span class="skill-tag">' + skill + '</span>'; }).join('') +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">LLM Agent:</div>' +
+                            '<div class="detail-content llm-agent">' + crew.llmAgent + '</div>' +
+                        '</div>' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">Current Mission:</div>' +
+                            '<div class="detail-content mission-status">' + crew.currentMission + '</div>' +
+                        '</div>' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">Expertise:</div>' +
+                            '<div class="detail-content expertise">' + crew.expertise + '</div>' +
+                        '</div>' +
+                        '<div class="detail-section">' +
+                            '<div class="detail-label">Recent Memories:</div>' +
+                            '<div class="memories">' +
+                                crew.recentMemories.map(function(memory){ return '<div class="memory-item">' + memory + '</div>'; }).join('') +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
                 crewGrid.appendChild(crewElement);
             });
         }
