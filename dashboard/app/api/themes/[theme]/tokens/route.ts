@@ -1,10 +1,24 @@
 import { NextResponse } from 'next/server';
-import { THEME_DEFINITIONS } from '@/../../universal-theme-system/theme-definitions';
 import fs from 'fs';
 import path from 'path';
 
-export async function GET(_req: Request, { params }: { params: { theme: string } }) {
-  const themeId = params.theme || 'gradient';
+// Resolve THEME_DEFINITIONS from repo root without relying on TS path aliases
+function loadThemeDefinitions(): any {
+  try {
+    const defsPath = path.resolve(process.cwd(), '..', 'universal-theme-system', 'theme-definitions.js');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mod = require(defsPath);
+    return mod?.THEME_DEFINITIONS || {};
+  } catch {
+    return {};
+  }
+}
+
+const THEME_DEFINITIONS: any = loadThemeDefinitions();
+
+export async function GET(_req: Request, { params }: { params: Promise<{ theme: string }> }) {
+  const { theme } = await params;
+  const themeId = theme || 'gradient';
   const base = (THEME_DEFINITIONS as any)[themeId]?.css || {};
 
   // Load override if present

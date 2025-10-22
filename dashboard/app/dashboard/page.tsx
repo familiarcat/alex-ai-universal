@@ -212,7 +212,7 @@ export default function DashboardPage() {
                     overflow: 'hidden',
                     boxShadow: 'var(--shadow)'
                   }}>
-                    <iframe
+                  <iframe
                       key={`${projectId}-${content.theme}`}
                       src={`/projects/${projectId}?embed=1`}
                       title={`${projectId}-preview`}
@@ -222,6 +222,9 @@ export default function DashboardPage() {
                   <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
                     Preview is fully isolated to reflect the project's own theme and tokens.
                   </div>
+                </div>
+                <div style={{ marginTop: 6, fontSize: 12 }}>
+                  Theme in sync: <code>{content.theme}</code>
                 </div>
               </div>
             </div>
