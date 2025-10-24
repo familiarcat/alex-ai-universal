@@ -21,7 +21,7 @@ async function main() {
   loadSecrets(['N8N_BASE_URL','N8N_API_KEY']);
   const base = (process.env.N8N_BASE_URL || 'https://n8n.pbradygeorgen.com').replace(/\/$/, '');
   const key = process.env.N8N_API_KEY; if (!key) { console.log('ORCH_SETUP_SKIPPED Missing N8N_API_KEY'); return; }
-  const hdrs = { 'X-N8N-API-KEY': key };
+  const hdrs = { 'X-N8N-API-KEY': key, 'Authorization': `Bearer ${key}` };
 
   const list = await req('GET', `${base}/api/v1/workflows`, hdrs);
   if (list.status >= 400) throw new Error(`List failed: ${list.status}`);
@@ -36,9 +36,9 @@ async function main() {
 
   const nodes = [
     { parameters: { httpMethod: 'POST', path: webhookPath, responseMode: 'responseNode', options: {} }, id: 'webhook', name: 'Orchestrator Webhook', type: 'n8n-nodes-base.webhook', typeVersion: 1, position: [180, 300] },
-    { parameters: { requestMethod: 'POST', url: ingestUrl, jsonParameters: true, options: {}, sendBody: true, bodyParametersJson: '={"body": $json}' }, id: 'ingest', name: 'Post to Ingest', type: 'n8n-nodes-base.httpRequest', typeVersion: 4, position: [440, 300] },
-    { parameters: { requestMethod: 'POST', url: summaryUrl, jsonParameters: true, options: {}, sendBody: true, bodyParametersJson: '={"input": {"title": $json.summary || $json.title || $json.summary || "Milestone", "bullets": $json.features || [], "context": "Milestone summary"}}' }, id: 'summary', name: 'Get Summary', type: 'n8n-nodes-base.httpRequest', typeVersion: 4, position: [700, 300] },
-    { parameters: { respondWith: 'json', responseBody: '={{ {ingestion: $json.ingestion || true, summary: $json.summary || $json.output || $json.result || "ok"} }}', options: {} }, id: 'respond', name: 'Respond', type: 'n8n-nodes-base.respondToWebhook', typeVersion: 1, position: [960, 300] }
+    { parameters: { requestMethod: 'POST', url: ingestUrl, jsonParameters: true, options: {}, sendBody: true, bodyParametersJson: '={"body": {"summary": $json.summary, "features": $json.features, "tags": $json.tags}}' }, id: 'ingest', name: 'Post to Ingest', type: 'n8n-nodes-base.httpRequest', typeVersion: 4, position: [440, 300] },
+    { parameters: { requestMethod: 'POST', url: summaryUrl, jsonParameters: true, options: {}, sendBody: true, bodyParametersJson: '={"input": {"title": $json.summary || $json.title || "Milestone", "bullets": $json.features || [], "context": "Milestone summary"}}' }, id: 'summary', name: 'Get Summary', type: 'n8n-nodes-base.httpRequest', typeVersion: 4, position: [700, 300] },
+    { parameters: { respondWith: 'json', responseBody: '={{ { ingestion: $node["Post to Ingest"].json || { ok: true }, summary: $json.summary || $json.output || $json.result || $json || "ok" } }}', options: {} }, id: 'respond', name: 'Respond', type: 'n8n-nodes-base.respondToWebhook', typeVersion: 1, position: [960, 300] }
   ];
   const connections = {
     'Orchestrator Webhook': { main: [[{ node: 'Post to Ingest', type: 'main', index: 0 }]] },

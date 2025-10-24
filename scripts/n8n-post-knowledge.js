@@ -32,10 +32,12 @@ async function main() {
   const features = arg('features', '').split(/[;,]/).map(s => s.trim()).filter(Boolean);
   const tags = arg('tags', 'milestone').split(',').map(s => s.trim()).filter(Boolean);
   const { loadSecrets } = require('./lib/secret-loader');
-  loadSecrets(['N8N_INGEST_URL']);
-  const endpoint = process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/ingest-knowledge';
+  loadSecrets(['N8N_ORCH_URL','N8N_INGEST_URL']);
+  const orchUrl = process.env.N8N_ORCH_URL;
+  const ingestUrl = process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/ingest-knowledge';
 
-  const payload = {
+  // Base knowledge doc (for direct ingest)
+  const knowledgeDoc = {
     title: summary,
     text: features.length ? `Features:\n- ${features.join('\n- ')}` : summary,
     tags,
@@ -43,9 +45,31 @@ async function main() {
     doc_id: `MILESTONE_${Date.now()}`
   };
 
-  const res = await post(endpoint, payload);
+  // Orchestrator expects summary/features/tags
+  const orchPayload = {
+    summary,
+    features,
+    tags
+  };
+
+  let target = ingestUrl;
+  let body = knowledgeDoc;
+  let usedOrchestrator = false;
+  if (orchUrl) { target = orchUrl; body = orchPayload; usedOrchestrator = true; }
+
+  const res = await post(target, usedOrchestrator ? body : { body: knowledgeDoc });
   console.log('STATUS', res.status);
-  if (res.body) console.log(res.body.slice(0, 500));
+  let printed = false;
+  try {
+    const json = JSON.parse(res.body || '{}');
+    const summaryText = json.summary || json.output || json.result || json?.data?.summary;
+    if (summaryText) { console.log('SUMMARY', String(summaryText).trim()); printed = true; }
+  } catch {}
+  if (!printed) {
+    // Fallback heuristic summary
+    const sentence = features.length ? features.join('; ') : summary;
+    console.log('SUMMARY', `${summary}: ${sentence}`);
+  }
 }
 
 main().catch(err => { console.error('ERROR', err.message || err); process.exit(1); });

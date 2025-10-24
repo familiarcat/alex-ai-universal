@@ -34,7 +34,7 @@ async function main() {
     console.log('SUMMARY_SETUP_SKIPPED Missing N8N_API_KEY');
     return;
   }
-  const hdrs = { 'X-N8N-API-KEY': key };
+  const hdrs = { 'X-N8N-API-KEY': key, 'Authorization': `Bearer ${key}` };
 
   // List workflows and find existing summarizer
   const list = await req('GET', `${base}/api/v1/workflows`, hdrs);

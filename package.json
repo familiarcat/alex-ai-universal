@@ -60,6 +60,8 @@
     "rag:execs": "node scripts/n8n-verify-execution.js",
     "rag:setup-summary": "node scripts/setup-summary-webhook.js",
     "rag:setup-orchestrator": "node scripts/setup-orchestrator-workflow.js",
+    "rag:force-register": "node scripts/n8n-force-register-webhooks.js",
+    "rag:run": "node scripts/n8n-run-workflow.js",
     "innovation:plan": "bash ./scripts/innovation-day-runner.sh"
   },
   "devDependencies": {
