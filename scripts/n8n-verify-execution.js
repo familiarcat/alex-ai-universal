@@ -2,6 +2,7 @@
 // Verify latest executions for the Knowledge Base RAG Ingestion workflow via n8n API
 
 const https = require('https');
+const { execSync } = require('child_process');
 
 function req(method, urlString, headers = {}, body) {
   const u = new URL(urlString);
@@ -27,14 +28,29 @@ function req(method, urlString, headers = {}, body) {
 
 async function main() {
   const { loadSecrets } = require('./lib/secret-loader');
+  // First pass: file parser fallback (~/.zshrc)
   loadSecrets(['N8N_BASE_URL','N8N_API_KEY']);
+  // Second pass: spawn a login shell to source ~/.zshrc and merge env if still missing
+  if (!process.env.N8N_API_KEY || !process.env.N8N_BASE_URL) {
+    try {
+      const out = execSync('bash -lc "source ~/.zshrc >/dev/null 2>&1 || true; echo N8N_BASE_URL=$N8N_BASE_URL; echo N8N_API_KEY=$N8N_API_KEY"', { stdio: ['ignore','pipe','ignore'] }).toString();
+      out.trim().split('\n').forEach(line => {
+        const idx = line.indexOf('=');
+        if (idx > 0) {
+          const k = line.slice(0, idx).trim();
+          const v = line.slice(idx + 1).trim();
+          if (k && v && !process.env[k]) process.env[k] = v;
+        }
+      });
+    } catch {}
+  }
   const base = (process.env.N8N_BASE_URL || 'https://n8n.pbradygeorgen.com').replace(/\/$/, '');
   const key = process.env.N8N_API_KEY;
   if (!key) {
     console.error('Missing N8N_API_KEY');
     process.exit(1);
   }
-  const hdrs = { 'X-N8N-API-KEY': key };
+  const hdrs = { 'X-N8N-API-KEY': key, 'Authorization': `Bearer ${key}` };
 
   // List workflows and find ingestion workflow
   const wfRes = await req('GET', `${base}/api/v1/workflows`, hdrs);
