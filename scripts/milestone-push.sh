@@ -98,6 +98,8 @@ if command -v node >/dev/null 2>&1; then
   echo "\n🧠 Posting milestone to RAG via n8n ingestion webhook..."
   node scripts/n8n-post-knowledge.js --summary "$summary" --features "$features" --tags "milestone,git,$current_branch" >/dev/null 2>&1 || true
   echo "   RAG ingestion attempted (non-blocking)"
+  echo "\n🗒️  Requesting crew summary via controller..."
+  node scripts/n8n-summarize-milestone.js --summary "$summary" --features "$features" || true
 fi
 
 
