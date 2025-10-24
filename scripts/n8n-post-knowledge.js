@@ -31,6 +31,8 @@ async function main() {
   const summary = arg('summary', 'Milestone');
   const features = arg('features', '').split(/[;,]/).map(s => s.trim()).filter(Boolean);
   const tags = arg('tags', 'milestone').split(',').map(s => s.trim()).filter(Boolean);
+  const { loadSecrets } = require('./lib/secret-loader');
+  loadSecrets(['N8N_INGEST_URL']);
   const endpoint = process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/ingest-knowledge';
 
   const payload = {
