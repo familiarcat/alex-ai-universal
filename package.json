@@ -58,6 +58,8 @@
     "rag:ingest": "node scripts/n8n-post-knowledge.js",
     "rag:verify": "node scripts/n8n-verify-knowledge.js",
     "rag:execs": "node scripts/n8n-verify-execution.js",
+    "rag:setup-summary": "node scripts/setup-summary-webhook.js",
+    "rag:setup-orchestrator": "node scripts/setup-orchestrator-workflow.js",
     "innovation:plan": "bash ./scripts/innovation-day-runner.sh"
   },
   "devDependencies": {
