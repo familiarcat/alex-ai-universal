@@ -93,4 +93,11 @@ echo "✅ Milestone pushed"
 echo "   Branch: $current_branch"
 echo "   Tag:    $tag_name ($commit_sha)"
 
+# Post milestone to RAG via n8n controller (best-effort; do not fail script)
+if command -v node >/dev/null 2>&1; then
+  echo "\n🧠 Posting milestone to RAG via n8n ingestion webhook..."
+  node scripts/n8n-post-knowledge.js --summary "$summary" --features "$features" --tags "milestone,git,$current_branch" >/dev/null 2>&1 || true
+  echo "   RAG ingestion attempted (non-blocking)"
+fi
+
 

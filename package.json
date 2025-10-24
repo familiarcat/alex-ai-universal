@@ -55,6 +55,7 @@
     "alex-ai:sync": "cd packages/core && npm run alex-ai universal-sync",
     "alex-ai:status": "cd packages/core && npm run alex-ai status",
     "milestone:push": "bash ./scripts/preflight-ship-health.sh --free-ports && bash ./scripts/milestone-push.sh",
+    "rag:ingest": "node scripts/n8n-post-knowledge.js",
     "innovation:plan": "bash ./scripts/innovation-day-runner.sh"
   },
   "devDependencies": {

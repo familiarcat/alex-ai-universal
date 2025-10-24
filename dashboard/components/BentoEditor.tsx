@@ -1,16 +1,17 @@
 'use client';
+
+import React, { useState } from 'react';
 import { useAppState } from '@/lib/state-manager';
 import { getProfessionalSuggestion, getAdvisorOptions, AdvisorCode } from '@/lib/suggestion-engine';
-import { useMemo, useState } from 'react';
 
 export default function BentoEditor({ projectId }: { projectId: string }) {
   const { projects, updateComponent } = useAppState();
   const project = projects[projectId];
   const components = project?.components || [];
-  const advisorOptions = useMemo(() => getAdvisorOptions(), []);
+  const advisorOptions = React.useMemo(() => getAdvisorOptions(), []);
   const [advisorOverride, setAdvisorOverride] = useState<AdvisorCode | ''>('');
 
-  const gridTemplate = useMemo(() => {
+  const gridTemplate = React.useMemo(() => {
     return 'repeat(auto-fill, minmax(260px, 1fr))';
   }, []);
 
