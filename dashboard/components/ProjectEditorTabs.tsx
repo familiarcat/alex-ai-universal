@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import QuizInline from '@/components/QuizInline';
 import WizardInline from '@/components/WizardInline';
+import CombinedWizard from '@/components/CombinedWizard';
+import BentoEditor from '@/components/BentoEditor';
 
 interface ProjectContentLike {
   headline: string;
@@ -22,9 +24,9 @@ interface ProjectEditorTabsProps {
 }
 
 export default function ProjectEditorTabs({ projectId, content, themes, onUpdate, onTheme }: ProjectEditorTabsProps) {
-  const [tab, setTab] = useState<'editor' | 'quiz' | 'wizard'>('editor');
+  const [tab, setTab] = useState<'editor' | 'quiz' | 'wizard' | 'compose'>('editor');
 
-  const tabButton = (id: 'editor' | 'quiz' | 'wizard', label: string) => (
+  const tabButton = (id: 'editor' | 'quiz' | 'wizard' | 'compose', label: string) => (
     <button
       onClick={() => setTab(id)}
       style={{
@@ -45,6 +47,7 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
         {tabButton('editor', 'Editor')}
         {tabButton('quiz', 'Quiz')}
         {tabButton('wizard', 'Wizard')}
+        {tabButton('compose', 'Compose')}
       </div>
 
       {tab === 'editor' && (
@@ -167,6 +170,19 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
           if (data.description) onUpdate('description', data.description);
           if (data.theme) onTheme(data.theme);
         }} />
+      )}
+
+      {tab === 'compose' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+          <div>
+            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>🧪 Combined Wizard</h4>
+            <CombinedWizard projectId={projectId} />
+          </div>
+          <div>
+            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>📦 Bento Editor</h4>
+            <BentoEditor projectId={projectId} />
+          </div>
+        </div>
       )}
     </div>
   );

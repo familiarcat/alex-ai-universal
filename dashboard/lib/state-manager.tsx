@@ -8,12 +8,27 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+export type ComponentRole = 'hero' | 'header' | 'footer' | 'feature' | 'testimonial' | 'cta' | 'gallery' | 'content';
+
+export interface ProjectComponent {
+  id: string;
+  title: string;
+  body: string;
+  role: ComponentRole;
+  priority: number; // 1..5 (5 = largest)
+  intent?: 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
+  tone?: 'bold' | 'calm' | 'playful' | 'serious' | 'futuristic';
+  theme?: string; // optional per-card override
+  updatedAt: number;
+}
+
 export interface ProjectContent {
   headline: string;
   subheadline: string;
   description: string;
   theme: string;
   updatedAt: number;
+  components?: ProjectComponent[];
 }
 
 export interface AppState {
@@ -26,6 +41,10 @@ export interface AppState {
   updateGlobalTheme: (themeId: string) => void;
   // alias used by some demo components
   setGlobalTheme?: (themeId: string) => void;
+  // components API
+  addComponents: (projectId: string, components: ProjectComponent[]) => void;
+  updateComponent: (projectId: string, componentId: string, changes: Partial<ProjectComponent>) => void;
+  reorderComponents: (projectId: string, order: string[]) => void;
 }
 
 const StateContext = createContext<AppState | null>(null);
@@ -123,8 +142,63 @@ export function StateProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const addComponents = (projectId: string, components: ProjectComponent[]) => {
+    setState(prev => {
+      const existing = prev.projects[projectId]?.components || [];
+      const next = {
+        ...prev,
+        projects: {
+          ...prev.projects,
+          [projectId]: {
+            ...prev.projects[projectId],
+            components: [...existing, ...components.map(c => ({ ...c, updatedAt: Date.now() }))],
+            updatedAt: Date.now()
+          }
+        }
+      };
+      localStorage.setItem('alex-ai-state', JSON.stringify(next));
+      window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      return next;
+    });
+  };
+
+  const updateComponent = (projectId: string, componentId: string, changes: Partial<ProjectComponent>) => {
+    setState(prev => {
+      const comps = prev.projects[projectId]?.components || [];
+      const nextComps = comps.map(c => c.id === componentId ? { ...c, ...changes, updatedAt: Date.now() } : c);
+      const next = {
+        ...prev,
+        projects: {
+          ...prev.projects,
+          [projectId]: { ...prev.projects[projectId], components: nextComps, updatedAt: Date.now() }
+        }
+      };
+      localStorage.setItem('alex-ai-state', JSON.stringify(next));
+      window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      return next;
+    });
+  };
+
+  const reorderComponents = (projectId: string, order: string[]) => {
+    setState(prev => {
+      const comps = prev.projects[projectId]?.components || [];
+      const map = Object.fromEntries(comps.map(c => [c.id, c]));
+      const nextComps = order.map(id => map[id]).filter(Boolean);
+      const next = {
+        ...prev,
+        projects: {
+          ...prev.projects,
+          [projectId]: { ...prev.projects[projectId], components: nextComps, updatedAt: Date.now() }
+        }
+      };
+      localStorage.setItem('alex-ai-state', JSON.stringify(next));
+      window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      return next;
+    });
+  };
+
   return (
-    <StateContext.Provider value={{ ...state, updateProject, updateTheme, updateGlobalTheme, setGlobalTheme: updateGlobalTheme }}>
+    <StateContext.Provider value={{ ...state, updateProject, updateTheme, updateGlobalTheme, setGlobalTheme: updateGlobalTheme, addComponents, updateComponent, reorderComponents }}>
       {children}
     </StateContext.Provider>
   );

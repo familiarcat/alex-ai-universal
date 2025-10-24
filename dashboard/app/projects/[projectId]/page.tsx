@@ -78,46 +78,76 @@ export default function ProjectPage() {
       padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Hero Section - Updates Live! */}
-        <div style={{
-          textAlign: 'center',
-          padding: '80px 30px',
-          background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '24px',
-          marginBottom: '50px',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
-          <h1 style={{ 
-            fontSize: '56px', 
-            fontWeight: 800, 
-            marginBottom: '20px',
-            lineHeight: 1.2
+        {/* If components exist, render a bento grid, else fallback to simple hero */}
+        {Array.isArray(content.components) && content.components.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
+            {content.components.map((c) => {
+              const perCard = (c.theme && (themeStyles as any)[c.theme]) || style;
+              const cardStyle: any = {
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 16,
+                padding: 20,
+              };
+              if (c.role === 'hero') {
+                cardStyle.gridColumn = '1 / -1';
+                cardStyle.background = 'rgba(255,255,255,0.08)';
+                cardStyle.padding = 40;
+              } else if (c.priority >= 4) {
+                cardStyle.gridColumn = 'span 2';
+              }
+              return (
+                <div key={c.id} style={cardStyle}>
+                  <div style={{ color: perCard.accentColor, fontSize: c.role === 'hero' ? 42 : 20, fontWeight: 800, marginBottom: 10 }}>{c.title}</div>
+                  <div style={{ opacity: 0.9, fontSize: c.role === 'hero' ? 18 : 14, lineHeight: 1.6 }}>{c.body}</div>
+                  {c.role === 'cta' && (
+                    <div style={{ marginTop: 16 }}>
+                      <a href="#" style={{ background: perCard.accentColor, color: '#0a0015', padding: '10px 14px', borderRadius: 10, textDecoration: 'none', fontWeight: 700 }}>Continue →</a>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '80px 30px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '24px',
+            marginBottom: '50px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            {content.headline}
-          </h1>
-          <p style={{ 
-            fontSize: '22px', 
-            opacity: 0.95,
-            marginBottom: '25px',
-            lineHeight: 1.6,
-            maxWidth: '800px',
-            margin: '0 auto 25px'
-          }}>
-            {content.subheadline}
-          </p>
-          <p style={{ 
-            fontSize: '18px',
-            opacity: 0.85,
-            lineHeight: 1.6,
-            maxWidth: '700px',
-            margin: '0 auto'
-          }}>
-            {content.description}
-          </p>
-        </div>
-
-        {/* Dev Mode Info removed for production-faithful previews */}
+            <h1 style={{ 
+              fontSize: '56px', 
+              fontWeight: 800, 
+              marginBottom: '20px',
+              lineHeight: 1.2
+            }}>
+              {content.headline}
+            </h1>
+            <p style={{ 
+              fontSize: '22px', 
+              opacity: 0.95,
+              marginBottom: '25px',
+              lineHeight: 1.6,
+              maxWidth: '800px',
+              margin: '0 auto 25px'
+            }}>
+              {content.subheadline}
+            </p>
+            <p style={{ 
+              fontSize: '18px',
+              opacity: 0.85,
+              lineHeight: 1.6,
+              maxWidth: '700px',
+              margin: '0 auto'
+            }}>
+              {content.description}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
