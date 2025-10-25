@@ -41,11 +41,19 @@ async function triggerWebhook(path, payload) {
   return res.data;
 }
 
+async function triggerWebhookWithHeaders(path, payload, headers) {
+  const { webhookUrl } = getConfig();
+  const url = `${webhookUrl.replace(/\/$/, '')}/${String(path).replace(/^\//, '')}`;
+  const res = await axios.post(url, payload || {}, { timeout: 10000, headers: headers || {} });
+  return res.data;
+}
+
 module.exports = {
   getConfig,
   testN8nConnection,
   listWorkflows,
   triggerWebhook,
+  triggerWebhookWithHeaders,
 };
 
 

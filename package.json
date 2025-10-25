@@ -55,6 +55,8 @@
     "alex-ai:sync": "cd packages/core && npm run alex-ai universal-sync",
     "alex-ai:status": "cd packages/core && npm run alex-ai status",
     "milestone:push": "bash ./scripts/preflight-ship-health.sh --free-ports && bash ./scripts/milestone-push.sh",
+    "milestone:one-touch": "bash ./scripts/milestone-one-touch.sh",
+    "crew:provision": "bash ./scripts/provision-crew-access.sh",
     "rag:ingest": "node scripts/n8n-post-knowledge.js",
     "rag:verify": "node scripts/n8n-verify-knowledge.js",
     "rag:execs": "node scripts/n8n-verify-execution.js",
