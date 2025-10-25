@@ -18,6 +18,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 function httpGet(urlStr) {
   return new Promise((resolve, reject) => {
@@ -154,9 +155,18 @@ async function fetchTopCommentsWithPuppeteer(youtubeUrl, maxComments = 20) {
   }
 }
 
+function getFlag(name, def = undefined) {
+  const idx = process.argv.findIndex(a => a === `--${name}` || a.startsWith(`--${name}=`));
+  if (idx === -1) return def;
+  const val = process.argv[idx].includes('=') ? process.argv[idx].split('=')[1] : process.argv[idx + 1];
+  return val === undefined ? def : val;
+}
+
 async function main() {
   const youtubeUrl = process.argv[2];
   const outputPath = process.argv[3] || path.join(process.cwd(), 'youtube-rag-payload.json');
+  const noFrames = Boolean(getFlag('no-frames', undefined) !== undefined);
+  const framesCount = parseInt(getFlag('frames', process.env.YT_FRAMES || '8'), 10) || 8;
   if (!youtubeUrl) {
     console.error('Usage: node scripts/enrich-youtube-to-rag.js <youtube_url> [output_json]');
     process.exit(1);
@@ -228,6 +238,41 @@ async function main() {
       source_url: youtubeUrl,
       is_current: true
     });
+  }
+
+  // Optional: capture key frames using helper script (yt-dlp + ffmpeg)
+  if (!noFrames) {
+    try {
+      const scriptPath = path.join(process.cwd(), 'scripts', 'youtube-capture-frames.sh');
+      if (fs.existsSync(scriptPath)) {
+        const stdout = execFileSync('bash', [scriptPath, youtubeUrl, String(framesCount)], { encoding: 'utf8' });
+        const lines = String(stdout || '').trim().split(/\r?\n/);
+        const outDir = lines[lines.length - 1];
+        if (outDir && fs.existsSync(outDir)) {
+          const files = fs.readdirSync(outDir)
+            .filter(f => f.match(/^frame-\d+\.jpg$/))
+            .map(f => path.join(outDir, f))
+            .sort();
+          if (files.length) {
+            documents.push({
+              doc_type: 'frames',
+              audience: 'all',
+              category: 'ai-best-practices',
+              title: `${title} (Key Frames)`,
+              summary: `Extracted ${files.length} frames for visual context`,
+              content: files.map(f => `Frame: ${f}`).join('\n'),
+              assets: files,
+              keywords: ['youtube','frames','screenshots','context'],
+              source_type: 'youtube',
+              source_url: youtubeUrl,
+              is_current: true,
+            });
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Frame capture skipped:', e.message);
+    }
   }
 
   fs.writeFileSync(outputPath, JSON.stringify({ documents }, null, 2));
