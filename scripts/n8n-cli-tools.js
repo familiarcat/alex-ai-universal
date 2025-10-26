@@ -68,6 +68,7 @@ class N8NClient {
   constructor(url, apiKey) {
     this.baseUrl = url.replace(/\/$/, ''); // Remove trailing slash
     this.apiKey = apiKey;
+    this.projectId = process.env.N8N_PROJECT_ID || '';
   }
 
   async request(method, endpoint, body = null) {
@@ -84,9 +85,16 @@ class N8NClient {
         headers: {
           'Content-Type': 'application/json',
           'X-N8N-API-KEY': this.apiKey,
+          // Newer n8n uses Personal Access Tokens (Bearer)
+          'Authorization': `Bearer ${this.apiKey}`,
           'Accept': 'application/json'
         }
       };
+
+      // Include project header for multi-project n8n instances (new UI)
+      if (this.projectId) {
+        options.headers['X-N8N-Project-ID'] = this.projectId;
+      }
 
       if (body) {
         const bodyString = JSON.stringify(body);
@@ -147,12 +155,55 @@ class N8NClient {
   }
 
   async activateWorkflow(id) {
-    // Modern n8n exposes dedicated endpoints for activation
-    return this.request('POST', `/api/v1/workflows/${id}/activate`);
+    // Prefer PUT full update with active=true for newest n8n
+    try {
+      const current = await this.getWorkflow(id);
+      const activationData = {
+        name: current.name,
+        nodes: current.nodes,
+        connections: current.connections,
+        settings: current.settings || {},
+        staticData: current.staticData || null,
+        active: true,
+      };
+      return await this.updateWorkflow(id, activationData);
+    } catch (e) {
+      const msg = String(e.message || e);
+      // Fallback: older n8n supported POST /activate
+      if (/method not allowed|405|404/i.test(msg) === false) {
+        try {
+          return await this.request('POST', `/api/v1/workflows/${id}/activate`);
+        } catch (e2) {
+          throw e2;
+        }
+      }
+      throw e;
+    }
   }
 
   async deactivateWorkflow(id) {
-    return this.request('POST', `/api/v1/workflows/${id}/deactivate`);
+    try {
+      const current = await this.getWorkflow(id);
+      const deactivationData = {
+        name: current.name,
+        nodes: current.nodes,
+        connections: current.connections,
+        settings: current.settings || {},
+        staticData: current.staticData || null,
+        active: false,
+      };
+      return await this.updateWorkflow(id, deactivationData);
+    } catch (e) {
+      const msg = String(e.message || e);
+      if (/method not allowed|405|404/i.test(msg) === false) {
+        try {
+          return await this.request('POST', `/api/v1/workflows/${id}/deactivate`);
+        } catch (e2) {
+          throw e2;
+        }
+      }
+      throw e;
+    }
   }
 
   async deleteWorkflow(id) {

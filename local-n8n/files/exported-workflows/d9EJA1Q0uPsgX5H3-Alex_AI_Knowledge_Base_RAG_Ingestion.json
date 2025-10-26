@@ -126,14 +126,12 @@
     },
     {
       "parameters": {
-        "chunkSize": 1000,
-        "chunkOverlap": 200,
-        "options": {}
+        "functionCode": "const text = $json.content || '';\nconst chunkSize = 1000;\nconst overlap = 200;\nconst results = [];\nfor (let i = 0; i < text.length; i += chunkSize - overlap) {\n  const chunk = text.slice(i, i + chunkSize);\n  results.push({ json: { ...$json, chunk, chunk_index: results.length }});\n}\nreturn results;"
       },
       "id": "chunk-document",
       "name": "Chunk Document",
-      "type": "@n8n/n8n-nodes-langchain.textSplitter",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
       "position": [
         1050,
         300
@@ -141,13 +139,15 @@
     },
     {
       "parameters": {
+        "resource": "embeddings",
+        "operation": "create",
         "model": "text-embedding-3-small",
-        "options": {}
+        "input": "={{ $json.chunk }}"
       },
       "id": "generate-embeddings",
       "name": "Generate OpenAI Embeddings",
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAI",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 4,
       "position": [
         1250,
         300
@@ -158,6 +158,28 @@
           "name": "OpenAI API"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "embedding",
+              "name": "embedding",
+              "value": "={{ $json.data[0].embedding }}",
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "id": "generate-embeddings-extract-embedding",
+      "name": "Extract Embedding",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        1450,
+        300
+      ]
     },
     {
       "parameters": {
@@ -443,7 +465,7 @@
       "main": [
         [
           {
-            "node": "Store in Supabase",
+            "node": "Extract Embedding",
             "type": "main",
             "index": 0
           }
@@ -506,6 +528,17 @@
         [
           {
             "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Embedding": {
+      "main": [
+        [
+          {
+            "node": "Store in Supabase",
             "type": "main",
             "index": 0
           }
