@@ -17,6 +17,36 @@ const nextConfig = {
       {
         source: '/observation-lounge',
         destination: '/reports/observation-lounge'
+      },
+      // Unified bridge routes to themed services
+      {
+        source: '/bridge/gallery/:path*',
+        destination: 'http://localhost:3010/:path*'
+      },
+      {
+        source: '/bridge/quiz/:path*',
+        destination: 'http://localhost:3020/:path*'
+      },
+      {
+        source: '/bridge/wizard/:path*',
+        destination: 'http://localhost:3030/:path*'
+      },
+      {
+        source: '/bridge/control/:path*',
+        destination: 'http://localhost:3001/:path*'
+      },
+      // Projects (proxied under one URI)
+      {
+        source: '/bridge/projects/alpha/:path*',
+        destination: 'http://localhost:3004/:path*'
+      },
+      {
+        source: '/bridge/projects/beta/:path*',
+        destination: 'http://localhost:3002/:path*'
+      },
+      {
+        source: '/bridge/projects/gamma/:path*',
+        destination: 'http://localhost:3003/:path*'
       }
     ];
   },

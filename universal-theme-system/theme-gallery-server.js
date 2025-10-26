@@ -250,23 +250,30 @@ class ThemeGalleryServer {
   }
 
   generateThemeSpecificCSS() {
-    return Object.entries(THEME_DEFINITIONS).map(([id, theme]) => {
-      const css = theme.css;
-      return `
+    return Object.entries(THEME_DEFINITIONS)
+      .filter(([id, theme]) => theme && theme.css && typeof theme.css === 'object')
+      .map(([id, theme]) => {
+        const css = theme.css || {};
+        const bg = css['--background'] || '#000';
+        const text = css['--text'] || '#fff';
+        const surface = css['--surface'];
+        const border = css['--border'];
+        const primary = css['--primary'] || '#00ffaa';
+        return `
         .theme-${id} {
-            background: ${css['--background']};
-            color: ${css['--text']};
+            background: ${bg};
+            color: ${text};
         }
         .theme-${id} .theme-content {
-            ${css['--surface'] ? `background: ${css['--surface']};` : ''}
-            ${css['--border'] ? `border: 1px solid ${css['--border']};` : ''}
+            ${surface ? `background: ${surface};` : ''}
+            ${border ? `border: 1px solid ${border};` : ''}
         }
         .theme-${id} .cta-button {
-            background: ${css['--primary']};
-            color: ${css['--background']};
+            background: ${primary};
+            color: ${text};
         }
       `;
-    }).join('\n');
+      }).join('\n');
   }
 
   generateThemePreviews() {

@@ -383,6 +383,42 @@ npm run lint
 npm run clean
 ```
 
+### **Dashboard-as-Bridge (Unified URI for all themed systems)**
+
+Run the entire stack with the dashboard on http://localhost:3000 as the control center. All services are available under `/bridge/*`.
+
+```bash
+# From repo root
+npm run dev:bridge
+
+# Dashboard
+#   http://localhost:3000
+
+# Projects (proxied)
+#   http://localhost:3000/bridge/projects/alpha/
+#   http://localhost:3000/bridge/projects/beta/
+#   http://localhost:3000/bridge/projects/gamma/
+
+# Themed tools
+#   http://localhost:3000/bridge/gallery/
+#   http://localhost:3000/bridge/quiz/
+#   http://localhost:3000/bridge/wizard/
+```
+
+Control individual pieces:
+
+```bash
+# Start/stop themed tools (3010/3020/3030)
+npm run themes:start
+npm run themes:stop
+
+# Start/stop bridged projects (alpha=3004, beta=3002, gamma=3003)
+npm run bridge:start
+npm run bridge:stop
+```
+
+Routing rules live in `dashboard/next.config.js` under the `/bridge/*` rewrites.
+
 ---
 
 ## 📊 **PERFORMANCE METRICS**

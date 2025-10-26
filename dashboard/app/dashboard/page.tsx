@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
   const projectMeta = {
-    alpha: { name: 'Enterprise E-commerce', port: 3000, icon: '🛒', budget: 15000 },
+    alpha: { name: 'Enterprise E-commerce', port: 3004, icon: '🛒', budget: 15000 },
     beta: { name: 'Starfleet Medical Portal', port: 3002, icon: '🏥', budget: 25000 },
     gamma: { name: 'Federation Analytics', port: 3003, icon: '📊', budget: 10000 }
   };
@@ -82,7 +82,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <Link 
-                  href={`/projects/${projectId}`}
+                  href={`/bridge/projects/${projectId}/`}
                   target="_blank"
                   style={{
                     background: 'var(--accent)',
@@ -131,7 +131,7 @@ export default function DashboardPage() {
                   }}>
                   <iframe
                       key={`${projectId}-${content.theme}`}
-                      src={`/projects/${projectId}?embed=1`}
+                      src={`/bridge/projects/${projectId}/`}
                       title={`${projectId}-preview`}
                       style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
                     />
