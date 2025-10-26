@@ -47,20 +47,14 @@ async function main() {
   const dir = path.join(process.cwd(), 'exported-workflows');
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
 
-  const results = { imported: [], skipped: [], activated: [], failed: [] };
+  const results = { imported: [], activated: [], failed: [] };
 
   for (const f of files) {
     const full = path.join(dir, f);
     const json = JSON.parse(fs.readFileSync(full, 'utf8'));
-    const hasLangchain = JSON.stringify(json).includes('@n8n/n8n-nodes-langchain');
     try {
       const { workflow } = await importWorkflow(client, full);
       results.imported.push(workflow.name);
-      if (hasLangchain) {
-        console.log(`⚠️  Skipping activation (LangChain nodes): ${workflow.name}`);
-        results.skipped.push(workflow.name);
-        continue;
-      }
       // Activate via PUT active=true using client helper
       await client.activateWorkflow(workflow.id);
       results.activated.push(workflow.name);
@@ -74,7 +68,6 @@ async function main() {
   console.log('\n📊 Summary');
   console.log(`  Imported:  ${results.imported.length}`);
   console.log(`  Activated: ${results.activated.length}`);
-  console.log(`  Skipped:   ${results.skipped.length} (LangChain nodes)`);
   console.log(`  Failed:    ${results.failed.length}`);
 }
 
