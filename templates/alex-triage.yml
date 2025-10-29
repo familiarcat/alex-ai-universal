@@ -1,0 +1,132 @@
+name: Alex AI Triage
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  pull_request:
+    types: [opened, edited, reopened, ready_for_review]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      target_type:
+        description: 'issue or pr'
+        required: false
+        default: 'issue'
+      number:
+        description: 'issue/PR number'
+        required: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Triage with Alex and apply updates
+        uses: actions/github-script@v7
+        env:
+          ALEX_API_URL: ${{ secrets.ALEX_API_URL }}
+          ALEX_API_KEY: ${{ secrets.ALEX_API_KEY }}
+        with:
+          script: |
+            const { context, github, core } = require('@actions/github');
+            const inputs = context.payload.inputs || {};
+            const hasSecrets = !!(process.env.ALEX_API_URL && process.env.ALEX_API_KEY);
+
+            async function fetchJson(url, options) {
+              const res = await fetch(url, options);
+              if (!res.ok) return { ok: false, status: res.status };
+              return { ok: true, json: await res.json() };
+            }
+
+            // Determine target number for manual dispatch
+            let num = context.payload.issue?.number || context.payload.pull_request?.number;
+            if (!num && inputs.number) num = parseInt(inputs.number, 10);
+            const targetType = inputs.target_type || (context.payload.pull_request ? 'pr' : 'issue');
+            if (!num) {
+              core.info('No issue/PR number provided; skipping. Provide inputs.number to workflow_dispatch.');
+              return;
+            }
+
+            async function getItem() {
+              if (targetType === 'pr') {
+                const pr = await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: num }).then(r => r.data).catch(() => null);
+                if (!pr) return { isPR: true, item: null };
+                return { isPR: true, item: pr };
+              }
+              const issue = await github.rest.issues.get({ owner: context.repo.owner, repo: context.repo.repo, issue_number: num }).then(r => r.data).catch(() => null);
+              return { isPR: false, item: issue };
+            }
+
+            const { isPR, item } = await getItem();
+            if (!item) {
+              core.info(`Item #${num} not found.`);
+              return;
+            }
+
+            const payload = {
+              eventName: context.eventName || 'workflow_dispatch',
+              repo: context.repo,
+              delivery: process.env.GITHUB_RUN_ID,
+              sender: context.payload.sender?.login,
+              issue: isPR ? undefined : {
+                number: item.number,
+                title: item.title,
+                body: item.body || '',
+                labels: (item.labels || []).map(l => typeof l === 'string' ? l : l.name),
+                state: item.state,
+                isPullRequest: false
+              },
+              pull_request: isPR ? {
+                number: item.number,
+                title: item.title,
+                body: item.body || '',
+                labels: (item.labels || []).map(l => typeof l === 'string' ? l : l.name),
+                state: item.state,
+                draft: !!item.draft
+              } : undefined
+            };
+
+            let alex = { labels: [], milestone: null, dryRun: true };
+            if (hasSecrets) {
+              try {
+                const res = await fetchJson(process.env.ALEX_API_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.ALEX_API_KEY}` },
+                  body: JSON.stringify(payload)
+                });
+                if (res.ok) alex = res.json; else core.warning(`Alex API returned ${res.status}`);
+              } catch (e) {
+                core.warning(`Alex API error: ${e.message}`);
+              }
+            } else {
+              core.info('ALEX_API_URL/ALEX_API_KEY not set; running in dry-run.');
+            }
+
+            if (alex.labels && alex.labels.length) {
+              await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: num, labels: alex.labels }).catch(e => core.warning(`addLabels failed: ${e.message}`));
+            }
+
+            if (alex.milestone && typeof alex.milestone === 'string') {
+              const list = await github.rest.issues.listMilestones({ owner: context.repo.owner, repo: context.repo.repo, state: 'open' });
+              let ms = list.data.find(m => m.title === alex.milestone);
+              if (!ms) {
+                try {
+                  const created = await github.rest.issues.createMilestone({ owner: context.repo.owner, repo: context.repo.repo, title: alex.milestone });
+                  ms = created.data;
+                } catch (e) { core.warning(`createMilestone failed: ${e.message}`); }
+              }
+              if (ms) {
+                await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: num, milestone: ms.number }).catch(e => core.warning(`assign milestone failed: ${e.message}`));
+              }
+            }
+
+

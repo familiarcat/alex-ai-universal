@@ -16,17 +16,14 @@ Alex AI Universal now includes a complete universal integration system that ensu
 ### **Quick Start with Universal Integration**
 
 ```bash
-# Initialize any project with Alex AI Universal capabilities
-npx @alex-ai/core universal-init
+# Initialize any repo (adds workflow + env templates)
+npx alex-ai init
 
-# Sync knowledge across all projects
-alex-ai universal-sync
+# Verify setup (secrets, permissions)
+alex-ai verify
 
-# Engage crew for analysis
-alex-ai crew-engage --request "Analyze my project architecture"
-
-# Check system status
-alex-ai status
+# Local triage (requires GITHUB_REPOSITORY or GITHUB_OWNER/REPO env)
+alex-ai triage --item 123
 ```
 
 ### **Demo Project**

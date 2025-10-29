@@ -12,7 +12,10 @@
       "name": "Prompt Interception",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "webhookId": "anti-hallucination-webhook"
     },
     {
@@ -23,7 +26,10 @@
       "name": "Prompt Analysis",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -33,7 +39,10 @@
       "name": "Crew Splitter",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -43,33 +52,48 @@
       "name": "LLM Optimization",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [900, 300]
+      "position": [
+        900,
+        300
+      ]
     },
     {
       "parameters": {
-        "model": "={{ $json.optimalLLM }}",
-        "messages": {
-          "values": [
+        "requestMethod": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParametersJson": "={{$json.body || $json}}",
+        "headerParametersUi": {
+          "parameter": [
             {
-              "role": "system",
-              "content": "You are {{ $json.crewMember }} from Star Trek: The Next Generation. Provide your perspective on the given prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis."
+              "name": "Authorization",
+              "value": "={{\"Bearer \"+$env.OPENROUTER_API_KEY}}"
             },
             {
-              "role": "user", 
-              "content": "Original Prompt: {{ $json.originalPrompt }}\n\nPlease provide your perspective on this prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis."
+              "name": "HTTP-Referer",
+              "value": "={{$env.OPENROUTER_REFERER}}"
+            },
+            {
+              "name": "X-Title",
+              "value": "={{$env.OPENROUTER_TITLE}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
-        "options": {
-          "temperature": 0.7,
-          "maxTokens": 1000
-        }
+        "options": {}
       },
       "id": "crew-response-generation",
       "name": "Crew Response Generation",
-      "type": "n8n-nodes-base.openRouter",
-      "typeVersion": 1,
-      "position": [1120, 300]
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        300
+      ]
     },
     {
       "parameters": {
@@ -79,7 +103,10 @@
       "name": "Response Processing",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [1340, 300]
+      "position": [
+        1340,
+        300
+      ]
     },
     {
       "parameters": {
@@ -89,7 +116,10 @@
       "name": "Hallucination Analysis",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [1560, 300]
+      "position": [
+        1560,
+        300
+      ]
     },
     {
       "parameters": {
@@ -107,7 +137,10 @@
       "name": "Correction Gate",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [1780, 300]
+      "position": [
+        1780,
+        300
+      ]
     },
     {
       "parameters": {
@@ -117,7 +150,10 @@
       "name": "Correction Processing",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [2000, 300]
+      "position": [
+        2000,
+        300
+      ]
     },
     {
       "parameters": {
@@ -127,7 +163,10 @@
       "name": "RAG Memory Storage",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [2220, 300]
+      "position": [
+        2220,
+        300
+      ]
     },
     {
       "parameters": {
@@ -137,7 +176,10 @@
       "name": "Result Compilation",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [2440, 300]
+      "position": [
+        2440,
+        300
+      ]
     },
     {
       "parameters": {
@@ -148,7 +190,10 @@
       "name": "Response Return",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [2660, 300]
+      "position": [
+        2660,
+        300
+      ]
     },
     {
       "parameters": {
@@ -159,7 +204,10 @@
       "name": "Error Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [2000, 500]
+      "position": [
+        2000,
+        500
+      ]
     }
   ],
   "connections": {

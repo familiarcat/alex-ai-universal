@@ -17,11 +17,11 @@ cd "$(dirname "$0")/dashboard"
 # Clean any stale processes
 lsof -ti:3000 | xargs kill -9 2>/dev/null || true
 
-# Start Next.js dev server
-echo "🚀 Launching Next.js on http://localhost:3000"
+# Start Next.js dev server with n8n-aware env (remote preferred, local fallback)
+echo "🚀 Launching Next.js on http://localhost:3000 (n8n-aware)"
 echo ""
 
-npm run dev
+npm run dev:n8n
 
 # Note: Next.js handles:
 # - Dashboard UI

@@ -61,28 +61,37 @@
     },
     {
       "parameters": {
-        "model": "={{ $json.optimalLLM }}",
-        "messages": {
-          "values": [
+        "requestMethod": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParametersJson": "={{$json.body || $json}}",
+        "headerParametersUi": {
+          "parameter": [
             {
-              "role": "system",
-              "content": "You are {{ $json.crewMember }} from Star Trek: The Next Generation. Provide your perspective on the given prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis."
+              "name": "Authorization",
+              "value": "={{\"Bearer \"+$env.OPENROUTER_API_KEY}}"
             },
             {
-              "role": "user",
-              "content": "Original Prompt: {{ $json.originalPrompt }}\n\nPlease provide your perspective on this prompt, drawing from your unique expertise and personality. Be specific, insightful, and maintain your character's voice while providing valuable analysis."
+              "name": "HTTP-Referer",
+              "value": "={{$env.OPENROUTER_REFERER}}"
+            },
+            {
+              "name": "X-Title",
+              "value": "={{$env.OPENROUTER_TITLE}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
-        "options": {
-          "temperature": 0.7,
-          "maxTokens": 1000
-        }
+        "options": {}
       },
       "id": "crew-response-generation",
       "name": "Crew Response Generation",
-      "type": "n8n-nodes-base.openRouter",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
       "position": [
         1120,
         300

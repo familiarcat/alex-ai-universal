@@ -4,6 +4,9 @@
   "description": "Universal AI Code Assistant - Standalone Repository",
   "private": true,
   "workspaces": [],
+  "bin": {
+    "alex-ai": "bin/alex-ai"
+  },
   "scripts": {
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",
     "n8n:sync-remote": "node scripts/n8n-bulk-sync-remote.js",
@@ -102,6 +105,7 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
+    "@octokit/rest": "^21.0.0",
     "chokidar": "^4.0.3"
   }
 }
