@@ -48,11 +48,18 @@ export async function GET() {
     let data: any = null;
     let lastError: { status?: number; body?: string } | null = null;
 
+    const sharedHeaders: Record<string, string> = {};
+    const signingSecret = process.env.N8N_WEBHOOK_SECRET || process.env.N8N_CONTROLLER_TOKEN;
+    if (signingSecret) {
+      // simple shared-secret header; workflow should validate
+      sharedHeaders['x-controller-token'] = signingSecret;
+    }
+
     for (const url of candidates) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 8000);
-        const res = await fetch(url, { method: 'GET', signal: controller.signal, headers: { 'Accept': 'application/json' } });
+        const res = await fetch(url, { method: 'GET', signal: controller.signal, headers: { 'Accept': 'application/json', ...sharedHeaders } });
         clearTimeout(timeout);
         if (!res.ok) {
           lastError = { status: res.status, body: await res.text().catch(() => '') };

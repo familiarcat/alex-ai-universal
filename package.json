@@ -8,6 +8,7 @@
     "alex-ai": "bin/alex-ai"
   },
   "scripts": {
+    "engage": "bash ./scripts/engage-alex-ai-enhanced.sh",
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",
     "n8n:sync-remote": "node scripts/n8n-bulk-sync-remote.js",
     "n8n:up": "docker compose -f docker-compose.n8n.yml up -d",
