@@ -84,6 +84,10 @@ export default function DevNavigation() {
           🛸 Observation Lounge
         </Link>
         
+        <Link href="/reports/architecture" style={linkStyle(isActive('/reports/architecture'))}>
+          🧭 Architecture
+        </Link>
+        
         <div style={{ position: 'relative' }}>
           <button
             onClick={() => setProjectsOpen(!projectsOpen)}
