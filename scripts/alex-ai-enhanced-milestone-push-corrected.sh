@@ -327,11 +327,12 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
     
     # Push to remote
     lieutenant_uhura "Transmitting enhanced milestone to remote repository..."
-    lieutenant_uhura "📻 Transmission [git-push]: Pushing to origin/$branch..."
-    if git push origin "$branch" 2>/dev/null; then
+    lieutenant_uhura "📻 Transmission [git-push]: Pushing to origin/$branch (no suppression, will fail loudly)..."
+    if git push origin "$branch"; then
         lieutenant_uhura "📻 Transmission [git-push]: ✅ SUCCESS"
     else
-        lieutenant_uhura "📻 Transmission [git-push]: ⚠️ WARNING - Remote push failed, but local commit created"
+        lieutenant_uhura "📻 Transmission [git-push]: ❌ FAILED"
+        exit 1
     fi
     
     # User experience summary with task details

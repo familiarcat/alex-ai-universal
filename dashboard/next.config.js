@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 const nextConfig = {
+  // Silence multi-lockfile warning by pointing tracing root to repo root
+  outputFileTracingRoot: path.join(__dirname, '..'),
   // Enable static exports for deployment (commented out for dev)
   // output: 'export',
   trailingSlash: true,

@@ -135,12 +135,12 @@ export default function DashboardPage() {
                     boxShadow: 'var(--shadow)'
                   }}>
                   {mounted && (
-                    <iframe
+                  <iframe
                         key={`${projectId}-${content.theme}-${content.updatedAt}`}
                         src={`/bridge/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}&t=${content.updatedAt}`}
-                        title={`${projectId}-preview`}
-                        style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
-                      />
+                      title={`${projectId}-preview`}
+                      style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
+                    />
                   )}
                   </div>
                   <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">

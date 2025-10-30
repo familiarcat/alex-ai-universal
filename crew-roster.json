@@ -1,0 +1,119 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-30T18:07:30Z",
+  "n8nInstance": "https://n8n.pbradygeorgen.com",
+  "totalCrewMembers": 11,
+  "activeCrewMembers": 11,
+  "crewMembers": [
+    {
+      "id": "xz1Op8tLhe6dd3yV",
+      "name": "Captain Jean-Luc Picard - Strategic Leadership",
+      "fullName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/xz1Op8tLhe6dd3yV",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "RxCX3376Du6xW727",
+      "name": "Commander Data - Android Analytics",
+      "fullName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/RxCX3376Du6xW727",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "BFh2I9TwxN9871uO",
+      "name": "Commander William Riker - Tactical Execution",
+      "fullName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/BFh2I9TwxN9871uO",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "ozPdtlXJ7mkB3jkc",
+      "name": "Counselor Deanna Troi - User Experience",
+      "fullName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/ozPdtlXJ7mkB3jkc",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "neFZ70goRnt6qUNm",
+      "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "fullName": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/neFZ70goRnt6qUNm",
+      "nodes": 8,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "FZjbB8fmomNvH7et",
+      "name": "Dr. Beverly Crusher - Health & Diagnostics",
+      "fullName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/FZjbB8fmomNvH7et",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "8jLIY7HajF9rd0X4",
+      "name": "LCARS Access & Retrieval System",
+      "fullName": "LCARS Access & Retrieval System - Real-time Preview",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/8jLIY7HajF9rd0X4",
+      "nodes": 5,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "vIxsa7NkBwrISmIu",
+      "name": "LCARS Library Computer",
+      "fullName": "LCARS Library Computer - LLM Optimization",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/vIxsa7NkBwrISmIu",
+      "nodes": 6,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "ogsUoPCp5KjNf3Or",
+      "name": "Lieutenant Commander Geordi La Forge - Infrastructure",
+      "fullName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/ogsUoPCp5KjNf3Or",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "ALug4ov1cTS754pV",
+      "name": "Lieutenant Uhura - Communications & I/O",
+      "fullName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/ALug4ov1cTS754pV",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    },
+    {
+      "id": "Jz3TVht94wnjr5Q7",
+      "name": "Lieutenant Worf - Security & Compliance",
+      "fullName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/Jz3TVht94wnjr5Q7",
+      "nodes": 7,
+      "lastUpdated": "2025-10-26",
+      "active": true
+    }
+  ]
+}
