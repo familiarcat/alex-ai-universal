@@ -17,42 +17,47 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# Crew member functions
-captain_picard() {
-    echo -e "${BLUE}👨‍✈️ Captain Picard: $1${NC}" >&2
-}
-
-commander_data() {
-    echo -e "${CYAN}🤖 Commander Data: $1${NC}" >&2
-}
-
-lieutenant_geordi() {
-    echo -e "${YELLOW}⚙️ Lieutenant Commander Geordi: $1${NC}" >&2
-}
-
-lieutenant_worf() {
-    echo -e "${RED}⚔️ Lieutenant Worf: $1${NC}" >&2
-}
-
-dr_crusher() {
-    echo -e "${PURPLE}🏥 Dr. Crusher: $1${NC}" >&2
-}
-
-commander_riker() {
-    echo -e "${GREEN}⚡ Commander Riker: $1${NC}" >&2
-}
-
-counselor_troi() {
-    echo -e "${WHITE}💭 Counselor Troi: $1${NC}" >&2
-}
-
-lieutenant_uhura() {
-    echo -e "${BLUE}📡 Lieutenant Uhura: $1${NC}" >&2
-}
-
-quark() {
-    echo -e "${YELLOW}💰 Quark: $1${NC}" >&2
-}
+# Crew member functions (theme-gated)
+# Set ALEX_AI_THEME=off to silence themed logs
+if [ "${ALEX_AI_THEME:-off}" = "off" ]; then
+    captain_picard() { :; }
+    commander_data() { :; }
+    lieutenant_geordi() { :; }
+    lieutenant_worf() { :; }
+    dr_crusher() { :; }
+    commander_riker() { :; }
+    counselor_troi() { :; }
+    lieutenant_uhura() { :; }
+    quark() { :; }
+else
+    captain_picard() {
+        echo -e "${BLUE}👨‍✈️ Captain Picard: $1${NC}" >&2
+    }
+    commander_data() {
+        echo -e "${CYAN}🤖 Commander Data: $1${NC}" >&2
+    }
+    lieutenant_geordi() {
+        echo -e "${YELLOW}⚙️ Lieutenant Commander Geordi: $1${NC}" >&2
+    }
+    lieutenant_worf() {
+        echo -e "${RED}⚔️ Lieutenant Worf: $1${NC}" >&2
+    }
+    dr_crusher() {
+        echo -e "${PURPLE}🏥 Dr. Crusher: $1${NC}" >&2
+    }
+    commander_riker() {
+        echo -e "${GREEN}⚡ Commander Riker: $1${NC}" >&2
+    }
+    counselor_troi() {
+        echo -e "${WHITE}💭 Counselor Troi: $1${NC}" >&2
+    }
+    lieutenant_uhura() {
+        echo -e "${BLUE}📡 Lieutenant Uhura: $1${NC}" >&2
+    }
+    quark() {
+        echo -e "${YELLOW}💰 Quark: $1${NC}" >&2
+    }
+fi
 
 # Task tracking functions
 analyze_git_changes() {
