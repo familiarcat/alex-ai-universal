@@ -48,6 +48,15 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "N8N agents are now connected for memory collection and sharing!"
     echo "You can now use 'Engage AlexAI' in Cursor AI chat with full N8N integration."
+    echo ""
+    # Create a lightweight marker for Cursor workflows and remind user about chat routing
+    echo "engaged" > .alex-ai-cursor-engaged 2>/dev/null || true
+    if [ -f .cursorrules ]; then
+        echo "🧭 Cursor is configured to route chat to 'npx alex-ai chat' while engaged."
+        echo "   Say 'exit' to stop the chat session."
+    else
+        echo "ℹ️  Tip: Add a .cursorrules file to prefer routing chat to 'npx alex-ai chat' after engagement."
+    fi
 else
     echo "❌ Failed to initialize Alex AI. Please check your ~/.zshrc configuration."
     exit 1

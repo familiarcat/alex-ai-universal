@@ -8,12 +8,17 @@
 
 import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 
 export default function DashboardPage() {
   const { projects, updateProject, updateTheme } = useAppState();
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const projectMeta = {
     alpha: { name: 'Enterprise E-commerce', port: 3004, icon: '🛒', budget: 15000 },
@@ -123,18 +128,20 @@ export default function DashboardPage() {
                   <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     👁️ Live Preview (Isolated, Real-Time)
                   </h3>
-                  <div style={{
+                  <div suppressHydrationWarning style={{
                     border: 'var(--border)',
                     borderRadius: 'var(--radius)',
                     overflow: 'hidden',
                     boxShadow: 'var(--shadow)'
                   }}>
-                  <iframe
-                      key={`${projectId}-${content.theme}`}
-                      src={`/bridge/projects/${projectId}/`}
-                      title={`${projectId}-preview`}
-                      style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
-                    />
+                  {mounted && (
+                    <iframe
+                        key={`${projectId}-${content.theme}-${content.updatedAt}`}
+                        src={`/bridge/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}&t=${content.updatedAt}`}
+                        title={`${projectId}-preview`}
+                        style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
+                      />
+                  )}
                   </div>
                   <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
                     Preview is fully isolated to reflect the project's own theme and tokens.

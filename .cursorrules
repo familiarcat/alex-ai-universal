@@ -1,0 +1,23 @@
+AI Behavior: Cursor Chat Routing for Alex AI
+
+Rule: After the user runs the "engage" command, treat this chat as a thin proxy to the local CLI.
+
+When engaged:
+- Always route the user's chat message content to the external command: `npx alex-ai chat`.
+- Return the CLI's textual output back into chat without creating or modifying any files.
+- Maintain the zero-artifact guarantee; do not generate files or directories unless explicitly requested by the user.
+- Prefer the Alex AI CLI for status, crew, n8n, and RAG interactions.
+
+Guardrails:
+- If external command execution is not possible, respond inline using the Alex AI reasoning but clearly state that the CLI could not be invoked.
+- Never write artifacts to the repository unless the user explicitly asks for code edits or files.
+
+Engagement cue phrases (examples):
+- "Engage Alex AI"
+- "Activate Alex AI"
+- "Start Alex AI chat"
+- "Open Alex AI chat"
+
+Deactivation:
+- If the user says "exit" or "stop Alex AI chat", stop routing to the CLI and resume normal behavior.
+

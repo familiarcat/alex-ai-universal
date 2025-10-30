@@ -359,9 +359,41 @@ class EnhancedProjectServer {
   }
 
   handleRequest(req, res) {
-    if (req.url === '/') {
+    // Allow per-request overrides via query params for live preview
+    const url = new URL(req.url, `http://localhost:${this.project.port}`);
+    const oldContent = this.content;
+    const oldTheme = this.themeId;
+    let useOverrides = false;
+    try {
+      const headline = url.searchParams.get('headline');
+      const subheadline = url.searchParams.get('subheadline');
+      const description = url.searchParams.get('description');
+      const theme = url.searchParams.get('theme');
+      if (headline || subheadline || description || theme) {
+        useOverrides = true;
+        // clone to avoid mutating template
+        const clone = JSON.parse(JSON.stringify(this.content));
+        if (headline) clone.hero.headline = headline;
+        if (subheadline) clone.hero.subheadline = subheadline;
+        if (description) {
+          // Map description to first feature description if present for richer preview
+          if (clone.features && clone.features[0]) {
+            clone.features[0].description = description;
+          }
+        }
+        this.content = clone;
+        if (theme) this.themeId = theme;
+      }
+    } catch {}
+
+    if (url.pathname === '/' || url.pathname === '') {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(this.generateHTML());
+      // restore base content/theme to avoid cross-request bleed
+      if (useOverrides) {
+        this.content = oldContent;
+        this.themeId = oldTheme;
+      }
     } else if (req.url === '/api/info') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({

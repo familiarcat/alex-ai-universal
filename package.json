@@ -61,6 +61,7 @@
     "alex-ai:status": "cd packages/core && npm run alex-ai status",
     "milestone:push": "bash ./scripts/preflight-ship-health.sh --free-ports && bash ./scripts/milestone-push.sh",
     "milestone:one-touch": "bash ./scripts/milestone-one-touch.sh",
+    "engage:auto": "bash ./scripts/auto-engage-and-milestone.sh",
     "crew:provision": "bash ./scripts/provision-crew-access.sh",
     "rag:ingest": "node scripts/n8n-post-knowledge.js",
     "rag:verify": "node scripts/n8n-verify-knowledge.js",
@@ -75,7 +76,12 @@
     "bridge:stop": "lsof -ti:3004,3002,3003 | xargs kill -9 2>/dev/null || true",
     "themes:start": "node ./universal-theme-system/theme-gallery-server.js & node ./universal-theme-system/vibe-quiz-server.js & node ./universal-theme-system/crew-wizard-server.js &",
     "themes:stop": "lsof -ti:3010,3020,3030 | xargs kill -9 2>/dev/null || true",
-    "dev:bridge": "npm run themes:start && npm run bridge:start && bash ./start-alex-ai.sh"
+    "dev:bridge": "npm run themes:start && npm run bridge:start && bash ./start-alex-ai.sh",
+    "local:e2e": "bash ./scripts/local-e2e-setup.sh",
+    "local:chat": "node bin/alex-ai chat",
+    "local:engage": "node bin/alex-ai engage \"$MESSAGE\"",
+    "ports:kill": "bash ./scripts/kill-ports.sh",
+    "dashboard:dev:clean": "bash ./scripts/kill-ports.sh && cd dashboard && npm run dev:n8n"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

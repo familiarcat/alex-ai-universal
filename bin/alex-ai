@@ -4,9 +4,18 @@
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
 
-function run(script, args = []) {
+function runScriptInScripts(script, args = []) {
   const scriptPath = path.join(__dirname, '..', 'scripts', script);
   const res = spawnSync(process.execPath, [scriptPath, ...args], { stdio: 'inherit', env: process.env });
+  process.exitCode = res.status || 0;
+}
+
+function runLocalCLI(args = []) {
+  // Prefer built dist, fall back to JS in src (already present)
+  const distPath = path.join(__dirname, '..', 'packages', 'cli', 'dist', 'alex-ai-cli.js');
+  const srcPath = path.join(__dirname, '..', 'packages', 'cli', 'src', 'alex-ai-cli.js');
+  const cliPath = require('fs').existsSync(distPath) ? distPath : srcPath;
+  const res = spawnSync(process.execPath, [cliPath, ...args], { stdio: 'inherit', env: process.env });
   process.exitCode = res.status || 0;
 }
 
@@ -14,13 +23,19 @@ const [, , cmd, ...rest] = process.argv;
 
 switch (cmd) {
   case 'init':
-    run('cli-init.js', rest);
+    runScriptInScripts('cli-init.js', rest);
     break;
   case 'verify':
-    run('cli-verify.js', rest);
+    runScriptInScripts('cli-verify.js', rest);
     break;
   case 'triage':
-    run('cli-triage.js', rest);
+    runScriptInScripts('cli-triage.js', rest);
+    break;
+  case 'engage':
+    runLocalCLI(['engage', ...rest]);
+    break;
+  case 'chat':
+    runLocalCLI(['chat', ...rest]);
     break;
   default: {
     console.log('Alex AI CLI');
@@ -28,6 +43,8 @@ switch (cmd) {
     console.log('  alex-ai init            # add workflow and env templates to current repo');
     console.log('  alex-ai verify          # preflight check for secrets and permissions');
     console.log('  alex-ai triage [--item <number>|--all]  # triage issues/PRs locally');
+    console.log('  alex-ai engage "<message>"  # one-shot engagement via local CLI');
+    console.log('  alex-ai chat            # interactive chat via local CLI');
     process.exitCode = 0;
   }
 }
