@@ -4,13 +4,17 @@
  */
 
 const http = require('http');
-const { CONTENT_TEMPLATES } = require('./content-templates');
+const { THEME_DEFINITIONS } = require('../universal-theme-system/theme-definitions');
+const UniversalThemeManager = require('../universal-theme-system/theme-manager');
 
 class EnhancedProjectServer {
   constructor(project, themeId) {
     this.project = project;
     this.themeId = themeId;
-    this.content = CONTENT_TEMPLATES[themeId] || CONTENT_TEMPLATES.gradient;
+    this.themeManager = new UniversalThemeManager();
+    const themeDef = THEME_DEFINITIONS[themeId] || THEME_DEFINITIONS.gradient;
+    this.content = themeDef.content || {};
+    this.serverCSS = themeDef.serverCSS || {};
     this.server = null;
   }
 
@@ -29,22 +33,32 @@ class EnhancedProjectServer {
 
   generateHTML() {
     const css = this.getThemeCSS();
-    const accessibility = this.content.accessibility;
+    const themeDef = THEME_DEFINITIONS[this.themeId] || THEME_DEFINITIONS.gradient;
+    const content = this.content || {};
+    const hero = content.hero || { headline: this.project.name, subheadline: '', cta: 'Get Started', ctaSecondary: 'Learn More' };
+    const features = content.features || [];
+    const typography = content.typography || themeDef.typography || { headingSize: '48px', lineHeight: '1.6' };
+    const businessType = content.businessType || 'Platform';
+    
+    // Extract colors from CSS tokens
+    const textColor = themeDef.css?.['--text'] || '#ffffff';
+    const headingColor = themeDef.css?.['--heading'] || '#ffffff';
+    const borderColor = themeDef.css?.['--border'] || 'rgba(255, 255, 255, 0.1)';
     
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${this.project.name} | ${this.content.businessType}</title>
+    <title>${this.project.name} | ${businessType}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            ${css.background}
-            color: ${accessibility.textColor};
+            ${css.background || ''}
+            color: ${textColor};
             min-height: 100vh;
-            line-height: ${this.content.typography.lineHeight};
+            line-height: ${typography.lineHeight || '1.6'};
         }
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
@@ -52,18 +66,16 @@ class EnhancedProjectServer {
         .hero {
             text-align: center;
             padding: 100px 30px;
-            ${css.heroBackground}
+            ${css.heroBackground || ''}
             border-radius: 24px;
             margin-bottom: 60px;
-            ${accessibility.cardBackground ? `background: ${accessibility.cardBackground};` : ''}
-            ${accessibility.backdropBlur ? `backdrop-filter: blur(${accessibility.backdropBlur});` : ''}
-            border: 1px solid ${accessibility.borderColor || 'rgba(255, 255, 255, 0.1)'};
+            border: 1px solid ${borderColor};
         }
         .hero h1 {
-            font-size: ${this.content.typography.headingSize};
+            font-size: ${typography.headingSize || '48px'};
             font-weight: 700;
             margin-bottom: 24px;
-            ${accessibility.textShadow ? `text-shadow: ${accessibility.textShadow};` : ''}
+            color: ${headingColor};
             line-height: 1.2;
         }
         .hero p {
@@ -101,8 +113,8 @@ class EnhancedProjectServer {
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
         .btn-secondary {
-            ${css.buttonSecondary}
-            border: 2px solid ${accessibility.borderColor || 'currentColor'};
+            ${css.buttonSecondary || ''}
+            border: 2px solid ${borderColor};
         }
         .btn-secondary:hover {
             ${css.buttonSecondaryHover}
@@ -124,11 +136,10 @@ class EnhancedProjectServer {
             gap: 30px;
         }
         .feature-card {
-            ${css.cardBackground}
+            ${css.cardBackground || ''}
             padding: 40px 30px;
             border-radius: 20px;
-            border: 1px solid ${accessibility.borderColor || 'rgba(255, 255, 255, 0.1)'};
-            ${accessibility.backdropBlur ? `backdrop-filter: blur(${accessibility.backdropBlur});` : ''}
+            border: 1px solid ${borderColor};
             transition: transform 0.3s ease;
         }
         .feature-card:hover {
@@ -159,12 +170,12 @@ class EnhancedProjectServer {
         
         /* Trust Section */
         .trust-section {
-            ${css.cardBackground}
+            ${css.cardBackground || ''}
             padding: 60px 40px;
             border-radius: 24px;
             margin-bottom: 60px;
             text-align: center;
-            border: 1px solid ${accessibility.borderColor || 'rgba(255, 255, 255, 0.1)'};
+            border: 1px solid ${borderColor};
         }
         .trust-grid {
             display: grid;
@@ -183,7 +194,7 @@ class EnhancedProjectServer {
             padding: 40px 20px;
             opacity: 0.7;
             font-size: 14px;
-            border-top: 1px solid ${accessibility.borderColor || 'rgba(255, 255, 255, 0.1)'};
+            border-top: 1px solid ${borderColor};
         }
         .status-bar {
             position: fixed;
@@ -191,11 +202,10 @@ class EnhancedProjectServer {
             left: 0;
             right: 0;
             background: rgba(0, 0, 0, 0.9);
-            ${accessibility.backdropBlur ? `backdrop-filter: blur(10px);` : ''}
             padding: 15px;
             text-align: center;
             font-size: 13px;
-            border-top: 1px solid ${accessibility.borderColor || 'rgba(255, 255, 255, 0.1)'};
+            border-top: 1px solid ${borderColor};
         }
         .status-indicator {
             display: inline-block;
@@ -213,7 +223,7 @@ class EnhancedProjectServer {
         
         /* Accessibility */
         *:focus-visible {
-            outline: 3px solid ${accessibility.accentColor || '#00ff88'};
+            outline: 3px solid ${themeDef.css?.['--accent'] || '#00ff88'};
             outline-offset: 2px;
         }
     </style>
@@ -222,29 +232,31 @@ class EnhancedProjectServer {
     <div class="container">
         <!-- Hero Section -->
         <div class="hero">
-            <h1>${this.content.hero.headline}</h1>
-            <p>${this.content.hero.subheadline}</p>
+            <h1>${hero.headline}</h1>
+            <p>${hero.subheadline}</p>
             <div class="cta-group">
-                <button class="btn btn-primary">${this.content.hero.cta}</button>
-                <button class="btn btn-secondary">${this.content.hero.ctaSecondary}</button>
+                <button class="btn btn-primary">${hero.cta}</button>
+                <button class="btn btn-secondary">${hero.ctaSecondary}</button>
             </div>
         </div>
 
         <!-- Features Section -->
+        ${features.length > 0 ? `
         <div class="features">
             <h2 class="section-heading">Why Choose ${this.project.name}?</h2>
             <div class="features-grid">
-                ${this.content.features.map(feature => `
+                ${features.map(feature => `
                     <div class="feature-card">
-                        <span class="feature-icon">${feature.icon}</span>
+                        <span class="feature-icon">${feature.icon || '✨'}</span>
                         <h3 class="feature-title">${feature.title}</h3>
                         <p class="feature-description">${feature.description}</p>
-                        <p class="feature-benefit">→ ${feature.benefit}</p>
+                        ${feature.benefit ? `<p class="feature-benefit">→ ${feature.benefit}</p>` : ''}
                         ${feature.technical ? `<p style="font-size: 12px; opacity: 0.6; margin-top: 8px;">${feature.technical}</p>` : ''}
                     </div>
                 `).join('')}
             </div>
         </div>
+        ` : ''}
 
         <!-- Trust/Social Proof Section -->
         ${this.renderTrustSection()}
@@ -264,7 +276,7 @@ class EnhancedProjectServer {
     <div class="status-bar">
         <span class="status-indicator"></span>
         <span>Managed by Alex AI Dashboard | 
-        ${this.content.businessType} | 
+        ${businessType} | 
         ${this.project.assignedCrew.length} Crew Members | 
         Port ${this.project.port}</span>
     </div>
@@ -394,47 +406,80 @@ class EnhancedProjectServer {
   handleRequest(req, res) {
     // Allow per-request overrides via query params for live preview
     const url = new URL(req.url, `http://localhost:${this.project.port}`);
+    const themeParam = url.searchParams.get('theme');
+    
+    // Reload theme from project-themes.json if no query param (to pick up dashboard changes)
+    // Query param theme takes precedence over file-based theme
+    let effectiveThemeId = themeParam;
+    if (!effectiveThemeId) {
+      // Reload from file to get latest persisted theme
+      this.themeManager.loadProjectThemes();
+      effectiveThemeId = this.themeManager.getProjectTheme(this.project.id) || this.themeId;
+    }
+    
     const oldContent = this.content;
     const oldTheme = this.themeId;
     let useOverrides = false;
+    
     try {
       const headline = url.searchParams.get('headline');
       const subheadline = url.searchParams.get('subheadline');
       const description = url.searchParams.get('description');
-      const theme = url.searchParams.get('theme');
-      if (headline || subheadline || description || theme) {
+      
+      // If theme changed (from query param or file reload), reload content
+      if (effectiveThemeId !== this.themeId) {
+        const themeDef = THEME_DEFINITIONS[effectiveThemeId] || THEME_DEFINITIONS.gradient;
+        this.content = JSON.parse(JSON.stringify(themeDef.content || {}));
+        this.themeId = effectiveThemeId;
+        useOverrides = true;
+      }
+      
+      if (headline || subheadline || description || themeParam) {
         useOverrides = true;
         // clone to avoid mutating template
         const clone = JSON.parse(JSON.stringify(this.content));
-        if (headline) clone.hero.headline = headline;
-        if (subheadline) clone.hero.subheadline = subheadline;
+        this.content = clone;
+        // Apply live preview overrides
+        if (headline && this.content.hero) this.content.hero.headline = headline;
+        if (subheadline && this.content.hero) this.content.hero.subheadline = subheadline;
         if (description) {
           // Map description to first feature description if present for richer preview
-          if (clone.features && clone.features[0]) {
-            clone.features[0].description = description;
+          if (this.content.features && this.content.features[0]) {
+            this.content.features[0].description = description;
+          } else if (this.content.hero) {
+            // Fallback: use as subheadline if no features
+            this.content.hero.subheadline = description;
           }
         }
-        this.content = clone;
-        if (theme) this.themeId = theme;
       }
     } catch {}
 
     if (url.pathname === '/' || url.pathname === '') {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(this.generateHTML());
-      // restore base content/theme to avoid cross-request bleed
-      if (useOverrides) {
+      // Restore content template but keep theme if it changed from file
+      if (useOverrides && !themeParam && effectiveThemeId === oldTheme) {
+        // Only restore if theme didn't change
         this.content = oldContent;
         this.themeId = oldTheme;
+      } else if (themeParam) {
+        // Query param theme - restore content but keep theme for this request
+        this.content = oldContent;
+        // themeId stays as effectiveThemeId (from query param)
+      } else if (effectiveThemeId !== oldTheme) {
+        // Theme changed from file - keep it and restore content
+        this.content = oldContent;
+        // themeId stays as effectiveThemeId (from file)
       }
     } else if (req.url === '/api/info') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
+      const content = this.content || {};
       res.end(JSON.stringify({
         project: this.project.name,
         theme: this.themeId,
-        businessType: this.content.businessType,
-        customerProfile: this.content.customerProfile,
-        pricePoint: this.content.pricePoint
+        businessType: content.businessType,
+        customerProfile: content.customerProfile,
+        pricePoint: content.pricePoint
       }));
     } else {
       res.writeHead(404);

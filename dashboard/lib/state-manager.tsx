@@ -126,8 +126,21 @@ export function StateProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const updateTheme = (projectId: string, themeId: string) => {
+  const updateTheme = async (projectId: string, themeId: string) => {
+    // Update local state immediately
     updateProject(projectId, 'theme', themeId);
+    
+    // Persist to project-themes.json via API
+    try {
+      await fetch(`/api/themes/project/${projectId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ themeId })
+      });
+    } catch (error) {
+      console.error('Failed to persist theme change:', error);
+      // Non-blocking - local state is updated, persistence is best-effort
+    }
   };
 
   const updateGlobalTheme = (themeId: string) => {
