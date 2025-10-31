@@ -147,7 +147,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <Link 
-                  href={`/bridge/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
+                  href={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
                   target="_blank"
                   style={{
                     background: 'var(--accent)',
@@ -201,7 +201,7 @@ export default function DashboardPage() {
                   {mounted && (
                   <iframe
                         key={`${projectId}-${content.theme}-${content.headline}-${content.subheadline}-${content.description}-${content.updatedAt}`}
-                        src={`/bridge/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
+                        src={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
                       title={`${projectId}-preview`}
                       style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}
                     />
