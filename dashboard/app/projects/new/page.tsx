@@ -41,6 +41,12 @@ export default function NewProjectPage() {
     description: '' 
   });
   
+  // Crossfade state: track current and previous iframe keys
+  const [previewIframeState, setPreviewIframeState] = useState<{ current: string; previous: string | null }>({
+    current: 'initial',
+    previous: null
+  });
+  
   const [step, setStep] = useState<'theme' | 'wizard' | 'review' | 'generating'>('theme');
   
   // Wizard state
@@ -223,6 +229,17 @@ export default function NewProjectPage() {
     
     return () => clearTimeout(timer);
   }, [previewTheme, previewHeadline, previewSubheadline, previewDescription]);
+  
+  // Update iframe state for crossfade
+  useEffect(() => {
+    const newKey = `${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`;
+    if (previewIframeState.current !== newKey) {
+      setPreviewIframeState({
+        current: newKey,
+        previous: previewIframeState.current
+      });
+    }
+  }, [debouncedPreview]);
 
   return (
     <div style={containerStyle}>
@@ -520,31 +537,68 @@ export default function NewProjectPage() {
             {mounted ? (
               <>
                 <style>{`
-                  @keyframes smoothFadeIn {
-                    from {
-                      opacity: 0;
-                    }
-                    to {
-                      opacity: 1;
-                    }
+                  @keyframes crossfadeFadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                   }
                   
-                  .new-project-preview-iframe {
-                    animation: smoothFadeIn 0.15s ease-out;
+                  @keyframes crossfadeFadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                  }
+                  
+                  .new-project-iframe-container {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+                  
+                  .new-project-iframe-layer {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    display: block;
+                    background: #fff;
+                  }
+                  
+                  .new-project-iframe-current {
+                    animation: crossfadeFadeIn 0.15s ease-out forwards;
+                    z-index: 2;
+                  }
+                  
+                  .new-project-iframe-previous {
+                    animation: crossfadeFadeOut 0.15s ease-out forwards;
+                    z-index: 1;
                   }
                 `}</style>
-                <iframe
-                  key={`${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`}
-                  src={`/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`}
-                  title="project-preview"
-                  className="new-project-preview-iframe"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    border: 0,
-                    display: 'block'
-                  }}
-                />
+                <div className="new-project-iframe-container">
+                  {/* Current iframe (fading in) */}
+                  <iframe
+                    key={previewIframeState.current}
+                    src={`/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`}
+                    title="project-preview-current"
+                    className="new-project-iframe-layer new-project-iframe-current"
+                    onLoad={() => {
+                      // Garbage collect previous iframe after fade completes
+                      setTimeout(() => {
+                        setPreviewIframeState(prev => ({ ...prev, previous: null }));
+                      }, 150);
+                    }}
+                  />
+                  
+                  {/* Previous iframe (fading out) - removed after animation */}
+                  {previewIframeState.previous && previewIframeState.previous !== 'initial' && (
+                    <iframe
+                      key={previewIframeState.previous}
+                      src={`/projects/preview`}
+                      title="project-preview-previous"
+                      className="new-project-iframe-layer new-project-iframe-previous"
+                    />
+                  )}
+                </div>
               </>
             ) : (
               <div style={{ color: 'var(--text-muted)', fontSize: 14 }}>
