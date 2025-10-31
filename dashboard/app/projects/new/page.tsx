@@ -88,35 +88,29 @@ export default function NewProjectPage() {
   function generateProject() {
     setStep('generating');
     
-    // Find available slot
-    const slots = ['alpha', 'beta', 'gamma'] as const;
-    const availableSlot = slots.find(slot => !projects[slot] || projects[slot].headline === '');
-    
-    if (!availableSlot) {
-      alert('All project slots are full. Please delete a project first.');
-      setStep('review');
-      return;
-    }
+    // Generate unique project ID (unlimited slots)
+    const projectId = `project_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     
     const theme = selectedTheme || recommendedTheme;
     const headline = projectName || `New ${businessType.charAt(0).toUpperCase() + businessType.slice(1)} Project`;
     const subheadline = goals || 'Achieve your business goals with modern design';
     const description = niche || 'A professional platform built for success';
     
-    // Create project content
-    updateProject(availableSlot, 'headline', headline);
-    updateProject(availableSlot, 'subheadline', subheadline);
-    updateProject(availableSlot, 'description', description);
-    updateTheme(availableSlot, theme);
+    // Create project content with metadata
+    updateProject(projectId, 'headline', headline);
+    updateProject(projectId, 'subheadline', subheadline);
+    updateProject(projectId, 'description', description);
+    updateProject(projectId, 'businessType', businessType); // Store for icon mapping
+    updateTheme(projectId, theme);
     
     // Generate initial components based on business type
     const components = generateInitialComponents(businessType, intent, tone, theme);
     if (components.length > 0) {
-      addComponents(availableSlot, components as any);
+      addComponents(projectId, components as any);
     }
     
     // Store learning in n8n => Supabase
-    storeProjectCreationMemory(availableSlot, theme, businessType, intent, tone);
+    storeProjectCreationMemory(projectId, theme, businessType, intent, tone);
     
     // Redirect to dashboard
     setTimeout(() => {

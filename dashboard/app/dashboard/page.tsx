@@ -20,10 +20,36 @@ export default function DashboardPage() {
     setMounted(true);
   }, []);
 
-  const projectMeta = {
-    alpha: { name: 'Enterprise E-commerce', port: 3004, icon: '🛒', budget: 15000 },
-    beta: { name: 'Starfleet Medical Portal', port: 3002, icon: '🏥', budget: 25000 },
-    gamma: { name: 'Federation Analytics', port: 3003, icon: '📊', budget: 10000 }
+  // Dynamic project metadata - supports unlimited projects
+  const getProjectMeta = (projectId: string, content: any) => {
+    // Legacy support for original 3 projects
+    const legacyMeta: Record<string, any> = {
+      alpha: { name: 'Enterprise E-commerce', port: 3004, icon: '🛒', budget: 15000 },
+      beta: { name: 'Starfleet Medical Portal', port: 3002, icon: '🏥', budget: 25000 },
+      gamma: { name: 'Federation Analytics', port: 3003, icon: '📊', budget: 10000 }
+    };
+    
+    if (legacyMeta[projectId]) {
+      return legacyMeta[projectId];
+    }
+    
+    // Dynamic projects get auto-generated metadata
+    const icons: Record<string, string> = {
+      ecommerce: '🛒', healthcare: '🏥', analytics: '📊', 
+      saas: '💻', portfolio: '🎨', hospitality: '🏨',
+      finance: '💰', publishing: '📰'
+    };
+    
+    // Extract business type from content if available
+    const businessType = content.businessType || 'platform';
+    const icon = icons[businessType] || '🌟';
+    
+    return {
+      name: content.headline || 'New Project',
+      port: 3000, // All use dashboard proxy
+      icon,
+      budget: 10000 // Default
+    };
   };
 
   const themes = [
@@ -94,7 +120,7 @@ export default function DashboardPage() {
 
         {/* Projects */}
         {Object.entries(projects).map(([projectId, content]) => {
-          const meta = projectMeta[projectId as keyof typeof projectMeta];
+          const meta = getProjectMeta(projectId, content);
           
           return (
             <div key={projectId} className="card" style={{

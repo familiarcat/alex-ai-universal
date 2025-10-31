@@ -27,6 +27,7 @@ export interface ProjectContent {
   subheadline: string;
   description: string;
   theme: string;
+  businessType?: string; // For dynamic icon/metadata mapping
   updatedAt: number;
   components?: ProjectComponent[];
 }
