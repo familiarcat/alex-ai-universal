@@ -65,7 +65,7 @@ export default function ProjectHomePage() {
   const accentColor = themeColors.accent;
   
   return (
-    <div style={{ 
+    <div suppressHydrationWarning style={{ 
       minHeight: '100vh', 
       background: bgColor,
       color: textColor,
@@ -73,7 +73,7 @@ export default function ProjectHomePage() {
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Hero Section */}
-        <div style={{ 
+        <div suppressHydrationWarning style={{ 
           textAlign: 'center', 
           marginBottom: 80,
           padding: 60,
@@ -102,7 +102,7 @@ export default function ProjectHomePage() {
           </p>
           
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' as const }}>
-            <button style={{
+            <button suppressHydrationWarning style={{
               padding: '16px 32px',
               background: isDark ? '#00ffaa' : '#667eea',
               color: isDark ? '#0a0015' : '#ffffff',
@@ -115,7 +115,7 @@ export default function ProjectHomePage() {
             }}>
               Get Started
             </button>
-            <button style={{
+            <button suppressHydrationWarning style={{
               padding: '16px 32px',
               background: 'transparent',
               color: textColor,
@@ -139,14 +139,14 @@ export default function ProjectHomePage() {
             marginBottom: 80
           }}>
             {project.components.map(comp => (
-              <div key={comp.id} style={{
+              <div key={comp.id} suppressHydrationWarning style={{
                 padding: 30,
                 background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.8)',
                 borderRadius: 16,
                 border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
                 gridColumn: comp.role === 'hero' ? 'span 2' : 'auto'
               }}>
-                <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12, color: headingColor }}>
+                <h3 suppressHydrationWarning style={{ fontSize: 20, fontWeight: 600, marginBottom: 12, color: headingColor }}>
                   {comp.title}
                 </h3>
                 <p style={{ fontSize: 15, lineHeight: 1.6, opacity: 0.9 }}>
@@ -156,7 +156,7 @@ export default function ProjectHomePage() {
             ))}
           </div>
         ) : (
-          <div style={{ 
+          <div suppressHydrationWarning style={{ 
             textAlign: 'center',
             padding: 60,
             background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
@@ -173,7 +173,7 @@ export default function ProjectHomePage() {
         )}
         
         {/* Footer Navigation */}
-        <footer style={{
+        <footer suppressHydrationWarning style={{
           marginTop: 80,
           paddingTop: 40,
           borderTop: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)'
@@ -185,7 +185,7 @@ export default function ProjectHomePage() {
             marginBottom: 30
           }}>
             <div>
-              <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Company</h4>
+              <h4 suppressHydrationWarning style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Company</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, opacity: 0.8 }}>
                 <Link href={`/projects/${projectId}/about`} style={{ color: textColor, textDecoration: 'none' }}>About</Link>
                 <Link href={`/projects/${projectId}/careers`} style={{ color: textColor, textDecoration: 'none' }}>Careers</Link>
@@ -193,14 +193,14 @@ export default function ProjectHomePage() {
               </div>
             </div>
             <div>
-              <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Products</h4>
+              <h4 suppressHydrationWarning style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Products</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, opacity: 0.8 }}>
                 <Link href={`/projects/${projectId}/features`} style={{ color: textColor, textDecoration: 'none' }}>Features</Link>
                 <Link href={`/projects/${projectId}/pricing`} style={{ color: textColor, textDecoration: 'none' }}>Pricing</Link>
               </div>
             </div>
             <div>
-              <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Support</h4>
+              <h4 suppressHydrationWarning style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Support</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, opacity: 0.8 }}>
                 <Link href={`/projects/${projectId}/docs`} style={{ color: textColor, textDecoration: 'none' }}>Documentation</Link>
                 <Link href={`/projects/${projectId}/support`} style={{ color: textColor, textDecoration: 'none' }}>Support</Link>
@@ -208,7 +208,7 @@ export default function ProjectHomePage() {
               </div>
             </div>
             <div>
-              <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Legal</h4>
+              <h4 suppressHydrationWarning style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, color: headingColor }}>Legal</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, opacity: 0.8 }}>
                 <Link href={`/projects/${projectId}/privacy`} style={{ color: textColor, textDecoration: 'none' }}>Privacy</Link>
                 <Link href={`/projects/${projectId}/terms`} style={{ color: textColor, textDecoration: 'none' }}>Terms</Link>
@@ -216,7 +216,7 @@ export default function ProjectHomePage() {
             </div>
           </div>
           
-          <div style={{ 
+          <div suppressHydrationWarning style={{ 
             paddingTop: 20,
             borderTop: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
             fontSize: 13,
