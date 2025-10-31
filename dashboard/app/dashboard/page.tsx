@@ -22,6 +22,15 @@ export default function DashboardPage() {
     setMounted(true);
   }, []);
   
+  // Debounce iframe updates for smooth 60fps editing (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedProjects(projects);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [projects]);
+  
   const handleDeleteConfirm = () => {
     if (deleteModal) {
       deleteProject(deleteModal.projectId);
@@ -231,12 +240,12 @@ export default function DashboardPage() {
                         }
                         
                         .live-preview-iframe {
-                          animation: smoothFadeIn 0.3s ease-in-out;
+                          animation: smoothFadeIn 0.15s ease-out;
                         }
                       `}</style>
                       <iframe
-                        key={`${projectId}-${content.theme}-${content.headline}-${content.subheadline}-${content.description}-${content.updatedAt}`}
-                        src={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
+                        key={`${projectId}-${debouncedProjects[projectId]?.theme}-${debouncedProjects[projectId]?.headline}-${debouncedProjects[projectId]?.subheadline}-${debouncedProjects[projectId]?.description}`}
+                        src={`/projects/${projectId}/?headline=${encodeURIComponent(debouncedProjects[projectId]?.headline || '')}&subheadline=${encodeURIComponent(debouncedProjects[projectId]?.subheadline || '')}&description=${encodeURIComponent(debouncedProjects[projectId]?.description || '')}&theme=${encodeURIComponent(debouncedProjects[projectId]?.theme || 'gradient')}`}
                         title={`${projectId}-preview`}
                         className="live-preview-iframe"
                         style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}

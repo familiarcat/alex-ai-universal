@@ -33,6 +33,14 @@ export default function NewProjectPage() {
     setMounted(true);
   }, []);
   
+  // Debounced preview state for smooth 60fps updates (300ms)
+  const [debouncedPreview, setDebouncedPreview] = useState({ 
+    theme: 'gradient' as ThemeId, 
+    headline: '', 
+    subheadline: '', 
+    description: '' 
+  });
+  
   const [step, setStep] = useState<'theme' | 'wizard' | 'review' | 'generating'>('theme');
   
   // Wizard state
@@ -196,13 +204,25 @@ export default function NewProjectPage() {
     fontSize: 14
   };
 
-  // Preview URL with current selections
+  // Live preview values (for immediate display)
   const previewTheme = selectedTheme;
   const previewHeadline = projectName || `Your ${businessType} Project`;
   const previewSubheadline = goals || 'Building something amazing';
   const previewDescription = niche || 'Professional platform';
   
-  // Preview URL (no Date.now() to prevent hydration errors)
+  // Debounce iframe updates (300ms after user stops typing)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedPreview({
+        theme: previewTheme,
+        headline: previewHeadline,
+        subheadline: previewSubheadline,
+        description: previewDescription
+      });
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [previewTheme, previewHeadline, previewSubheadline, previewDescription]);
 
   return (
     <div style={containerStyle}>
@@ -510,12 +530,12 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-preview-iframe {
-                    animation: smoothFadeIn 0.3s ease-in-out;
+                    animation: smoothFadeIn 0.15s ease-out;
                   }
                 `}</style>
                 <iframe
-                  key={`${previewTheme}-${previewHeadline}-${previewSubheadline}`}
-                  src={`/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}`}
+                  key={`${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`}
+                  src={`/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`}
                   title="project-preview"
                   className="new-project-preview-iframe"
                   style={{
