@@ -17,6 +17,7 @@ export default function DashboardPage() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
+  const [debouncedProjects, setDebouncedProjects] = useState(projects);
 
   useEffect(() => {
     setMounted(true);
