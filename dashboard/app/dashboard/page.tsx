@@ -56,14 +56,40 @@ export default function DashboardPage() {
           padding: '30px',
           borderRadius: 'var(--radius)',
           marginBottom: '30px',
-          border: 'var(--border)'
+          border: 'var(--border)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap' as const,
+          gap: '20px'
         }}>
-          <h1 style={{ fontSize: '36px', color: 'var(--accent)', marginBottom: '10px' }}>
-            🖖 Alex AI Dashboard - REAL Integration
-          </h1>
-          <p className="text-muted">
-            Edit content here, see updates LIVE on project pages! Open projects in new tabs to test.
-          </p>
+          <div>
+            <h1 style={{ fontSize: '36px', color: 'var(--accent)', marginBottom: '10px' }}>
+              🖖 Alex AI Dashboard - REAL Integration
+            </h1>
+            <p className="text-muted" style={{ marginBottom: 0 }}>
+              Edit content here, see updates LIVE on project pages! Open projects in new tabs to test.
+            </p>
+          </div>
+          <Link
+            href="/projects/new"
+            style={{
+              padding: '14px 24px',
+              background: 'var(--accent)',
+              color: '#0a0015',
+              borderRadius: 'var(--radius)',
+              textDecoration: 'none',
+              fontWeight: 600,
+              fontSize: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 12px rgba(0, 255, 170, 0.3)'
+            }}
+          >
+            <span style={{ fontSize: '20px' }}>+</span> New Project
+          </Link>
         </div>
 
         {/* Projects */}

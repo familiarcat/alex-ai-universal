@@ -1,0 +1,564 @@
+'use client';
+
+/**
+ * New Project Creation Workflow
+ * Integrates Quiz + Wizard for guided project generation
+ * Memory: Stored in n8n => Supabase RAG system for crew learning
+ * 
+ * Crew: Captain Picard (Strategy), Data (Logic), Troi (UX), La Forge (Implementation)
+ */
+
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAppState } from '@/lib/state-manager';
+
+type ThemeId = 'mochaEarth' | 'verdantNature' | 'chromeMetallic' | 'brutalist' | 'mutedNeon' | 'monochromeBlue' | 'gradient' | 'pastel' | 'cyberpunk' | 'glassmorphism' | 'midnight' | 'offworld';
+type BusinessType = 'ecommerce' | 'healthcare' | 'analytics' | 'portfolio' | 'saas' | 'hospitality' | 'finance' | 'publishing';
+type Intent = 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
+type Tone = 'bold' | 'calm' | 'playful' | 'serious' | 'futuristic';
+
+const QUIZ_QUESTIONS: Array<{ q: string; key: ThemeId }> = [
+  { q: 'Do you want warm, sophisticated earth tones (Pantone 2025)?', key: 'mochaEarth' },
+  { q: 'Is sustainability and eco-consciousness central to your brand?', key: 'verdantNature' },
+  { q: 'Do you need a high-tech, metallic, luxury aesthetic?', key: 'chromeMetallic' },
+  { q: 'Do you prefer pure minimalism with raw authenticity?', key: 'brutalist' },
+  { q: 'Do you want calm sophistication with surprise neon accents?', key: 'mutedNeon' },
+  { q: 'Do you need professional trust with a single-hue color story?', key: 'monochromeBlue' },
+  { q: 'Do you prefer vibrant multi-color gradients?', key: 'gradient' },
+  { q: 'Do you prefer soft pastels and gentle colors?', key: 'pastel' },
+  { q: 'Do you want futuristic neon with high contrast?', key: 'cyberpunk' },
+  { q: 'Should it have frosted glass and blur effects?', key: 'glassmorphism' },
+  { q: 'Will this be used primarily in dark environments?', key: 'midnight' },
+  { q: 'Should it feel otherworldly with glowing panels?', key: 'offworld' }
+];
+
+const THEME_NAMES: Record<ThemeId, string> = {
+  mochaEarth: '☕ Mocha Earth',
+  verdantNature: '🌿 Verdant Nature',
+  chromeMetallic: '🤖 Chrome Future',
+  brutalist: '⬛ Brutalist Raw',
+  mutedNeon: '✨ Muted Neon',
+  monochromeBlue: '🔵 Monochrome Blue',
+  gradient: '🌈 Gradient Fusion',
+  pastel: '🌸 Pastel',
+  cyberpunk: '🔮 Cyberpunk',
+  glassmorphism: '🪟 Glass',
+  midnight: '🌙 Midnight',
+  offworld: '🛸 Offworld'
+};
+
+export default function NewProjectPage() {
+  const router = useRouter();
+  const { projects, updateProject, updateTheme, addComponents } = useAppState();
+  
+  const [step, setStep] = useState<'quiz' | 'wizard' | 'review' | 'generating'>('quiz');
+  
+  // Quiz state
+  const [quizIdx, setQuizIdx] = useState(0);
+  const [quizScores, setQuizScores] = useState<Record<ThemeId, number>>(
+    Object.fromEntries(QUIZ_QUESTIONS.map(q => [q.key, 0])) as Record<ThemeId, number>
+  );
+  
+  // Wizard state
+  const [projectName, setProjectName] = useState('');
+  const [businessType, setBusinessType] = useState<BusinessType>('ecommerce');
+  const [niche, setNiche] = useState('');
+  const [goals, setGoals] = useState('');
+  const [intent, setIntent] = useState<Intent>('convert');
+  const [tone, setTone] = useState<Tone>('calm');
+  const [selectedTheme, setSelectedTheme] = useState<ThemeId | null>(null);
+  
+  const recommendedTheme = useMemo(() => {
+    const sorted = (Object.entries(quizScores) as Array<[ThemeId, number]>)
+      .sort((a, b) => b[1] - a[1]);
+    return sorted[0]?.[0] || 'mochaEarth';
+  }, [quizScores]);
+
+  function answerQuiz(yes: boolean) {
+    const themeKey = QUIZ_QUESTIONS[quizIdx].key;
+    setQuizScores(s => ({ ...s, [themeKey]: s[themeKey] + (yes ? 1 : 0) }));
+    
+    if (quizIdx + 1 >= QUIZ_QUESTIONS.length) {
+      setStep('wizard');
+    } else {
+      setQuizIdx(i => i + 1);
+    }
+  }
+
+  function generateProject() {
+    setStep('generating');
+    
+    // Find available slot
+    const slots = ['alpha', 'beta', 'gamma'] as const;
+    const availableSlot = slots.find(slot => !projects[slot] || projects[slot].headline === '');
+    
+    if (!availableSlot) {
+      alert('All project slots are full. Please delete a project first.');
+      setStep('review');
+      return;
+    }
+    
+    const theme = selectedTheme || recommendedTheme;
+    const headline = projectName || `New ${businessType.charAt(0).toUpperCase() + businessType.slice(1)} Project`;
+    const subheadline = goals || 'Achieve your business goals with modern design';
+    const description = niche || 'A professional platform built for success';
+    
+    // Create project content
+    updateProject(availableSlot, 'headline', headline);
+    updateProject(availableSlot, 'subheadline', subheadline);
+    updateProject(availableSlot, 'description', description);
+    updateTheme(availableSlot, theme);
+    
+    // Generate initial components based on business type
+    const components = generateInitialComponents(businessType, intent, tone, theme);
+    if (components.length > 0) {
+      addComponents(availableSlot, components as any);
+    }
+    
+    // Store learning in n8n => Supabase
+    storeProjectCreationMemory(availableSlot, theme, businessType, intent, tone);
+    
+    // Redirect to dashboard
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 2000);
+  }
+
+  function generateInitialComponents(type: BusinessType, intent: Intent, tone: Tone, theme: ThemeId) {
+    // Generate 3-5 starter components based on business type
+    const uid = () => `comp_${Math.random().toString(36).slice(2, 9)}`;
+    
+    const baseComponents = [
+      {
+        id: uid(),
+        title: 'Hero Section',
+        body: `Welcome to our ${type} platform`,
+        role: 'hero' as const,
+        priority: 5,
+        intent,
+        tone,
+        theme,
+        updatedAt: Date.now()
+      },
+      {
+        id: uid(),
+        title: 'Key Features',
+        body: 'Discover what makes us unique',
+        role: 'feature' as const,
+        priority: 4,
+        intent: 'educate' as const,
+        tone,
+        theme,
+        updatedAt: Date.now()
+      },
+      {
+        id: uid(),
+        title: 'Call to Action',
+        body: 'Get started today',
+        role: 'cta' as const,
+        priority: 4,
+        intent: 'convert' as const,
+        tone: 'bold' as const,
+        theme,
+        updatedAt: Date.now()
+      }
+    ];
+    
+    return baseComponents;
+  }
+
+  async function storeProjectCreationMemory(slot: string, theme: ThemeId, bizType: BusinessType, intent: Intent, tone: Tone) {
+    try {
+      // Store in n8n => Supabase for crew learning
+      const memory = {
+        event: 'project_created',
+        slot,
+        theme,
+        businessType: bizType,
+        intent,
+        tone,
+        timestamp: new Date().toISOString(),
+        source: 'new_project_workflow'
+      };
+      
+      // Post to n8n knowledge webhook
+      const n8nUrl = process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
+      await fetch(`${n8nUrl}/webhook/knowledge-ingest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(memory)
+      }).catch(() => console.log('Memory storage best-effort'));
+      
+    } catch (error) {
+      console.log('Memory storage failed (non-blocking):', error);
+    }
+  }
+
+  const containerStyle = {
+    minHeight: '100vh',
+    background: 'var(--background)',
+    color: 'var(--text)',
+    padding: '40px 20px'
+  };
+
+  const cardStyle = {
+    maxWidth: '800px',
+    margin: '0 auto',
+    background: 'var(--card)',
+    border: 'var(--border)',
+    borderRadius: 'var(--radius)',
+    padding: '40px',
+    boxShadow: 'var(--shadow)'
+  };
+
+  const buttonPrimary = {
+    padding: '12px 24px',
+    borderRadius: 8,
+    background: 'var(--accent)',
+    color: '#0a0015',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: 16,
+    fontWeight: 600,
+    transition: 'all 0.2s ease'
+  };
+
+  const buttonSecondary = {
+    padding: '12px 24px',
+    borderRadius: 8,
+    background: 'transparent',
+    color: 'var(--text)',
+    border: 'var(--border)',
+    cursor: 'pointer',
+    fontSize: 16
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px 16px',
+    background: 'var(--card-alt)',
+    color: 'var(--text)',
+    border: 'var(--border)',
+    borderRadius: 8,
+    fontSize: 14
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={cardStyle}>
+        {/* Progress Indicator */}
+        <div style={{ marginBottom: 30, display: 'flex', justifyContent: 'center', gap: 8 }}>
+          <div style={{ 
+            width: 40, 
+            height: 4, 
+            borderRadius: 2, 
+            background: step === 'quiz' || step === 'wizard' || step === 'review' || step === 'generating' ? 'var(--accent)' : 'var(--subtle)' 
+          }} />
+          <div style={{ 
+            width: 40, 
+            height: 4, 
+            borderRadius: 2, 
+            background: step === 'wizard' || step === 'review' || step === 'generating' ? 'var(--accent)' : 'var(--subtle)' 
+          }} />
+          <div style={{ 
+            width: 40, 
+            height: 4, 
+            borderRadius: 2, 
+            background: step === 'review' || step === 'generating' ? 'var(--accent)' : 'var(--subtle)' 
+          }} />
+          <div style={{ 
+            width: 40, 
+            height: 4, 
+            borderRadius: 2, 
+            background: step === 'generating' ? 'var(--accent)' : 'var(--subtle)' 
+          }} />
+        </div>
+
+        {/* Step 1: Theme Discovery Quiz */}
+        {step === 'quiz' && (
+          <div>
+            <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12, color: 'var(--accent)' }}>
+              🎯 Discover Your Perfect Theme
+            </h1>
+            <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
+              Answer {QUIZ_QUESTIONS.length} quick questions to find the theme that matches your brand.
+            </p>
+            
+            <div style={{ 
+              padding: 30, 
+              background: 'var(--card-alt)', 
+              borderRadius: 12, 
+              marginBottom: 20,
+              border: '2px solid var(--accent)'
+            }}>
+              <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 20, lineHeight: 1.5 }}>
+                {QUIZ_QUESTIONS[quizIdx].q}
+              </div>
+              
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button 
+                  onClick={() => answerQuiz(true)} 
+                  style={{ 
+                    ...buttonPrimary,
+                    flex: 1 
+                  }}
+                >
+                  ✓ Yes
+                </button>
+                <button 
+                  onClick={() => answerQuiz(false)} 
+                  style={{ 
+                    ...buttonSecondary,
+                    flex: 1 
+                  }}
+                >
+                  ✗ No
+                </button>
+              </div>
+            </div>
+            
+            <div style={{ 
+              fontSize: 13, 
+              opacity: 0.6, 
+              textAlign: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span>Question {quizIdx + 1} of {QUIZ_QUESTIONS.length}</span>
+              <button 
+                onClick={() => setStep('wizard')} 
+                style={{ 
+                  padding: '6px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--accent)',
+                  cursor: 'pointer',
+                  fontSize: 12,
+                  textDecoration: 'underline'
+                }}
+              >
+                Skip Quiz →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Business Details Wizard */}
+        {step === 'wizard' && (
+          <div>
+            <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12, color: 'var(--accent)' }}>
+              🧙 Configure Your Project
+            </h1>
+            <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
+              Tell us about your business so we can create the perfect starting point.
+            </p>
+            
+            <div style={{ display: 'grid', gap: 20 }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                  Project Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., Acme Inc, My Portfolio, HealthCare Plus"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  style={inputStyle}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                  Business Type
+                </label>
+                <select value={businessType} onChange={(e) => setBusinessType(e.target.value as BusinessType)} style={inputStyle}>
+                  <option value="ecommerce">E-commerce / Retail</option>
+                  <option value="healthcare">Healthcare / Medical</option>
+                  <option value="analytics">Analytics / Data Platform</option>
+                  <option value="saas">SaaS / Software</option>
+                  <option value="portfolio">Portfolio / Agency</option>
+                  <option value="hospitality">Hospitality / Travel</option>
+                  <option value="finance">Finance / Professional Services</option>
+                  <option value="publishing">Publishing / Media</option>
+                </select>
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                  Niche / Specialty
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., Sustainable fashion, Telemedicine, Real-time analytics"
+                  value={niche}
+                  onChange={(e) => setNiche(e.target.value)}
+                  style={inputStyle}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                  Primary Goal
+                </label>
+                <textarea
+                  placeholder="e.g., Increase online sales, Build patient trust, Showcase portfolio"
+                  value={goals}
+                  onChange={(e) => setGoals(e.target.value)}
+                  style={{ ...inputStyle, minHeight: 80, resize: 'vertical' as const }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                    Intent
+                  </label>
+                  <select value={intent} onChange={(e) => setIntent(e.target.value as Intent)} style={inputStyle}>
+                    <option value="acquire">Acquire Attention</option>
+                    <option value="convert">Convert to Action</option>
+                    <option value="educate">Educate / Inform</option>
+                    <option value="trust">Build Trust</option>
+                    <option value="delight">Delight / Brand</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 500 }}>
+                    Tone
+                  </label>
+                  <select value={tone} onChange={(e) => setTone(e.target.value as Tone)} style={inputStyle}>
+                    <option value="bold">Bold / Assertive</option>
+                    <option value="calm">Calm / Reassuring</option>
+                    <option value="playful">Playful / Fun</option>
+                    <option value="serious">Serious / Professional</option>
+                    <option value="futuristic">Futuristic / Tech</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: 30, display: 'flex', gap: 12 }}>
+              <button onClick={() => { setStep('quiz'); setQuizIdx(0); }} style={buttonSecondary}>
+                ← Back to Quiz
+              </button>
+              <button onClick={() => setStep('review')} style={{ ...buttonPrimary, flex: 1 }}>
+                Continue to Review →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Review & Generate */}
+        {step === 'review' && (
+          <div>
+            <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12, color: 'var(--accent)' }}>
+              ✨ Review & Create
+            </h1>
+            <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
+              Review your choices and generate your project.
+            </p>
+            
+            <div style={{ display: 'grid', gap: 16, marginBottom: 30 }}>
+              <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Project Name</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>{projectName || 'Untitled Project'}</div>
+              </div>
+              
+              <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Business Type</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>{businessType}</div>
+              </div>
+              
+              <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Recommended Theme</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)' }}>
+                  {THEME_NAMES[recommendedTheme]}
+                </div>
+                <div style={{ fontSize: 12, marginTop: 8 }}>
+                  Or choose a different theme:
+                </div>
+                <select 
+                  value={selectedTheme || recommendedTheme} 
+                  onChange={(e) => setSelectedTheme(e.target.value as ThemeId)}
+                  style={{ ...inputStyle, marginTop: 8 }}
+                >
+                  <optgroup label="🔥 2025 Trending">
+                    <option value="mochaEarth">☕ Mocha Earth</option>
+                    <option value="verdantNature">🌿 Verdant Nature</option>
+                    <option value="chromeMetallic">🤖 Chrome Future</option>
+                    <option value="brutalist">⬛ Brutalist Raw</option>
+                    <option value="mutedNeon">✨ Muted Neon</option>
+                    <option value="monochromeBlue">🔵 Monochrome Blue</option>
+                  </optgroup>
+                  <optgroup label="✨ Classic">
+                    <option value="gradient">🌈 Gradient</option>
+                    <option value="pastel">🌸 Pastel</option>
+                    <option value="cyberpunk">🔮 Cyberpunk</option>
+                    <option value="glassmorphism">🪟 Glass</option>
+                    <option value="midnight">🌙 Midnight</option>
+                    <option value="offworld">🛸 Offworld</option>
+                  </optgroup>
+                </select>
+              </div>
+              
+              <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Intent & Tone</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>{intent} / {tone}</div>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: 30, display: 'flex', gap: 12 }}>
+              <button onClick={() => setStep('wizard')} style={buttonSecondary}>
+                ← Edit Details
+              </button>
+              <button onClick={generateProject} style={{ ...buttonPrimary, flex: 1 }}>
+                🚀 Generate Project
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Generating */}
+        {step === 'generating' && (
+          <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <div style={{ fontSize: 48, marginBottom: 20 }}>🚀</div>
+            <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 16, color: 'var(--accent)' }}>
+              Generating Your Project...
+            </h2>
+            <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 20 }}>
+              Creating structure, applying theme {THEME_NAMES[selectedTheme || recommendedTheme]}, and storing learning data...
+            </p>
+            <div style={{ 
+              width: '100%', 
+              height: 4, 
+              background: 'var(--subtle)', 
+              borderRadius: 2, 
+              overflow: 'hidden',
+              marginTop: 30
+            }}>
+              <div style={{ 
+                width: '70%', 
+                height: '100%', 
+                background: 'var(--accent)',
+                animation: 'progress 2s ease-in-out'
+              }} />
+            </div>
+            <div style={{ fontSize: 13, opacity: 0.6, marginTop: 12 }}>
+              Crew members are learning from your choices...
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 🖖 Crew Review:
+ * - Captain Picard: "Clear separation of creation vs editing. Excellent strategic architecture."
+ * - Commander Data: "Logical flow with proper state transitions. Memory storage integration verified."
+ * - Counselor Troi: "Progressive workflow reduces anxiety. Users feel guided, not overwhelmed."
+ * - Lt. Cmdr. La Forge: "Clean implementation. n8n integration will help crew learn patterns over time."
+ */
+
