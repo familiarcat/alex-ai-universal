@@ -104,6 +104,15 @@ class AlexAICrewManager {
                 status: 'active',
                 lastActivity: new Date(),
                 capabilities: ['business_intelligence', 'budget_optimization', 'roi_analysis', 'business_analysis']
+            },
+            {
+                id: 'chief_obrien',
+                name: 'Chief Miles O\'Brien',
+                role: 'Chief of Operations',
+                specialization: ['Pragmatic Solutions', 'Hands-On Implementation', 'Troubleshooting', 'Quick Fixes', 'Real-World Engineering', 'System Maintenance'],
+                status: 'active',
+                lastActivity: new Date(),
+                capabilities: ['pragmatic_solutions', 'quick_fixes', 'hands_on_implementation', 'troubleshooting', 'system_maintenance', 'real_world_engineering', 'practical_decisions', 'minimal_complexity']
             }
         ];
         members.forEach(member => {

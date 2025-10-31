@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2025-10-30T18:07:30Z",
+  "version": "1.1.0",
+  "lastUpdated": "2025-10-31T00:00:00Z",
   "n8nInstance": "https://n8n.pbradygeorgen.com",
-  "totalCrewMembers": 11,
-  "activeCrewMembers": 11,
+  "totalCrewMembers": 12,
+  "activeCrewMembers": 12,
   "crewMembers": [
     {
       "id": "xz1Op8tLhe6dd3yV",
@@ -114,6 +114,18 @@
       "nodes": 7,
       "lastUpdated": "2025-10-26",
       "active": true
+    },
+    {
+      "id": "MuaWfFowlkSDefSP",
+      "name": "Chief Miles O'Brien - Pragmatic Solutions",
+      "fullName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "status": "active",
+      "workflowUrl": "https://n8n.pbradygeorgen.com/workflow/MuaWfFowlkSDefSP",
+      "nodes": 7,
+      "lastUpdated": "2025-10-31",
+      "active": true,
+      "specialization": "Pragmatic Engineering, Quick Fixes, Hands-On Solutions",
+      "personality": "No-nonsense, direct, experience-based, anti-over-engineering"
     }
   ]
 }
