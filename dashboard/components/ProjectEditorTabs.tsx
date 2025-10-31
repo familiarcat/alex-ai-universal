@@ -69,7 +69,8 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
         {mainTabButton('advanced', 'Advanced Builder', '🎨')}
       </div>
 
-      {tab === 'editor' && (
+      {/* Quick Edit Tab */}
+      {tab === 'quick-edit' && (
         <div>
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: 'var(--accent)' }}>
