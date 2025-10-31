@@ -22,6 +22,12 @@ export interface ProjectComponent {
   updatedAt: number;
 }
 
+export interface PageContent {
+  title: string;
+  body: string;
+  updatedAt: number;
+}
+
 export interface ProjectContent {
   headline: string;
   subheadline: string;
@@ -30,6 +36,19 @@ export interface ProjectContent {
   businessType?: string; // For dynamic icon/metadata mapping
   updatedAt: number;
   components?: ProjectComponent[];
+  // Multi-page content (customizable via dashboard)
+  pages?: {
+    about?: PageContent;
+    pricing?: PageContent;
+    features?: PageContent;
+    contact?: PageContent;
+    blog?: PageContent;
+    docs?: PageContent;
+    support?: PageContent;
+    careers?: PageContent;
+    privacy?: PageContent;
+    terms?: PageContent;
+  };
 }
 
 export interface AppState {

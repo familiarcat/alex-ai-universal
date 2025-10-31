@@ -261,10 +261,10 @@ class EnhancedProjectServer {
                 <div>
                     <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Company</h4>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 10px;"><a href="/about" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">About Us</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/careers" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Careers</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/press" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Press & Media</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/partners" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Partners</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/about" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">About Us</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/careers" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Careers</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/blog" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Blog</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/dashboard" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Dashboard</a></li>
                     </ul>
                 </div>
                 
@@ -272,10 +272,10 @@ class EnhancedProjectServer {
                 <div>
                     <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Products</h4>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 10px;"><a href="/features" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Features</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/pricing" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Pricing</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/enterprise" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Enterprise</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/integrations" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Integrations</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/features" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Features</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/pricing" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Pricing</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/#features" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">See Features</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/#cta" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Get Started</a></li>
                     </ul>
                 </div>
                 
@@ -283,10 +283,10 @@ class EnhancedProjectServer {
                 <div>
                     <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Resources</h4>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 10px;"><a href="/blog" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Blog</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/docs" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Documentation</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/support" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Support Center</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/community" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Community</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/blog" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Blog</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/docs" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Documentation</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/support" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Support Center</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/blog" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Community</a></li>
                     </ul>
                 </div>
                 
@@ -296,8 +296,8 @@ class EnhancedProjectServer {
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="margin-bottom: 10px;"><a href="mailto:hello@${this.project.name.toLowerCase().replace(/\s+/g, '')}.com" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📧 Email Us</a></li>
                         <li style="margin-bottom: 10px;"><a href="tel:+1-555-0123" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📞 (555) 012-3456</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/locations" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📍 Find a Location</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/contact" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">💬 Contact Form</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/contact" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📍 Contact Us</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/contact" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">💬 Contact Form</a></li>
                     </ul>
                 </div>
                 
@@ -305,10 +305,10 @@ class EnhancedProjectServer {
                 <div>
                     <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Legal</h4>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 10px;"><a href="/privacy" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Privacy Policy</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/terms" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Terms of Service</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/cookies" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Cookie Policy</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/accessibility" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Accessibility</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/privacy" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Privacy Policy</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/terms" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Terms of Service</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/privacy" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Cookie Policy</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/projects/${this.project.id}/support" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Accessibility</a></li>
                     </ul>
                 </div>
             </div>
