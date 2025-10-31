@@ -172,7 +172,7 @@ export default function DashboardPage() {
               borderRadius: 'var(--radius)',
               overflow: 'hidden',
               marginBottom: '30px'
-            }}>
+            }} suppressHydrationWarning>
               {/* Project Header */}
               <div style={{
                 background: 'var(--card-alt)',
