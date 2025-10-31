@@ -135,7 +135,7 @@ export function StateProvider({ children }: { children: ReactNode }) {
         }
       };
       
-      // Persist and broadcast
+      // Persist to localStorage (cache/fallback)
       localStorage.setItem('alex-ai-state', JSON.stringify(newState));
       
       // Trigger storage event for other tabs
@@ -143,6 +143,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
         key: 'alex-ai-state',
         newValue: JSON.stringify(newState)
       }));
+      
+      // Sync to Supabase via n8n (proper DDD flow)
+      debouncedContentSync(newState.projects[projectId], 2000);
       
       return newState;
     });
