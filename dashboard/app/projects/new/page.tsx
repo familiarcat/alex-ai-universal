@@ -22,22 +22,7 @@ type BusinessType = 'ecommerce' | 'healthcare' | 'analytics' | 'portfolio' | 'sa
 type Intent = 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
 type Tone = 'bold' | 'calm' | 'playful' | 'serious' | 'futuristic';
 
-const QUIZ_QUESTIONS: Array<{ q: string; key: ThemeId }> = [
-  { q: 'Do you want warm, sophisticated earth tones (Pantone 2025)?', key: 'mochaEarth' },
-  { q: 'Is sustainability and eco-consciousness central to your brand?', key: 'verdantNature' },
-  { q: 'Do you need a high-tech, metallic, luxury aesthetic?', key: 'chromeMetallic' },
-  { q: 'Do you prefer pure minimalism with raw authenticity?', key: 'brutalist' },
-  { q: 'Do you want calm sophistication with surprise neon accents?', key: 'mutedNeon' },
-  { q: 'Do you need professional trust with a single-hue color story?', key: 'monochromeBlue' },
-  { q: 'Do you prefer vibrant multi-color gradients?', key: 'gradient' },
-  { q: 'Do you prefer soft pastels and gentle colors?', key: 'pastel' },
-  { q: 'Do you want futuristic neon with high contrast?', key: 'cyberpunk' },
-  { q: 'Should it have frosted glass and blur effects?', key: 'glassmorphism' },
-  { q: 'Will this be used primarily in dark environments?', key: 'midnight' },
-  { q: 'Should it feel otherworldly with glowing panels?', key: 'offworld' }
-];
-
-// Theme names now imported from shared metadata
+// Quiz removed - now using unified visual ThemeSelector component (same as dashboard)
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -57,15 +42,7 @@ export default function NewProjectPage() {
   const [goals, setGoals] = useState('');
   const [intent, setIntent] = useState<Intent>('convert');
   const [tone, setTone] = useState<Tone>('calm');
-  const [selectedTheme, setSelectedTheme] = useState<ThemeId | null>(null);
-  
-  const recommendedTheme = useMemo(() => {
-    const sorted = (Object.entries(quizScores) as Array<[ThemeId, number]>)
-      .sort((a, b) => b[1] - a[1]);
-    return sorted[0]?.[0] || 'mochaEarth';
-  }, [quizScores]);
-
-  // Quiz now shows all questions at once, no need for navigation function
+  const [selectedTheme, setSelectedTheme] = useState<ThemeId>('gradient'); // Default theme, user selects via visual gallery
 
   function generateProject() {
     setStep('generating');
@@ -153,6 +130,7 @@ export default function NewProjectPage() {
         businessType: bizType,
         intent,
         tone,
+        selectionMethod: 'visual_gallery', // Unified ThemeSelector component
         timestamp: new Date().toISOString(),
         source: 'new_project_workflow'
       };
@@ -271,7 +249,7 @@ export default function NewProjectPage() {
           
           {/* Unified ThemeSelector Component (Same as Dashboard) */}
           <ThemeSelector
-            value={selectedTheme}
+            value={selectedTheme || 'gradient'}
             onChange={(themeId) => setSelectedTheme(themeId as ThemeId)}
             mode="gallery"
             showQuickDropdown={false}
@@ -417,15 +395,15 @@ export default function NewProjectPage() {
               </div>
               
               <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
-                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Recommended Theme</div>
+                <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Selected Theme</div>
                 <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', marginBottom: 12 }}>
-                  {THEME_NAMES[recommendedTheme]}
+                  {THEME_NAMES[selectedTheme]}
                 </div>
                 <ThemeSelector
-                  value={selectedTheme || recommendedTheme}
+                  value={selectedTheme}
                   onChange={(themeId) => setSelectedTheme(themeId as ThemeId)}
                   mode="dropdown"
-                  label="Or choose a different theme:"
+                  label="Change theme:"
                 />
               </div>
               
