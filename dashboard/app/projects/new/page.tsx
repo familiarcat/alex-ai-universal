@@ -565,6 +565,7 @@ export default function NewProjectPage() {
                     position: relative;
                     width: 100%;
                     height: 100%;
+                    background: #ffffff;
                   }
                   
                   .new-project-iframe-layer {
@@ -583,20 +584,23 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-current.loaded {
-                    animation: crossfadeFadeIn 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                    animation: crossfadeFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                   }
                   
                   .new-project-iframe-current.loading {
                     opacity: 0;
+                    pointer-events: none;
                   }
                   
                   .new-project-iframe-previous {
                     z-index: 1;
                     opacity: 1;
+                    pointer-events: none;
                   }
                   
                   .new-project-iframe-previous.fading {
-                    animation: crossfadeFadeOut 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                    animation: crossfadeFadeOut 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                    pointer-events: none;
                   }
                 `}</style>
                 <div className="new-project-iframe-container">
@@ -607,13 +611,16 @@ export default function NewProjectPage() {
                     title="project-preview-current"
                     className={`new-project-iframe-layer new-project-iframe-current ${previewIframeState.isLoaded ? 'loaded' : 'loading'}`}
                     onLoad={() => {
-                      // Mark as loaded to trigger simultaneous crossfade
-                      setPreviewIframeState(prev => ({ ...prev, isLoaded: true }));
-                      
-                      // Garbage collect previous iframe after crossfade completes
+                      // Wait for iframe content to fully render before crossfading
                       setTimeout(() => {
-                        setPreviewIframeState(prev => ({ ...prev, previous: null, previousUrl: null }));
-                      }, 180); // Match animation duration
+                        // Mark as loaded to trigger simultaneous crossfade
+                        setPreviewIframeState(prev => ({ ...prev, isLoaded: true }));
+                        
+                        // Garbage collect previous iframe after crossfade completes
+                        setTimeout(() => {
+                          setPreviewIframeState(prev => ({ ...prev, previous: null, previousUrl: null }));
+                        }, 200); // Match animation duration
+                      }, 50); // Allow iframe content to paint
                     }}
                   />
                   
