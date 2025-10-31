@@ -24,30 +24,49 @@ interface ProjectEditorTabsProps {
 }
 
 export default function ProjectEditorTabs({ projectId, content, themes, onUpdate, onTheme }: ProjectEditorTabsProps) {
-  const [tab, setTab] = useState<'editor' | 'quiz' | 'wizard' | 'compose'>('editor');
+  const [tab, setTab] = useState<'quick-edit' | 'advanced'>('quick-edit');
+  const [advancedSubTab, setAdvancedSubTab] = useState<'quiz' | 'wizard' | 'components'>('quiz');
 
-  const tabButton = (id: 'editor' | 'quiz' | 'wizard' | 'compose', label: string) => (
+  const mainTabButton = (id: 'quick-edit' | 'advanced', label: string, icon: string) => (
     <button
       onClick={() => setTab(id)}
       style={{
-        padding: '8px 12px',
+        padding: '12px 20px',
         borderRadius: 8,
-        border: 'var(--border)',
-        background: tab === id ? 'var(--subtle)' : 'var(--card-alt)',
+        border: tab === id ? '2px solid var(--accent)' : 'var(--border)',
+        background: tab === id ? 'var(--accent)' : 'var(--card-alt)',
+        color: tab === id ? '#0a0015' : 'var(--text)',
+        cursor: 'pointer',
+        fontSize: 14,
+        fontWeight: tab === id ? 600 : 400,
+        transition: 'all 0.2s ease'
+      }}
+    >{icon} {label}</button>
+  );
+
+  const subTabButton = (id: 'quiz' | 'wizard' | 'components', label: string) => (
+    <button
+      onClick={() => setAdvancedSubTab(id)}
+      style={{
+        padding: '6px 12px',
+        borderRadius: 6,
+        border: 'none',
+        background: advancedSubTab === id ? 'var(--subtle)' : 'transparent',
         color: 'var(--text)',
         cursor: 'pointer',
-        fontSize: 13
+        fontSize: 12,
+        opacity: advancedSubTab === id ? 1 : 0.7,
+        transition: 'all 0.2s ease'
       }}
     >{label}</button>
   );
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-        {tabButton('editor', 'Editor')}
-        {tabButton('quiz', 'Quiz')}
-        {tabButton('wizard', 'Wizard')}
-        {tabButton('compose', 'Compose')}
+      {/* Main Tabs */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+        {mainTabButton('quick-edit', 'Quick Edit', '✏️')}
+        {mainTabButton('advanced', 'Advanced Builder', '🎨')}
       </div>
 
       {tab === 'editor' && (
@@ -283,32 +302,98 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
               )}
             </div>
           </div>
+
+          {/* Progression Hint */}
+          <div style={{ 
+            marginTop: '24px', 
+            padding: '16px', 
+            background: 'var(--card-alt)', 
+            borderRadius: 'var(--radius)',
+            border: '1px dashed var(--accent)',
+            opacity: 0.9
+          }}>
+            <div style={{ fontSize: '13px', marginBottom: '8px', color: 'var(--accent)', fontWeight: 600 }}>
+              💡 Need more control?
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text)', marginBottom: '10px' }}>
+              Try <strong>Advanced Builder</strong> for AI-powered content generation, theme recommendations, and component-level customization.
+            </div>
+            <button 
+              onClick={() => setTab('advanced')}
+              style={{ 
+                padding: '8px 16px', 
+                borderRadius: 6, 
+                background: 'var(--accent)', 
+                color: '#0a0015', 
+                border: 'none', 
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: 600
+              }}
+            >
+              🚀 Try Advanced Builder →
+            </button>
+          </div>
         </div>
       )}
 
-      {tab === 'quiz' && (
-        <QuizInline projectId={projectId} onApplyTheme={(t) => onTheme(t)} />
-      )}
-
-      {tab === 'wizard' && (
-        <WizardInline projectId={projectId} onApply={(data) => {
-          if (data.headline) onUpdate('headline', data.headline);
-          if (data.subheadline) onUpdate('subheadline', data.subheadline);
-          if (data.description) onUpdate('description', data.description);
-          if (data.theme) onTheme(data.theme);
-        }} />
-      )}
-
-      {tab === 'compose' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
-          <div>
-            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>🧪 Combined Wizard</h4>
-            <CombinedWizard projectId={projectId} />
+      {/* Advanced Builder Tab */}
+      {tab === 'advanced' && (
+        <div>
+          {/* Sub-tabs */}
+          <div style={{ 
+            display: 'flex', 
+            gap: 4, 
+            marginBottom: 16, 
+            padding: '4px',
+            background: 'var(--card-alt)',
+            borderRadius: 8,
+            width: 'fit-content'
+          }}>
+            {subTabButton('quiz', '🎯 Quiz')}
+            {subTabButton('wizard', '🧙 Wizard')}
+            {subTabButton('components', '📦 Components')}
           </div>
-          <div>
-            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>📦 Bento Editor</h4>
-            <BentoEditor projectId={projectId} />
-          </div>
+
+          {/* Sub-tab Content */}
+          {advancedSubTab === 'quiz' && (
+            <div>
+              <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
+                Answer questions to get AI-powered theme recommendations
+              </div>
+              <QuizInline projectId={projectId} onApplyTheme={(t) => onTheme(t)} />
+            </div>
+          )}
+
+          {advancedSubTab === 'wizard' && (
+            <div>
+              <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
+                Quick wizard to generate content suggestions
+              </div>
+              <WizardInline projectId={projectId} onApply={(data) => {
+                if (data.headline) onUpdate('headline', data.headline);
+                if (data.subheadline) onUpdate('subheadline', data.subheadline);
+                if (data.description) onUpdate('description', data.description);
+                if (data.theme) onTheme(data.theme);
+              }} />
+            </div>
+          )}
+
+          {advancedSubTab === 'components' && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+              <div>
+                <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
+                  Create and manage page components with AI-powered suggestions
+                </div>
+                <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>🧪 Component Wizard</h4>
+                <CombinedWizard projectId={projectId} />
+              </div>
+              <div>
+                <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>📦 Component Grid</h4>
+                <BentoEditor projectId={projectId} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
