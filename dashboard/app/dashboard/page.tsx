@@ -215,15 +215,33 @@ export default function DashboardPage() {
                     boxShadow: 'var(--shadow)',
                     flex: 1,
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    position: 'relative' as const
                   }}>
                   {mounted && (
-                  <iframe
+                    <>
+                      <style>{`
+                        @keyframes smoothFadeIn {
+                          from {
+                            opacity: 0;
+                          }
+                          to {
+                            opacity: 1;
+                          }
+                        }
+                        
+                        .live-preview-iframe {
+                          animation: smoothFadeIn 0.3s ease-in-out;
+                        }
+                      `}</style>
+                      <iframe
                         key={`${projectId}-${content.theme}-${content.headline}-${content.subheadline}-${content.description}-${content.updatedAt}`}
                         src={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
-                      title={`${projectId}-preview`}
-                      style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}
-                    />
+                        title={`${projectId}-preview`}
+                        className="live-preview-iframe"
+                        style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}
+                      />
+                    </>
                   )}
                   </div>
                   <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
