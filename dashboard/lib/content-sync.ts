@@ -1,11 +1,21 @@
 /**
  * Content Sync: Proper DDD Flow for User Content
- * Client <=> n8n <=> Supabase
+ * Client => n8n Controller => Supabase Database
+ * 
+ * ⚠️  SEPARATION OF CONCERNS:
+ * - Client NEVER accesses Supabase directly
+ * - ALL database operations flow through n8n
+ * - n8n is the single controller for data access
  * 
  * Memory: Stored in n8n => Supabase RAG
  */
 
 const N8N_URL = process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
+
+/**
+ * ✅ Proper DDD: Client => n8n => Supabase
+ * ❌ Never: Client => Supabase (violates separation of concerns)
+ */
 
 export interface ProjectContent {
   projectId: string;

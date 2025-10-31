@@ -1,67 +1,70 @@
 #!/bin/bash
 
 # Setup Supabase Schema for Project Content
-# Proper DDD: Client <=> n8n <=> Supabase
+# Proper DDD: Client => n8n Controller => Supabase
+# 
+# ⚠️  IMPORTANT: This script does NOT access Supabase directly!
+# All database operations flow through n8n as the controller.
 
 set -e
 
-echo "🗄️  Setting up Supabase schema for project content..."
+echo "🗄️  Setting up Supabase schema via n8n Controller..."
 echo ""
 
-# Load Supabase credentials from ~/.zshrc
+# Load n8n credentials from ~/.zshrc (NOT Supabase - proper DDD!)
 source "$HOME/.zshrc" 2>/dev/null || true
 
-if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
-  echo "❌ Error: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in ~/.zshrc"
+if [ -z "$N8N_URL" ]; then
+  echo "❌ Error: N8N_URL must be set in ~/.zshrc"
   echo ""
-  echo "Add these to your ~/.zshrc:"
-  echo "  export SUPABASE_URL='https://your-project.supabase.co'"
-  echo "  export SUPABASE_SERVICE_ROLE_KEY='your-service-role-key'"
+  echo "Add this to your ~/.zshrc:"
+  echo "  export N8N_URL='https://n8n.pbradygeorgen.com'"
   exit 1
 fi
 
-# Extract project ID from Supabase URL
-SUPABASE_PROJECT_ID=$(echo "$SUPABASE_URL" | sed -E 's|https://([^.]+)\.supabase\.co|\1|')
-
-echo "📍 Supabase Project: $SUPABASE_PROJECT_ID"
-echo ""
-
-# Check if psql is installed
-if ! command -v psql &> /dev/null; then
-  echo "❌ Error: psql (PostgreSQL client) is not installed"
-  echo ""
-  echo "Install it:"
-  echo "  macOS: brew install postgresql"
-  echo "  Ubuntu: sudo apt-get install postgresql-client"
-  exit 1
+# Admin setup key for security (prevents unauthorized schema changes)
+if [ -z "$ADMIN_SETUP_KEY" ]; then
+  echo "⚠️  Warning: ADMIN_SETUP_KEY not set. Using default (insecure)."
+  ADMIN_SETUP_KEY="default-admin-key-change-me"
 fi
 
-# Connection string
-SUPABASE_DB_URL="postgresql://postgres:$SUPABASE_SERVICE_ROLE_KEY@db.${SUPABASE_PROJECT_ID}.supabase.co:5432/postgres"
-
-echo "🔧 Running schema migration..."
+echo "📍 n8n Controller: $N8N_URL"
+echo "🔒 Separation of Concerns: Client => n8n => Supabase ✅"
 echo ""
 
-# Run the SQL schema
-psql "$SUPABASE_DB_URL" -f supabase/schema-project-content.sql
+# Call n8n webhook to setup schema (proper DDD flow)
+echo "🔧 Triggering schema setup via n8n..."
+echo ""
 
-if [ $? -eq 0 ]; then
+response=$(curl -s -w "\n%{http_code}" -X POST "${N8N_URL}/webhook/supabase-schema-setup" \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Key: ${ADMIN_SETUP_KEY}" \
+  -d '{}')
+
+http_code=$(echo "$response" | tail -n1)
+body=$(echo "$response" | head -n-1)
+
+if [ "$http_code" -eq 200 ]; then
+  echo "✅ Supabase schema created successfully via n8n!"
   echo ""
-  echo "✅ Supabase schema created successfully!"
+  echo "📊 Response:"
+  echo "$body" | jq '.' 2>/dev/null || echo "$body"
   echo ""
-  echo "📊 Created:"
-  echo "  - Table: project_content"
-  echo "  - Table: project_content_changelog"
-  echo "  - View: active_projects"
-  echo "  - View: recent_project_changes"
-  echo "  - Triggers: version increment, changelog"
-  echo "  - RLS Policies: n8n service role access"
+  echo "✅ Proper DDD flow confirmed:"
+  echo "   Client (this script) => n8n Controller => Supabase Database"
   echo ""
-  echo "🔍 Verify in Supabase dashboard:"
-  echo "  $SUPABASE_URL"
+  echo "🔍 Verify schema in n8n logs:"
+  echo "   ${N8N_URL}/workflows"
 else
+  echo "❌ Schema creation failed (HTTP $http_code)"
   echo ""
-  echo "❌ Schema creation failed. Check errors above."
+  echo "Response:"
+  echo "$body"
+  echo ""
+  echo "Troubleshooting:"
+  echo "  1. Check n8n workflow 'Supabase Schema Setup' is imported and activated"
+  echo "  2. Check ADMIN_SETUP_KEY matches n8n environment variable"
+  echo "  3. Check n8n has Supabase PostgreSQL credentials configured"
   exit 1
 fi
 
