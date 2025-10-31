@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [debouncedProjects, setDebouncedProjects] = useState(projects);
   
   // Crossfade state: track current and previous iframe for smooth transitions
-  const [iframeStates, setIframeStates] = useState<{[key: string]: { current: string; previous: string | null }}>({});
+  const [iframeStates, setIframeStates] = useState<{[key: string]: { current: string; previous: string | null; isLoaded: boolean }}>({});
 
   useEffect(() => {
     setMounted(true);
@@ -47,7 +47,8 @@ export default function DashboardPage() {
             ...prev,
             [projectId]: {
               current: newKey,
-              previous: current || null
+              previous: current || null,
+              isLoaded: false // New iframe not loaded yet
             }
           };
         }
@@ -292,40 +293,57 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-current {
-                          animation: crossfadeFadeIn 0.15s ease-out forwards;
                           z-index: 2;
                         }
                         
+                        .iframe-current.loaded {
+                          animation: crossfadeFadeIn 0.12s ease-out forwards;
+                        }
+                        
+                        .iframe-current.loading {
+                          opacity: 0;
+                        }
+                        
                         .iframe-previous {
-                          animation: crossfadeFadeOut 0.15s ease-out forwards;
                           z-index: 1;
+                          opacity: 1;
+                        }
+                        
+                        .iframe-previous.fading {
+                          animation: crossfadeFadeOut 0.12s ease-out forwards;
                         }
                       `}</style>
                       <div className="iframe-container">
-                        {/* Current iframe (fading in) */}
+                        {/* Current iframe (loading invisibly, then fades in when ready) */}
                         <iframe
                           key={iframeStates[projectId]?.current || 'initial'}
                           src={`/projects/${projectId}/?headline=${encodeURIComponent(debouncedProjects[projectId]?.headline || '')}&subheadline=${encodeURIComponent(debouncedProjects[projectId]?.subheadline || '')}&description=${encodeURIComponent(debouncedProjects[projectId]?.description || '')}&theme=${encodeURIComponent(debouncedProjects[projectId]?.theme || 'gradient')}`}
                           title={`${projectId}-preview-current`}
-                          className="iframe-layer iframe-current"
-                          onLoad={(e) => {
-                            // Garbage collect previous iframe after fade completes
+                          className={`iframe-layer iframe-current ${iframeStates[projectId]?.isLoaded ? 'loaded' : 'loading'}`}
+                          onLoad={() => {
+                            // Mark as loaded to trigger fade-in
+                            setIframeStates(prev => ({
+                              ...prev,
+                              [projectId]: { ...prev[projectId], isLoaded: true }
+                            }));
+                            
+                            // Garbage collect previous iframe after crossfade completes
                             setTimeout(() => {
                               setIframeStates(prev => ({
                                 ...prev,
                                 [projectId]: { ...prev[projectId], previous: null }
                               }));
-                            }, 150); // Match animation duration
+                            }, 120); // Match animation duration
                           }}
                         />
                         
-                        {/* Previous iframe (fading out) - removed after animation */}
+                        {/* Previous iframe (stays visible until new one loads, then fades out) */}
                         {iframeStates[projectId]?.previous && (
                           <iframe
                             key={iframeStates[projectId]?.previous}
                             src={`/projects/${projectId}/`}
                             title={`${projectId}-preview-previous`}
-                            className="iframe-layer iframe-previous"
+                            className={`iframe-layer iframe-previous ${iframeStates[projectId]?.isLoaded ? 'fading' : ''}`}
                           />
                         )}
                       </div>
