@@ -11,6 +11,8 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/state-manager';
+import { THEME_NAMES } from '@/lib/theme-metadata';
+import ThemeSelector from '@/components/ThemeSelector';
 
 type ThemeId = 'mochaEarth' | 'verdantNature' | 'chromeMetallic' | 'brutalist' | 'mutedNeon' | 'monochromeBlue' | 'gradient' | 'pastel' | 'cyberpunk' | 'glassmorphism' | 'midnight' | 'offworld';
 type BusinessType = 'ecommerce' | 'healthcare' | 'analytics' | 'portfolio' | 'saas' | 'hospitality' | 'finance' | 'publishing';
@@ -32,20 +34,7 @@ const QUIZ_QUESTIONS: Array<{ q: string; key: ThemeId }> = [
   { q: 'Should it feel otherworldly with glowing panels?', key: 'offworld' }
 ];
 
-const THEME_NAMES: Record<ThemeId, string> = {
-  mochaEarth: '☕ Mocha Earth',
-  verdantNature: '🌿 Verdant Nature',
-  chromeMetallic: '🤖 Chrome Future',
-  brutalist: '⬛ Brutalist Raw',
-  mutedNeon: '✨ Muted Neon',
-  monochromeBlue: '🔵 Monochrome Blue',
-  gradient: '🌈 Gradient Fusion',
-  pastel: '🌸 Pastel',
-  cyberpunk: '🔮 Cyberpunk',
-  glassmorphism: '🪟 Glass',
-  midnight: '🌙 Midnight',
-  offworld: '🛸 Offworld'
-};
+// Theme names now imported from shared metadata
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -529,34 +518,15 @@ export default function NewProjectPage() {
               
               <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
                 <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Recommended Theme</div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)' }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', marginBottom: 12 }}>
                   {THEME_NAMES[recommendedTheme]}
                 </div>
-                <div style={{ fontSize: 12, marginTop: 8 }}>
-                  Or choose a different theme:
-                </div>
-                <select 
-                  value={selectedTheme || recommendedTheme} 
-                  onChange={(e) => setSelectedTheme(e.target.value as ThemeId)}
-                  style={{ ...inputStyle, marginTop: 8 }}
-                >
-                  <optgroup label="🔥 2025 Trending">
-                    <option value="mochaEarth">☕ Mocha Earth</option>
-                    <option value="verdantNature">🌿 Verdant Nature</option>
-                    <option value="chromeMetallic">🤖 Chrome Future</option>
-                    <option value="brutalist">⬛ Brutalist Raw</option>
-                    <option value="mutedNeon">✨ Muted Neon</option>
-                    <option value="monochromeBlue">🔵 Monochrome Blue</option>
-                  </optgroup>
-                  <optgroup label="✨ Classic">
-                    <option value="gradient">🌈 Gradient</option>
-                    <option value="pastel">🌸 Pastel</option>
-                    <option value="cyberpunk">🔮 Cyberpunk</option>
-                    <option value="glassmorphism">🪟 Glass</option>
-                    <option value="midnight">🌙 Midnight</option>
-                    <option value="offworld">🛸 Offworld</option>
-                  </optgroup>
-                </select>
+                <ThemeSelector
+                  value={selectedTheme || recommendedTheme}
+                  onChange={(themeId) => setSelectedTheme(themeId as ThemeId)}
+                  mode="dropdown"
+                  label="Or choose a different theme:"
+                />
               </div>
               
               <div style={{ padding: 16, background: 'var(--card-alt)', borderRadius: 8 }}>
