@@ -293,6 +293,7 @@ export default function DashboardPage() {
                           width: 100%;
                           height: 100%;
                           min-height: 600px;
+                          background: #ffffff;
                         }
                         
                         .iframe-layer {
@@ -311,20 +312,23 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-current.loaded {
-                          animation: crossfadeFadeIn 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                          animation: crossfadeFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                         }
                         
                         .iframe-current.loading {
                           opacity: 0;
+                          pointer-events: none;
                         }
                         
                         .iframe-previous {
                           z-index: 1;
                           opacity: 1;
+                          pointer-events: none;
                         }
                         
                         .iframe-previous.fading {
-                          animation: crossfadeFadeOut 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                          animation: crossfadeFadeOut 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                          pointer-events: none;
                         }
                       `}</style>
                       <div className="iframe-container">
@@ -335,19 +339,23 @@ export default function DashboardPage() {
                           title={`${projectId}-preview-current`}
                           className={`iframe-layer iframe-current ${iframeStates[projectId]?.isLoaded ? 'loaded' : 'loading'}`}
                           onLoad={() => {
-                            // Mark as loaded to trigger simultaneous crossfade
-                            setIframeStates(prev => ({
-                              ...prev,
-                              [projectId]: { ...prev[projectId], isLoaded: true }
-                            }));
-                            
-                            // Garbage collect previous iframe after crossfade animation completes
+                            // Wait a bit for iframe content to fully render before crossfading
+                            // This prevents black flash during paint
                             setTimeout(() => {
+                              // Mark as loaded to trigger simultaneous crossfade
+                              setIframeStates(prev => ({
+                                ...prev,
+                                [projectId]: { ...prev[projectId], isLoaded: true }
+                              }));
+                              
+                              // Garbage collect previous iframe after crossfade animation completes
+                              setTimeout(() => {
                               setIframeStates(prev => ({
                                 ...prev,
                                 [projectId]: { ...prev[projectId], previous: null, previousUrl: null }
                               }));
-                            }, 180); // Match animation duration
+                            }, 200); // Match animation duration
+                            }, 50); // Allow iframe content to paint
                           }}
                         />
                         
