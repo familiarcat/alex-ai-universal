@@ -313,12 +313,13 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-current.loaded {
-                          animation: crossfadeFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                          animation: crossfadeFadeIn 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                         }
                         
                         .iframe-current.loading {
                           opacity: 0;
                           pointer-events: none;
+                          visibility: hidden;
                         }
                         
                         .iframe-previous {
@@ -328,7 +329,7 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-previous.fading {
-                          animation: crossfadeFadeOut 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                          animation: crossfadeFadeOut 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                           pointer-events: none;
                         }
                       `}</style>
@@ -340,8 +341,8 @@ export default function DashboardPage() {
                           title={`${projectId}-preview-current`}
                           className={`iframe-layer iframe-current ${iframeStates[projectId]?.isLoaded ? 'loaded' : 'loading'}`}
                           onLoad={() => {
-                            // Wait a bit for iframe content to fully render before crossfading
-                            // This prevents black flash during paint
+                            // Wait for iframe content to fully render AND paint before crossfading
+                            // Increased delay ensures all content is visible before transition
                             setTimeout(() => {
                               // Mark as loaded to trigger simultaneous crossfade
                               setIframeStates(prev => ({
@@ -351,12 +352,12 @@ export default function DashboardPage() {
                               
                               // Garbage collect previous iframe after crossfade animation completes
                               setTimeout(() => {
-                              setIframeStates(prev => ({
-                                ...prev,
-                                [projectId]: { ...prev[projectId], previous: null, previousUrl: null }
-                              }));
-                            }, 200); // Match animation duration
-                            }, 50); // Allow iframe content to paint
+                                setIframeStates(prev => ({
+                                  ...prev,
+                                  [projectId]: { ...prev[projectId], previous: null, previousUrl: null }
+                                }));
+                              }, 250); // Match animation duration
+                            }, 100); // Increased: allow full content paint
                           }}
                         />
                         

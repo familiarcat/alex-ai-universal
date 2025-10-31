@@ -584,12 +584,13 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-current.loaded {
-                    animation: crossfadeFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                    animation: crossfadeFadeIn 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                   }
                   
                   .new-project-iframe-current.loading {
                     opacity: 0;
                     pointer-events: none;
+                    visibility: hidden;
                   }
                   
                   .new-project-iframe-previous {
@@ -599,7 +600,7 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-previous.fading {
-                    animation: crossfadeFadeOut 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+                    animation: crossfadeFadeOut 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                     pointer-events: none;
                   }
                 `}</style>
@@ -611,7 +612,7 @@ export default function NewProjectPage() {
                     title="project-preview-current"
                     className={`new-project-iframe-layer new-project-iframe-current ${previewIframeState.isLoaded ? 'loaded' : 'loading'}`}
                     onLoad={() => {
-                      // Wait for iframe content to fully render before crossfading
+                      // Wait for iframe content to fully render AND paint before crossfading
                       setTimeout(() => {
                         // Mark as loaded to trigger simultaneous crossfade
                         setPreviewIframeState(prev => ({ ...prev, isLoaded: true }));
@@ -619,8 +620,8 @@ export default function NewProjectPage() {
                         // Garbage collect previous iframe after crossfade completes
                         setTimeout(() => {
                           setPreviewIframeState(prev => ({ ...prev, previous: null, previousUrl: null }));
-                        }, 200); // Match animation duration
-                      }, 50); // Allow iframe content to paint
+                        }, 250); // Match animation duration
+                      }, 100); // Increased: allow full content paint
                     }}
                   />
                   
