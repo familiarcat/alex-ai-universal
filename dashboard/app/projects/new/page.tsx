@@ -8,7 +8,7 @@
  * Crew: Captain Picard (Strategy), Data (Logic), Troi (UX), La Forge (Implementation)
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/state-manager';
 import { THEME_NAMES } from '@/lib/theme-metadata';
@@ -39,6 +39,11 @@ const QUIZ_QUESTIONS: Array<{ q: string; key: ThemeId }> = [
 export default function NewProjectPage() {
   const router = useRouter();
   const { projects, updateProject, updateTheme, addComponents } = useAppState();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const [step, setStep] = useState<'quiz' | 'wizard' | 'review' | 'generating'>('quiz');
   
@@ -604,25 +609,37 @@ export default function NewProjectPage() {
             )}
           </div>
           
-          <div style={{
-            flex: 1,
-            border: '2px solid var(--accent)',
-            borderRadius: 16,
-            overflow: 'hidden',
-            boxShadow: '0 8px 32px rgba(0, 255, 170, 0.2)',
-            background: '#fff'
-          }}>
-            <iframe
-              key={previewUrl}
-              src={previewUrl}
-              title="project-preview"
-              style={{
-                width: '100%',
-                height: '100%',
-                border: 0,
-                display: 'block'
-              }}
-            />
+          <div 
+            suppressHydrationWarning
+            style={{
+              flex: 1,
+              border: '2px solid var(--accent)',
+              borderRadius: 16,
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0, 255, 170, 0.2)',
+              background: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            {mounted ? (
+              <iframe
+                key={`${previewTheme}-${previewHeadline}-${previewSubheadline}`}
+                src={`/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}`}
+                title="project-preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 0,
+                  display: 'block'
+                }}
+              />
+            ) : (
+              <div style={{ color: 'var(--text-muted)', fontSize: 14 }}>
+                Loading preview...
+              </div>
+            )}
           </div>
           
           <div style={{
