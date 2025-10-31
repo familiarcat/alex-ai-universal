@@ -10,15 +10,24 @@ import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ProjectEditorTabs from '@/components/ProjectEditorTabs';
+import DeleteProjectModal from '@/components/DeleteProjectModal';
 
 export default function DashboardPage() {
-  const { projects, updateProject, updateTheme } = useAppState();
+  const { projects, updateProject, updateTheme, deleteProject } = useAppState();
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+  
+  const handleDeleteConfirm = () => {
+    if (deleteModal) {
+      deleteProject(deleteModal.projectId);
+      setDeleteModal(null);
+    }
+  };
 
   // Dynamic project metadata - supports unlimited projects
   const getProjectMeta = (projectId: string, content: any) => {
@@ -146,20 +155,46 @@ export default function DashboardPage() {
                     Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}
                   </div>
                 </div>
-                <Link 
-                  href={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
-                  target="_blank"
-                  style={{
-                    background: 'var(--accent)',
-                    color: '#0a0015',
-                    padding: '12px 24px',
-                    borderRadius: 'var(--radius)',
-                    textDecoration: 'none',
-                    fontWeight: 600
-                  }}
-                >
-                  🌐 View Live Project
-                </Link>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <Link 
+                    href={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
+                    target="_blank"
+                    style={{
+                      background: 'var(--accent)',
+                      color: '#0a0015',
+                      padding: '12px 24px',
+                      borderRadius: 'var(--radius)',
+                      textDecoration: 'none',
+                      fontWeight: 600
+                    }}
+                  >
+                    🌐 View Live Project
+                  </Link>
+                  <button
+                    onClick={() => setDeleteModal({ projectId, projectName: meta.name })}
+                    style={{
+                      padding: '12px 20px',
+                      background: 'transparent',
+                      color: '#ff4444',
+                      border: '2px solid #ff4444',
+                      borderRadius: 'var(--radius)',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                      fontSize: '14px',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#ff4444';
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#ff4444';
+                    }}
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </div>
 
               {/* Editor + Preview */}
@@ -219,6 +254,18 @@ export default function DashboardPage() {
           );
         })}
       </div>
+      
+      {/* Delete Confirmation Modal */}
+      {deleteModal && (
+        <DeleteProjectModal
+          projectId={deleteModal.projectId}
+          projectName={deleteModal.projectName}
+          componentCount={projects[deleteModal.projectId]?.components?.length || 0}
+          theme={projects[deleteModal.projectId]?.theme || 'unknown'}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteModal(null)}
+        />
+      )}
     </div>
   );
 }

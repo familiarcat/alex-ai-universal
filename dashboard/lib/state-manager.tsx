@@ -59,6 +59,7 @@ export interface AppState {
   updateProject: (projectId: string, field: string, value: string) => void;
   updateTheme: (projectId: string, themeId: string) => void;
   updateGlobalTheme: (themeId: string) => void;
+  deleteProject: (projectId: string) => void;
   // alias used by some demo components
   setGlobalTheme?: (themeId: string) => void;
   // components API
@@ -230,8 +231,21 @@ export function StateProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const deleteProject = (projectId: string) => {
+    setState(prev => {
+      const { [projectId]: removed, ...remainingProjects } = prev.projects;
+      const next = {
+        ...prev,
+        projects: remainingProjects
+      };
+      localStorage.setItem('alex-ai-state', JSON.stringify(next));
+      window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      return next;
+    });
+  };
+
   return (
-    <StateContext.Provider value={{ ...state, updateProject, updateTheme, updateGlobalTheme, setGlobalTheme: updateGlobalTheme, addComponents, updateComponent, reorderComponents }}>
+    <StateContext.Provider value={{ ...state, updateProject, updateTheme, updateGlobalTheme, deleteProject, setGlobalTheme: updateGlobalTheme, addComponents, updateComponent, reorderComponents }}>
       {children}
     </StateContext.Provider>
   );
