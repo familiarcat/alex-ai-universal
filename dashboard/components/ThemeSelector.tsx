@@ -9,6 +9,7 @@
  */
 
 import { THEME_METADATA, getThemesByCategory, getThemeById } from '@/lib/theme-metadata';
+import { useState, useEffect } from 'react';
 
 interface ThemeSelectorProps {
   value: string;
