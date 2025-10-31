@@ -18,6 +18,9 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
   const [debouncedProjects, setDebouncedProjects] = useState(projects);
+  
+  // Crossfade state: track current and previous iframe for smooth transitions
+  const [iframeStates, setIframeStates] = useState<{[key: string]: { current: string; previous: string | null }}>({});
 
   useEffect(() => {
     setMounted(true);
@@ -31,6 +34,27 @@ export default function DashboardPage() {
     
     return () => clearTimeout(timer);
   }, [projects]);
+  
+  // Update iframe states for crossfade effect
+  useEffect(() => {
+    Object.keys(projects).forEach(projectId => {
+      const newKey = `${projectId}-${debouncedProjects[projectId]?.theme}-${debouncedProjects[projectId]?.headline}-${debouncedProjects[projectId]?.subheadline}-${debouncedProjects[projectId]?.description}`;
+      
+      setIframeStates(prev => {
+        const current = prev[projectId]?.current;
+        if (current !== newKey) {
+          return {
+            ...prev,
+            [projectId]: {
+              current: newKey,
+              previous: current || null
+            }
+          };
+        }
+        return prev;
+      });
+    });
+  }, [debouncedProjects, projects]);
   
   const handleDeleteConfirm = () => {
     if (deleteModal) {
@@ -231,7 +255,7 @@ export default function DashboardPage() {
                   {mounted && (
                     <>
                       <style>{`
-                        @keyframes smoothFadeIn {
+                        @keyframes crossfadeFadeIn {
                           from {
                             opacity: 0;
                           }
@@ -240,17 +264,71 @@ export default function DashboardPage() {
                           }
                         }
                         
-                        .live-preview-iframe {
-                          animation: smoothFadeIn 0.15s ease-out;
+                        @keyframes crossfadeFadeOut {
+                          from {
+                            opacity: 1;
+                          }
+                          to {
+                            opacity: 0;
+                          }
+                        }
+                        
+                        .iframe-container {
+                          position: relative;
+                          width: 100%;
+                          height: 100%;
+                          min-height: 600px;
+                        }
+                        
+                        .iframe-layer {
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          width: 100%;
+                          height: 100%;
+                          border: 0;
+                          display: block;
+                          background: #fff;
+                        }
+                        
+                        .iframe-current {
+                          animation: crossfadeFadeIn 0.15s ease-out forwards;
+                          z-index: 2;
+                        }
+                        
+                        .iframe-previous {
+                          animation: crossfadeFadeOut 0.15s ease-out forwards;
+                          z-index: 1;
                         }
                       `}</style>
-                      <iframe
-                        key={`${projectId}-${debouncedProjects[projectId]?.theme}-${debouncedProjects[projectId]?.headline}-${debouncedProjects[projectId]?.subheadline}-${debouncedProjects[projectId]?.description}`}
-                        src={`/projects/${projectId}/?headline=${encodeURIComponent(debouncedProjects[projectId]?.headline || '')}&subheadline=${encodeURIComponent(debouncedProjects[projectId]?.subheadline || '')}&description=${encodeURIComponent(debouncedProjects[projectId]?.description || '')}&theme=${encodeURIComponent(debouncedProjects[projectId]?.theme || 'gradient')}`}
-                        title={`${projectId}-preview`}
-                        className="live-preview-iframe"
-                        style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}
-                      />
+                      <div className="iframe-container">
+                        {/* Current iframe (fading in) */}
+                        <iframe
+                          key={iframeStates[projectId]?.current || 'initial'}
+                          src={`/projects/${projectId}/?headline=${encodeURIComponent(debouncedProjects[projectId]?.headline || '')}&subheadline=${encodeURIComponent(debouncedProjects[projectId]?.subheadline || '')}&description=${encodeURIComponent(debouncedProjects[projectId]?.description || '')}&theme=${encodeURIComponent(debouncedProjects[projectId]?.theme || 'gradient')}`}
+                          title={`${projectId}-preview-current`}
+                          className="iframe-layer iframe-current"
+                          onLoad={(e) => {
+                            // Garbage collect previous iframe after fade completes
+                            setTimeout(() => {
+                              setIframeStates(prev => ({
+                                ...prev,
+                                [projectId]: { ...prev[projectId], previous: null }
+                              }));
+                            }, 150); // Match animation duration
+                          }}
+                        />
+                        
+                        {/* Previous iframe (fading out) - removed after animation */}
+                        {iframeStates[projectId]?.previous && (
+                          <iframe
+                            key={iframeStates[projectId]?.previous}
+                            src={`/projects/${projectId}/`}
+                            title={`${projectId}-preview-previous`}
+                            className="iframe-layer iframe-previous"
+                          />
+                        )}
+                      </div>
                     </>
                   )}
                   </div>
