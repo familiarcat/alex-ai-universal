@@ -120,6 +120,19 @@ function getInitialState() {
 export function StateProvider({ children }: { children: ReactNode }) {
   // Lazy initialization: getInitialState() runs ONCE before first render
   const [state, setState] = useState(getInitialState);
+  
+  // 🎨 UNIVERSAL THEME SYNC: Initialize cookies on mount
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      // Sync global theme to cookie
+      document.cookie = `global-theme=${state.globalTheme}; path=/; max-age=31536000; SameSite=Lax`;
+      
+      // Sync all project themes to cookies
+      Object.entries(state.projects).forEach(([projectId, project]) => {
+        document.cookie = `project-theme-${projectId}=${project.theme}; path=/; max-age=31536000; SameSite=Lax`;
+      });
+    }
+  }, []); // Run once on mount
 
   // Real-time cross-tab synchronization
   useEffect(() => {
@@ -161,6 +174,11 @@ export function StateProvider({ children }: { children: ReactNode }) {
         newValue: JSON.stringify(newState)
       }));
       
+      // 🎨 UNIVERSAL THEME: Sync theme to cookie for SSR consistency
+      if (field === 'theme') {
+        document.cookie = `project-theme-${projectId}=${value}; path=/; max-age=31536000; SameSite=Lax`;
+      }
+      
       // Sync to Supabase via n8n (proper DDD flow)
       debouncedContentSync(newState.projects[projectId], 2000);
       
@@ -184,6 +202,10 @@ export function StateProvider({ children }: { children: ReactNode }) {
         key: 'alex-ai-state',
         newValue: JSON.stringify(newState)
       }));
+      
+      // 🎨 UNIVERSAL THEME: Sync to cookie for SSR consistency
+      document.cookie = `global-theme=${themeId}; path=/; max-age=31536000; SameSite=Lax`;
+      
       return newState;
     });
   };
