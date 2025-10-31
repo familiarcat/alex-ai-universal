@@ -190,8 +190,9 @@ export default function DashboardPage() {
                     Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <div suppressHydrationWarning style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <Link 
+                    suppressHydrationWarning
                     href={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
                     target="_blank"
                     style={{
