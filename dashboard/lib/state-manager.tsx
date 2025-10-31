@@ -121,6 +121,13 @@ function getInitialState() {
 export function StateProvider({ children }: { children: ReactNode }) {
   // Lazy initialization: getInitialState() runs ONCE before first render
   const [state, setState] = useState(getInitialState);
+  
+  // 🎯 PROPER DDD: Sync from Supabase on mount (if localStorage is stale)
+  useEffect(() => {
+    // TODO: Fetch all projects from Supabase via n8n on mount
+    // This ensures we start with authoritative data from the database
+    // For now, we rely on localStorage + manual syncs
+  }, []);
 
   // Real-time cross-tab synchronization
   useEffect(() => {
