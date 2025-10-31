@@ -62,18 +62,18 @@ export const THEME_HEADING_COLORS: Record<string, string> = {
 };
 
 export const THEME_ACCENT_COLORS: Record<string, string> = {
-  mochaEarth: '#A67B5B',
-  verdantNature: '#2E7D32',
-  chromeMetallic: '#00D4FF',
-  brutalist: '#000000',
-  mutedNeon: '#00FFF0',
-  monochromeBlue: '#1565C0',
-  gradient: '#667eea',
-  pastel: '#f093fb',
-  cyberpunk: '#ff0099', // Hot pink/magenta
-  glassmorphism: '#6366f1',
-  midnight: '#00ffff',
-  offworld: '#00d9ff' // Bright cyan
+  mochaEarth: '#7A9B76',    // Sage green
+  verdantNature: '#2E7D32',  // Forest green
+  chromeMetallic: '#00D4FF', // Electric cyan
+  brutalist: '#000000',      // Pure black
+  mutedNeon: '#00FFF0',      // Neon cyan
+  monochromeBlue: '#1565C0', // Deep blue
+  gradient: '#f093fb',       // Pink
+  pastel: '#e8a4d4',         // Soft pink
+  cyberpunk: '#ff0099',      // Hot pink/magenta
+  glassmorphism: '#a78bfa',  // Purple
+  midnight: '#00ffff',       // Cyan
+  offworld: '#00d9ff'        // Bright cyan
 };
 
 export const THEME_IS_DARK: Record<string, boolean> = {
