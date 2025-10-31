@@ -7,10 +7,10 @@ type BusinessIntent = 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
 type HumanTone = 'bold' | 'calm' | 'playful' | 'serious' | 'futuristic';
 
 const INTENT_TO_THEME: Record<BusinessIntent, Partial<Record<HumanTone, string>>> = {
-  acquire:    { bold: 'neubrutalism', playful: 'gradient', futuristic: 'cyberpunk' },
-  convert:    { bold: 'material', calm: 'corporate', serious: 'material' },
-  educate:    { calm: 'pastel', serious: 'material', playful: 'glassmorphism' },
-  trust:      { calm: 'corporate', serious: 'midnight', bold: 'material' },
+  acquire:    { bold: 'brutalist', playful: 'gradient', futuristic: 'cyberpunk' },
+  convert:    { bold: 'monochromeBlue', calm: 'mochaEarth', serious: 'monochromeBlue' },
+  educate:    { calm: 'pastel', serious: 'monochromeBlue', playful: 'glassmorphism' },
+  trust:      { calm: 'mochaEarth', serious: 'midnight', bold: 'monochromeBlue' },
   delight:    { playful: 'glassmorphism', bold: 'gradient', futuristic: 'cyberpunk' }
 };
 
@@ -21,8 +21,8 @@ export default function IntentThemeSwitcher() {
 
   const themeId = useMemo(() => {
     const mapped = INTENT_TO_THEME[intent]?.[tone];
-    return mapped || 'material';
-  }, [intent, tone]);
+    return mapped || globalTheme || 'midnight';
+  }, [intent, tone, globalTheme]);
 
   // Apply only on explicit action
   const apply = () => {

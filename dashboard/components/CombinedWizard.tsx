@@ -17,15 +17,18 @@ function uid(prefix: string) {
 }
 
 const INTENT_TO_THEME: Record<Intent, Partial<Record<Tone, string>>> = {
-  acquire:    { bold: 'neubrutalism', playful: 'gradient', futuristic: 'cyberpunk' },
-  convert:    { bold: 'material', calm: 'corporate', serious: 'material' },
-  educate:    { calm: 'pastel', serious: 'material', playful: 'glassmorphism' },
-  trust:      { calm: 'corporate', serious: 'midnight', bold: 'material' },
+  acquire:    { bold: 'brutalist', playful: 'gradient', futuristic: 'cyberpunk' },
+  convert:    { bold: 'monochromeBlue', calm: 'mochaEarth', serious: 'monochromeBlue' },
+  educate:    { calm: 'pastel', serious: 'monochromeBlue', playful: 'glassmorphism' },
+  trust:      { calm: 'mochaEarth', serious: 'midnight', bold: 'monochromeBlue' },
   delight:    { playful: 'gradient', futuristic: 'cyberpunk', calm: 'glassmorphism' }
 };
 
 export default function CombinedWizard({ projectId, onCreated }: CombinedWizardProps) {
-  const { addComponents, updateTheme } = useAppState();
+  const { addComponents, updateTheme, projects } = useAppState();
+  
+  // Inherit current project theme as default
+  const currentProjectTheme = projects[projectId]?.theme || 'gradient';
 
   const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
   const [businessType, setBusinessType] = useState<BusinessType>('ecommerce');
@@ -34,13 +37,13 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
   const [goals, setGoals] = useState<string>('Increase conversions and brand trust');
   const [intent, setIntent] = useState<Intent>('convert');
   const [tone, setTone] = useState<Tone>('calm');
-  const [theme, setTheme] = useState<string>('gradient');
+  const [theme, setTheme] = useState<string>(currentProjectTheme);
   const [domainAnswers, setDomainAnswers] = useState<Record<string, string>>({});
 
   const recommendedTheme = useMemo(() => {
     const m = INTENT_TO_THEME[intent]?.[tone];
-    return m || 'material';
-  }, [intent, tone]);
+    return m || currentProjectTheme;
+  }, [intent, tone, currentProjectTheme]);
 
   function next() { setStep((s) => (Math.min(4, (s + 1)) as 0 | 1 | 2 | 3 | 4)); }
   function back() { setStep((s) => (Math.max(0, (s - 1)) as 0 | 1 | 2 | 3 | 4)); }
@@ -259,16 +262,29 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
 
       {step === 4 && (
         <div>
-          <div style={{ marginBottom: 8 }}>Theme</div>
+          <div style={{ marginBottom: 8 }}>Theme (Current: {currentProjectTheme})</div>
           <select value={theme} onChange={(e) => setTheme(e.target.value)} style={input as any}>
-            <option value="gradient">Gradient</option>
-            <option value="pastel">Pastel</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="glassmorphism">Glass</option>
-            <option value="midnight">Midnight</option>
-            <option value="offworld">Offworld</option>
-            <option value="">Use recommended ({recommendedTheme})</option>
+            <optgroup label="🔥 2025 Trending Themes">
+              <option value="mochaEarth">☕ Mocha Earth</option>
+              <option value="verdantNature">🌿 Verdant Nature</option>
+              <option value="chromeMetallic">🤖 Chrome Future</option>
+              <option value="brutalist">⬛ Brutalist Raw</option>
+              <option value="mutedNeon">✨ Muted Neon</option>
+              <option value="monochromeBlue">🔵 Monochrome Blue</option>
+            </optgroup>
+            <optgroup label="✨ Classic Themes">
+              <option value="gradient">🌈 Gradient</option>
+              <option value="pastel">🌸 Pastel</option>
+              <option value="cyberpunk">🔮 Cyberpunk</option>
+              <option value="glassmorphism">🪟 Glass</option>
+              <option value="midnight">🌙 Midnight</option>
+              <option value="offworld">🛸 Offworld</option>
+            </optgroup>
+            <option value="">✨ Use recommended ({recommendedTheme})</option>
           </select>
+          <div style={{ marginTop: 8, padding: 8, background: 'var(--card-alt)', borderRadius: 6, fontSize: 12 }}>
+            💡 Based on your intent "{intent}" and tone "{tone}", we recommend: <strong>{recommendedTheme}</strong>
+          </div>
           <div style={row as any}>
             <button onClick={back} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
             <button onClick={finish} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Create components</button>

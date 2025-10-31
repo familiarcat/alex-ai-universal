@@ -82,15 +82,25 @@ export default function BentoEditor({ projectId }: { projectId: string }) {
                 <option value="">—</option>
                 {toneOptions.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
-              <label style={{ fontSize: 12, opacity: 0.8 }}>Theme</label>
+              <label style={{ fontSize: 12, opacity: 0.8 }}>Theme Override</label>
               <select value={c.theme || ''} onChange={(e) => updateComponent(projectId, c.id, { theme: e.target.value })} style={select as any}>
-                <option value="">Project theme</option>
-                <option value="gradient">Gradient</option>
-                <option value="pastel">Pastel</option>
-                <option value="cyberpunk">Cyberpunk</option>
-                <option value="glassmorphism">Glass</option>
-                <option value="midnight">Midnight</option>
-                <option value="offworld">Offworld</option>
+                <option value="">Use project theme ({project?.theme || 'gradient'})</option>
+                <optgroup label="🔥 2025 Trending">
+                  <option value="mochaEarth">☕ Mocha Earth</option>
+                  <option value="verdantNature">🌿 Verdant Nature</option>
+                  <option value="chromeMetallic">🤖 Chrome Future</option>
+                  <option value="brutalist">⬛ Brutalist Raw</option>
+                  <option value="mutedNeon">✨ Muted Neon</option>
+                  <option value="monochromeBlue">🔵 Monochrome Blue</option>
+                </optgroup>
+                <optgroup label="✨ Classic">
+                  <option value="gradient">🌈 Gradient</option>
+                  <option value="pastel">🌸 Pastel</option>
+                  <option value="cyberpunk">🔮 Cyberpunk</option>
+                  <option value="glassmorphism">🪟 Glass</option>
+                  <option value="midnight">🌙 Midnight</option>
+                  <option value="offworld">🛸 Offworld</option>
+                </optgroup>
               </select>
               <select
                 value={advisorOverride}
