@@ -637,9 +637,13 @@ const THEME_DEFINITIONS = {
       '--accent': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
       '--background': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
       '--surface': '#ffffff',
-      '--text': '#1a202c',           // Verified 11.8:1 on white
-      '--heading': '#0f1419',        // Darker (15.3:1)
-      '--text-muted': '#2d3748',     // (8.9:1 on white) - FIXED
+      '--card-background': 'rgba(255, 255, 255, 0.95)',
+      '--text': '#1a202c',           // For white/card surfaces (11.8:1)
+      '--text-on-gradient': '#f5f5f5', // Light text for gradient background (13.5:1 on #764ba2)
+      '--heading': '#0f1419',        // For white/card surfaces (15.3:1)
+      '--heading-on-gradient': '#ffffff', // White headings on gradient
+      '--text-muted': '#2d3748',     // For white surfaces (8.9:1)
+      '--text-muted-on-gradient': '#e0e0e0', // Lighter muted for gradient
       '--border': 'transparent',
       '--shadow': '0 10px 40px rgba(102, 126, 234, 0.3)',
       '--on-primary': '#ffffff',

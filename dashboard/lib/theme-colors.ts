@@ -38,7 +38,7 @@ export const THEME_TEXT_COLORS: Record<string, string> = {
   brutalist: '#000000',
   mutedNeon: '#2A2A2A',
   monochromeBlue: '#0D3B66',
-  gradient: '#1a202c',
+  gradient: '#f5f5f5', // Light text for gradient background (was #1a202c - too dark)
   pastel: '#2d2d2d',
   cyberpunk: '#f0e8ff', // Pink-tinted white
   glassmorphism: '#e8e8e8',
@@ -53,7 +53,7 @@ export const THEME_HEADING_COLORS: Record<string, string> = {
   brutalist: '#000000',
   mutedNeon: '#1A1A1A',
   monochromeBlue: '#0A1929',
-  gradient: '#0f1419',
+  gradient: '#ffffff', // White headings for gradient background (was #0f1419 - too dark)
   pastel: '#1a1a1a',
   cyberpunk: '#ff0099', // Hot pink
   glassmorphism: '#ffffff',
@@ -83,7 +83,7 @@ export const THEME_IS_DARK: Record<string, boolean> = {
   brutalist: false,
   mutedNeon: false,
   monochromeBlue: false,
-  gradient: false,
+  gradient: true, // Changed to true - gradient background is dark
   pastel: false,
   cyberpunk: true,
   glassmorphism: true,
