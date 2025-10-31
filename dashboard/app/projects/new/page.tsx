@@ -202,7 +202,7 @@ export default function NewProjectPage() {
   const previewSubheadline = goals || 'Building something amazing';
   const previewDescription = niche || 'Professional platform';
   
-  const previewUrl = `/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}&t=${Date.now()}`;
+  // Preview URL (no Date.now() to prevent hydration errors)
 
   return (
     <div style={containerStyle}>
