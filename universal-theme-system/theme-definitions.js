@@ -815,26 +815,26 @@ const THEME_DEFINITIONS = {
   cyberpunk: {
     name: 'Cyberpunk Neon',
     icon: '🔮',
-    description: 'Futuristic neon aesthetics',
+    description: 'Hot pink/magenta neon city vibes',
     category: 'futuristic',
     year: 2025,
     
     css: {
-      '--primary': 'hsl(300, 100%, 50%)',
-      '--secondary': 'hsl(180, 100%, 50%)',
-      '--accent': '#00ffaa',
-      '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
-      '--surface': 'rgba(26, 15, 46, 0.7)',
-      '--text': '#e8e8e8',           // Brighter (13.7:1) - FIXED
-      '--heading': '#00ffaa',
-      '--text-muted': '#b8b8b8',     // Brighter (7.8:1) - FIXED
-      '--border': '1px solid rgba(255, 0, 255, 0.3)',
-      '--shadow': '0 0 20px rgba(255, 0, 255, 0.5)',
-      '--neon-pink': '#ff00ff',
-      '--neon-cyan': '#00ffaa',
-      '--glow': '0 0 15px currentColor',
-      '--on-primary': '#0a0a0a',
-      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0.0))'
+      '--primary': 'hsl(320, 100%, 55%)',    // Hot pink (vs offworld's cyan)
+      '--secondary': 'hsl(280, 100%, 60%)',  // Electric purple
+      '--accent': '#ff0099',                  // Magenta (vs offworld's cyan)
+      '--background': 'linear-gradient(135deg, #1a0520 0%, #2d1040 100%)', // Purple-ish dark (vs offworld's blue)
+      '--surface': 'rgba(255, 0, 153, 0.08)', // Pink tint (vs offworld's cyan)
+      '--text': '#f0e8ff',           // Slightly pink-tinted white (13.7:1+)
+      '--heading': '#ff0099',        // Magenta headings (vs offworld's cyan)
+      '--text-muted': '#c8b8d8',     // Purple-tinted muted (7.8:1+)
+      '--border': '1px solid rgba(255, 0, 153, 0.4)', // Pink border (vs offworld's cyan)
+      '--shadow': '0 0 25px rgba(255, 0, 153, 0.6)', // Pink glow (vs offworld's cyan)
+      '--neon-pink': '#ff0099',
+      '--neon-purple': '#9d00ff',
+      '--glow': '0 0 20px rgba(255, 0, 153, 0.8)',
+      '--on-primary': '#ffffff',
+      '--scrim': 'linear-gradient(0deg, rgba(29, 5, 32, 0.5), rgba(0,0,0,0.0))'
     },
     
     typography: {
@@ -900,13 +900,13 @@ const THEME_DEFINITIONS = {
     },
     
     serverCSS: {
-      background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 100%);',
-      heroBackground: 'background: rgba(0, 255, 170, 0.05); border: 1px solid rgba(0, 255, 170, 0.3); box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);',
-      cardBackground: 'background: rgba(26, 15, 46, 0.7); border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 15px rgba(255, 0, 255, 0.15);',
-      cardHover: 'border-color: #00ffaa; box-shadow: 0 0 25px rgba(0, 255, 170, 0.4), 0 0 15px rgba(255, 0, 255, 0.2);',
-      buttonPrimary: 'background: #00ffaa; color: #0a0015; font-weight: 700; box-shadow: 0 0 20px rgba(0, 255, 170, 0.5);',
-      buttonSecondary: 'background: transparent; color: #00ffaa; border: 2px solid #00ffaa;',
-      buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.15); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
+      background: 'background: linear-gradient(135deg, #1a0520 0%, #2d1040 100%);', // Purple-ish dark
+      heroBackground: 'background: rgba(255, 0, 153, 0.08); border: 1px solid rgba(255, 0, 153, 0.4); box-shadow: 0 0 25px rgba(255, 0, 153, 0.3);',
+      cardBackground: 'background: rgba(255, 0, 153, 0.08); border: 1px solid rgba(255, 0, 153, 0.4); box-shadow: 0 0 20px rgba(255, 0, 153, 0.2);',
+      cardHover: 'border-color: #ff0099; box-shadow: 0 0 35px rgba(255, 0, 153, 0.6), 0 0 20px rgba(157, 0, 255, 0.3); transform: translateY(-3px);',
+      buttonPrimary: 'background: linear-gradient(135deg, #ff0099 0%, #9d00ff 100%); color: #ffffff; font-weight: 700; box-shadow: 0 0 25px rgba(255, 0, 153, 0.6);',
+      buttonSecondary: 'background: transparent; color: #ff0099; border: 2px solid #ff0099;',
+      buttonSecondaryHover: 'background: rgba(255, 0, 153, 0.15); box-shadow: 0 0 20px rgba(255, 0, 153, 0.4);'
     }
   },
 
@@ -1035,27 +1035,27 @@ const THEME_DEFINITIONS = {
   offworld: {
     name: 'Offworld Panel',
     icon: '🛸',
-    description: 'Dark nebula backdrop, glass panels, neon-accent UI',
+    description: 'Deep space blue with cyan UI panels',
     category: 'futuristic',
     year: 2025,
     
     css: {
-      '--primary': 'hsl(165, 100%, 65%)',
-      '--secondary': 'hsl(285, 80%, 72%)',
-      '--accent': '#00ffaa',
-      '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
-      '--surface': 'rgba(0, 255, 170, 0.05)',
-      '--text': '#e8e8e8',           // Brighter (13.7:1) - FIXED
-      '--heading': '#00ffaa',
-      '--text-muted': '#b8b8b8',     // Brighter (7.8:1) - FIXED
-      '--border': '1px solid rgba(0, 255, 170, 0.2)',
-      '--shadow': '0 10px 30px rgba(0, 255, 170, 0.12)',
-      '--blur': '10px',
-      '--panel': 'rgba(0, 255, 170, 0.03)',
-      '--panel-strong': 'rgba(0, 255, 170, 0.1)',
-      '--glow': '0 0 16px rgba(0, 255, 170, 0.6)',
-      '--on-primary': '#0a0a0a',
-      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.0))'
+      '--primary': 'hsl(200, 95%, 55%)',     // Deep blue (vs cyberpunk's pink)
+      '--secondary': 'hsl(185, 90%, 60%)',   // Cyan/teal
+      '--accent': '#00d9ff',                  // Bright cyan (vs cyberpunk's magenta)
+      '--background': 'linear-gradient(135deg, #020818 0%, #041c35 50%, #062a4d 100%)', // Deep blue space (vs cyberpunk's purple)
+      '--surface': 'rgba(0, 217, 255, 0.06)', // Cyan tint (vs cyberpunk's pink)
+      '--text': '#e0f4ff',           // Blue-tinted white (13.7:1+)
+      '--heading': '#00d9ff',        // Cyan headings (vs cyberpunk's magenta)
+      '--text-muted': '#a8d8e8',     // Blue-tinted muted (7.8:1+)
+      '--border': '1px solid rgba(0, 217, 255, 0.3)', // Cyan border
+      '--shadow': '0 10px 35px rgba(0, 100, 200, 0.25)', // Blue glow
+      '--blur': '12px',
+      '--panel': 'rgba(0, 217, 255, 0.04)',
+      '--panel-strong': 'rgba(0, 217, 255, 0.12)',
+      '--glow': '0 0 18px rgba(0, 217, 255, 0.7)',
+      '--on-primary': '#ffffff',
+      '--scrim': 'linear-gradient(0deg, rgba(2, 8, 24, 0.6), rgba(0,0,0,0.0))'
     },
     
     typography: {
@@ -1086,13 +1086,13 @@ const THEME_DEFINITIONS = {
     },
     
     serverCSS: {
-      background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 50%, #1a0f2e 100%);',
-      heroBackground: 'background: rgba(0, 255, 170, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 170, 0.25); box-shadow: 0 0 20px rgba(0, 255, 170, 0.15);',
-      cardBackground: 'background: rgba(0, 255, 170, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 255, 170, 0.2); box-shadow: 0 10px 30px rgba(0, 255, 170, 0.12);',
-      cardHover: 'border-color: rgba(0, 255, 170, 0.4); box-shadow: 0 0 30px rgba(0, 255, 170, 0.25), 0 15px 40px rgba(0, 0, 0, 0.4); transform: translateY(-2px);',
-      buttonPrimary: 'background: #00ffaa; color: #0a0a0a; font-weight: 700; box-shadow: 0 0 16px rgba(0, 255, 170, 0.6);',
-      buttonSecondary: 'background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.3);',
-      buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.2); border-color: rgba(0, 255, 170, 0.5); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
+      background: 'background: linear-gradient(135deg, #020818 0%, #041c35 50%, #062a4d 100%);', // Deep blue space
+      heroBackground: 'background: rgba(0, 217, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 217, 255, 0.3); box-shadow: 0 0 25px rgba(0, 100, 200, 0.2);',
+      cardBackground: 'background: rgba(0, 217, 255, 0.06); backdrop-filter: blur(14px); border: 1px solid rgba(0, 217, 255, 0.25); box-shadow: 0 12px 35px rgba(0, 100, 200, 0.15);',
+      cardHover: 'border-color: rgba(0, 217, 255, 0.5); box-shadow: 0 0 35px rgba(0, 217, 255, 0.35), 0 15px 45px rgba(0, 100, 200, 0.3); transform: translateY(-3px);',
+      buttonPrimary: 'background: linear-gradient(135deg, #00d9ff 0%, #0088cc 100%); color: #ffffff; font-weight: 700; box-shadow: 0 0 20px rgba(0, 217, 255, 0.7);',
+      buttonSecondary: 'background: rgba(0, 217, 255, 0.08); color: #00d9ff; border: 1px solid rgba(0, 217, 255, 0.35);',
+      buttonSecondaryHover: 'background: rgba(0, 217, 255, 0.15); border-color: rgba(0, 217, 255, 0.6); box-shadow: 0 0 18px rgba(0, 217, 255, 0.4);'
     }
   }
 };
