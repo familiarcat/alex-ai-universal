@@ -7,6 +7,7 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { debouncedContentSync } from './content-sync';
 
 export type ComponentRole = 'hero' | 'header' | 'footer' | 'feature' | 'testimonial' | 'cta' | 'gallery' | 'content';
 
@@ -148,20 +149,11 @@ export function StateProvider({ children }: { children: ReactNode }) {
   };
 
   const updateTheme = async (projectId: string, themeId: string) => {
-    // Update local state immediately
+    // Update local state immediately (triggers debouncedContentSync via updateProject)
     updateProject(projectId, 'theme', themeId);
     
-    // Persist to project-themes.json via API
-    try {
-      await fetch(`/api/themes/project/${projectId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ themeId })
-      });
-    } catch (error) {
-      console.error('Failed to persist theme change:', error);
-      // Non-blocking - local state is updated, persistence is best-effort
-    }
+    // Note: n8n sync now handles persistence via proper DDD flow
+    // Old project-themes.json API call removed (legacy)
   };
 
   const updateGlobalTheme = (themeId: string) => {
@@ -190,8 +182,14 @@ export function StateProvider({ children }: { children: ReactNode }) {
           }
         }
       };
+      
+      // Persist to localStorage (cache/fallback)
       localStorage.setItem('alex-ai-state', JSON.stringify(next));
       window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      
+      // Sync to Supabase via n8n (proper DDD flow)
+      debouncedContentSync(next.projects[projectId], 2000);
+      
       return next;
     });
   };
@@ -207,8 +205,14 @@ export function StateProvider({ children }: { children: ReactNode }) {
           [projectId]: { ...prev.projects[projectId], components: nextComps, updatedAt: Date.now() }
         }
       };
+      
+      // Persist to localStorage (cache/fallback)
       localStorage.setItem('alex-ai-state', JSON.stringify(next));
       window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      
+      // Sync to Supabase via n8n (proper DDD flow)
+      debouncedContentSync(next.projects[projectId], 2000);
+      
       return next;
     });
   };
