@@ -188,14 +188,7 @@ class EnhancedProjectServer {
             font-weight: 500;
         }
         
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            opacity: 0.7;
-            font-size: 14px;
-            border-top: 1px solid ${borderColor};
-        }
+        /* Status Bar */
         .status-bar {
             position: fixed;
             bottom: 0;
@@ -261,15 +254,78 @@ class EnhancedProjectServer {
         <!-- Trust/Social Proof Section -->
         ${this.renderTrustSection()}
 
-        <!-- Tech Stack -->
-        <div class="trust-section" style="margin-bottom: 100px;">
-            <h2 class="section-heading">🛠️ Powered By</h2>
-            <div class="trust-grid">
-                ${this.project.tech.map(tech => `
-                    <div class="trust-item">${tech}</div>
-                `).join('')}
+        <!-- Footer Navigation & Contact -->
+        <footer style="margin-top: 80px; padding: 60px 40px 40px; ${css.cardBackground || ''}; border-top: 1px solid ${borderColor}; border-radius: 24px 24px 0 0;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                <!-- Company -->
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Company</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px;"><a href="/about" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">About Us</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/careers" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Careers</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/press" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Press & Media</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/partners" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Products/Services -->
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Products</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px;"><a href="/features" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Features</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/pricing" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Pricing</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/enterprise" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Enterprise</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/integrations" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Integrations</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Resources</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px;"><a href="/blog" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Blog</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/docs" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Documentation</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/support" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Support Center</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/community" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Community</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Contact</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px;"><a href="mailto:hello@${this.project.name.toLowerCase().replace(/\s+/g, '')}.com" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📧 Email Us</a></li>
+                        <li style="margin-bottom: 10px;"><a href="tel:+1-555-0123" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📞 (555) 012-3456</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/locations" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">📍 Find a Location</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/contact" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">💬 Contact Form</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal & Social -->
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: ${headingColor};">Legal</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px;"><a href="/privacy" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Privacy Policy</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/terms" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Terms of Service</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/cookies" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Cookie Policy</a></li>
+                        <li style="margin-bottom: 10px;"><a href="/accessibility" style="color: ${textColor}; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Accessibility</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+            
+            <!-- Footer Bottom: Copyright & Social -->
+            <div style="border-top: 1px solid ${borderColor}; padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div style="font-size: 14px; opacity: 0.7;">
+                    © ${new Date().getFullYear()} ${this.project.name}. All rights reserved.
+                </div>
+                <div style="display: flex; gap: 16px;">
+                    <a href="https://twitter.com" target="_blank" rel="noopener" style="color: ${textColor}; opacity: 0.7; text-decoration: none; font-size: 20px; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Twitter">𝕏</a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener" style="color: ${textColor}; opacity: 0.7; text-decoration: none; font-size: 20px; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="LinkedIn">in</a>
+                    <a href="https://github.com" target="_blank" rel="noopener" style="color: ${textColor}; opacity: 0.7; text-decoration: none; font-size: 20px; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="GitHub">⚡</a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener" style="color: ${textColor}; opacity: 0.7; text-decoration: none; font-size: 20px; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Instagram">📷</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Status Bar -->

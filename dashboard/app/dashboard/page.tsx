@@ -115,10 +115,11 @@ export default function DashboardPage() {
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
                 gap: '30px',
-                padding: '30px'
+                padding: '30px',
+                minHeight: '800px'
               }}>
                 {/* Left: Editor */}
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     ✏️ Content Editor (Updates Live!)
                   </h3>
@@ -132,7 +133,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Right: Live Preview (Isolated) */}
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
                     👁️ Live Preview (Isolated, Real-Time)
                   </h3>
@@ -140,23 +141,26 @@ export default function DashboardPage() {
                     border: 'var(--border)',
                     borderRadius: 'var(--radius)',
                     overflow: 'hidden',
-                    boxShadow: 'var(--shadow)'
+                    boxShadow: 'var(--shadow)',
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column'
                   }}>
                   {mounted && (
                   <iframe
                         key={`${projectId}-${content.theme}-${content.headline}-${content.subheadline}-${content.description}-${content.updatedAt}`}
                         src={`/bridge/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
                       title={`${projectId}-preview`}
-                      style={{ width: '100%', height: '520px', border: '0', display: 'block', background: '#fff' }}
+                      style={{ width: '100%', height: '100%', minHeight: '600px', border: '0', display: 'block', background: '#fff', flex: 1 }}
                     />
                   )}
                   </div>
                   <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
                     Preview is fully isolated to reflect the project's own theme and tokens.
                   </div>
-                </div>
-                <div style={{ marginTop: 6, fontSize: 12 }}>
-                  Theme in sync: <code>{content.theme}</code>
+                  <div style={{ marginTop: 6, fontSize: 12 }}>
+                    Theme in sync: <code>{content.theme}</code>
+                  </div>
                 </div>
               </div>
             </div>
