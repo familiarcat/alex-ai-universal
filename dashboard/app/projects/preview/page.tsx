@@ -7,7 +7,7 @@
  */
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { getThemeColors, isThemeDark } from '@/lib/theme-colors';
 
 export default function PreviewPage() {
   const searchParams = useSearchParams();
@@ -18,73 +18,14 @@ export default function PreviewPage() {
   const description = searchParams?.get('description') || 'Professional platform';
   const theme = searchParams?.get('theme') || 'mochaEarth'; // No 'gradient' flash - use current trend
   
-  // Theme styling
-  const isDark = ['cyberpunk', 'midnight', 'offworld', 'glassmorphism', 'chromeMetallic'].includes(theme);
+  // Theme styling from single source of truth
+  const themeColors = getThemeColors(theme);
+  const isDark = isThemeDark(theme);
   
-  const bgGradients: Record<string, string> = {
-    mochaEarth: 'linear-gradient(135deg, #F5EFE7 0%, #E8DED2 100%)',
-    verdantNature: 'linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%)',
-    chromeMetallic: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)',
-    brutalist: '#FFFFFF',
-    mutedNeon: 'linear-gradient(135deg, #F5F0EA 0%, #E8E1D9 100%)',
-    monochromeBlue: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-    pastel: 'linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)',
-    cyberpunk: 'linear-gradient(135deg, #1a0520 0%, #2d1040 100%)', // Hot pink/purple  
-    glassmorphism: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-    midnight: 'linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #1a1a24 100%)',
-    offworld: 'linear-gradient(135deg, #020818 0%, #041c35 50%, #062a4d 100%)' // Deep blue space
-  };
-  
-  const textColors: Record<string, string> = {
-    mochaEarth: '#2D2520',
-    verdantNature: '#1B3A1F',
-    chromeMetallic: '#E8E8E8',
-    brutalist: '#000000',
-    mutedNeon: '#2A2A2A',
-    monochromeBlue: '#0D3B66',
-    gradient: '#1a202c',
-    pastel: '#2d2d2d',
-    cyberpunk: '#e8e8e8',
-    glassmorphism: '#e8e8e8',
-    midnight: '#e8e8e8',
-    offworld: '#e8e8e8'
-  };
-  
-  const headingColors: Record<string, string> = {
-    mochaEarth: '#1A1614',
-    verdantNature: '#0D1F11',
-    chromeMetallic: '#FFFFFF',
-    brutalist: '#000000',
-    mutedNeon: '#1A1A1A',
-    monochromeBlue: '#0A1929',
-    gradient: '#0f1419',
-    pastel: '#1a1a1a',
-    cyberpunk: '#ff0099', // Hot pink
-    glassmorphism: '#ffffff',
-    midnight: '#ffffff',
-    offworld: '#00d9ff' // Bright cyan
-  };
-  
-  const accentColors: Record<string, string> = {
-    mochaEarth: '#A67B5B',
-    verdantNature: '#2E7D32',
-    chromeMetallic: '#00D4FF',
-    brutalist: '#000000',
-    mutedNeon: '#00FFF0',
-    monochromeBlue: '#1565C0',
-    gradient: '#667eea',
-    pastel: '#f093fb',
-    cyberpunk: '#00ffaa',
-    glassmorphism: '#6366f1',
-    midnight: '#00ffff',
-    offworld: '#00ffaa'
-  };
-  
-  const bgColor = bgGradients[theme] || bgGradients.mochaEarth;
-  const textColor = textColors[theme] || '#2d2d2d';
-  const headingColor = headingColors[theme] || '#1a1a1a';
-  const accentColor = accentColors[theme] || '#667eea';
+  const bgColor = themeColors.background;
+  const textColor = themeColors.text;
+  const headingColor = themeColors.heading;
+  const accentColor = themeColors.accent;
   
   return (
     <div style={{ 
