@@ -17,7 +17,8 @@ export default function DashboardPage() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
-  const [debouncedProjects, setDebouncedProjects] = useState(projects);
+  // Initialize debounced state from loaded projects (not default state)
+  const [debouncedProjects, setDebouncedProjects] = useState(() => projects);
   
   // Crossfade state: track current and previous iframe content for smooth transitions
   const [iframeStates, setIframeStates] = useState<{[key: string]: { 
