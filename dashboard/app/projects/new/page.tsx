@@ -42,9 +42,10 @@ export default function NewProjectPage() {
   });
   
   // Crossfade state: track current and previous iframe keys
-  const [previewIframeState, setPreviewIframeState] = useState<{ current: string; previous: string | null }>({
+  const [previewIframeState, setPreviewIframeState] = useState<{ current: string; previous: string | null; isLoaded: boolean }>({
     current: 'initial',
-    previous: null
+    previous: null,
+    isLoaded: true
   });
   
   const [step, setStep] = useState<'theme' | 'wizard' | 'review' | 'generating'>('theme');
@@ -236,7 +237,8 @@ export default function NewProjectPage() {
     if (previewIframeState.current !== newKey) {
       setPreviewIframeState({
         current: newKey,
-        previous: previewIframeState.current
+        previous: previewIframeState.current,
+        isLoaded: false // New iframe not loaded yet
       });
     }
   }, [debouncedPreview]);
@@ -565,37 +567,51 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-current {
-                    animation: crossfadeFadeIn 0.15s ease-out forwards;
                     z-index: 2;
                   }
                   
+                  .new-project-iframe-current.loaded {
+                    animation: crossfadeFadeIn 0.12s ease-out forwards;
+                  }
+                  
+                  .new-project-iframe-current.loading {
+                    opacity: 0;
+                  }
+                  
                   .new-project-iframe-previous {
-                    animation: crossfadeFadeOut 0.15s ease-out forwards;
                     z-index: 1;
+                    opacity: 1;
+                  }
+                  
+                  .new-project-iframe-previous.fading {
+                    animation: crossfadeFadeOut 0.12s ease-out forwards;
                   }
                 `}</style>
                 <div className="new-project-iframe-container">
-                  {/* Current iframe (fading in) */}
+                  {/* Current iframe (loading invisibly, then fades in when ready) */}
                   <iframe
                     key={previewIframeState.current}
                     src={`/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`}
                     title="project-preview-current"
-                    className="new-project-iframe-layer new-project-iframe-current"
+                    className={`new-project-iframe-layer new-project-iframe-current ${previewIframeState.isLoaded ? 'loaded' : 'loading'}`}
                     onLoad={() => {
-                      // Garbage collect previous iframe after fade completes
+                      // Mark as loaded to trigger fade-in
+                      setPreviewIframeState(prev => ({ ...prev, isLoaded: true }));
+                      
+                      // Garbage collect previous iframe after crossfade completes
                       setTimeout(() => {
                         setPreviewIframeState(prev => ({ ...prev, previous: null }));
-                      }, 150);
+                      }, 120);
                     }}
                   />
                   
-                  {/* Previous iframe (fading out) - removed after animation */}
+                  {/* Previous iframe (stays visible until new one loads, then fades out) */}
                   {previewIframeState.previous && previewIframeState.previous !== 'initial' && (
                     <iframe
                       key={previewIframeState.previous}
                       src={`/projects/preview`}
                       title="project-preview-previous"
-                      className="new-project-iframe-layer new-project-iframe-previous"
+                      className={`new-project-iframe-layer new-project-iframe-previous ${previewIframeState.isLoaded ? 'fading' : ''}`}
                     />
                   )}
                 </div>
