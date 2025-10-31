@@ -14,6 +14,9 @@ import { useAppState } from '@/lib/state-manager';
 import { THEME_NAMES } from '@/lib/theme-metadata';
 import ThemeSelector from '@/components/ThemeSelector';
 
+// Option to skip quiz and use visual theme selector directly
+const USE_VISUAL_THEME_SELECTOR = false; // Set to true to use gallery instead of quiz
+
 type ThemeId = 'mochaEarth' | 'verdantNature' | 'chromeMetallic' | 'brutalist' | 'mutedNeon' | 'monochromeBlue' | 'gradient' | 'pastel' | 'cyberpunk' | 'glassmorphism' | 'midnight' | 'offworld';
 type BusinessType = 'ecommerce' | 'healthcare' | 'analytics' | 'portfolio' | 'saas' | 'hospitality' | 'finance' | 'publishing';
 type Intent = 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
@@ -45,13 +48,7 @@ export default function NewProjectPage() {
     setMounted(true);
   }, []);
   
-  const [step, setStep] = useState<'quiz' | 'wizard' | 'review' | 'generating'>('quiz');
-  
-  // Quiz state
-  const [quizIdx, setQuizIdx] = useState(0);
-  const [quizScores, setQuizScores] = useState<Record<ThemeId, number>>(
-    Object.fromEntries(QUIZ_QUESTIONS.map(q => [q.key, 0])) as Record<ThemeId, number>
-  );
+  const [step, setStep] = useState<'theme' | 'wizard' | 'review' | 'generating'>('theme');
   
   // Wizard state
   const [projectName, setProjectName] = useState('');
@@ -76,7 +73,7 @@ export default function NewProjectPage() {
     // Generate unique project ID (unlimited slots)
     const projectId = `project_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     
-    const theme = selectedTheme || recommendedTheme;
+    const theme = selectedTheme;
     const headline = projectName || `New ${businessType.charAt(0).toUpperCase() + businessType.slice(1)} Project`;
     const subheadline = goals || 'Achieve your business goals with modern design';
     const description = niche || 'A professional platform built for success';
@@ -94,7 +91,7 @@ export default function NewProjectPage() {
       addComponents(projectId, components as any);
     }
     
-    // Store learning in n8n => Supabase
+    // Store learning in n8n => Supabase (visual selection instead of quiz)
     storeProjectCreationMemory(projectId, theme, businessType, intent, tone);
     
     // Redirect to dashboard
@@ -222,7 +219,7 @@ export default function NewProjectPage() {
   };
 
   // Preview URL with current selections
-  const previewTheme = selectedTheme || recommendedTheme;
+  const previewTheme = selectedTheme;
   const previewHeadline = projectName || `Your ${businessType} Project`;
   const previewSubheadline = goals || 'Building something amazing';
   const previewDescription = niche || 'Professional platform';
@@ -262,138 +259,36 @@ export default function NewProjectPage() {
           }} />
         </div>
 
-        {/* Step 1: Theme Discovery Quiz */}
-        {step === 'quiz' && (
-          <div>
-            <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12, color: 'var(--accent)' }}>
-              🎯 Discover Your Perfect Theme
-            </h1>
-            <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
-              Answer all questions to find the best theme. Your recommendation updates in real-time!
-            </p>
-            
-            {/* Live Recommendation */}
-            <div style={{
-              padding: 24,
-              background: 'var(--accent)',
-              color: '#0a0015',
-              borderRadius: 12,
-              marginBottom: 30,
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, opacity: 0.8 }}>
-                ✨ Your Recommended Theme
-              </div>
-              <div style={{ fontSize: 28, fontWeight: 700 }}>
-                {THEME_NAMES[recommendedTheme]}
-              </div>
-              <div style={{ fontSize: 13, marginTop: 8, opacity: 0.8 }}>
-                Based on {Object.values(quizScores).filter(v => v > 0).length} answers
-              </div>
-            </div>
-            
-            {/* All Questions at Once */}
-            <div style={{ display: 'grid', gap: 16, marginBottom: 30 }}>
-              {QUIZ_QUESTIONS.map((question, idx) => {
-                const isAnswered = quizScores[question.key] > 0;
-                return (
-                  <div 
-                    key={idx}
-                    style={{
-                      padding: 20,
-                      background: isAnswered ? 'var(--subtle)' : 'var(--card-alt)',
-                      border: isAnswered ? '2px solid var(--accent)' : 'var(--border)',
-                      borderRadius: 12,
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      alignItems: 'center',
-                      gap: 16,
-                      flexWrap: 'wrap' as const
-                    }}>
-                      <div style={{ 
-                        flex: 1, 
-                        minWidth: 250,
-                        fontSize: 15, 
-                        fontWeight: 500,
-                        lineHeight: 1.4
-                      }}>
-                        {question.q}
-                      </div>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <button
-                          onClick={() => setQuizScores(s => ({ ...s, [question.key]: 1 }))}
-                          style={{
-                            padding: '10px 24px',
-                            borderRadius: 8,
-                            background: quizScores[question.key] === 1 ? 'var(--accent)' : 'var(--card)',
-                            color: quizScores[question.key] === 1 ? '#0a0015' : 'var(--text)',
-                            border: quizScores[question.key] === 1 ? 'none' : 'var(--border)',
-                            cursor: 'pointer',
-                            fontWeight: quizScores[question.key] === 1 ? 600 : 400,
-                            fontSize: 14,
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          ✓ Yes
-                        </button>
-                        <button
-                          onClick={() => setQuizScores(s => ({ ...s, [question.key]: 0 }))}
-                          style={{
-                            padding: '10px 24px',
-                            borderRadius: 8,
-                            background: quizScores[question.key] === 0 && isAnswered ? 'var(--card)' : 'transparent',
-                            color: 'var(--text)',
-                            border: 'var(--border)',
-                            cursor: 'pointer',
-                            fontSize: 14,
-                            opacity: quizScores[question.key] === 0 ? 0.5 : 0.7,
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          ✗ No
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            
-            {/* Navigation */}
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'space-between' }}>
-              <button 
-                onClick={() => {
-                  // Reset quiz
-                  setQuizScores(Object.fromEntries(QUIZ_QUESTIONS.map(q => [q.key, 0])) as Record<ThemeId, number>);
-                }} 
-                style={buttonSecondary}
-              >
-                ↺ Reset Answers
-              </button>
-              <div style={{ display: 'flex', gap: 12 }}>
-                <button 
-                  onClick={() => setStep('wizard')} 
-                  style={buttonSecondary}
-                >
-                  Skip Quiz →
-                </button>
-                <button 
-                  onClick={() => {
-                    setSelectedTheme(recommendedTheme);
-                    setStep('wizard');
-                  }} 
-                  style={buttonPrimary}
-                >
-                  Use {THEME_NAMES[recommendedTheme]} →
-                </button>
-              </div>
-            </div>
+      {/* Step 1: Visual Theme Selection (Unified with Dashboard) */}
+      {step === 'theme' && (
+        <div>
+          <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12, color: 'var(--accent)' }}>
+            🎨 Choose Your Theme
+          </h1>
+          <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
+            Select a visual theme for your project. You can change this later in the dashboard.
+          </p>
+          
+          {/* Unified ThemeSelector Component (Same as Dashboard) */}
+          <ThemeSelector
+            value={selectedTheme}
+            onChange={(themeId) => setSelectedTheme(themeId as ThemeId)}
+            mode="gallery"
+            showQuickDropdown={false}
+            label=""
+          />
+          
+          {/* Navigation */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 30 }}>
+            <button 
+              onClick={() => setStep('wizard')} 
+              style={buttonPrimary}
+            >
+              Continue with {THEME_NAMES[selectedTheme]} →
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
         {/* Step 2: Business Details Wizard */}
         {step === 'wizard' && (
