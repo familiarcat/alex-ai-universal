@@ -19,8 +19,14 @@ export default function DashboardPage() {
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
   const [debouncedProjects, setDebouncedProjects] = useState(projects);
   
-  // Crossfade state: track current and previous iframe for smooth transitions
-  const [iframeStates, setIframeStates] = useState<{[key: string]: { current: string; previous: string | null; isLoaded: boolean }}>({});
+  // Crossfade state: track current and previous iframe content for smooth transitions
+  const [iframeStates, setIframeStates] = useState<{[key: string]: { 
+    current: string; 
+    currentUrl: string;
+    previous: string | null;
+    previousUrl: string | null;
+    isLoaded: boolean;
+  }}>({});
 
   useEffect(() => {
     setMounted(true);
@@ -38,16 +44,24 @@ export default function DashboardPage() {
   // Update iframe states for crossfade effect
   useEffect(() => {
     Object.keys(projects).forEach(projectId => {
-      const newKey = `${projectId}-${debouncedProjects[projectId]?.theme}-${debouncedProjects[projectId]?.headline}-${debouncedProjects[projectId]?.subheadline}-${debouncedProjects[projectId]?.description}`;
+      const content = debouncedProjects[projectId];
+      if (!content) return;
+      
+      const newKey = `${projectId}-${content.theme}-${content.headline}-${content.subheadline}-${content.description}`;
+      const newUrl = `/projects/${projectId}/?headline=${encodeURIComponent(content.headline || '')}&subheadline=${encodeURIComponent(content.subheadline || '')}&description=${encodeURIComponent(content.description || '')}&theme=${encodeURIComponent(content.theme || 'gradient')}`;
       
       setIframeStates(prev => {
         const current = prev[projectId]?.current;
+        const currentUrl = prev[projectId]?.currentUrl;
+        
         if (current !== newKey) {
           return {
             ...prev,
             [projectId]: {
               current: newKey,
+              currentUrl: newUrl,
               previous: current || null,
+              previousUrl: currentUrl || null,
               isLoaded: false // New iframe not loaded yet
             }
           };
@@ -297,7 +311,7 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-current.loaded {
-                          animation: crossfadeFadeIn 0.12s ease-out forwards;
+                          animation: crossfadeFadeIn 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                         }
                         
                         .iframe-current.loading {
@@ -310,38 +324,38 @@ export default function DashboardPage() {
                         }
                         
                         .iframe-previous.fading {
-                          animation: crossfadeFadeOut 0.12s ease-out forwards;
+                          animation: crossfadeFadeOut 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                         }
                       `}</style>
                       <div className="iframe-container">
-                        {/* Current iframe (loading invisibly, then fades in when ready) */}
+                        {/* Current iframe (loading invisibly behind previous, fades in when ready) */}
                         <iframe
                           key={iframeStates[projectId]?.current || 'initial'}
-                          src={`/projects/${projectId}/?headline=${encodeURIComponent(debouncedProjects[projectId]?.headline || '')}&subheadline=${encodeURIComponent(debouncedProjects[projectId]?.subheadline || '')}&description=${encodeURIComponent(debouncedProjects[projectId]?.description || '')}&theme=${encodeURIComponent(debouncedProjects[projectId]?.theme || 'gradient')}`}
+                          src={iframeStates[projectId]?.currentUrl || `/projects/${projectId}/`}
                           title={`${projectId}-preview-current`}
                           className={`iframe-layer iframe-current ${iframeStates[projectId]?.isLoaded ? 'loaded' : 'loading'}`}
                           onLoad={() => {
-                            // Mark as loaded to trigger fade-in
+                            // Mark as loaded to trigger simultaneous crossfade
                             setIframeStates(prev => ({
                               ...prev,
                               [projectId]: { ...prev[projectId], isLoaded: true }
                             }));
                             
-                            // Garbage collect previous iframe after crossfade completes
+                            // Garbage collect previous iframe after crossfade animation completes
                             setTimeout(() => {
                               setIframeStates(prev => ({
                                 ...prev,
-                                [projectId]: { ...prev[projectId], previous: null }
+                                [projectId]: { ...prev[projectId], previous: null, previousUrl: null }
                               }));
-                            }, 120); // Match animation duration
+                            }, 180); // Match animation duration
                           }}
                         />
                         
-                        {/* Previous iframe (stays visible until new one loads, then fades out) */}
-                        {iframeStates[projectId]?.previous && (
+                        {/* Previous iframe (shows ACTUAL previous content, stays visible until crossfade) */}
+                        {iframeStates[projectId]?.previous && iframeStates[projectId]?.previousUrl && (
                           <iframe
                             key={iframeStates[projectId]?.previous}
-                            src={`/projects/${projectId}/`}
+                            src={iframeStates[projectId]?.previousUrl || ''}
                             title={`${projectId}-preview-previous`}
                             className={`iframe-layer iframe-previous ${iframeStates[projectId]?.isLoaded ? 'fading' : ''}`}
                           />
