@@ -187,13 +187,12 @@ export default function NewProjectPage() {
   };
 
   const cardStyle = {
-    maxWidth: '800px',
-    margin: '0 auto',
     background: 'var(--card)',
     border: 'var(--border)',
     borderRadius: 'var(--radius)',
-    padding: '40px',
-    boxShadow: 'var(--shadow)'
+    padding: '30px',
+    boxShadow: 'var(--shadow)',
+    height: 'fit-content'
   };
 
   const buttonPrimary = {
@@ -228,9 +227,19 @@ export default function NewProjectPage() {
     fontSize: 14
   };
 
+  // Preview URL with current selections
+  const previewTheme = selectedTheme || recommendedTheme;
+  const previewHeadline = projectName || `Your ${businessType} Project`;
+  const previewSubheadline = goals || 'Building something amazing';
+  const previewDescription = niche || 'Professional platform';
+  
+  const previewUrl = `/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}&t=${Date.now()}`;
+
   return (
     <div style={containerStyle}>
-      <div style={cardStyle}>
+      <div style={{ maxWidth: '1800px', margin: '0 auto', display: 'grid', gridTemplateColumns: '550px 1fr', gap: 30, alignItems: 'start' }}>
+        {/* Left: Creation Form */}
+        <div style={cardStyle}>
         {/* Progress Indicator */}
         <div style={{ marginBottom: 30, display: 'flex', justifyContent: 'center', gap: 8 }}>
           <div style={{ 
@@ -597,6 +606,65 @@ export default function NewProjectPage() {
             </div>
           </div>
         )}
+        </div>
+
+        {/* Right: Live Preview */}
+        <div style={{
+          position: 'sticky',
+          top: 20,
+          height: 'calc(100vh - 40px)',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div style={{
+            marginBottom: 12,
+            fontSize: 18,
+            fontWeight: 600,
+            color: 'var(--accent)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }}>
+            <span>👁️</span>
+            <span>Live Preview</span>
+            {step === 'generating' && (
+              <span style={{ fontSize: 12, opacity: 0.7, marginLeft: 8 }}>
+                (Generating...)
+              </span>
+            )}
+          </div>
+          
+          <div style={{
+            flex: 1,
+            border: '2px solid var(--accent)',
+            borderRadius: 16,
+            overflow: 'hidden',
+            boxShadow: '0 8px 32px rgba(0, 255, 170, 0.2)',
+            background: '#fff'
+          }}>
+            <iframe
+              key={previewUrl}
+              src={previewUrl}
+              title="project-preview"
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 0,
+                display: 'block'
+              }}
+            />
+          </div>
+          
+          <div style={{
+            marginTop: 12,
+            fontSize: 12,
+            opacity: 0.7,
+            textAlign: 'center',
+            color: 'var(--text-muted)'
+          }}>
+            Preview updates as you make changes
+          </div>
+        </div>
       </div>
     </div>
   );
