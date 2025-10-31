@@ -15,27 +15,26 @@ export default function ProjectHomePage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const { projects } = useAppState();
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   
   const projectId = params.projectId as string;
+  const project = projects[projectId];
   
   // Get content from query params (for live preview) or from state
+  // Query params take priority for live preview updates
   const queryHeadline = searchParams?.get('headline');
   const querySubheadline = searchParams?.get('subheadline');
   const queryDescription = searchParams?.get('description');
   const queryTheme = searchParams?.get('theme');
   
-  const project = projects[projectId];
+  // Use query params FIRST (for live preview), then project state
+  // No 'gradient' fallback - use actual project theme
+  const headline = queryHeadline || project?.headline || 'Welcome';
+  const subheadline = querySubheadline || project?.subheadline || 'Your new project';
+  const description = queryDescription || project?.description || 'Get started building something amazing';
+  const theme = queryTheme || project?.theme || 'mochaEarth'; // Changed from 'gradient' to match most common user selection
   
-  if (!mounted) {
-    return null; // Prevent hydration mismatch
-  }
-  
-  if (!project) {
+  // Show 404 only if truly not found (after checking everything)
+  if (!project && !queryHeadline && !queryTheme) {
     return (
       <div style={{ 
         minHeight: '100vh', 
@@ -55,12 +54,6 @@ export default function ProjectHomePage() {
       </div>
     );
   }
-  
-  // Use query params if available (live preview), otherwise use project state
-  const headline = queryHeadline || project.headline || 'Welcome';
-  const subheadline = querySubheadline || project.subheadline || 'Your new project';
-  const description = queryDescription || project.description || 'Get started building something amazing';
-  const theme = queryTheme || project.theme || 'gradient';
   
   // Theme-aware styling
   const isDark = ['cyberpunk', 'midnight', 'offworld', 'glassmorphism', 'chromeMetallic'].includes(theme);
