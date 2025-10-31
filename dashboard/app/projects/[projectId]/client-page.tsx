@@ -23,12 +23,15 @@ interface UniversalTheme {
 interface ClientProjectPageProps {
   projectId: string;
   initialTheme: UniversalTheme;
+  initialContent: any | null;
   searchParams: Record<string, string>;
 }
 
-export default function ClientProjectPage({ projectId, initialTheme, searchParams }: ClientProjectPageProps) {
+export default function ClientProjectPage({ projectId, initialTheme, initialContent, searchParams }: ClientProjectPageProps) {
   const { projects } = useAppState();
-  const project = projects[projectId];
+  
+  // Priority: state-manager (live edits) > initialContent (SSR) > defaults
+  const project = projects[projectId] || initialContent;
   
   // Get content from query params (for live preview) or from state
   const queryHeadline = searchParams.headline;

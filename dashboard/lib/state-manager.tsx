@@ -71,16 +71,10 @@ export interface AppState {
 
 const StateContext = createContext<AppState | null>(null);
 
-// Helper: Read cookie value (client-side only)
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
 // Helper: Load initial state from localStorage (runs synchronously before first render)
 function getInitialState() {
-  // Try to load from localStorage first (user's saved state)
+  // 🎯 PROPER DDD: localStorage for client-side optimistic updates only
+  // Supabase (via n8n) is the single source of truth
   if (typeof window !== 'undefined') {
     try {
       const saved = localStorage.getItem('alex-ai-state');
@@ -94,56 +88,39 @@ function getInitialState() {
     }
   }
   
-  // 🎨 UNIVERSAL THEME: Fallback to cookies if localStorage is empty
-  // This ensures consistency when localStorage is cleared but cookies persist
-  const globalThemeCookie = getCookie('global-theme');
-  
-  // Fallback: Default state (only used if localStorage is empty)
-  console.log('📋 Using default state (no saved state found), globalTheme from cookie:', globalThemeCookie || 'not set');
+  // Fallback: Default state (will be synced from Supabase on mount)
+  console.log('📋 Using default state (will sync from Supabase)');
   return {
     projects: {
       alpha: {
         headline: '✨ Discover Your Next Obsession',
         subheadline: 'Curated collections of premium streetwear and creative essentials',
         description: 'Limited edition drops and exclusive designs you won\'t find anywhere else. New releases every Friday.',
-        theme: getCookie('project-theme-alpha') || 'gradient',
+        theme: 'gradient',
         updatedAt: Date.now()
       },
       beta: {
         headline: 'Compassionate Care, When You Need It Most',
         subheadline: 'Board-certified providers dedicated to your health and wellness',
         description: 'Professional healthcare services with telemedicine, patient portal, and HIPAA-compliant security.',
-        theme: getCookie('project-theme-beta') || 'pastel',
+        theme: 'pastel',
         updatedAt: Date.now()
       },
       gamma: {
         headline: '⚡ Unlock the Power of Your Data',
         subheadline: 'Real-time analytics and ML-powered insights for modern teams',
         description: 'Advanced dashboards, custom reports, powerful API access, and predictive analytics.',
-        theme: getCookie('project-theme-gamma') || 'cyberpunk',
+        theme: 'cyberpunk',
         updatedAt: Date.now()
       }
     },
-    globalTheme: globalThemeCookie || 'midnight'
+    globalTheme: 'midnight'
   };
 }
 
 export function StateProvider({ children }: { children: ReactNode }) {
   // Lazy initialization: getInitialState() runs ONCE before first render
   const [state, setState] = useState(getInitialState);
-  
-  // 🎨 UNIVERSAL THEME SYNC: Initialize cookies on mount
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      // Sync global theme to cookie
-      document.cookie = `global-theme=${state.globalTheme}; path=/; max-age=31536000; SameSite=Lax`;
-      
-      // Sync all project themes to cookies
-      Object.entries(state.projects).forEach(([projectId, project]) => {
-        document.cookie = `project-theme-${projectId}=${project.theme}; path=/; max-age=31536000; SameSite=Lax`;
-      });
-    }
-  }, []); // Run once on mount
 
   // Real-time cross-tab synchronization
   useEffect(() => {
@@ -176,7 +153,7 @@ export function StateProvider({ children }: { children: ReactNode }) {
         }
       };
       
-      // Persist to localStorage (cache/fallback)
+      // Persist to localStorage (optimistic client cache)
       localStorage.setItem('alex-ai-state', JSON.stringify(newState));
       
       // Trigger storage event for other tabs
@@ -185,12 +162,7 @@ export function StateProvider({ children }: { children: ReactNode }) {
         newValue: JSON.stringify(newState)
       }));
       
-      // 🎨 UNIVERSAL THEME: Sync theme to cookie for SSR consistency
-      if (field === 'theme') {
-        document.cookie = `project-theme-${projectId}=${value}; path=/; max-age=31536000; SameSite=Lax`;
-      }
-      
-      // Sync to Supabase via n8n (proper DDD flow)
+      // 🎯 PROPER DDD: Sync to Supabase via n8n (single source of truth)
       debouncedContentSync(newState.projects[projectId], 2000);
       
       return newState;
@@ -213,10 +185,6 @@ export function StateProvider({ children }: { children: ReactNode }) {
         key: 'alex-ai-state',
         newValue: JSON.stringify(newState)
       }));
-      
-      // 🎨 UNIVERSAL THEME: Sync to cookie for SSR consistency
-      document.cookie = `global-theme=${themeId}; path=/; max-age=31536000; SameSite=Lax`;
-      
       return newState;
     });
   };
