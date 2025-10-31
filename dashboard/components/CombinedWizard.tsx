@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useAppState } from '@/lib/state-manager';
+import ThemeSelector from '@/components/ThemeSelector';
 
 type BusinessType = 'ecommerce' | 'healthcare' | 'analytics' | 'portfolio' | 'saas';
 type Intent = 'acquire' | 'convert' | 'educate' | 'trust' | 'delight';
@@ -262,27 +263,13 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
 
       {step === 4 && (
         <div>
-          <div style={{ marginBottom: 8 }}>Theme (Current: {currentProjectTheme})</div>
-          <select value={theme} onChange={(e) => setTheme(e.target.value)} style={input as any}>
-            <optgroup label="🔥 2025 Trending Themes">
-              <option value="mochaEarth">☕ Mocha Earth</option>
-              <option value="verdantNature">🌿 Verdant Nature</option>
-              <option value="chromeMetallic">🤖 Chrome Future</option>
-              <option value="brutalist">⬛ Brutalist Raw</option>
-              <option value="mutedNeon">✨ Muted Neon</option>
-              <option value="monochromeBlue">🔵 Monochrome Blue</option>
-            </optgroup>
-            <optgroup label="✨ Classic Themes">
-              <option value="gradient">🌈 Gradient</option>
-              <option value="pastel">🌸 Pastel</option>
-              <option value="cyberpunk">🔮 Cyberpunk</option>
-              <option value="glassmorphism">🪟 Glass</option>
-              <option value="midnight">🌙 Midnight</option>
-              <option value="offworld">🛸 Offworld</option>
-            </optgroup>
-            <option value="">✨ Use recommended ({recommendedTheme})</option>
-          </select>
-          <div style={{ marginTop: 8, padding: 8, background: 'var(--card-alt)', borderRadius: 6, fontSize: 12 }}>
+          <ThemeSelector
+            value={theme || recommendedTheme}
+            onChange={setTheme}
+            mode="dropdown"
+            label={`Theme (Current: ${currentProjectTheme})`}
+          />
+          <div style={{ marginTop: 12, padding: 8, background: 'var(--card-alt)', borderRadius: 6, fontSize: 12 }}>
             💡 Based on your intent "{intent}" and tone "{tone}", we recommend: <strong>{recommendedTheme}</strong>
           </div>
           <div style={row as any}>
