@@ -232,14 +232,22 @@ export function StateProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteProject = (projectId: string) => {
+    // Delete from Supabase via n8n (proper DDD flow)
+    deleteProjectContent(projectId).catch(err => 
+      console.warn('Project deletion from Supabase failed (non-blocking):', err)
+    );
+    
     setState(prev => {
       const { [projectId]: removed, ...remainingProjects } = prev.projects;
       const next = {
         ...prev,
         projects: remainingProjects
       };
+      
+      // Remove from localStorage (cache)
       localStorage.setItem('alex-ai-state', JSON.stringify(next));
       window.dispatchEvent(new StorageEvent('storage', { key: 'alex-ai-state', newValue: JSON.stringify(next) }));
+      
       return next;
     });
   };
