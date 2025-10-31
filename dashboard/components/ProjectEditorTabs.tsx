@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import QuizInline from '@/components/QuizInline';
-import WizardInline from '@/components/WizardInline';
 import CombinedWizard from '@/components/CombinedWizard';
 import BentoEditor from '@/components/BentoEditor';
 
@@ -24,10 +22,9 @@ interface ProjectEditorTabsProps {
 }
 
 export default function ProjectEditorTabs({ projectId, content, themes, onUpdate, onTheme }: ProjectEditorTabsProps) {
-  const [tab, setTab] = useState<'quick-edit' | 'advanced'>('quick-edit');
-  const [advancedSubTab, setAdvancedSubTab] = useState<'quiz' | 'wizard' | 'components'>('quiz');
+  const [tab, setTab] = useState<'quick-edit' | 'components'>('quick-edit');
 
-  const mainTabButton = (id: 'quick-edit' | 'advanced', label: string, icon: string) => (
+  const mainTabButton = (id: 'quick-edit' | 'components', label: string, icon: string) => (
     <button
       onClick={() => setTab(id)}
       style={{
@@ -44,29 +41,12 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
     >{icon} {label}</button>
   );
 
-  const subTabButton = (id: 'quiz' | 'wizard' | 'components', label: string) => (
-    <button
-      onClick={() => setAdvancedSubTab(id)}
-      style={{
-        padding: '6px 12px',
-        borderRadius: 6,
-        border: 'none',
-        background: advancedSubTab === id ? 'var(--subtle)' : 'transparent',
-        color: 'var(--text)',
-        cursor: 'pointer',
-        fontSize: 12,
-        opacity: advancedSubTab === id ? 1 : 0.7,
-        transition: 'all 0.2s ease'
-      }}
-    >{label}</button>
-  );
-
   return (
     <div>
       {/* Main Tabs */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
         {mainTabButton('quick-edit', 'Quick Edit', '✏️')}
-        {mainTabButton('advanced', 'Advanced Builder', '🎨')}
+        {mainTabButton('components', 'Component Manager', '📦')}
       </div>
 
       {/* Quick Edit Tab */}
@@ -314,13 +294,13 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
             opacity: 0.9
           }}>
             <div style={{ fontSize: '13px', marginBottom: '8px', color: 'var(--accent)', fontWeight: 600 }}>
-              💡 Need more control?
+              📦 Need to add sections?
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text)', marginBottom: '10px' }}>
-              Try <strong>Advanced Builder</strong> for AI-powered content generation, theme recommendations, and component-level customization.
+              Switch to <strong>Component Manager</strong> to build rich, multi-section pages with hero blocks, features, testimonials, and more.
             </div>
             <button 
-              onClick={() => setTab('advanced')}
+              onClick={() => setTab('components')}
               style={{ 
                 padding: '8px 16px', 
                 borderRadius: 6, 
@@ -332,69 +312,29 @@ export default function ProjectEditorTabs({ projectId, content, themes, onUpdate
                 fontWeight: 600
               }}
             >
-              🚀 Try Advanced Builder →
+              📦 Manage Components →
             </button>
           </div>
         </div>
       )}
 
-      {/* Advanced Builder Tab */}
-      {tab === 'advanced' && (
-        <div>
-          {/* Sub-tabs */}
-          <div style={{ 
-            display: 'flex', 
-            gap: 4, 
-            marginBottom: 16, 
-            padding: '4px',
-            background: 'var(--card-alt)',
-            borderRadius: 8,
-            width: 'fit-content'
-          }}>
-            {subTabButton('quiz', '🎯 Quiz')}
-            {subTabButton('wizard', '🧙 Wizard')}
-            {subTabButton('components', '📦 Components')}
+      {/* Component Manager Tab */}
+      {tab === 'components' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+          <div>
+            <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
+              Create structured page components with AI-powered suggestions based on your business type
+            </div>
+            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>🧪 Add Components (AI-Powered)</h4>
+            <CombinedWizard projectId={projectId} />
           </div>
-
-          {/* Sub-tab Content */}
-          {advancedSubTab === 'quiz' && (
-            <div>
-              <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
-                Answer questions to get AI-powered theme recommendations
-              </div>
-              <QuizInline projectId={projectId} onApplyTheme={(t) => onTheme(t)} />
+          <div>
+            <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>📦 Manage Component Cards</h4>
+            <div style={{ marginBottom: 12, fontSize: 13, color: 'var(--text-muted)' }}>
+              Edit existing components, adjust priority, set intent/tone, and customize per-component themes
             </div>
-          )}
-
-          {advancedSubTab === 'wizard' && (
-            <div>
-              <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
-                Quick wizard to generate content suggestions
-              </div>
-              <WizardInline projectId={projectId} onApply={(data) => {
-                if (data.headline) onUpdate('headline', data.headline);
-                if (data.subheadline) onUpdate('subheadline', data.subheadline);
-                if (data.description) onUpdate('description', data.description);
-                if (data.theme) onTheme(data.theme);
-              }} />
-            </div>
-          )}
-
-          {advancedSubTab === 'components' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
-              <div>
-                <div style={{ marginBottom: 12, fontSize: 14, color: 'var(--text-muted)' }}>
-                  Create and manage page components with AI-powered suggestions
-                </div>
-                <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>🧪 Component Wizard</h4>
-                <CombinedWizard projectId={projectId} />
-              </div>
-              <div>
-                <h4 style={{ marginBottom: 8, color: 'var(--accent)' }}>📦 Component Grid</h4>
-                <BentoEditor projectId={projectId} />
-              </div>
-            </div>
-          )}
+            <BentoEditor projectId={projectId} />
+          </div>
         </div>
       )}
     </div>
