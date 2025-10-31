@@ -71,6 +71,13 @@ export interface AppState {
 
 const StateContext = createContext<AppState | null>(null);
 
+// Helper: Read cookie value (client-side only)
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
 // Helper: Load initial state from localStorage (runs synchronously before first render)
 function getInitialState() {
   // Try to load from localStorage first (user's saved state)
@@ -87,33 +94,37 @@ function getInitialState() {
     }
   }
   
+  // 🎨 UNIVERSAL THEME: Fallback to cookies if localStorage is empty
+  // This ensures consistency when localStorage is cleared but cookies persist
+  const globalThemeCookie = getCookie('global-theme');
+  
   // Fallback: Default state (only used if localStorage is empty)
-  console.log('📋 Using default state (no saved state found)');
+  console.log('📋 Using default state (no saved state found), globalTheme from cookie:', globalThemeCookie || 'not set');
   return {
     projects: {
       alpha: {
         headline: '✨ Discover Your Next Obsession',
         subheadline: 'Curated collections of premium streetwear and creative essentials',
         description: 'Limited edition drops and exclusive designs you won\'t find anywhere else. New releases every Friday.',
-        theme: 'gradient',
+        theme: getCookie('project-theme-alpha') || 'gradient',
         updatedAt: Date.now()
       },
       beta: {
         headline: 'Compassionate Care, When You Need It Most',
         subheadline: 'Board-certified providers dedicated to your health and wellness',
         description: 'Professional healthcare services with telemedicine, patient portal, and HIPAA-compliant security.',
-        theme: 'pastel',
+        theme: getCookie('project-theme-beta') || 'pastel',
         updatedAt: Date.now()
       },
       gamma: {
         headline: '⚡ Unlock the Power of Your Data',
         subheadline: 'Real-time analytics and ML-powered insights for modern teams',
         description: 'Advanced dashboards, custom reports, powerful API access, and predictive analytics.',
-        theme: 'cyberpunk',
+        theme: getCookie('project-theme-gamma') || 'cyberpunk',
         updatedAt: Date.now()
       }
     },
-    globalTheme: 'midnight'
+    globalTheme: globalThemeCookie || 'midnight'
   };
 }
 

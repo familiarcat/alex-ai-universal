@@ -183,10 +183,10 @@ export default function DashboardPage() {
                 alignItems: 'center'
               }}>
                 <div>
-                  <h2 style={{ fontSize: '24px', color: 'var(--accent)' }}>
+                  <h2 suppressHydrationWarning style={{ fontSize: '24px', color: 'var(--accent)' }}>
                     {meta.icon} {meta.name}
                   </h2>
-                  <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }}>
+                  <div suppressHydrationWarning className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }}>
                     Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}
                   </div>
                 </div>
