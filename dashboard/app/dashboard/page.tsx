@@ -27,12 +27,20 @@ export default function DashboardPage() {
   };
 
   const themes = [
-    { id: 'gradient', icon: '🌈', name: 'Gradient' },
-    { id: 'pastel', icon: '🌸', name: 'Pastel' },
-    { id: 'cyberpunk', icon: '🔮', name: 'Cyberpunk' },
-    { id: 'glassmorphism', icon: '🪟', name: 'Glass' },
-    { id: 'midnight', icon: '🌙', name: 'Midnight' },
-    { id: 'offworld', icon: '🛸', name: 'Offworld Panel' }
+    // 2025 NEW TRENDS
+    { id: 'mochaEarth', icon: '☕', name: 'Mocha Earth', category: '2025 Trend', year: 2025 },
+    { id: 'verdantNature', icon: '🌿', name: 'Verdant Nature', category: '2025 Trend', year: 2025 },
+    { id: 'chromeMetallic', icon: '🤖', name: 'Chrome Future', category: '2025 Trend', year: 2025 },
+    { id: 'brutalist', icon: '⬛', name: 'Brutalist Raw', category: '2025 Trend', year: 2025 },
+    { id: 'mutedNeon', icon: '✨', name: 'Muted Neon', category: '2025 Trend', year: 2025 },
+    { id: 'monochromeBlue', icon: '🔵', name: 'Monochrome Blue', category: '2025 Trend', year: 2025 },
+    // CLASSIC THEMES
+    { id: 'gradient', icon: '🌈', name: 'Gradient Fusion', category: 'Classic' },
+    { id: 'pastel', icon: '🌸', name: 'Pastel', category: 'Classic' },
+    { id: 'cyberpunk', icon: '🔮', name: 'Cyberpunk', category: 'Classic' },
+    { id: 'glassmorphism', icon: '🪟', name: 'Glass', category: 'Classic' },
+    { id: 'midnight', icon: '🌙', name: 'Midnight', category: 'Classic' },
+    { id: 'offworld', icon: '🛸', name: 'Offworld', category: 'Classic' }
   ];
 
   return (

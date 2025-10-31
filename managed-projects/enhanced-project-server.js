@@ -285,12 +285,14 @@ class EnhancedProjectServer {
   }
 
   renderTrustSection() {
-    if (this.content.socialProof) {
+    const content = this.content || {};
+    
+    if (content.socialProof) {
       return `
         <div class="trust-section">
-            <h2 class="section-heading">${this.content.socialProof.heading}</h2>
+            <h2 class="section-heading">${content.socialProof.heading}</h2>
             <div class="trust-grid">
-                ${this.content.socialProof.testimonials.map(t => `
+                ${(content.socialProof.testimonials || []).map(t => `
                     <div class="trust-item">
                         <p style="font-style: italic; margin-bottom: 8px;">"${t.text}"</p>
                         <p style="font-size: 14px; opacity: 0.7;">— ${t.author}</p>
@@ -301,13 +303,14 @@ class EnhancedProjectServer {
       `;
     }
     
-    if (this.content.trust) {
+    if (content.trust) {
+      const items = content.trust.credentials || content.trust.awards || [];
       return `
         <div class="trust-section">
-            <h2 class="section-heading">${this.content.trust.heading}</h2>
+            <h2 class="section-heading">${content.trust.heading}</h2>
             <div class="trust-grid">
-                ${this.content.trust.credentials.map(cred => `
-                    <div class="trust-item">${cred}</div>
+                ${items.map(item => `
+                    <div class="trust-item">${item}</div>
                 `).join('')}
             </div>
         </div>
@@ -336,71 +339,9 @@ class EnhancedProjectServer {
   }
 
   getThemeCSS() {
-    // Theme-specific CSS configurations - Each theme is visually distinct
-    const themes = {
-      gradient: {
-        // Vibrant multi-color gradients with warm tones
-        background: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);',
-        heroBackground: 'background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);',
-        cardBackground: 'background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);',
-        cardHover: 'border-color: #f093fb; box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4); transform: translateY(-2px);',
-        buttonPrimary: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);',
-        buttonSecondary: 'background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);',
-        buttonSecondaryHover: 'background: rgba(255, 255, 255, 0.25);'
-      },
-      pastel: {
-        // Soft pastels with clean whitespace - Healthcare/Minimal
-        background: 'background: linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%);',
-        heroBackground: 'background: #ffffff; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);',
-        cardBackground: 'background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.06);',
-        cardHover: 'box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); transform: translateY(-2px);',
-        buttonPrimary: 'background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #ffffff; box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);',
-        buttonSecondary: 'background: #ffffff; color: #4a4a4a; border: 2px solid rgba(74, 74, 74, 0.2);',
-        buttonSecondaryHover: 'background: #f8f8f8; border-color: rgba(74, 74, 74, 0.3);'
-      },
-      cyberpunk: {
-        // Dark neon with cyan/magenta accents - High-tech/Futuristic
-        background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 100%);',
-        heroBackground: 'background: rgba(0, 255, 170, 0.05); border: 1px solid rgba(0, 255, 170, 0.3); box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);',
-        cardBackground: 'background: rgba(26, 15, 46, 0.7); border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 15px rgba(255, 0, 255, 0.15);',
-        cardHover: 'border-color: #00ffaa; box-shadow: 0 0 25px rgba(0, 255, 170, 0.4), 0 0 15px rgba(255, 0, 255, 0.2);',
-        buttonPrimary: 'background: #00ffaa; color: #0a0015; font-weight: 700; box-shadow: 0 0 20px rgba(0, 255, 170, 0.5);',
-        buttonSecondary: 'background: transparent; color: #00ffaa; border: 2px solid #00ffaa;',
-        buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.15); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
-      },
-      glassmorphism: {
-        // Frosted glass with blue-purple tones - Modern/Glass aesthetic
-        background: 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);',
-        heroBackground: 'background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);',
-        cardBackground: 'background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);',
-        cardHover: 'border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5); transform: translateY(-3px);',
-        buttonPrimary: 'background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #ffffff; backdrop-filter: blur(8px); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);',
-        buttonSecondary: 'background: rgba(255, 255, 255, 0.12); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px);',
-        buttonSecondaryHover: 'background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3);'
-      },
-      midnight: {
-        // Deep dark with cyan accents - Dark theme variant
-        background: 'background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #1a1a24 100%);',
-        heroBackground: 'background: rgba(0, 255, 255, 0.04); border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);',
-        cardBackground: 'background: #1a1a24; border: 1px solid rgba(0, 255, 255, 0.15); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);',
-        cardHover: 'border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.35), 0 8px 30px rgba(0, 0, 0, 0.6);',
-        buttonPrimary: 'background: #00ffff; color: #0a0a0a; font-weight: 700; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);',
-        buttonSecondary: 'background: transparent; color: #00ffff; border: 2px solid #00ffff;',
-        buttonSecondaryHover: 'background: rgba(0, 255, 255, 0.1); box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);'
-      },
-      offworld: {
-        // Dark nebula with teal accents - Enhanced dashboard aesthetic
-        background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 50%, #1a0f2e 100%);',
-        heroBackground: 'background: rgba(0, 255, 170, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 170, 0.25); box-shadow: 0 0 20px rgba(0, 255, 170, 0.15);',
-        cardBackground: 'background: rgba(0, 255, 170, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 255, 170, 0.2); box-shadow: 0 10px 30px rgba(0, 255, 170, 0.12);',
-        cardHover: 'border-color: rgba(0, 255, 170, 0.4); box-shadow: 0 0 30px rgba(0, 255, 170, 0.25), 0 15px 40px rgba(0, 0, 0, 0.4); transform: translateY(-2px);',
-        buttonPrimary: 'background: #00ffaa; color: #0a0a0a; font-weight: 700; box-shadow: 0 0 16px rgba(0, 255, 170, 0.6);',
-        buttonSecondary: 'background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.3);',
-        buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.2); border-color: rgba(0, 255, 170, 0.5); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
-      }
-    };
-
-    return themes[this.themeId] || themes.gradient;
+    // Use serverCSS from THEME_DEFINITIONS (single source of truth)
+    const themeDef = THEME_DEFINITIONS[this.themeId] || THEME_DEFINITIONS.gradient;
+    return themeDef.serverCSS || {};
   }
 
   handleRequest(req, res) {
