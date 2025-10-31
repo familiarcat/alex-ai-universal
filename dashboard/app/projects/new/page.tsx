@@ -74,16 +74,7 @@ export default function NewProjectPage() {
     return sorted[0]?.[0] || 'mochaEarth';
   }, [quizScores]);
 
-  function answerQuiz(yes: boolean) {
-    const themeKey = QUIZ_QUESTIONS[quizIdx].key;
-    setQuizScores(s => ({ ...s, [themeKey]: s[themeKey] + (yes ? 1 : 0) }));
-    
-    if (quizIdx + 1 >= QUIZ_QUESTIONS.length) {
-      setStep('wizard');
-    } else {
-      setQuizIdx(i => i + 1);
-    }
-  }
+  // Quiz now shows all questions at once, no need for navigation function
 
   function generateProject() {
     setStep('generating');
@@ -275,65 +266,128 @@ export default function NewProjectPage() {
               🎯 Discover Your Perfect Theme
             </h1>
             <p style={{ fontSize: 16, opacity: 0.8, marginBottom: 30 }}>
-              Answer {QUIZ_QUESTIONS.length} quick questions to find the theme that matches your brand.
+              Answer all questions to find the best theme. Your recommendation updates in real-time!
             </p>
             
-            <div style={{ 
-              padding: 30, 
-              background: 'var(--card-alt)', 
-              borderRadius: 12, 
-              marginBottom: 20,
-              border: '2px solid var(--accent)'
+            {/* Live Recommendation */}
+            <div style={{
+              padding: 24,
+              background: 'var(--accent)',
+              color: '#0a0015',
+              borderRadius: 12,
+              marginBottom: 30,
+              textAlign: 'center'
             }}>
-              <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 20, lineHeight: 1.5 }}>
-                {QUIZ_QUESTIONS[quizIdx].q}
+              <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, opacity: 0.8 }}>
+                ✨ Your Recommended Theme
               </div>
-              
-              <div style={{ display: 'flex', gap: 12 }}>
-                <button 
-                  onClick={() => answerQuiz(true)} 
-                  style={{ 
-                    ...buttonPrimary,
-                    flex: 1 
-                  }}
-                >
-                  ✓ Yes
-                </button>
-                <button 
-                  onClick={() => answerQuiz(false)} 
-                  style={{ 
-                    ...buttonSecondary,
-                    flex: 1 
-                  }}
-                >
-                  ✗ No
-                </button>
+              <div style={{ fontSize: 28, fontWeight: 700 }}>
+                {THEME_NAMES[recommendedTheme]}
+              </div>
+              <div style={{ fontSize: 13, marginTop: 8, opacity: 0.8 }}>
+                Based on {Object.values(quizScores).filter(v => v > 0).length} answers
               </div>
             </div>
             
-            <div style={{ 
-              fontSize: 13, 
-              opacity: 0.6, 
-              textAlign: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <span>Question {quizIdx + 1} of {QUIZ_QUESTIONS.length}</span>
+            {/* All Questions at Once */}
+            <div style={{ display: 'grid', gap: 16, marginBottom: 30 }}>
+              {QUIZ_QUESTIONS.map((question, idx) => {
+                const isAnswered = quizScores[question.key] > 0;
+                return (
+                  <div 
+                    key={idx}
+                    style={{
+                      padding: 20,
+                      background: isAnswered ? 'var(--subtle)' : 'var(--card-alt)',
+                      border: isAnswered ? '2px solid var(--accent)' : 'var(--border)',
+                      borderRadius: 12,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <div style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      gap: 16,
+                      flexWrap: 'wrap' as const
+                    }}>
+                      <div style={{ 
+                        flex: 1, 
+                        minWidth: 250,
+                        fontSize: 15, 
+                        fontWeight: 500,
+                        lineHeight: 1.4
+                      }}>
+                        {question.q}
+                      </div>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          onClick={() => setQuizScores(s => ({ ...s, [question.key]: 1 }))}
+                          style={{
+                            padding: '10px 24px',
+                            borderRadius: 8,
+                            background: quizScores[question.key] === 1 ? 'var(--accent)' : 'var(--card)',
+                            color: quizScores[question.key] === 1 ? '#0a0015' : 'var(--text)',
+                            border: quizScores[question.key] === 1 ? 'none' : 'var(--border)',
+                            cursor: 'pointer',
+                            fontWeight: quizScores[question.key] === 1 ? 600 : 400,
+                            fontSize: 14,
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          ✓ Yes
+                        </button>
+                        <button
+                          onClick={() => setQuizScores(s => ({ ...s, [question.key]: 0 }))}
+                          style={{
+                            padding: '10px 24px',
+                            borderRadius: 8,
+                            background: quizScores[question.key] === 0 && isAnswered ? 'var(--card)' : 'transparent',
+                            color: 'var(--text)',
+                            border: 'var(--border)',
+                            cursor: 'pointer',
+                            fontSize: 14,
+                            opacity: quizScores[question.key] === 0 ? 0.5 : 0.7,
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          ✗ No
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Navigation */}
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'space-between' }}>
               <button 
-                onClick={() => setStep('wizard')} 
-                style={{ 
-                  padding: '6px 12px',
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--accent)',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                  textDecoration: 'underline'
-                }}
+                onClick={() => {
+                  // Reset quiz
+                  setQuizScores(Object.fromEntries(QUIZ_QUESTIONS.map(q => [q.key, 0])) as Record<ThemeId, number>);
+                }} 
+                style={buttonSecondary}
               >
-                Skip Quiz →
+                ↺ Reset Answers
               </button>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button 
+                  onClick={() => setStep('wizard')} 
+                  style={buttonSecondary}
+                >
+                  Skip Quiz →
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedTheme(recommendedTheme);
+                    setStep('wizard');
+                  }} 
+                  style={buttonPrimary}
+                >
+                  Use {THEME_NAMES[recommendedTheme]} →
+                </button>
+              </div>
             </div>
           </div>
         )}
