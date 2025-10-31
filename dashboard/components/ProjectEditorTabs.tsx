@@ -118,6 +118,7 @@ export default function ProjectEditorTabs({ projectId, content, onUpdate, onThem
               onChange={onTheme}
               mode="gallery"
               label="🎨 Theme Selection"
+              showQuickDropdown={false}
             />
           </div>
 

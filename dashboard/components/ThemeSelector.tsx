@@ -17,6 +17,7 @@ interface ThemeSelectorProps {
   showInherit?: boolean;
   inheritLabel?: string;
   label?: string;
+  showQuickDropdown?: boolean; // Show dropdown in gallery mode (default: true)
 }
 
 export default function ThemeSelector({ 
@@ -25,7 +26,8 @@ export default function ThemeSelector({
   mode = 'gallery',
   showInherit = false,
   inheritLabel = 'Use default',
-  label = '🎨 Theme Selection'
+  label = '🎨 Theme Selection',
+  showQuickDropdown = true
 }: ThemeSelectorProps) {
   
   const currentTheme = getThemeById(value);
@@ -79,33 +81,35 @@ export default function ThemeSelector({
         </label>
       )}
       
-      {/* Quick Dropdown */}
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '12px 14px',
-          marginBottom: '16px',
-          background: 'var(--card-alt)',
-          color: 'var(--text)',
-          border: '2px solid var(--accent)',
-          borderRadius: 'var(--radius)',
-          fontSize: '14px'
-        }}
-      >
-        {showInherit && <option value="">{inheritLabel}</option>}
-        <optgroup label="🔥 2025 Trending Themes">
-          {trendingThemes.map((t) => (
-            <option key={t.id} value={t.id}>{t.icon} {t.name}</option>
-          ))}
-        </optgroup>
-        <optgroup label="✨ Classic Themes">
-          {classicThemes.map((t) => (
-            <option key={t.id} value={t.id}>{t.icon} {t.name}</option>
-          ))}
-        </optgroup>
-      </select>
+      {/* Quick Dropdown (optional) */}
+      {showQuickDropdown && (
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '12px 14px',
+            marginBottom: '16px',
+            background: 'var(--card-alt)',
+            color: 'var(--text)',
+            border: '2px solid var(--accent)',
+            borderRadius: 'var(--radius)',
+            fontSize: '14px'
+          }}
+        >
+          {showInherit && <option value="">{inheritLabel}</option>}
+          <optgroup label="🔥 2025 Trending Themes">
+            {trendingThemes.map((t) => (
+              <option key={t.id} value={t.id}>{t.icon} {t.name}</option>
+            ))}
+          </optgroup>
+          <optgroup label="✨ Classic Themes">
+            {classicThemes.map((t) => (
+              <option key={t.id} value={t.id}>{t.icon} {t.name}</option>
+            ))}
+          </optgroup>
+        </select>
+      )}
 
       {/* Visual Theme Gallery */}
       <div>
