@@ -493,21 +493,39 @@ export default function NewProjectPage() {
               background: '#fff',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              position: 'relative' as const
             }}
           >
             {mounted ? (
-              <iframe
-                key={`${previewTheme}-${previewHeadline}-${previewSubheadline}`}
-                src={`/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}`}
-                title="project-preview"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 0,
-                  display: 'block'
-                }}
-              />
+              <>
+                <style>{`
+                  @keyframes smoothFadeIn {
+                    from {
+                      opacity: 0;
+                    }
+                    to {
+                      opacity: 1;
+                    }
+                  }
+                  
+                  .new-project-preview-iframe {
+                    animation: smoothFadeIn 0.3s ease-in-out;
+                  }
+                `}</style>
+                <iframe
+                  key={`${previewTheme}-${previewHeadline}-${previewSubheadline}`}
+                  src={`/projects/preview?headline=${encodeURIComponent(previewHeadline)}&subheadline=${encodeURIComponent(previewSubheadline)}&description=${encodeURIComponent(previewDescription)}&theme=${encodeURIComponent(previewTheme)}`}
+                  title="project-preview"
+                  className="new-project-preview-iframe"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                    display: 'block'
+                  }}
+                />
+              </>
             ) : (
               <div style={{ color: 'var(--text-muted)', fontSize: 14 }}>
                 Loading preview...
