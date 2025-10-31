@@ -30,10 +30,10 @@ export default function PreviewPage() {
     monochromeBlue: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
     gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
     pastel: 'linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)',
-    cyberpunk: 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
+    cyberpunk: 'linear-gradient(135deg, #1a0520 0%, #2d1040 100%)', // Hot pink/purple  
     glassmorphism: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
     midnight: 'linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #1a1a24 100%)',
-    offworld: 'linear-gradient(135deg, #0a0015 0%, #150a1f 50%, #1a0f2e 100%)'
+    offworld: 'linear-gradient(135deg, #020818 0%, #041c35 50%, #062a4d 100%)' // Deep blue space
   };
   
   const textColors: Record<string, string> = {
@@ -60,10 +60,10 @@ export default function PreviewPage() {
     monochromeBlue: '#0A1929',
     gradient: '#0f1419',
     pastel: '#1a1a1a',
-    cyberpunk: '#00ffaa',
+    cyberpunk: '#ff0099', // Hot pink
     glassmorphism: '#ffffff',
     midnight: '#ffffff',
-    offworld: '#00ffaa'
+    offworld: '#00d9ff' // Bright cyan
   };
   
   const accentColors: Record<string, string> = {
