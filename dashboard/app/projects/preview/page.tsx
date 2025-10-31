@@ -11,20 +11,12 @@ import { useEffect, useState } from 'react';
 
 export default function PreviewPage() {
   const searchParams = useSearchParams();
-  const [mounted, setMounted] = useState(false);
   
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  if (!mounted) {
-    return null;
-  }
-  
+  // Removed mounted check - render immediately with query params to prevent flash
   const headline = searchParams?.get('headline') || 'Your Project';
   const subheadline = searchParams?.get('subheadline') || 'Building something amazing';
   const description = searchParams?.get('description') || 'Professional platform';
-  const theme = searchParams?.get('theme') || 'gradient';
+  const theme = searchParams?.get('theme') || 'mochaEarth'; // No 'gradient' flash - use current trend
   
   // Theme styling
   const isDark = ['cyberpunk', 'midnight', 'offworld', 'glassmorphism', 'chromeMetallic'].includes(theme);
@@ -89,7 +81,7 @@ export default function PreviewPage() {
     offworld: '#00ffaa'
   };
   
-  const bgColor = bgGradients[theme] || bgGradients.gradient;
+  const bgColor = bgGradients[theme] || bgGradients.mochaEarth;
   const textColor = textColors[theme] || '#2d2d2d';
   const headingColor = headingColors[theme] || '#1a1a1a';
   const accentColor = accentColors[theme] || '#667eea';
