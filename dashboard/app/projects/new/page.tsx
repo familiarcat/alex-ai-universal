@@ -41,10 +41,18 @@ export default function NewProjectPage() {
     description: '' 
   });
   
-  // Crossfade state: track current and previous iframe keys
-  const [previewIframeState, setPreviewIframeState] = useState<{ current: string; previous: string | null; isLoaded: boolean }>({
+  // Crossfade state: track current and previous iframe content
+  const [previewIframeState, setPreviewIframeState] = useState<{ 
+    current: string; 
+    currentUrl: string;
+    previous: string | null;
+    previousUrl: string | null;
+    isLoaded: boolean;
+  }>({
     current: 'initial',
+    currentUrl: '/projects/preview',
     previous: null,
+    previousUrl: null,
     isLoaded: true
   });
   
@@ -234,14 +242,18 @@ export default function NewProjectPage() {
   // Update iframe state for crossfade
   useEffect(() => {
     const newKey = `${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`;
+    const newUrl = `/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`;
+    
     if (previewIframeState.current !== newKey) {
       setPreviewIframeState({
         current: newKey,
+        currentUrl: newUrl,
         previous: previewIframeState.current,
+        previousUrl: previewIframeState.currentUrl,
         isLoaded: false // New iframe not loaded yet
       });
     }
-  }, [debouncedPreview]);
+  }, [debouncedPreview, previewIframeState.current, previewIframeState.currentUrl]);
 
   return (
     <div style={containerStyle}>
@@ -571,7 +583,7 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-current.loaded {
-                    animation: crossfadeFadeIn 0.12s ease-out forwards;
+                    animation: crossfadeFadeIn 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                   }
                   
                   .new-project-iframe-current.loading {
@@ -584,32 +596,32 @@ export default function NewProjectPage() {
                   }
                   
                   .new-project-iframe-previous.fading {
-                    animation: crossfadeFadeOut 0.12s ease-out forwards;
+                    animation: crossfadeFadeOut 0.18s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
                   }
                 `}</style>
                 <div className="new-project-iframe-container">
-                  {/* Current iframe (loading invisibly, then fades in when ready) */}
+                  {/* Current iframe (loading invisibly behind previous, fades in when ready) */}
                   <iframe
                     key={previewIframeState.current}
-                    src={`/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`}
+                    src={previewIframeState.currentUrl}
                     title="project-preview-current"
                     className={`new-project-iframe-layer new-project-iframe-current ${previewIframeState.isLoaded ? 'loaded' : 'loading'}`}
                     onLoad={() => {
-                      // Mark as loaded to trigger fade-in
+                      // Mark as loaded to trigger simultaneous crossfade
                       setPreviewIframeState(prev => ({ ...prev, isLoaded: true }));
                       
                       // Garbage collect previous iframe after crossfade completes
                       setTimeout(() => {
-                        setPreviewIframeState(prev => ({ ...prev, previous: null }));
-                      }, 120);
+                        setPreviewIframeState(prev => ({ ...prev, previous: null, previousUrl: null }));
+                      }, 180); // Match animation duration
                     }}
                   />
                   
-                  {/* Previous iframe (stays visible until new one loads, then fades out) */}
-                  {previewIframeState.previous && previewIframeState.previous !== 'initial' && (
+                  {/* Previous iframe (shows ACTUAL previous content, stays visible until crossfade) */}
+                  {previewIframeState.previous && previewIframeState.previousUrl && previewIframeState.previous !== 'initial' && (
                     <iframe
                       key={previewIframeState.previous}
-                      src={`/projects/preview`}
+                      src={previewIframeState.previousUrl}
                       title="project-preview-previous"
                       className={`new-project-iframe-layer new-project-iframe-previous ${previewIframeState.isLoaded ? 'fading' : ''}`}
                     />
