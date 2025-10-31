@@ -71,8 +71,25 @@ export interface AppState {
 
 const StateContext = createContext<AppState | null>(null);
 
-export function StateProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState({
+// Helper: Load initial state from localStorage (runs synchronously before first render)
+function getInitialState() {
+  // Try to load from localStorage first (user's saved state)
+  if (typeof window !== 'undefined') {
+    try {
+      const saved = localStorage.getItem('alex-ai-state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.log('✅ Loaded state from localStorage:', Object.keys(parsed.projects || {}).length, 'projects');
+        return parsed;
+      }
+    } catch (error) {
+      console.warn('Failed to load state from localStorage:', error);
+    }
+  }
+  
+  // Fallback: Default state (only used if localStorage is empty)
+  console.log('📋 Using default state (no saved state found)');
+  return {
     projects: {
       alpha: {
         headline: '✨ Discover Your Next Obsession',
@@ -97,23 +114,23 @@ export function StateProvider({ children }: { children: ReactNode }) {
       }
     },
     globalTheme: 'midnight'
-  });
+  };
+}
 
-  // Real-time WebSocket synchronization
+export function StateProvider({ children }: { children: ReactNode }) {
+  // Lazy initialization: getInitialState() runs ONCE before first render
+  const [state, setState] = useState(getInitialState);
+
+  // Real-time cross-tab synchronization
   useEffect(() => {
-    // Hydrate from localStorage if present
-    try {
-      const saved = localStorage.getItem('alex-ai-state');
-      if (saved) {
-        setState(JSON.parse(saved));
-      }
-    } catch {}
-
-    // In production, this would connect to WebSocket server
-    // For now, we use localStorage for cross-tab sync
+    // Listen for changes from other tabs
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'alex-ai-state' && e.newValue) {
-        setState(JSON.parse(e.newValue));
+        try {
+          setState(JSON.parse(e.newValue));
+        } catch (error) {
+          console.warn('Failed to sync state from other tab:', error);
+        }
       }
     };
 
