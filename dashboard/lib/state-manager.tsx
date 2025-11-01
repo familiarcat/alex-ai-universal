@@ -112,6 +112,13 @@ function getInitialState() {
         description: 'Advanced dashboards, custom reports, powerful API access, and predictive analytics.',
         theme: 'cyberpunk',
         updatedAt: Date.now()
+      },
+      temporal: {
+        headline: '⏰ Master Your Time, Shape Your Future',
+        subheadline: 'Temporal workflow orchestration for modern distributed systems',
+        description: 'Build resilient applications with durable execution, automatic retries, and visual workflow monitoring.',
+        theme: 'offworld',
+        updatedAt: Date.now()
       }
     },
     globalTheme: 'midnight'
