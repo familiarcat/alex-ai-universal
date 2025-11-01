@@ -1,5 +1,5 @@
 {
-  "name": "@alex-ai/universal-extension",
+  "name": "@alex-ai/universal-core",
   "version": "1.0.0",
   "description": "Local development stub for Alex AI universal core",
   "main": "index.js",

@@ -1,5 +1,5 @@
 {
-  "name": "alex-ai-universal",
+  "name": "@alex-ai/vscode-extension",
   "displayName": "Alex AI Universal",
   "description": "Star Trek crew-based AI assistant with zero-artifact guarantee",
   "version": "1.0.0",
