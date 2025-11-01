@@ -22,9 +22,12 @@ const CREATIVE_PROJECT_PORTS: Record<string, number> = {
   temporal: 3006,
 };
 
+type ContentView = 'screenplay' | 'novel' | 'outline' | 'character-map' | 'timeline' | 'home';
+
 export default function CreativeProjectPage({ params }: PageProps) {
   const [projectId, setProjectId] = useState<string>('');
   const [mounted, setMounted] = useState(false);
+  const [activeView, setActiveView] = useState<ContentView>('home');
   const { projects } = useAppState();
 
   useEffect(() => {
@@ -134,6 +137,16 @@ export default function CreativeProjectPage({ params }: PageProps) {
 
   const port = CREATIVE_PROJECT_PORTS[projectId];
   
+  // Navigation items for Temporal Wake
+  const navigationItems: { id: ContentView; label: string; icon: string; path: string }[] = [
+    { id: 'home', label: 'Home', icon: '🏠', path: '/' },
+    { id: 'screenplay', label: 'Screenplay', icon: '🎬', path: '/screenplay?mode=styled' },
+    { id: 'novel', label: 'Novel', icon: '📖', path: '/novel?mode=styled' },
+    { id: 'outline', label: 'Outline', icon: '📋', path: '/outline?mode=styled' },
+    { id: 'character-map', label: 'Character Map', icon: '🗺️', path: '/mermaid' },
+    { id: 'timeline', label: 'Timeline', icon: '⏱️', path: '/mermaid_timeline' },
+  ];
+  
   if (!port) {
     return (
       <div style={{ 
@@ -189,7 +202,8 @@ export default function CreativeProjectPage({ params }: PageProps) {
     );
   }
 
-  const embedUrl = `http://localhost:${port}`;
+  const currentNav = navigationItems.find(item => item.id === activeView);
+  const embedUrl = `http://localhost:${port}${currentNav?.path || '/'}`;
 
   return (
     <div style={{ 
@@ -264,18 +278,101 @@ export default function CreativeProjectPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Embedded Creative App */}
-      <iframe
-        src={embedUrl}
-        style={{
-          flex: 1,
-          width: '100%',
-          height: 'calc(100vh - 80px)',
-          border: 'none',
-          background: '#fff'
-        }}
-        title={`${project.headline} - Creative Project`}
-      />
+      {/* Content Navigation Bar */}
+      <div style={{
+        background: 'rgba(0, 0, 0, 0.3)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        padding: '0 30px',
+        display: 'flex',
+        gap: '0',
+        overflowX: 'auto'
+      }}>
+        {navigationItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveView(item.id)}
+            style={{
+              background: activeView === item.id 
+                ? 'rgba(0, 255, 170, 0.15)' 
+                : 'transparent',
+              border: 'none',
+              borderBottom: activeView === item.id 
+                ? '2px solid #00ffaa' 
+                : '2px solid transparent',
+              color: activeView === item.id ? '#00ffaa' : 'rgba(255, 255, 255, 0.7)',
+              padding: '15px 24px',
+              fontSize: '14px',
+              fontWeight: activeView === item.id ? 600 : 400,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => {
+              if (activeView !== item.id) {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.color = '#fff';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeView !== item.id) {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+              }
+            }}
+          >
+            <span style={{ fontSize: '16px' }}>{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Main Content Area */}
+      <div style={{ 
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      }}>
+        {/* Content Description Banner */}
+        {activeView !== 'home' && (
+          <div style={{
+            background: 'rgba(138, 43, 226, 0.1)',
+            borderBottom: '1px solid rgba(138, 43, 226, 0.2)',
+            padding: '12px 30px',
+            fontSize: '13px',
+            color: 'rgba(255, 255, 255, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span style={{ fontSize: '20px' }}>{currentNav?.icon}</span>
+            <div>
+              <strong style={{ color: '#ba55d3' }}>Now viewing:</strong> {currentNav?.label}
+              {activeView === 'screenplay' && ' - Professional screenplay format with INT/EXT scenes, character cues, and proper formatting'}
+              {activeView === 'novel' && ' - Full novel prose with intelligent soft-hyphenation for optimal reading'}
+              {activeView === 'outline' && ' - Structured narrative outline with acts, beats, and story arc'}
+              {activeView === 'character-map' && ' - Interactive Mermaid diagram showing character relationships'}
+              {activeView === 'timeline' && ' - Visual timeline from launch to arrival with key story events'}
+            </div>
+          </div>
+        )}
+
+        {/* Embedded Creative App */}
+        <iframe
+          key={embedUrl} // Force reload on URL change
+          src={embedUrl}
+          style={{
+            flex: 1,
+            width: '100%',
+            border: 'none',
+            background: '#fff'
+          }}
+          title={`${project.headline} - ${currentNav?.label || 'Home'}`}
+        />
+      </div>
 
       {/* Status Bar */}
       <div style={{
@@ -288,7 +385,7 @@ export default function CreativeProjectPage({ params }: PageProps) {
         justifyContent: 'space-between'
       }}>
         <div>
-          🖖 Diplomatic Integration: Foreign system embedded successfully
+          🖖 Diplomatic Integration: {activeView === 'home' ? 'Overview' : `Viewing ${currentNav?.label}`}
         </div>
         <div>
           Crew: O'Brien (Implementation) • Troi (UX) • La Forge (Infrastructure)
