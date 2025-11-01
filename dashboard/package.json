@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed:projects": "ts-node scripts/seed-projects-to-supabase.ts"
+    "seed:projects": "node scripts/seed-projects-to-supabase.js"
   },
   "dependencies": {
     "next": "15.5.5",
