@@ -7,7 +7,7 @@
  * ZERO ARTIFACT GUARANTEE - No files created in user projects
  */
 
-import { createNPXExtension } from '@alex-ai/universal-extension';
+import { createNPXExtension } from '@alex-ai/universal-core';
 import * as commander from 'commander';
 import { spawn } from 'child_process';
 import * as path from 'path';

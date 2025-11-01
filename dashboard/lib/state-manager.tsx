@@ -34,6 +34,7 @@ export interface ProjectContent {
   subheadline: string;
   description: string;
   theme: string;
+  projectType?: 'business' | 'creative'; // Differentiates business vs creative/narrative projects
   businessType?: string; // For dynamic icon/metadata mapping
   updatedAt: number;
   components?: ProjectComponent[];
@@ -114,10 +115,11 @@ function getInitialState() {
         updatedAt: Date.now()
       },
       temporal: {
-        headline: '⏰ Master Your Time, Shape Your Future',
-        subheadline: 'Temporal workflow orchestration for modern distributed systems',
-        description: 'Build resilient applications with durable execution, automatic retries, and visual workflow monitoring.',
+        headline: '⏰ Temporal Wake - Screenplay & Novel',
+        subheadline: 'Professional screenplay and novel writing system with visualization',
+        description: 'Complete creative writing suite with screenplay formatting, novel composition, outline tools, and Mermaid timeline visualization.',
         theme: 'offworld',
+        projectType: 'creative',
         updatedAt: Date.now()
       }
     },

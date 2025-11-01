@@ -191,16 +191,41 @@ export default function DashboardContent() {
                 alignItems: 'center'
               }}>
                 <div>
-                  <h2 style={{ fontSize: '24px', color: 'var(--accent)' }}>
-                    {meta.icon} {meta.name}
-                  </h2>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                    <h2 style={{ fontSize: '24px', color: 'var(--accent)', margin: 0 }}>
+                      {meta.icon} {meta.name}
+                    </h2>
+                    {content.projectType === 'creative' && (
+                      <span style={{
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        background: 'rgba(138, 43, 226, 0.2)',
+                        color: '#ba55d3',
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(138, 43, 226, 0.3)'
+                      }}>
+                        Creative
+                      </span>
+                    )}
+                  </div>
                   <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }}>
-                    Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}
+                    {content.projectType === 'creative' ? (
+                      <>External App | Port {meta.port} | Theme: {content.theme}</>
+                    ) : (
+                      <>Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}</>
+                    )}
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <Link 
-                    href={`/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`}
+                    href={
+                      content.projectType === 'creative' 
+                        ? `/creative/${projectId}`
+                        : `/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`
+                    }
                     target="_blank"
                     style={{
                       background: 'var(--accent)',
@@ -211,7 +236,7 @@ export default function DashboardContent() {
                       fontWeight: 600
                     }}
                   >
-                    🌐 View Live Project
+                    {content.projectType === 'creative' ? '📝 Open Creative Suite' : '🌐 View Live Project'}
                   </Link>
                   <button
                     onClick={() => setDeleteModal({ projectId, projectName: meta.name })}
@@ -240,7 +265,8 @@ export default function DashboardContent() {
                 </div>
               </div>
 
-              {/* Editor + Preview */}
+              {/* Editor + Preview (only for business projects) */}
+              {content.projectType !== 'creative' && (
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
@@ -390,6 +416,37 @@ export default function DashboardContent() {
                   </div>
                 </div>
               </div>
+              )}
+
+              {/* Creative Project Info */}
+              {content.projectType === 'creative' && (
+                <div style={{ padding: '30px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '64px', marginBottom: '20px' }}>📝</div>
+                  <h3 style={{ fontSize: '24px', color: 'var(--accent)', marginBottom: '15px' }}>
+                    Creative Project
+                  </h3>
+                  <p className="text-muted" style={{ fontSize: '16px', lineHeight: 1.6, marginBottom: '30px' }}>
+                    {content.description}
+                  </p>
+                  <p className="text-muted" style={{ fontSize: '14px', marginBottom: '20px' }}>
+                    This is an externally integrated creative writing system. Use the button above to access the full creative suite with screenplay formatting, novel composition, and visualization tools.
+                  </p>
+                  <div style={{
+                    background: 'rgba(138, 43, 226, 0.1)',
+                    border: '1px solid rgba(138, 43, 226, 0.2)',
+                    borderRadius: '8px',
+                    padding: '20px',
+                    marginTop: '20px'
+                  }}>
+                    <div style={{ fontSize: '14px', color: '#ba55d3', marginBottom: '10px', fontWeight: 600 }}>
+                      🖖 Diplomatic Integration
+                    </div>
+                    <div style={{ fontSize: '13px', opacity: 0.8 }}>
+                      This foreign system is embedded via port {meta.port} while maintaining dashboard consistency.
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
