@@ -88,11 +88,12 @@ export default function DashboardContent() {
 
   // Dynamic project metadata - supports unlimited projects
   const getProjectMeta = (projectId: string, content: any) => {
-    // Legacy support for original 3 projects
+    // Legacy support for original 4 projects
     const legacyMeta: Record<string, any> = {
       alpha: { name: 'Enterprise E-commerce', port: 3004, icon: '🛒', budget: 15000 },
       beta: { name: 'Starfleet Medical Portal', port: 3002, icon: '🏥', budget: 25000 },
-      gamma: { name: 'Federation Analytics', port: 3003, icon: '📊', budget: 10000 }
+      gamma: { name: 'Federation Analytics', port: 3003, icon: '📊', budget: 10000 },
+      temporal: { name: 'Temporal Workflow Engine', port: 3006, icon: '⏰', budget: 20000 }
     };
     
     if (legacyMeta[projectId]) {
