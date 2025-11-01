@@ -8,6 +8,7 @@
 
 import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 interface UniversalTheme {
   themeId: string;
@@ -29,9 +30,15 @@ interface ClientProjectPageProps {
 
 export default function ClientProjectPage({ projectId, initialTheme, initialContent, searchParams }: ClientProjectPageProps) {
   const { projects } = useAppState();
+  const [mounted, setMounted] = useState(false);
   
   // Priority: state-manager (live edits) > initialContent (SSR) > defaults
   const project = projects[projectId] || initialContent;
+  
+  // Prevent hydration mismatch for components (they may differ server vs client)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Get content from query params (for live preview) or from state
   const queryHeadline = searchParams.headline;
@@ -138,7 +145,7 @@ export default function ClientProjectPage({ projectId, initialTheme, initialCont
         </div>
         
         {/* Features/Components Section */}
-        {project?.components && project.components.length > 0 ? (
+        {mounted && project?.components && project.components.length > 0 ? (
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
