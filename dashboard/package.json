@@ -1,39 +1,27 @@
 {
   "name": "alex-ai-dashboard",
   "version": "1.0.0",
-  "description": "Real-time Alex AI Universal Dashboard",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:n8n": "./scripts/load-n8n-credentials.sh && next dev",
+    "dev:n8n": "N8N_URL=https://n8n.pbradygeorgen.com next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build && ./scripts/deploy-aws.sh",
-    "deploy:staging": "npm run build && ./scripts/deploy-aws.sh staging",
-    "deploy:production": "npm run build && ./scripts/deploy-aws.sh production",
-    "deploy:n8n": "./scripts/deploy-n8n.sh",
-    "deploy:ci-cd": "./scripts/ci-cd-deploy.sh",
-    "test:n8n": "node -e \"console.log('Testing N8N connection...'); require('./lib/n8n-client').testN8nConnection().then(console.log);\""
+    "seed:projects": "ts-node scripts/seed-projects-to-supabase.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.57.4",
-    "autoprefixer": "^10.4.0",
-    "axios": "^1.12.2",
-    "lucide-react": "^0.292.0",
-    "next": "^15.0.0",
-    "postcss": "^8.4.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "recharts": "^2.8.0",
-    "tailwindcss": "^3.3.0"
+    "next": "15.5.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.19.21",
-    "@types/react": "^18.3.26",
-    "@types/react-dom": "^18.3.7",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^15.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.5",
+    "typescript": "^5",
+    "ts-node": "^10.9.2"
   }
 }
