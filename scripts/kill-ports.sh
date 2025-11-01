@@ -2,7 +2,7 @@
 
 set -e
 
-PORTS=(3000 3001 3002 3003 3004 3010 3020 3030 5678)
+PORTS=(3000 3001 3002 3003 3004 3006 3010 3020 3030 5678)
 
 echo "🛑 Stopping processes on common Alex AI ports: ${PORTS[*]}"
 

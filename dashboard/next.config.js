@@ -51,6 +51,12 @@ const nextConfig = {
         source: '/bridge/projects/gamma/:path*',
         destination: 'http://localhost:3003/:path*'
       }
+      ,
+      // Temporal Wake Story Builder (external project)
+      {
+        source: '/bridge/projects/temporal/:path*',
+        destination: 'http://localhost:3006/:path*'
+      }
     ];
   },
   // Environment variables

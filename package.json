@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Universal AI Code Assistant - Standalone Repository",
   "private": true,
-  "workspaces": [],
+  "workspaces": [
+    "packages/*"
+  ],
   "bin": {
     "alex-ai": "bin/alex-ai"
   },
@@ -72,7 +74,7 @@
     "e2e:verify": "bash ./scripts/e2e-verify-all.sh",
     "innovation:plan": "bash ./scripts/innovation-day-runner.sh",
     "bridge:start": "node ./start-bridged-projects.js",
-    "bridge:stop": "lsof -ti:3004,3002,3003 | xargs kill -9 2>/dev/null || true",
+    "bridge:stop": "lsof -ti:3004,3002,3003,3006 | xargs kill -9 2>/dev/null || true",
     "themes:start": "node ./universal-theme-system/theme-gallery-server.js & node ./universal-theme-system/vibe-quiz-server.js & node ./universal-theme-system/crew-wizard-server.js &",
     "themes:stop": "lsof -ti:3010,3020,3030 | xargs kill -9 2>/dev/null || true",
     "dev:bridge": "npm run themes:start && npm run bridge:start && bash ./start-alex-ai.sh",

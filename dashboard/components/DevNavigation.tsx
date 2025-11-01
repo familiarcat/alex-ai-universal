@@ -152,6 +152,18 @@ export default function DevNavigation() {
               >
                 📊 Gamma (Analytics)
               </Link>
+                <Link 
+                  href="/projects/temporal" 
+                  style={{
+                    ...linkStyle(isActive('/projects/temporal')),
+                    display: 'block',
+                    paddingLeft: '16px',
+                    borderLeft: '3px solid var(--border)'
+                  }}
+                  onClick={() => setProjectsOpen(false)}
+                >
+                  🛰️ Temporal (Story Builder)
+                </Link>
             </div>
           )}
         </div>
