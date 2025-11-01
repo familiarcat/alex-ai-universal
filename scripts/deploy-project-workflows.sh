@@ -24,8 +24,9 @@ echo ""
 # Load credentials from ~/.zshrc
 if [ -f "$HOME/.zshrc" ]; then
     echo "🔐 Loading credentials from ~/.zshrc..."
-    # shellcheck disable=SC1090
-    source "$HOME/.zshrc" >/dev/null 2>&1 || true
+    # Extract just the N8N variables (avoid sourcing entire zsh config in bash)
+    export N8N_API_KEY=$(grep "export N8N_API_KEY" "$HOME/.zshrc" | cut -d'"' -f2)
+    export N8N_URL=$(grep "export N8N_URL" "$HOME/.zshrc" | cut -d'"' -f2)
 else
     echo "❌ ~/.zshrc not found!"
     exit 1
