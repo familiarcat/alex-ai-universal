@@ -1,7 +1,5 @@
-'use client';
-
 /**
- * Dashboard Page - Client-Only Rendering
+ * Dashboard Page - Client-Only Rendering (Server Component wrapper)
  * 
  * ✅ NO SSR (ssr: false) - Eliminates ALL hydration errors
  * 
