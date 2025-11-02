@@ -125,6 +125,7 @@ export default function DashboardContent() {
   return (
     <div style={{ 
       minHeight: '100vh',
+      background: 'var(--background)',
       color: 'var(--text)',
       padding: '40px 20px'
     }}>
