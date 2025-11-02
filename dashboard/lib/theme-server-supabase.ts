@@ -36,11 +36,26 @@ export async function getServerProject(projectId: string): Promise<{ theme: Univ
     });
     
     if (!response.ok) {
-      console.warn(`[SSR] Project ${projectId} not found in Supabase`);
+      console.warn(`[SSR] Project ${projectId} not found in Supabase (${response.status})`);
       return null;
     }
     
-    const data = await response.json();
+    // Check if response has content before parsing
+    const text = await response.text();
+    if (!text || text.trim() === '') {
+      console.warn(`[SSR] Empty response for project ${projectId} - falling back to localStorage`);
+      return null;
+    }
+    
+    // Parse JSON safely
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      console.error(`[SSR] Invalid JSON for project ${projectId}:`, text.substring(0, 100));
+      return null;
+    }
+    
     const themeId = data.theme || 'mochaEarth';
     
     return {
