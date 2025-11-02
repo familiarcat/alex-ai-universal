@@ -46,7 +46,9 @@ export default function GlobalThemeStyles() {
     }
   `;
   
-  return <style dangerouslySetInnerHTML={{ __html: cssVars }} />;
+  // suppressHydrationWarning: Server renders with default theme, client hydrates with localStorage theme
+  // This is intentional - we allow server/client mismatch for theme styles
+  return <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: cssVars }} />;
 }
 
 

@@ -8,6 +8,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { debouncedContentSync } from './content-sync';
+import { debouncedSettingsSync, retrieveSettings } from './settings-sync';
 
 export type ComponentRole = 'hero' | 'header' | 'footer' | 'feature' | 'testimonial' | 'cta' | 'gallery' | 'content';
 
@@ -131,12 +132,27 @@ export function StateProvider({ children }: { children: ReactNode }) {
   // Lazy initialization: getInitialState() runs ONCE before first render
   const [state, setState] = useState(getInitialState);
   
-  // 🎯 PROPER DDD: Sync from Supabase on mount (if localStorage is stale)
+  // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
   useEffect(() => {
+    // Load globalTheme from Supabase via n8n
+    retrieveSettings('default').then(settings => {
+      if (settings && settings.globalTheme && settings.globalTheme !== state.globalTheme) {
+        console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
+        setState(prev => {
+          const newState = { ...prev, globalTheme: settings.globalTheme };
+          // Update localStorage cache
+          localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+          return newState;
+        });
+      }
+    }).catch(err => {
+      console.warn('Failed to load settings from Supabase (non-blocking):', err);
+    });
+    
     // TODO: Fetch all projects from Supabase via n8n on mount
     // This ensures we start with authoritative data from the database
-    // For now, we rely on localStorage + manual syncs
-  }, []);
+    // For now, projects rely on localStorage + manual syncs
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Real-time cross-tab synchronization
   useEffect(() => {
@@ -196,11 +212,19 @@ export function StateProvider({ children }: { children: ReactNode }) {
   const updateGlobalTheme = (themeId: string) => {
     setState(prevState => {
       const newState = { ...prevState, globalTheme: themeId } as typeof prevState;
+      
+      // Persist to localStorage (optimistic client cache)
       localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+      
+      // Trigger storage event for other tabs
       window.dispatchEvent(new StorageEvent('storage', {
         key: 'alex-ai-state',
         newValue: JSON.stringify(newState)
       }));
+      
+      // 🎯 PROPER DDD: Sync to Supabase via n8n (single source of truth)
+      debouncedSettingsSync({ globalTheme: themeId }, 1000);
+      
       return newState;
     });
   };
