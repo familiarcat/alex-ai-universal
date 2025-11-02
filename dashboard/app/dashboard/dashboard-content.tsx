@@ -18,9 +18,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 import DeleteProjectModal from '@/components/DeleteProjectModal';
+import ThemeSelector from '@/components/ThemeSelector';
 
 export default function DashboardContent() {
-  const { projects, updateProject, updateTheme, deleteProject } = useAppState();
+  const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
@@ -141,7 +142,7 @@ export default function DashboardContent() {
           flexWrap: 'wrap' as const,
           gap: '20px'
         }}>
-          <div>
+          <div style={{ flex: 1 }}>
             <h1 style={{ fontSize: '36px', color: 'var(--accent)', marginBottom: '10px' }}>
               🖖 Alex AI Dashboard - REAL Integration
             </h1>
@@ -149,6 +150,17 @@ export default function DashboardContent() {
               Edit content here, see updates LIVE on project pages! Open projects in new tabs to test.
             </p>
           </div>
+          
+          {/* Global Theme Selector */}
+          <div style={{ minWidth: '200px', maxWidth: '250px' }}>
+            <ThemeSelector
+              value={globalTheme}
+              onChange={updateGlobalTheme}
+              mode="dropdown"
+              label="🎨 Global Theme"
+            />
+          </div>
+          
           <Link
             href="/projects/new"
             style={{
@@ -163,7 +175,8 @@ export default function DashboardContent() {
               alignItems: 'center',
               gap: '8px',
               transition: 'all 0.2s ease',
-              boxShadow: '0 4px 12px rgba(0, 255, 170, 0.3)'
+              boxShadow: '0 4px 12px rgba(0, 255, 170, 0.3)',
+              whiteSpace: 'nowrap'
             }}
           >
             <span style={{ fontSize: '20px' }}>+</span> New Project
