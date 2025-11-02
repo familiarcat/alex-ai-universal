@@ -123,10 +123,7 @@ export default function DashboardContent() {
   // Themes now managed by shared ThemeSelector component
 
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      background: 'var(--background)',
-      color: 'var(--text)',
+    <div className="dashboard-theme-wrapper" style={{ 
       padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
