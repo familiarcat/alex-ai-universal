@@ -27,7 +27,7 @@ function getCredential(key) {
 
 const N8N_API_KEY = getCredential('N8N_API_KEY');
 const N8N_URL = getCredential('N8N_URL') || 'https://n8n.pbradygeorgen.com';
-const CREDENTIAL_ID = 'iUZDdMiy60b3NRvq';
+const CREDENTIAL_ID = 'N96bQKR0loSF14d3';
 
 console.log('🔗 AGGRESSIVE AUTOMATION: Auto-Link Workflows');
 console.log('==============================================');

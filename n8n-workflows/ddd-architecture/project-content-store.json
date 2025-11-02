@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "name": "project-content-store",
+    "description": "Client => n8n => Supabase (Create/Update)",
+    "exported": "2025-11-02T03:04:43.002Z",
+    "n8nVersion": "76395fd9-841b-46fe-b325-0f37580dea02"
+  },
+  "workflow": {
+    "name": "Project Content Store (Dashboard => Supabase)",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "project-content-store",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "webhook-trigger",
+        "name": "Webhook Trigger",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          256,
+          304
+        ],
+        "webhookId": "73bcf92f-217c-4de8-8bd6-b1918d00ee72"
+      },
+      {
+        "parameters": {
+          "functionCode": "// Validate and transform project content\nconst body = $input.item.json.body;\n\n// Required fields\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nif (!body.headline) {\n  throw new Error('headline is required');\n}\n\n// Build project data\nconst projectData = {\n  project_id: body.projectId,\n  headline: body.headline,\n  subheadline: body.subheadline || '',\n  description: body.description || '',\n  theme: body.theme || 'midnight',\n  project_type: body.projectType || 'business',\n  business_type: body.businessType || null,\n  components: body.components ? JSON.stringify(body.components) : null,\n  pages: body.pages ? JSON.stringify(body.pages) : null,\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('📦 Storing project:', projectData.project_id);\n\nreturn { json: projectData };"
+        },
+        "id": "validate-transform",
+        "name": "Validate & Transform",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [
+          464,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "useCustomSchema": true,
+          "operation": "insert"
+        },
+        "id": "supabase-upsert",
+        "name": "Supabase Upsert",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          656,
+          304
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "N96bQKR0loSF14d3",
+            "name": "Supabase Account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"projectId\": $json.project_id, \"message\": \"Project stored successfully\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "id": "response-success",
+        "name": "Response Success",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [
+          864,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to store project\" } }}",
+          "options": {
+            "responseCode": 500
+          }
+        },
+        "id": "response-error",
+        "name": "Response Error",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [
+          864,
+          464
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Validate & Transform",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate & Transform": {
+        "main": [
+          [
+            {
+              "node": "Supabase Upsert",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase Upsert": {
+        "main": [
+          [
+            {
+              "node": "Response Success",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null
+  }
+}
