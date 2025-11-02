@@ -17,7 +17,6 @@
 import dynamic from 'next/dynamic';
 
 const DashboardContent = dynamic(() => import('./dashboard-content'), {
-  ssr: false, // ← THIS ELIMINATES ALL HYDRATION ERRORS
   loading: () => (
     <div style={{
       minHeight: '100vh',
