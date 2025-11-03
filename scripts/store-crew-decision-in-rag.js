@@ -25,11 +25,13 @@ function loadCredentials() {
   };
   
   return {
-    n8nUrl: getEnvVar('N8N_URL') || 'https://n8n.pbradygeorgen.com'
+    n8nUrl: getEnvVar('N8N_URL') || 'https://n8n.pbradygeorgen.com',
+    supabaseUrl: getEnvVar('SUPABASE_URL'),
+    supabaseServiceKey: getEnvVar('SUPABASE_SERVICE_KEY')
   };
 }
 
-const { n8nUrl } = loadCredentials();
+const { n8nUrl, supabaseUrl, supabaseServiceKey } = loadCredentials();
 
 /**
  * Create crew decision payload for RAG storage
@@ -95,13 +97,32 @@ function createCrewDecisionPayload(crewMemory) {
 }
 
 /**
- * Store in RAG via n8n webhook
+ * Store in RAG via Supabase directly (fallback when n8n webhooks are down)
  */
-async function storeInRAG(payload) {
+async function storeViaSupabase(payload) {
   return new Promise((resolve, reject) => {
-    const url = new URL('/webhook/knowledge-ingest', n8nUrl);
+    const url = new URL('/rest/v1/knowledge_base', supabaseUrl);
     
-    const data = JSON.stringify(payload);
+    // Transform payload for Supabase schema
+    const supabaseData = {
+      session_id: payload.session_id,
+      category: payload.category || 'crew_memory_comprehensive',
+      title: payload.title,
+      executive_summary: payload.executive_summary || '',
+      content: JSON.parse(payload.searchable_content || '{}'),
+      tags: payload.tags || [],
+      session_date: payload.session_date || new Date().toISOString().split('T')[0],
+      crew_members: payload.crew_members || [],
+      critical_decisions: payload.critical_decisions || [],
+      bugs_fixed: payload.bugs_fixed || [],
+      technical_patterns: payload.technical_patterns || [],
+      lessons_learned: payload.lessons_learned || [],
+      user_insights: payload.user_insights || [],
+      architectural_decisions: payload.architectural_decisions || [],
+      knowledge_base_entries: payload.knowledge_base_entries || []
+    };
+    
+    const data = JSON.stringify(supabaseData);
     
     const options = {
       hostname: url.hostname,
@@ -109,8 +130,10 @@ async function storeInRAG(payload) {
       path: url.pathname,
       method: 'POST',
       headers: {
+        'apikey': supabaseServiceKey,
+        'Authorization': `Bearer ${supabaseServiceKey}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
+        'Prefer': 'return=representation'
       }
     };
     
@@ -119,7 +142,7 @@ async function storeInRAG(payload) {
       res.on('data', chunk => body += chunk);
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ status: res.statusCode, data: body });
+          resolve({ status: res.statusCode, data: body, method: 'supabase-direct' });
         } else {
           reject(new Error(`HTTP ${res.statusCode}: ${body}`));
         }
@@ -130,6 +153,60 @@ async function storeInRAG(payload) {
     req.write(data);
     req.end();
   });
+}
+
+/**
+ * Store in RAG via n8n webhook (preferred) with Supabase fallback
+ */
+async function storeInRAG(payload) {
+  // Try n8n webhook first (proper DDD architecture)
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const url = new URL('/webhook/knowledge-ingest', n8nUrl);
+      
+      const data = JSON.stringify(payload);
+      
+      const options = {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': data.length
+        }
+      };
+      
+      const req = https.request(options, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve({ status: res.statusCode, data: body, method: 'n8n-webhook' });
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${body}`));
+          }
+        });
+      });
+      
+      req.on('error', reject);
+      req.write(data);
+      req.end();
+    });
+    
+    return result;
+  } catch (error) {
+    console.warn('⚠️  n8n webhook failed, using Supabase fallback...');
+    console.warn(`   Reason: ${error.message}`);
+    console.log('');
+    
+    // Fallback to direct Supabase API
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Supabase credentials not found in ~/.zshrc (fallback unavailable)');
+    }
+    
+    return await storeViaSupabase(payload);
+  }
 }
 
 /**
@@ -208,6 +285,10 @@ async function storeInRAG(payload) {
     const result = await storeInRAG(payload);
     console.log('✅ STORED IN RAG!');
     console.log(`   Status: ${result.status}`);
+    console.log(`   Method: ${result.method || 'n8n-webhook'}`);
+    if (result.method === 'supabase-direct') {
+      console.log('   ⚠️  Used Supabase fallback (n8n webhooks unavailable)');
+    }
     console.log('');
     console.log('🎉 Crew decision saved for future reference!');
     console.log('');
