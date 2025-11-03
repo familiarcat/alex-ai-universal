@@ -1019,3 +1019,11 @@ chat-browsers/
 *.ai-server
 *.ai-client
 *.ai-browser
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars.backup
+.terraform.tfstate.lock.info
+*.tfplan
