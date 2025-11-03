@@ -84,11 +84,11 @@ export function debouncedSettingsSync(settings: { globalTheme: string; preferenc
 
 /**
  * Retrieve settings directly from Supabase (fallback)
+ * Silent mode - no console errors (table might not exist yet)
  */
 async function retrieveSettingsFallback(userId: string = 'default'): Promise<{ globalTheme: string; preferences: any } | null> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.warn('Supabase credentials not configured for fallback');
-    return null;
+    return null; // Silent - credentials not configured
   }
 
   try {
@@ -102,12 +102,12 @@ async function retrieveSettingsFallback(userId: string = 'default'): Promise<{ g
     });
 
     if (!response.ok) {
-      return null;
+      return null; // Silent - table might not exist or RLS blocking
     }
 
     const data = await response.json();
     if (!data || data.length === 0) {
-      return null;
+      return null; // Silent - no settings found
     }
 
     return {
@@ -115,8 +115,7 @@ async function retrieveSettingsFallback(userId: string = 'default'): Promise<{ g
       preferences: data[0].preferences || {}
     };
   } catch (error) {
-    console.error('Supabase fallback retrieval error:', error);
-    return null;
+    return null; // Silent - network error or table doesn't exist
   }
 }
 

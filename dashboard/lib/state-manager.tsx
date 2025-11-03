@@ -133,8 +133,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState(getInitialState);
   
   // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
+  // Note: Uses intelligent fallback pattern (n8n → Supabase direct → localStorage)
   useEffect(() => {
-    // Load globalTheme from Supabase via n8n
+    // Load globalTheme from Supabase (via n8n or direct fallback)
     retrieveSettings('default').then(settings => {
       if (settings && settings.globalTheme && settings.globalTheme !== state.globalTheme) {
         console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
@@ -145,8 +146,10 @@ export function StateProvider({ children }: { children: ReactNode }) {
           return newState;
         });
       }
-    }).catch(err => {
-      console.warn('Failed to load settings from Supabase (non-blocking):', err);
+      // If settings is null: n8n and Supabase both unavailable, use localStorage (already loaded)
+    }).catch(() => {
+      // Silent catch - fallback pattern already tried n8n and Supabase
+      // localStorage is still our source of truth
     });
     
     // TODO: Fetch all projects from Supabase via n8n on mount

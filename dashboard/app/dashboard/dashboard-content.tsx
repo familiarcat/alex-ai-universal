@@ -222,7 +222,7 @@ export default function DashboardContent() {
                       </span>
                     )}
                   </div>
-                  <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }}>
+                  <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }} suppressHydrationWarning>
                     {content.projectType === 'creative' ? (
                       <>External App | Port {meta.port} | Theme: {content.theme}</>
                     ) : (
