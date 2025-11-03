@@ -8,14 +8,21 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GlobalThemeSwitcher from '@/components/GlobalThemeSwitcher';
 import IntentThemeSwitcher from '@/components/IntentThemeSwitcher';
 
 export default function DevNavigation() {
   const pathname = usePathname();
   const [projectsOpen, setProjectsOpen] = useState(false);
-  const isNarrow = typeof window !== 'undefined' && window.innerWidth < 1200;
+  const [mounted, setMounted] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(false);
+
+  // Fix hydration: only check window width after client mount
+  useEffect(() => {
+    setMounted(true);
+    setIsNarrow(window.innerWidth < 1200);
+  }, []);
 
   // Only show in development
   const isDev = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_DEV_MODE === 'true';
@@ -171,7 +178,7 @@ export default function DevNavigation() {
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
           <IntentThemeSwitcher />
           <GlobalThemeSwitcher />
-          {!isNarrow && <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>}
+          {mounted && !isNarrow && <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>}
         </div>
       </div>
     </nav>
