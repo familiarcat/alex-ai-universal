@@ -1,17 +1,50 @@
 /**
- * User Settings Sync - DDD Architecture
+ * User Settings Sync - DDD Architecture with Intelligent Fallback
  * 
- * Client => n8n => Supabase (single source of truth for user preferences)
+ * Preferred: Client => n8n => Supabase (when n8n webhooks available)
+ * Fallback: Client => Supabase direct API (when n8n webhooks unavailable)
  * 
- * Pattern: Reuse proven project-sync patterns (O'Brien's efficiency)
+ * Pattern: Same intelligent fallback as RAG system (O'Brien's pragmatism)
  */
 
 const N8N_URL = process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rpkkkbufdwxmjaerbhbn.supabase.co';
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 let saveTimer: NodeJS.Timeout | null = null;
 
 /**
- * Debounced settings sync to Supabase via n8n
+ * Sync settings directly to Supabase (fallback)
+ */
+async function syncSettingsFallback(settings: { globalTheme: string; preferences?: any }, userId: string = 'default'): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/user_settings`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        global_theme: settings.globalTheme,
+        preferences: settings.preferences || {}
+      })
+    });
+
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Debounced settings sync to Supabase via n8n (with fallback)
  * Prevents excessive API calls during rapid theme changes
  */
 export function debouncedSettingsSync(settings: { globalTheme: string; preferences?: any }, delayMs: number = 1000) {
@@ -20,9 +53,8 @@ export function debouncedSettingsSync(settings: { globalTheme: string; preferenc
   }
   
   saveTimer = setTimeout(async () => {
+    // Try n8n first (preferred DDD architecture)
     try {
-      console.log('⚙️ Syncing settings to Supabase via n8n...', settings.globalTheme);
-      
       const response = await fetch(`${N8N_URL}/webhook/settings-store`, {
         method: 'POST',
         headers: {
@@ -30,73 +62,99 @@ export function debouncedSettingsSync(settings: { globalTheme: string; preferenc
           'X-Source': 'alex-ai-dashboard'
         },
         body: JSON.stringify({
-          userId: 'default', // Single-user MVP
+          userId: 'default',
           globalTheme: settings.globalTheme,
           preferences: settings.preferences || {}
         })
       });
       
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(`n8n settings sync failed: ${response.status} ${error}`);
+        throw new Error(`n8n returned ${response.status}`);
       }
       
-      const result = await response.json();
-      console.log('✅ Settings synced to Supabase:', result);
+      // Success via n8n - no console log to reduce noise
+      return;
     } catch (error) {
-      console.error('❌ Settings sync error (non-blocking):', error);
-      // Non-blocking: localStorage still works as fallback
+      // Fallback to direct Supabase API (silent)
+      await syncSettingsFallback(settings);
+      // Non-blocking: localStorage still works regardless
     }
   }, delayMs);
 }
 
 /**
- * Retrieve settings from Supabase via n8n
+ * Retrieve settings directly from Supabase (fallback)
+ */
+async function retrieveSettingsFallback(userId: string = 'default'): Promise<{ globalTheme: string; preferences: any } | null> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.warn('Supabase credentials not configured for fallback');
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/user_settings?user_id=eq.${userId}&select=global_theme,preferences`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    return {
+      globalTheme: data[0].global_theme || 'midnight',
+      preferences: data[0].preferences || {}
+    };
+  } catch (error) {
+    console.error('Supabase fallback retrieval error:', error);
+    return null;
+  }
+}
+
+/**
+ * Retrieve settings from Supabase via n8n (with fallback)
  * Returns settings object or null if not found
  */
 export async function retrieveSettings(userId: string = 'default'): Promise<{ globalTheme: string; preferences: any } | null> {
+  // Try n8n first (preferred DDD architecture)
   try {
-    console.log('🔍 Retrieving settings from Supabase via n8n...');
-    
     const response = await fetch(`${N8N_URL}/webhook/settings-retrieve?userId=${userId}`, {
       method: 'GET',
       headers: {
         'X-Source': 'alex-ai-dashboard-ssr',
         'Cache-Control': 'no-cache'
       },
-      cache: 'no-store' // Next.js: don't cache this
+      cache: 'no-store'
     });
     
     if (!response.ok) {
-      console.warn(`Settings retrieval failed: ${response.status}`);
-      return null;
+      throw new Error(`n8n returned ${response.status}`);
     }
     
-    // Check for empty response
     const text = await response.text();
     if (!text || text.trim() === '') {
-      console.warn('Empty response from settings-retrieve');
-      return null;
+      throw new Error('Empty response');
     }
     
-    // Parse JSON safely
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (parseError) {
-      console.error('Invalid JSON from settings-retrieve:', text.substring(0, 100));
-      return null;
-    }
-    
-    console.log('✅ Settings retrieved from Supabase:', data.globalTheme);
+    const data = JSON.parse(text);
+    console.log('✅ Settings retrieved via n8n:', data.globalTheme);
     
     return {
       globalTheme: data.globalTheme || 'midnight',
       preferences: data.preferences || {}
     };
   } catch (error) {
-    console.error('Settings retrieval error (non-blocking):', error);
-    return null;
+    // Fallback to direct Supabase API (silent - no console spam)
+    return await retrieveSettingsFallback(userId);
   }
 }
 
