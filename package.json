@@ -46,13 +46,12 @@
     "demo:standalone": "cd examples/demo-project && node standalone-enhanced-demo.js",
     "demo:clean": "cd examples/demo-project && node clean-enhanced-demo.js",
     "demo:simple": "cd examples/demo-project && node simple-demo.js",
-            "demo:web": "cd examples/demo-project && node src/web-server.js",
-            "demo:dashboard": "cd examples/demo-project && node src/dashboard-server.js",
+    "demo:web": "cd examples/demo-project && node src/web-server.js",
+    "demo:dashboard": "cd examples/demo-project && node src/dashboard-server.js",
     "demo:live-preview": "cd examples/demo-project && node src/live-preview-server.js",
     "crew:roster": "./scripts/sync-crew-roster.sh",
     "crew:list": "npm run crew:roster",
     "crew:sync": "npm run crew:roster",
-    
     "ai-learning": "cd examples/ai-learning-platform && node index.js",
     "ai-learning:dev": "cd examples/ai-learning-platform && npm run dev",
     "ai-learning:build": "cd examples/ai-learning-platform && npm run build",
@@ -85,15 +84,16 @@
     "dashboard:dev:clean": "bash ./scripts/kill-ports.sh && cd dashboard && npm run dev:n8n"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
     "@jest/globals": "^29.7.0",
+    "@types/node": "^20.12.7",
     "babel-jest": "^29.7.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "lerna": "^8.0.0",
+    "pg": "^8.16.3",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5",
-    "puppeteer": "^23.6.0"
+    "puppeteer": "^23.6.0",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18.0.0",
