@@ -1,417 +1,612 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+/**
+ * OBSERVATION LOUNGE - Crew Memory Browser
+ * 
+ * Displays crew learnings and reflections from RAG system (Supabase knowledge_base)
+ * Shows what each officer has learned and their future learning priorities
+ * 
+ * Data Source: Client => Supabase direct (via fallback, since n8n webhooks currently down)
+ * 
+ * Crew: Counselor Troi (UX), Commander Data (knowledge management), Chief O'Brien (pragmatic implementation)
+ */
 
-type Finding = {
-  topic: string;
-  content: string;
-  model: string;
-  cost_cents_estimate: number;
-  shared_by: string[];
-};
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-type FindingsFile = {
-  plan_id: string;
-  timestamp: string;
-  model: string;
-  budgets: Record<string, { used_cents: number; cap_cents: number }>;
-  findings: Finding[];
-};
+interface CrewReflection {
+  officer: string;
+  rank: string;
+  specialty: string;
+  memories_learned: string[];
+  future_learning_focus: string[];
+  key_insight: string;
+}
 
-type CrewMemory = {
-  crew_member: string;
+interface ObservationLoungeSession {
+  session_id: string;
   title: string;
-  summary: string;
-  key_findings: string[];
-  conclusions: string[];
-  recommendations: string[];
-  timestamp: string;
-};
+  executive_summary: string;
+  session_date: string;
+  created_at: string;
+  content: {
+    observation_lounge_transcript?: {
+      picard_opening?: { statement: string };
+      crew_reflections?: CrewReflection[];
+      picard_closing?: { statement: string };
+    };
+    crew_members_involved?: string[];
+    session_duration?: string;
+  };
+}
 
-// Canonical crew directory ensures one card per member even if no memory yet
-type CrewMeta = {
-  id: string;
+interface CrewMemberData {
   name: string;
-  displayName: string;
-  role: string;
   emoji: string;
-  aliases?: string[];
-  defaultGoals?: string[];
-  purpose?: string;
-  defaultModel?: string;
-  kind?: 'crew' | 'system';
-};
-const crewDirectory: CrewMeta[] = [
-  {
-    id: 'picard', name: 'picard', displayName: 'Captain Jean-Luc Picard', role: 'Commanding Officer', emoji: '🖖',
-    aliases: ['captain picard', 'jean-luc picard'],
-    defaultGoals: ['Set mission intent and constraints', 'Resolve conflicts and make final decisions', 'Uphold ethics and safety throughout operations'],
-    purpose: 'Leads strategy, sets intent, and arbitrates trade-offs across the crew.',
-    defaultModel: 'gpt-4o',
-    kind: 'crew'
-  },
-  {
-    id: 'riker', name: 'riker', displayName: 'Commander William Riker', role: 'First Officer', emoji: '🖖',
-    aliases: ['commander riker', 'will riker'],
-    defaultGoals: ['Translate mission intent into actionable plans', 'Coordinate cross-crew execution', 'Escalate risks and unblock progress'],
-    purpose: 'Turns strategy into execution plans and coordinates cross-functional delivery.',
-    defaultModel: 'gpt-4o-mini',
-    kind: 'crew'
-  },
-  {
-    id: 'data', name: 'data', displayName: 'Lieutenant Commander Data', role: 'Operations & Analysis', emoji: '🤖',
-    aliases: ['commander data'],
-    defaultGoals: ['Perform rigorous analysis and validation', 'Synthesize learnings into reusable patterns', 'Measure outcomes and surface insights'],
-    purpose: 'Analyzes telemetry, validates assumptions, and codifies patterns for reuse.',
-    defaultModel: 'gpt-4.1',
-    kind: 'crew'
-  },
-  {
-    id: 'la-forge', name: 'la forge', displayName: 'Lieutenant Commander Geordi La Forge', role: 'Chief Engineer', emoji: '🛠️',
-    aliases: ['geordi', 'geordi la forge', 'lieutenant commander geordi la forge'],
-    defaultGoals: ['Ensure systems reliability and performance', 'Automate workflows and integrations', 'Eliminate bottlenecks in the toolchain'],
-    purpose: 'Builds and maintains reliable, observable integrations and infrastructure.',
-    defaultModel: 'gpt-4o',
-    kind: 'crew'
-  },
-  {
-    id: 'worf', name: 'worf', displayName: 'Lieutenant Worf', role: 'Security', emoji: '🛡️',
-    aliases: ['lieutenant worf'],
-    defaultGoals: ['Harden security boundaries', 'Protect data and credentials', 'Monitor and respond to threats'],
-    purpose: 'Owns security posture, threat modeling, and incident response hygiene.',
-    defaultModel: 'gpt-4o-mini',
-    kind: 'crew'
-  },
-  {
-    id: 'crusher', name: 'dr. beverly crusher', displayName: 'Doctor Beverly Crusher', role: 'Medical', emoji: '🩺',
-    aliases: ['beverly crusher', 'dr crusher'],
-    defaultGoals: ['Safeguard system health', 'Promote resilient practises', 'Triage and stabilize critical incidents'],
-    purpose: 'Monitors system health and reliability, curates resilient operating practices.',
-    defaultModel: 'gpt-4o-mini',
-    kind: 'crew'
-  },
-  {
-    id: 'troi', name: 'counselor deanna troi', displayName: 'Counselor Deanna Troi', role: 'Counselor', emoji: '🧠',
-    aliases: ['deanna troi', 'counselor troi'],
-    defaultGoals: ['Improve UX clarity and empathy', 'Reduce cognitive load in workflows', 'Guide decisions with human-centered perspective'],
-    purpose: 'Advocates for human-centered UX, clarity, and cognitive load reduction.',
-    defaultModel: 'gpt-4o',
-    kind: 'crew'
-  },
-  {
-    id: 'uhura', name: 'lieutenant uhura', displayName: 'Lieutenant Uhura', role: 'Communications', emoji: '📡',
-    aliases: ['uhura'],
-    defaultGoals: ['Establish reliable integrations', 'Ensure API hygiene and observability', 'Maintain secure credential handling'],
-    purpose: 'Manages APIs, credentials, and observability for integrations (e.g., n8n/Supabase).',
-    defaultModel: 'gpt-4o',
-    kind: 'crew'
-  },
-  { id: 'quark', name: 'quark', displayName: 'Quark', role: 'Commerce', emoji: '💰', defaultGoals: ['Optimize business value', 'Prioritize ROI-driven features', 'Leverage partnerships and marketplaces'], purpose: 'Aligns delivery with ROI and market opportunities.', defaultModel: 'gpt-4o-mini', kind: 'crew' },
-  // Project/system identities often writing memories
-  { id: 'collective-milestone-memory', name: 'collective-milestone-memory', displayName: 'Collective Milestones', role: 'Project Memory', emoji: '🧩', defaultGoals: ['Record canonical achievements', 'Eliminate duplication', 'Surface knowledge for reuse'], purpose: 'Holds canonical project milestones and summaries.', defaultModel: 'gpt-4o', kind: 'system' },
-  { id: 'n8n-automation-solution-2025-10-13', name: 'n8n-automation-solution-2025-10-13', displayName: 'N8N Automation Solution', role: 'Automation', emoji: '⚙️', purpose: 'Automates ingestion and mediation between UI and Supabase via n8n.', defaultModel: 'gpt-4o-mini', kind: 'system' },
-  { id: 'ddd-migration-and-doc-workflow-2025-10-13', name: 'ddd-migration-and-doc-workflow-2025-10-13', displayName: 'DDD Migration & Documentation Workflow', role: 'Architecture', emoji: '🧱', purpose: 'Owns domain-driven design alignment and doc workflows.', defaultModel: 'gpt-4o-mini', kind: 'system' },
-];
+  rank: string;
+  specialty: string;
+  learnings: string[];
+  future_focus: string[];
+  key_insight: string;
+  last_session: string;
+}
 
 export default function ObservationLounge() {
-  const [crew, setCrew] = useState<CrewMemory[]>([]);
+  const [sessions, setSessions] = useState<ObservationLoungeSession[]>([]);
+  const [crewData, setCrewData] = useState<Record<string, CrewMemberData>>({});
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState('');
-  const [compact, setCompact] = useState(true);
+  const [selectedOfficer, setSelectedOfficer] = useState<string | null>(null);
+  const [expandedSession, setExpandedSession] = useState<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    async function load() {
+    async function loadCrewMemories() {
       try {
-        const res = await fetch('/api/lounge/latest', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (!cancelled) setCrew(Array.isArray(data.crew) ? data.crew : []);
-      } catch (e: any) {
-        if (!cancelled) setError(e.message || 'Failed to load');
+        setLoading(true);
+        
+        // Fetch from Supabase knowledge_base directly (fallback since n8n webhooks down)
+        const response = await fetch('/api/knowledge/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            category: 'observation_lounge_debrief',
+            limit: 10 
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load crew memories: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setSessions(data.sessions || []);
+        
+        // Parse crew data from sessions
+        const crewMap: Record<string, CrewMemberData> = {};
+        
+        for (const session of (data.sessions || [])) {
+          const transcript = session.content?.observation_lounge_transcript;
+          if (transcript?.crew_reflections) {
+            for (const reflection of transcript.crew_reflections) {
+              const key = reflection.officer.toLowerCase();
+              if (!crewMap[key] || session.created_at > crewMap[key].last_session) {
+                crewMap[key] = {
+                  name: reflection.officer,
+                  emoji: getOfficerEmoji(reflection.officer),
+                  rank: reflection.rank,
+                  specialty: reflection.specialty,
+                  learnings: reflection.memories_learned || [],
+                  future_focus: reflection.future_learning_focus || [],
+                  key_insight: reflection.key_insight || '',
+                  last_session: session.created_at
+                };
+              }
+            }
+          }
+        }
+        
+        setCrewData(crewMap);
+        setError(null);
+      } catch (err: any) {
+        console.error('Error loading crew memories:', err);
+        setError(err.message || 'Failed to load crew memories');
+      } finally {
+        setLoading(false);
       }
     }
-    load();
-    return () => { cancelled = true; };
+
+    loadCrewMemories();
   }, []);
 
-  const groups = useMemo(() => {
-    const normalized = (s: string) => (s || '').toLowerCase();
-    const q = normalized(query);
-
-    function isSubstantive(m: CrewMemory) {
-      const hasLists = Boolean((m.key_findings && m.key_findings.length) || (m.conclusions && m.conclusions.length) || (m.recommendations && m.recommendations.length));
-      const nonGenericTitle = (m.title || '').trim().toLowerCase() !== 'latest briefing';
-      const hasSummary = Boolean((m.summary || '').trim());
-      return hasLists || hasSummary || nonGenericTitle;
-    }
-
-    // Index memories by canonicalized key for matching against directory
-    const canon = (s: string) => normalized(s).replace(/[^a-z0-9]+/g, '-');
-    const bucket: Record<string, CrewMemory[]> = {};
-    for (const m of crew || []) {
-      const keys = new Set<string>();
-      const cm = m.crew_member || '';
-      keys.add(canon(cm));
-      // Also push raw to be safe
-      keys.add(normalized(cm));
-      for (const k of keys) {
-        if (!bucket[k]) bucket[k] = [];
-        bucket[k].push(m);
-      }
-    }
-
-    function chooseBest(list: CrewMemory[] | undefined): CrewMemory | null {
-      if (!list || list.length === 0) return null;
-      const sorted = list.slice().sort((a, b) => {
-        const as = Number(isSubstantive(a));
-        const bs = Number(isSubstantive(b));
-        if (as !== bs) return bs - as; // substantive first
-        const ta = Date.parse(a.timestamp || '');
-        const tb = Date.parse(b.timestamp || '');
-        if (!isNaN(ta) && !isNaN(tb)) return tb - ta;
-        if (!isNaN(ta)) return -1;
-        if (!isNaN(tb)) return 1;
-        return (a.crew_member || '').localeCompare(b.crew_member || '');
-      });
-      return sorted[0] || null;
-    }
-
-    // Build complete roster: ensure one entry per crewDirectory member
-    const roster = crewDirectory.map((meta) => {
-      const keys = [canon(meta.id), canon(meta.name), ...(meta.aliases || []).map(canon)];
-      let found: CrewMemory | null = null;
-      for (const k of keys) {
-        found = chooseBest(bucket[k]);
-        if (found) break;
-      }
-      if (!found) {
-        // Placeholder card to represent member without memory yet
-        found = {
-          crew_member: meta.displayName,
-          title: 'No recent briefing',
-          summary: (meta.defaultGoals && meta.defaultGoals.length)
-            ? `Agent goals: ${meta.defaultGoals.join(' · ')}`
-            : '',
-          key_findings: [],
-          conclusions: [],
-          recommendations: [],
-          timestamp: ''
-        };
-      }
-      return { meta, memory: found } as { meta: typeof meta; memory: CrewMemory };
-    });
-
-    // Compute activity score and partition
-    function activityScore(m: CrewMemory) {
-      const k = (m.key_findings?.length || 0) * 3;
-      const c = (m.conclusions?.length || 0) * 2;
-      const r = (m.recommendations?.length || 0) * 2;
-      const s = (m.summary && m.summary.trim() ? 1 : 0);
-      return k + c + r + s;
-    }
-
-    let filteredRoster = roster
-      // If searching, include members that match by meta or memory text
-      .filter(({ meta, memory }) => {
-        if (!q) return true;
-        const fields = [meta.name, meta.role, memory.crew_member, memory.title, memory.summary].join(' ').toLowerCase();
-        return fields.includes(q);
-      })
-      ;
-
-    const activeCrew = filteredRoster
-      .filter(({ meta }) => (meta.kind || 'crew') === 'crew')
-      .filter(({ memory }) => isSubstantive(memory))
-      .sort((a, b) => {
-        const sa = activityScore(a.memory);
-        const sb = activityScore(b.memory);
-        if (sa !== sb) return sb - sa; // more activity first
-        const ta = Date.parse(a.memory.timestamp || '');
-        const tb = Date.parse(b.memory.timestamp || '');
-        if (!isNaN(ta) && !isNaN(tb)) return tb - ta;
-        if (!isNaN(ta)) return -1;
-        if (!isNaN(tb)) return 1;
-        return a.meta.displayName.localeCompare(b.meta.displayName);
-      });
-
-    const inactiveCrew = filteredRoster
-      .filter(({ meta }) => (meta.kind || 'crew') === 'crew')
-      .filter(({ memory }) => !isSubstantive(memory))
-      .sort((a, b) => a.meta.displayName.localeCompare(b.meta.displayName));
-
-    const systems = filteredRoster
-      .filter(({ meta }) => (meta.kind || 'crew') === 'system')
-      .sort((a, b) => {
-        const ta = Date.parse(a.memory.timestamp || '');
-        const tb = Date.parse(b.memory.timestamp || '');
-        if (!isNaN(ta) && !isNaN(tb)) return tb - ta;
-        return a.meta.displayName.localeCompare(b.meta.displayName);
-      });
-
-    return { activeCrew, inactiveCrew, systems };
-  }, [crew, query]);
-
-  function formatWhen(ts: string) {
-    if (!ts) return '';
-    const t = Date.parse(ts);
-    if (isNaN(t)) return ts;
-    const diff = Date.now() - t;
-    const min = 60 * 1000;
-    const hr = 60 * min;
-    const day = 24 * hr;
-    if (diff < hr) return `${Math.max(1, Math.round(diff / min))}m ago`;
-    if (diff < day) return `${Math.round(diff / hr)}h ago`;
-    return new Date(t).toISOString().slice(0, 10);
+  function getOfficerEmoji(officer: string): string {
+    const emojiMap: Record<string, string> = {
+      'Commander Data': '🤖',
+      'Chief Miles O\'Brien': '👷',
+      'Lt. Commander Geordi La Forge': '🛠️',
+      'Commander Jean-Luc Picard': '👨‍✈️',
+      'Counselor Deanna Troi': '💚',
+      'Dr. Beverly Crusher': '👨‍⚕️',
+      'Commander William Riker': '🎺',
+      'Lt. Worf': '🛡️',
+      'Lt. Uhura': '📡',
+      'Quark': '💰'
+    };
+    return emojiMap[officer] || '🖖';
   }
 
-  function Section({ title, items, defaultOpen = false }: { title: string; items: string[]; defaultOpen?: boolean }) {
-    const [open, setOpen] = useState(defaultOpen);
-    if (!items || items.length === 0) return null;
-    const visible = compact ? items.slice(0, 6) : items;
+  function formatDate(dateStr: string): string {
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    } catch {
+      return dateStr;
+    }
+  }
+
+  const crewArray = Object.values(crewData).sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
+  if (loading) {
     return (
-      <div style={{ marginBottom: 8 }}>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          style={{
-            display: 'flex', justifyContent: 'space-between', width: '100%',
-            background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '8px 10px', cursor: 'pointer'
-          }}
-          className="a11y-focus"
-        >
-          <span style={{ fontWeight: 600 }}>{title}</span>
-          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{items.length}{open ? ' ▲' : ' ▼'}</span>
-        </button>
-        {open && (
-          <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
-            {visible.map((v, i) => (
-              <li key={i} style={{ fontSize: 13, color: 'var(--text)' }}>{v}</li>
-            ))}
-            {compact && items.length > visible.length && (
-              <li style={{ fontSize: 12, opacity: 0.8 }}>+ {items.length - visible.length} more</li>
-            )}
-          </ul>
-        )}
-      </div>
+      <main style={{ 
+        padding: '90px 24px 40px',
+        minHeight: '100vh',
+        background: 'var(--background)',
+        color: 'var(--text)'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '24px',
+          paddingTop: '80px'
+        }}>
+          <div style={{ fontSize: '64px', animation: 'pulse 2s ease-in-out infinite' }}>
+            🛸
+          </div>
+          <div style={{ fontSize: '24px', fontWeight: 600 }}>
+            Loading Observation Lounge...
+          </div>
+          <div style={{ fontSize: '14px', opacity: 0.6 }}>
+            Accessing crew memories from RAG system
+          </div>
+        </div>
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+          }
+        `}</style>
+      </main>
     );
   }
 
   return (
-    <main style={{ padding: '90px 24px 40px' }}>
-      <h1 style={{ color: 'var(--heading, var(--text))', fontSize: 28, marginBottom: 8 }}>🛸 Observation Lounge</h1>
-      <p style={{ opacity: 0.85, marginBottom: 12 }}>Cinematic briefing – each crew member’s latest understanding and skill emphasis.</p>
-
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search crew, titles, summaries"
-          style={{
-            flex: 1, minWidth: 240,
-            background: 'var(--surface)',
-            color: 'var(--text)',
-            border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px'
-          }}
-          className="a11y-focus"
-        />
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, opacity: 0.9 }}>
-          <input type="checkbox" checked={compact} onChange={(e) => setCompact(e.target.checked)} /> Compact
-        </label>
+    <main style={{ 
+      padding: '90px 24px 40px',
+      minHeight: '100vh',
+      background: 'var(--background)',
+      color: 'var(--text)',
+      maxWidth: '1400px',
+      margin: '0 auto'
+    }}>
+      {/* Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <h1 style={{ 
+            color: 'var(--heading)', 
+            fontSize: '32px', 
+            margin: 0,
+            fontWeight: 700
+          }}>
+            🛸 Observation Lounge
+          </h1>
+          <Link 
+            href="/dashboard"
+            style={{
+              fontSize: '14px',
+              color: 'var(--accent)',
+              textDecoration: 'none',
+              padding: '6px 12px',
+              border: '1px solid var(--accent)',
+              borderRadius: '6px',
+              marginLeft: 'auto'
+            }}
+          >
+            ← Dashboard
+          </Link>
+        </div>
+        <p style={{ 
+          fontSize: '16px', 
+          opacity: 0.8, 
+          margin: 0,
+          maxWidth: '800px'
+        }}>
+          Crew reflections, learnings, and future priorities from recent sessions. 
+          Each officer shares what they've mastered and what they're focused on learning next.
+        </p>
       </div>
 
       {error && (
-        <div style={{ border: '1px solid #ff6666', padding: 12, borderRadius: 8, background: 'rgba(255,0,0,0.06)', marginBottom: 16 }}>
+        <div style={{ 
+          border: '1px solid #ff6666', 
+          padding: '16px', 
+          borderRadius: '12px', 
+          background: 'rgba(255,0,0,0.1)', 
+          marginBottom: '24px' 
+        }}>
           <strong>Error:</strong> {error}
+          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.8 }}>
+            Make sure the knowledge_base table exists in Supabase and the API route is configured.
+          </div>
         </div>
       )}
 
-      {groups.activeCrew.length + groups.inactiveCrew.length + groups.systems.length === 0 ? (
-        <div style={{ opacity: 0.8, padding: 16, border: '1px dashed rgba(255,255,255,0.25)', borderRadius: 12 }}>
-          No latest briefings available yet. Once the n8n lounge webhook is live or local crew memories are added, updates will appear here.
+      {sessions.length === 0 && !error && (
+        <div style={{ 
+          opacity: 0.7, 
+          padding: '48px 24px', 
+          border: '2px dashed rgba(255,255,255,0.2)', 
+          borderRadius: '12px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🖖</div>
+          <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>
+            No Observation Lounge sessions yet
+          </div>
+          <div style={{ fontSize: '14px' }}>
+            Crew memories will appear here once they hold debrief sessions.
+          </div>
         </div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16 }}>
-          <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 8 }} className="a11y-muted">Active Crew Updates</div>
-          {groups.activeCrew.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 18, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
-                <span style={{ fontSize: 12, opacity: 0.7 }}>{formatWhen(memory.timestamp)}</span>
-              </div>
-              {(meta.purpose || meta.defaultModel) && (
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
-                  {meta.purpose && <span>{meta.purpose}</span>}
-                  {meta.purpose && meta.defaultModel && <span> · </span>}
-                  {meta.defaultModel && <span>Default model: {meta.defaultModel}</span>}
+      )}
+
+      {/* Session List */}
+      {sessions.length > 0 && (
+        <div style={{ marginBottom: '48px' }}>
+          <h2 style={{ 
+            fontSize: '20px', 
+            fontWeight: 600, 
+            marginBottom: '16px',
+            color: 'var(--accent)'
+          }}>
+            📋 Recent Sessions
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {sessions.map((session) => (
+              <div 
+                key={session.session_id}
+                style={{
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  background: 'var(--surface)',
+                  padding: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onClick={() => setExpandedSession(
+                  expandedSession === session.session_id ? null : session.session_id
+                )}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--accent)';
+                  e.currentTarget.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ 
+                      fontSize: '16px', 
+                      fontWeight: 600, 
+                      marginBottom: '4px',
+                      color: 'var(--heading)'
+                    }}>
+                      {session.title}
+                    </div>
+                    <div style={{ 
+                      fontSize: '13px', 
+                      opacity: 0.7,
+                      marginBottom: '8px'
+                    }}>
+                      {formatDate(session.created_at)}
+                      {session.content.session_duration && ` • ${session.content.session_duration}`}
+                      {session.content.crew_members_involved && 
+                        ` • ${session.content.crew_members_involved.length} officers`}
+                    </div>
+                    <div style={{ 
+                      fontSize: '14px', 
+                      opacity: 0.85,
+                      lineHeight: 1.5
+                    }}>
+                      {session.executive_summary}
+                    </div>
+                  </div>
+                  <div style={{ 
+                    fontSize: '20px',
+                    marginLeft: '16px',
+                    transform: expandedSession === session.session_id ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s ease'
+                  }}>
+                    ▼
+                  </div>
                 </div>
-              )}
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>{(memory.title || '').trim() && (memory.title || '').toLowerCase() !== 'latest briefing' ? memory.title : 'Latest Briefing'}</div>
-              <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 10 }}>
-                {(() => {
-                  const hasContent = Boolean((memory.summary || '').trim());
-                  if (hasContent) return memory.summary;
-                  if (meta.defaultGoals && meta.defaultGoals.length) {
-                    return `Agent goals: ${meta.defaultGoals.join(' · ')}`;
+
+                {/* Expanded Session Details */}
+                {expandedSession === session.session_id && session.content.observation_lounge_transcript && (
+                  <div style={{ 
+                    marginTop: '24px', 
+                    paddingTop: '24px',
+                    borderTop: '1px solid var(--border)'
+                  }}>
+                    {session.content.observation_lounge_transcript.picard_opening && (
+                      <div style={{ 
+                        marginBottom: '24px',
+                        padding: '16px',
+                        background: 'rgba(0,255,170,0.05)',
+                        borderLeft: '3px solid var(--accent)',
+                        borderRadius: '8px'
+                      }}>
+                        <div style={{ fontWeight: 600, marginBottom: '8px', color: 'var(--accent)' }}>
+                          👨‍✈️ Commander Picard (Opening)
+                        </div>
+                        <div style={{ fontSize: '14px', lineHeight: 1.6, fontStyle: 'italic' }}>
+                          "{session.content.observation_lounge_transcript.picard_opening.statement}"
+                        </div>
+                      </div>
+                    )}
+
+                    {session.content.observation_lounge_transcript.crew_reflections?.map((reflection, idx) => (
+                      <div 
+                        key={idx}
+                        style={{
+                          marginBottom: '16px',
+                          padding: '16px',
+                          background: 'var(--card)',
+                          borderRadius: '8px',
+                          border: '1px solid var(--border)'
+                        }}
+                      >
+                        <div style={{ 
+                          fontSize: '16px', 
+                          fontWeight: 600,
+                          marginBottom: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}>
+                          <span>{getOfficerEmoji(reflection.officer)}</span>
+                          <span>{reflection.officer}</span>
+                        </div>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          opacity: 0.7,
+                          marginBottom: '12px'
+                        }}>
+                          {reflection.rank} • {reflection.specialty}
+                        </div>
+                        
+                        {reflection.memories_learned && reflection.memories_learned.length > 0 && (
+                          <div style={{ marginBottom: '12px' }}>
+                            <div style={{ 
+                              fontSize: '13px', 
+                              fontWeight: 600,
+                              marginBottom: '6px',
+                              color: 'var(--accent)'
+                            }}>
+                              Memories Learned:
+                            </div>
+                            <ul style={{ 
+                              margin: 0, 
+                              paddingLeft: '20px',
+                              fontSize: '13px',
+                              opacity: 0.9
+                            }}>
+                              {reflection.memories_learned.slice(0, 3).map((learning, i) => (
+                                <li key={i} style={{ marginBottom: '4px' }}>{learning}</li>
+                              ))}
+                              {reflection.memories_learned.length > 3 && (
+                                <li style={{ opacity: 0.6, fontStyle: 'italic' }}>
+                                  + {reflection.memories_learned.length - 3} more learnings
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+
+                        {reflection.key_insight && (
+                          <div style={{
+                            fontSize: '13px',
+                            fontStyle: 'italic',
+                            padding: '8px 12px',
+                            background: 'rgba(0,255,170,0.05)',
+                            borderLeft: '2px solid var(--accent)',
+                            borderRadius: '4px',
+                            marginTop: '8px'
+                          }}>
+                            💡 "{reflection.key_insight}"
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {session.content.observation_lounge_transcript.picard_closing && (
+                      <div style={{ 
+                        marginTop: '24px',
+                        padding: '16px',
+                        background: 'rgba(0,255,170,0.05)',
+                        borderLeft: '3px solid var(--accent)',
+                        borderRadius: '8px'
+                      }}>
+                        <div style={{ fontWeight: 600, marginBottom: '8px', color: 'var(--accent)' }}>
+                          👨‍✈️ Commander Picard (Closing)
+                        </div>
+                        <div style={{ fontSize: '14px', lineHeight: 1.6, fontStyle: 'italic' }}>
+                          "{session.content.observation_lounge_transcript.picard_closing.statement}"
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Crew Member Cards */}
+      {crewArray.length > 0 && (
+        <div>
+          <h2 style={{ 
+            fontSize: '20px', 
+            fontWeight: 600, 
+            marginBottom: '16px',
+            color: 'var(--accent)'
+          }}>
+            👥 Crew Learning Summary
+          </h2>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', 
+            gap: '20px' 
+          }}>
+            {crewArray.map((crew) => (
+              <div 
+                key={crew.name}
+                style={{
+                  border: selectedOfficer === crew.name ? '2px solid var(--accent)' : '1px solid var(--border)',
+                  borderRadius: '12px',
+                  background: 'var(--surface)',
+                  padding: '20px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onClick={() => setSelectedOfficer(selectedOfficer === crew.name ? null : crew.name)}
+                onMouseEnter={(e) => {
+                  if (selectedOfficer !== crew.name) {
+                    e.currentTarget.style.borderColor = 'var(--accent)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
                   }
-                  return 'Briefing content pending.';
-                })()}
-              </div>
-
-              <Section title="Key Findings" items={memory.key_findings || []} defaultOpen={!compact} />
-              <Section title="Conclusions" items={memory.conclusions || []} />
-              <Section title="Recommendations" items={memory.recommendations || []} />
-            </div>
-          ))}
-
-          {groups.inactiveCrew.length > 0 && (
-            <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Crew — No recent findings</div>
-          )}
-          {groups.inactiveCrew.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px dashed var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{formatWhen(memory.timestamp)}</span>
-              </div>
-              {(meta.purpose || meta.defaultModel) && (
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
-                  {meta.purpose && <span>{meta.purpose}</span>}
-                  {meta.purpose && meta.defaultModel && <span> · </span>}
-                  {meta.defaultModel && <span>Default model: {meta.defaultModel}</span>}
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedOfficer !== crew.name) {
+                    e.currentTarget.style.borderColor = 'var(--border)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '12px',
+                  marginBottom: '12px'
+                }}>
+                  <div style={{ fontSize: '32px' }}>{crew.emoji}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ 
+                      fontSize: '18px', 
+                      fontWeight: 600,
+                      color: 'var(--heading)'
+                    }}>
+                      {crew.name}
+                    </div>
+                    <div style={{ 
+                      fontSize: '12px', 
+                      opacity: 0.7 
+                    }}>
+                      {crew.rank} • {crew.specialty}
+                    </div>
+                  </div>
                 </div>
-              )}
-              <div style={{ fontSize: 13, opacity: 0.85 }}>
-                {memory.summary && memory.summary.trim().length > 0
-                  ? memory.summary
-                  : (meta.defaultGoals && meta.defaultGoals.length
-                      ? `Agent goals: ${meta.defaultGoals.join(' · ')}`
-                      : 'No recent briefing yet.')}
-              </div>
-            </div>
-          ))}
 
-          {groups.systems.length > 0 && (
-            <div style={{ gridColumn: '1 / -1', fontWeight: 700, marginTop: 12 }} className="a11y-muted">Systems & Operations</div>
-          )}
-          {groups.systems.map(({ meta, memory }) => (
-            <div key={meta.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--surface)', padding: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                <h2 style={{ color: 'var(--heading, var(--text))', fontSize: 16, margin: 0 }}>{meta.emoji} {meta.displayName} <span style={{ opacity: 0.7, fontSize: 12 }}>· {meta.role}</span></h2>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{formatWhen(memory.timestamp)}</span>
+                <div style={{ 
+                  fontSize: '13px',
+                  opacity: 0.8,
+                  marginBottom: '12px',
+                  lineHeight: 1.5
+                }}>
+                  {crew.learnings.length} recent learnings • {crew.future_focus.length} future priorities
+                </div>
+
+                {selectedOfficer === crew.name && (
+                  <div style={{ 
+                    marginTop: '16px',
+                    paddingTop: '16px',
+                    borderTop: '1px solid var(--border)'
+                  }}>
+                    {crew.learnings.length > 0 && (
+                      <div style={{ marginBottom: '16px' }}>
+                        <div style={{ 
+                          fontSize: '14px', 
+                          fontWeight: 600,
+                          marginBottom: '8px',
+                          color: 'var(--accent)'
+                        }}>
+                          📚 Recent Learnings:
+                        </div>
+                        <ul style={{ 
+                          margin: 0, 
+                          paddingLeft: '20px',
+                          fontSize: '13px',
+                          opacity: 0.9
+                        }}>
+                          {crew.learnings.map((learning, i) => (
+                            <li key={i} style={{ marginBottom: '6px' }}>{learning}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {crew.future_focus.length > 0 && (
+                      <div style={{ marginBottom: '16px' }}>
+                        <div style={{ 
+                          fontSize: '14px', 
+                          fontWeight: 600,
+                          marginBottom: '8px',
+                          color: 'var(--accent)'
+                        }}>
+                          🎯 Future Learning Focus:
+                        </div>
+                        <ul style={{ 
+                          margin: 0, 
+                          paddingLeft: '20px',
+                          fontSize: '13px',
+                          opacity: 0.9
+                        }}>
+                          {crew.future_focus.map((focus, i) => (
+                            <li key={i} style={{ marginBottom: '6px' }}>{focus}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {crew.key_insight && (
+                      <div style={{
+                        fontSize: '13px',
+                        fontStyle: 'italic',
+                        padding: '12px',
+                        background: 'rgba(0,255,170,0.08)',
+                        borderLeft: '3px solid var(--accent)',
+                        borderRadius: '6px',
+                        lineHeight: 1.5
+                      }}>
+                        💡 <strong>Key Insight:</strong> "{crew.key_insight}"
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>
-                {meta.purpose}
-                {meta.defaultModel && <span> · Default model: {meta.defaultModel}</span>}
-              </div>
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>{(memory.title || '').trim() && (memory.title || '').toLowerCase() !== 'latest briefing' ? memory.title : 'Latest Briefing'}</div>
-              <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 10 }}>{memory.summary || 'Operational notes pending.'}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </main>
   );
 }
-
-
-
