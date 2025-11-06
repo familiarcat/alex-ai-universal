@@ -97,31 +97,31 @@
 
 #### Phase 3: Navigate to API Settings
 
-6. **Locate Settings in sidebar** (November 2025 UI)
+6. **Locate Project Settings in sidebar** (November 2025 UI)
    ```
    Left Sidebar Structure:
    
    ┌─────────────────────────┐
-   │ 🏠 Home                 │
+   │ 🏠 Project Overview     │
    │ 📊 Table Editor         │
    │ 🔍 SQL Editor           │
    │ 📈 Database             │
    │ 🔐 Authentication       │
    │ 📦 Storage              │
    │ 🎯 Edge Functions       │
-   │ ⚙️  Settings ← HERE     │
-   │    ├─ General          │
-   │    ├─ Database         │
-   │    ├─ API ← THEN HERE  │
-   │    ├─ Auth             │
-   │    └─ ...              │
+   │ 🔴 Realtime             │
+   │ 📋 Reports              │
+   │ 📝 Logs                 │
+   │ 📚 API Docs             │
+   │ 🔌 Integrations         │
+   │ ⚙️  Project Settings ← HERE │
    └─────────────────────────┘
    
    Navigation:
    1. Scroll to bottom of sidebar
-   2. Find "Settings" (gear icon ⚙️)
-   3. Click to expand submenu
-   4. Click "API"
+   2. Find "Project Settings" (gear icon ⚙️)
+   3. Click to open settings page
+   4. Click "API" in the settings navigation
    ```
 
 #### Phase 4: Locate Service Role Key
@@ -512,7 +512,7 @@ Once service role key is securely in ~/.zshrc:
 ```
 1. Private browser → supabase.com/dashboard
 2. Login → Select "Alex AI" project
-3. Settings → API
+3. Project Settings (bottom left) → API
 4. Find "service_role" key
 5. Click copy icon 📋
 6. Close browser immediately

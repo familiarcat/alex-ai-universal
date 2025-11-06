@@ -74,14 +74,14 @@ Without it:
 
 1. **Click on your Alex AI project** from the dashboard
 
-2. **In the left sidebar**, scroll down to find **"Settings"**
-   - It's usually near the bottom
+2. **In the left sidebar**, scroll down to find **"Project Settings"**
+   - It's at the bottom of the sidebar
    - Has a gear/cog icon ⚙️
 
-3. **Click "Settings"** to expand the submenu
+3. **Click "Project Settings"** to open the settings page
 
-4. **Click "API"** under Settings
-   - Full path: Settings → API
+4. **Click "API"** in the settings navigation
+   - Full path: Project Settings → API
    - This opens the API configuration page
 
 ---

@@ -45,8 +45,8 @@ You chose this before sleeping. Here's what to do:
 **Quick version:**
 
 1. **Go to:** https://supabase.com/dashboard
-2. **Login** → Select "Alex AI" project
-3. **Click:** Settings (left sidebar) → API
+2. **Login** → Select your project (e.g., "trange-new-world" or "Alex AI")
+3. **Click:** Project Settings (bottom of left sidebar) → API
 4. **Find:** "service_role" key (NOT "anon")
 5. **Copy** the key (long string starting with `eyJhbG...`)
 6. **Come back here** with the key

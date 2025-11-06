@@ -64,7 +64,7 @@ This script will:
 #### Option 2: Manual Addition
 1. Go to https://supabase.com/dashboard
 2. Select your Alex AI project
-3. Click **Settings** → **API**
+3. Click **Project Settings** (bottom of left sidebar) → **API**
 4. Find the **service_role** key (NOT the anon key)
 5. Copy it
 6. Add to ~/.zshrc:
