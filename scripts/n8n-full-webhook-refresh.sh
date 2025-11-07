@@ -19,6 +19,17 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Load Supabase/N8N credentials from ~/.zshrc (if present)
+if [[ -f "$SCRIPT_DIR/lib/load-supabase-env.sh" ]]; then
+  # shellcheck source=/dev/null
+  source "$SCRIPT_DIR/lib/load-supabase-env.sh"
+fi
+
+cd "$REPO_ROOT"
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -64,7 +75,6 @@ echo ""
 ################################################################################
 
 echo -e "${BLUE}🔄 Phase 1: Deactivating workflows via activation API...${NC}"
-cd "$(dirname "$0")/.."
 node scripts/n8n-toggle-workflows-activate-api.js --dry-run > /dev/null 2>&1 || true
 
 # Actually deactivate (just the deactivation part)
