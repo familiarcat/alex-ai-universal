@@ -19,22 +19,44 @@ declare module "next-auth" {
 }
 
 // Worf's Security Protocol: Environment validation
+// O'Brien's Pragmatic Update: Optional in development, required in production
+const isDevelopment = process.env.NODE_ENV !== "production";
+
 if (!process.env.GOOGLE_CLIENT_ID) {
-  throw new Error(
-    "GOOGLE_CLIENT_ID is required. Add it to your environment variables."
-  );
+  if (isDevelopment) {
+    console.warn(
+      "⚠️  GOOGLE_CLIENT_ID not set. Authentication will be disabled in development."
+    );
+  } else {
+    throw new Error(
+      "GOOGLE_CLIENT_ID is required. Add it to your environment variables."
+    );
+  }
 }
 
 if (!process.env.GOOGLE_CLIENT_SECRET) {
-  throw new Error(
-    "GOOGLE_CLIENT_SECRET is required. Add it to your environment variables."
-  );
+  if (isDevelopment) {
+    console.warn(
+      "⚠️  GOOGLE_CLIENT_SECRET not set. Authentication will be disabled in development."
+    );
+  } else {
+    throw new Error(
+      "GOOGLE_CLIENT_SECRET is required. Add it to your environment variables."
+    );
+  }
 }
 
 if (!process.env.NEXTAUTH_SECRET) {
-  throw new Error(
-    "NEXTAUTH_SECRET is required. Generate one with: openssl rand -base64 32"
-  );
+  if (isDevelopment) {
+    console.warn(
+      "⚠️  NEXTAUTH_SECRET not set. Using temporary development secret."
+    );
+    process.env.NEXTAUTH_SECRET = "development-secret-change-in-production";
+  } else {
+    throw new Error(
+      "NEXTAUTH_SECRET is required. Generate one with: openssl rand -base64 32"
+    );
+  }
 }
 
 if (!process.env.NEXTAUTH_URL) {
@@ -45,8 +67,11 @@ if (!process.env.NEXTAUTH_URL) {
 }
 
 // Data's Precise Configuration
-export const authConfig: NextAuthConfig = {
-  providers: [
+// O'Brien's Pragmatic Update: Only add Google provider if credentials exist
+const providers = [];
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -57,8 +82,16 @@ export const authConfig: NextAuthConfig = {
           response_type: "code",
         },
       },
-    }),
-  ],
+    })
+  );
+} else if (process.env.NODE_ENV !== "production") {
+  console.warn(
+    "⚠️  Google OAuth not configured. Authentication disabled in development mode."
+  );
+}
+
+export const authConfig: NextAuthConfig = {
+  providers,
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
