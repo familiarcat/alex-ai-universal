@@ -23,6 +23,7 @@
     "n8n:toggle-ssh": "bash scripts/n8n-toggle-workflows-ssh.sh",
     "n8n:toggle-ui": "node scripts/n8n-toggle-workflows-ui.js",
     "n8n:refresh": "npm run n8n:full-refresh",
+    "n8n:health": "node scripts/check-webhook-health.js",
     "n8n:up": "docker compose -f docker-compose.n8n.yml up -d",
     "n8n:down": "docker compose -f docker-compose.n8n.yml down",
     "n8n:export": "node scripts/n8n-export-all.js",
