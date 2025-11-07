@@ -26,6 +26,15 @@ const N8N_API_KEY = process.env.N8N_API_KEY;
 const N8N_EMAIL = process.env.N8N_EMAIL || process.env.N8N_USER_EMAIL;
 const N8N_PASSWORD = process.env.N8N_PASSWORD || process.env.N8N_USER_PASSWORD;
 
+// Tunable delay configuration (all values in milliseconds)
+const GLOBAL_NAVIGATION_DELAY = Number(process.env.N8N_UI_GLOBAL_NAVIGATION_DELAY_MS || 15000);
+const BETWEEN_PAGE_SLEEP = Number(process.env.N8N_UI_BETWEEN_PAGE_SLEEP_MS || 12000);
+const BETWEEN_WORKFLOW_DELAY = Number(process.env.N8N_UI_BETWEEN_WORKFLOW_DELAY_MS || 18000);
+const BETWEEN_TOGGLE_DELAY = Number(process.env.N8N_UI_BETWEEN_TOGGLE_DELAY_MS || 6000);
+const POST_TOGGLE_PROPAGATION_DELAY = Number(process.env.N8N_UI_POST_TOGGLE_PROPAGATION_DELAY_MS || 15000);
+const INITIAL_LOAD_WAIT = Number(process.env.N8N_UI_INITIAL_LOAD_WAIT_MS || 12000);
+const MAX_NAV_ATTEMPTS = Number(process.env.N8N_UI_MAX_NAV_ATTEMPTS || 5);
+
 // Colors
 const colors = {
   reset: '\x1b[0m',
@@ -104,6 +113,7 @@ async function main() {
     log.info('🌐 Step 2: Launching browser...');
     browser = await puppeteer.launch({
       headless: true, // Set to false to see the browser in action
+      slowMo: Number(process.env.N8N_UI_SLOWMO_MS || 250),
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -118,9 +128,19 @@ async function main() {
     });
 
     const page = await browser.newPage();
-    
+    await page.setRequestInterception(true);
+    page.on('request', (request) => {
+      const resourceType = request.resourceType();
+      if (['image', 'stylesheet', 'font', 'media'].includes(resourceType)) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
     // Set a reasonable timeout
-    page.setDefaultTimeout(30000);
+    page.setDefaultTimeout(90000);
+    page.setDefaultNavigationTimeout(90000);
 
     // Enable console logging from the page
     page.on('console', msg => {
@@ -136,7 +156,7 @@ async function main() {
     let navigationAttempts = 0;
     const maxNavigationAttempts = 3;
     
-    while (navigationAttempts < maxNavigationAttempts) {
+    while (navigationAttempts < MAX_NAV_ATTEMPTS) {
       try {
         await page.goto(N8N_URL, { 
           waitUntil: 'networkidle0', 
@@ -146,17 +166,18 @@ async function main() {
         break;
       } catch (error) {
         navigationAttempts++;
-        if (navigationAttempts >= maxNavigationAttempts) {
-          throw new Error(`Failed to navigate after ${maxNavigationAttempts} attempts: ${error.message}`);
+        if (navigationAttempts >= MAX_NAV_ATTEMPTS) {
+          throw new Error(`Failed to navigate after ${MAX_NAV_ATTEMPTS} attempts: ${error.message}`);
         }
-        log.warn(`   ⚠️  Navigation attempt ${navigationAttempts} failed, retrying in 10s...`);
-        await sleep(10000);
+        const retryWait = GLOBAL_NAVIGATION_DELAY + navigationAttempts * 2000;
+        log.warn(`   ⚠️  Navigation attempt ${navigationAttempts} failed, retrying in ${retryWait / 1000}s...`);
+        await sleep(retryWait);
       }
     }
     
     // Wait for page to settle (longer delay to avoid rate limiting)
-    log.info('   ⏳ Waiting for page to fully load...');
-    await sleep(5000);
+    log.info(`   ⏳ Waiting ${INITIAL_LOAD_WAIT / 1000}s for page to fully load...`);
+    await sleep(INITIAL_LOAD_WAIT);
 
     // Take a screenshot for debugging
     await page.screenshot({ path: '/tmp/n8n-initial-load.png' });
@@ -209,8 +230,8 @@ async function main() {
         
         // O'Brien's Rate Limiting: Wait between operations
         if (i > 0) {
-          log.info(`      ⏳ Rate limiting: waiting 5 seconds before next workflow...`);
-          await sleep(5000);
+          log.info(`      ⏳ Rate limiting: waiting ${BETWEEN_PAGE_SLEEP / 1000}s before next workflow...`);
+          await sleep(BETWEEN_PAGE_SLEEP);
         }
         
         // Navigate to workflow with retry logic
@@ -218,9 +239,8 @@ async function main() {
         log.info(`      🔗 Navigating to workflow...`);
         
         let navAttempts = 0;
-        const maxNavAttempts = 3;
         
-        while (navAttempts < maxNavAttempts) {
+        while (navAttempts < MAX_NAV_ATTEMPTS) {
           try {
             await page.goto(workflowUrl, { 
               waitUntil: 'networkidle0', 
@@ -229,17 +249,18 @@ async function main() {
             break;
           } catch (error) {
             navAttempts++;
-            if (navAttempts >= maxNavAttempts) {
-              throw new Error(`Failed to load workflow after ${maxNavAttempts} attempts`);
+            if (navAttempts >= MAX_NAV_ATTEMPTS) {
+              throw new Error(`Failed to load workflow after ${MAX_NAV_ATTEMPTS} attempts`);
             }
-            log.warn(`      ⚠️  Navigation failed, retrying in 10s... (${navAttempts}/${maxNavAttempts})`);
-            await sleep(10000);
+            const retryDelay = GLOBAL_NAVIGATION_DELAY + navAttempts * 5000;
+            log.warn(`      ⚠️  Navigation failed, retrying in ${retryDelay / 1000}s... (${navAttempts}/${MAX_NAV_ATTEMPTS})`);
+            await sleep(retryDelay);
           }
         }
         
         // Wait for workflow editor to fully load
-        log.info(`      ⏳ Waiting for workflow editor to load...`);
-        await sleep(5000);
+        log.info(`      ⏳ Waiting ${BETWEEN_PAGE_SLEEP / 1000}s for workflow editor to load...`);
+        await sleep(BETWEEN_PAGE_SLEEP);
 
         // Find the active toggle switch
         // N8N typically uses a switch/toggle button in the top-right
@@ -278,13 +299,13 @@ async function main() {
         if (workflow.active) {
           log.info(`      ⚫ Toggling OFF...`);
           await page.click(toggleSelector);
-          await sleep(3000); // Longer delay for state change
+          await sleep(BETWEEN_TOGGLE_DELAY); // Longer delay for state change
           log.info(`      ✅ Deactivated`);
         }
 
         log.info(`      🟢 Toggling ON...`);
         await page.click(toggleSelector);
-        await sleep(3000); // Longer delay for webhook registration
+        await sleep(POST_TOGGLE_PROPAGATION_DELAY); // Longer delay for webhook registration
         log.info(`      ✅ Activated`);
 
         log.success(`      ✅ ${workflow.name} - toggled successfully\n`);
@@ -308,8 +329,8 @@ async function main() {
 
       // O'Brien's Rate Limiting: Delay between workflows
       if (i < crewWorkflows.length - 1) {
-        log.info(`   ⏳ Waiting 8 seconds before next workflow (rate limiting)...\n`);
-        await sleep(8000);
+        log.info(`   ⏳ Waiting ${BETWEEN_WORKFLOW_DELAY / 1000}s before next workflow (rate limiting)...\n`);
+        await sleep(BETWEEN_WORKFLOW_DELAY);
       }
     }
 
