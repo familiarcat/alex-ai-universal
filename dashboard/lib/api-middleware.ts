@@ -1,11 +1,21 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Alex AI Universal - API Middleware Helpers
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Team Alpha: Lieutenant Worf (Security) + Chief O'Brien (Pragmatic Implementation)
+// Team Gamma: Counselor Troi (UX) + Dr. Crusher (Health) + Lieutenant Worf (Security)
+// Updated: Now uses @alex-ai/rate-limiter for unified rate limiting
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./auth";
+import { createNextJsRateLimiter } from "../../packages/rate-limiter/dist/index";
+
+// Create global rate limiter instance
+const rateLimiter = createNextJsRateLimiter({
+  maxRequests: 100,
+  windowMs: 60000,
+  message: "You're doing that a bit too quickly. Take a breath and try again in a moment.",
+  headers: true,
+});
 
 /**
  * Worf's Security: Require authentication for API routes
@@ -41,9 +51,9 @@ export async function requireAuth(request: NextRequest) {
 }
 
 /**
- * O'Brien's Pragmatic Rate Limiter for API routes
+ * Counselor Troi's User-Friendly Rate Limiter for API routes
  *
- * Simple in-memory rate limiting. For production, use Redis.
+ * Now powered by @alex-ai/rate-limiter for unified rate limiting across all systems
  *
  * Usage:
  * ```typescript
@@ -55,66 +65,24 @@ export async function requireAuth(request: NextRequest) {
  * }
  * ```
  */
-const rateLimitStore = new Map<
-  string,
-  { count: number; resetAt: number; requests: number[] }
->();
-
 export async function checkRateLimit(
   request: NextRequest,
   endpoint: string,
   maxRequests: number = 100,
   windowMs: number = 60000
 ): Promise<NextResponse | true> {
-  const identifier = request.ip || request.headers.get("x-forwarded-for") || "unknown";
-  const key = `${identifier}:${endpoint}`;
-  const now = Date.now();
+  // Create custom rate limiter if non-default settings
+  const limiter = (maxRequests !== 100 || windowMs !== 60000)
+    ? createNextJsRateLimiter({ maxRequests, windowMs })
+    : rateLimiter;
 
-  let record = rateLimitStore.get(key);
+  const result = limiter.checkLimit(request, endpoint);
 
-  // Clean up old records
-  if (record && now > record.resetAt) {
-    rateLimitStore.delete(key);
-    record = undefined;
-  }
-
-  // Initialize or update record
-  if (!record) {
-    record = {
-      count: 1,
-      resetAt: now + windowMs,
-      requests: [now],
-    };
-    rateLimitStore.set(key, record);
-    return true;
-  }
-
-  // Remove requests outside the window
-  record.requests = record.requests.filter((time) => time > now - windowMs);
-  record.count = record.requests.length + 1;
-  record.requests.push(now);
-
-  // Check if rate limit exceeded
-  if (record.count > maxRequests) {
-    const resetIn = Math.ceil((record.resetAt - now) / 1000);
-
-    return NextResponse.json(
-      {
-        error: "Too Many Requests",
-        message: `Rate limit exceeded. Try again in ${resetIn} seconds.`,
-        code: "RATE_LIMIT_EXCEEDED",
-        retryAfter: resetIn,
-      },
-      {
-        status: 429,
-        headers: {
-          "X-RateLimit-Limit": String(maxRequests),
-          "X-RateLimit-Remaining": String(Math.max(0, maxRequests - record.count)),
-          "X-RateLimit-Reset": String(record.resetAt),
-          "Retry-After": String(resetIn),
-        },
-      }
-    );
+  if (!result.allowed && result.response) {
+    return NextResponse.json(result.response.body, {
+      status: result.response.status,
+      headers: result.response.headers,
+    });
   }
 
   return true;
