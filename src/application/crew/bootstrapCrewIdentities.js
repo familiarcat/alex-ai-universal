@@ -26,7 +26,7 @@ async function bootstrapCrewIdentities(options = {}) {
 
     const similarity = computeSimilarity(
       snippetResult.snippet,
-      supabaseResult.memory?.observation
+      supabaseResult.memory?.content
     );
 
     const warnings = [];

@@ -13,6 +13,7 @@ const MEMORY_ALPHA_PORTAL_URL = process.env.MEMORY_ALPHA_PORTAL_URL ||
 const args = process.argv.slice(2);
 const SHOULD_INGEST = args.includes('--ingest');
 const QUIET = args.includes('--quiet');
+const STRICT_MODE = args.includes('--strict');
 
 function log(...messages) {
   if (!QUIET) {
@@ -57,8 +58,8 @@ async function run() {
   for (const entry of results) {
     const { crew, snippet, latestMemory, similarity, ingestResult, warnings } = entry;
     const similarityPercent = Math.round(similarity * 100);
-    const latestSummary = latestMemory?.observation
-      ? summarizeText(latestMemory.observation, 100)
+    const latestSummary = latestMemory?.content
+      ? summarizeText(latestMemory.content, 100)
       : '—';
 
     let action = 'skipped';
@@ -87,7 +88,9 @@ async function run() {
   if (lowSimilarity.length) {
     const names = lowSimilarity.map(entry => entry.crew.name).join(', ');
     log('⚠️  Low similarity detected for:', names);
-    process.exitCode = 2;
+    if (STRICT_MODE) {
+      process.exitCode = 2;
+    }
   }
 }
 

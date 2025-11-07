@@ -35,14 +35,15 @@ async function fetchLatestCrewMemory(crewKey) {
     const response = await axios.get(`${config.url}/rest/v1/crew_memories`, {
       params: {
         crew_member: `eq.${crewKey}`,
-        select: 'id,crew_member,source,category,observation,created_at',
+        select: 'id,crew_member,content,timestamp,importance,mission_id,created_at',
         order: 'created_at.desc',
         limit: 1
       },
       headers: {
         apikey: config.key,
         Authorization: `Bearer ${config.key}`,
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Prefer: 'return=representation'
       },
       timeout: 15000
     });
@@ -51,9 +52,10 @@ async function fetchLatestCrewMemory(crewKey) {
       memory: response.data?.[0] || null
     };
   } catch (error) {
+    const detail = error.response?.data ? JSON.stringify(error.response.data) : error.message;
     return {
       memory: null,
-      warning: `Supabase request failed: ${error.message}`
+      warning: `Supabase request failed: ${detail}`
     };
   }
 }
