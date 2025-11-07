@@ -73,7 +73,44 @@ async function storeIdentitySnapshot(crew, snippet, options = {}) {
   }
 }
 
+async function fetchLatestSnapshots(crewKey, limit = 1) {
+  const config = readSupabaseConfig();
+
+  if (!config.available) {
+    return {
+      entries: [],
+      warning: 'Supabase credentials not supplied; cannot fetch snapshots'
+    };
+  }
+
+  try {
+    const response = await axios.get(`${config.url}/rest/v1/knowledge_base`, {
+      headers: {
+        apikey: config.key,
+        Authorization: `Bearer ${config.key}`
+      },
+      params: {
+        'content->>crewKey': `eq.${crewKey}`,
+        order: 'created_at.desc',
+        limit
+      },
+      timeout: 15000
+    });
+
+    return {
+      entries: response.data
+    };
+  } catch (error) {
+    const detail = error.response?.data ? JSON.stringify(error.response.data) : error.message;
+    return {
+      entries: [],
+      warning: `Supabase fetch failed: ${detail}`
+    };
+  }
+}
+
 module.exports = {
-  storeIdentitySnapshot
+  storeIdentitySnapshot,
+  fetchLatestSnapshots
 };
 
