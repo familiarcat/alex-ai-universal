@@ -125,6 +125,8 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^21.0.0",
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0-rc.12",
     "chokidar": "^4.0.3"
   }
 }

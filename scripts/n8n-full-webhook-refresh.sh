@@ -45,7 +45,8 @@ echo -e "${BLUE}📋 This script will:${NC}"
 echo "   1. Deactivate all crew workflows (via API)"
 echo "   2. Restart n8n Docker container (clear cache)"
 echo "   3. Activate all crew workflows (via API)"
-echo "   4. Test webhook registration"
+echo "   4. Prime crew identities from Memory Alpha"
+echo "   5. Test webhook registration"
 echo ""
 echo -e "${YELLOW}⏱️  Expected duration: ~1 minute${NC}"
 echo ""
@@ -158,10 +159,24 @@ activateAll().catch(console.error);
 echo -e "${GREEN}✅ Phase 3 complete${NC}\n"
 
 ################################################################################
-# PHASE 4: Test webhooks
+# PHASE 4: Prime crew identity memories
 ################################################################################
 
-echo -e "${BLUE}🧪 Phase 4: Testing webhook registration...${NC}"
+# Run Memory Alpha bootstrap to give each crew member an initial identity snapshot
+echo -e "${BLUE}📚 Phase 4: Priming crew identities from Memory Alpha...${NC}"
+if node scripts/init-crew-identity-memories.js --ingest --quiet; then
+  echo -e "   ${GREEN}Identity bootstrap complete${NC}"
+else
+  echo -e "   ${YELLOW}Identity bootstrap encountered warnings (see output above)${NC}"
+fi
+echo ""
+sleep 2
+
+################################################################################
+# PHASE 5: Test webhooks
+################################################################################
+
+echo -e "${BLUE}🧪 Phase 5: Testing webhook registration...${NC}"
 echo "   Waiting 5 seconds for webhooks to register..."
 sleep 5
 
