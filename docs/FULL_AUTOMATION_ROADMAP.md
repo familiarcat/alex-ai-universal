@@ -64,9 +64,9 @@ This script will:
 #### Option 2: Manual Addition
 1. Go to https://supabase.com/dashboard
 2. Select your Alex AI project
-3. Click **Project Settings** (bottom of left sidebar) → **API**
-4. Find the **service_role** key (NOT the anon key)
-5. Copy it
+3. Click **Project Settings** (bottom of left sidebar) → **API Keys**
+4. Scroll to **Secret keys** section (NOT the Publishable key)
+5. Copy the **"default"** secret key (starts with `sb_secret_...`)
 6. Add to ~/.zshrc:
    ```bash
    echo 'export SUPABASE_SERVICE_ROLE_KEY="eyJhbG..."' >> ~/.zshrc

@@ -86,47 +86,56 @@ Without it:
 
 ---
 
-### Step 3: Locate the Service Role Key
+### Step 3: Locate the Secret Key (formerly "service_role")
 
-1. **Scroll down** to the section titled **"Project API keys"**
-
-2. **You'll see multiple keys listed:**
+1. **You'll see two sections on the API Keys page:**
    ```
    ┌─────────────────────────────────────────────────────────┐
-   │ Project API keys                                         │
+   │ API Keys                                                 │
    ├─────────────────────────────────────────────────────────┤
    │                                                          │
-   │ anon / public                                            │
-   │ This key is safe to use in a browser...                 │
-   │ eyJhbG... [COPY button]                                  │
+   │ Publishable key (safe to use in browser)                │
+   │ This key is safe to use in a browser if you have        │
+   │ enabled Row Level Security...                            │
+   │ sb_publishable_... [COPY button]                         │
    │                                                          │
    │ ─────────────────────────────────────────────────────   │
    │                                                          │
-   │ service_role                                ⭐ THIS ONE  │
-   │ This key has the ability to bypass Row Level Security..│
-   │ eyJhbG... [COPY button]                                  │
+   │ Secret keys                                 ⭐ THIS ONE  │
+   │ These API keys allow privileged access to your          │
+   │ project's APIs. Use in servers, functions, workers...   │
    │                                                          │
+   │ ┌──────────────────────────────────────────────────┐    │
+   │ │ NAME     │ API KEY              │ LAST SEEN     │    │
+   │ ├──────────────────────────────────────────────────┤    │
+   │ │ default  │ sb_secret_... 👁️ 📋  │ a few secs ago│    │
+   │ └──────────────────────────────────────────────────┘    │
    └─────────────────────────────────────────────────────────┘
    ```
 
-3. **Find the key labeled:** `service_role`
-   - **NOT** the `anon` key (you already have that)
-   - **NOT** the `public` key
-   - Look for the one that says: "This key has the ability to bypass Row Level Security"
+2. **Scroll to the "Secret keys" section**
+   - **NOT** the "Publishable key" at the top
+   - Look for the table with NAME, API KEY, LAST SEEN columns
+
+3. **Find the "default" secret key**
+   - Name: `default`
+   - The key that says: "These API keys allow privileged access"
 
 ---
 
-### Step 4: Copy the Service Role Key
+### Step 4: Copy the Secret Key
 
-1. **Look for the "service_role" key section**
+1. **Look for the "default" row in the Secret keys table**
 
 2. **The key itself is a long string** that looks like:
    ```
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI...
+   sb_secret_TCaP5xxxxxxxxxxxxx...
    ```
+   (It will be hidden with dots initially)
 
-3. **Click the COPY button** (📋 icon) next to the key
-   - Or manually select all the text and copy it
+3. **Click the COPY button** (📋 icon) or the eye icon (👁️) to reveal
+   - Copy button: copies directly to clipboard
+   - Eye icon: reveals the full key so you can see/copy it
    - The key is usually hidden by default for security
    - You might need to click "Reveal" or an eye icon 👁️ first
 

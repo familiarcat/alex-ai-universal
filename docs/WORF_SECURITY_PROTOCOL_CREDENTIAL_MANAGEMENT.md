@@ -124,44 +124,47 @@
    4. Click "API" in the settings navigation
    ```
 
-#### Phase 4: Locate Service Role Key
+#### Phase 4: Locate Secret Key (formerly "service_role")
 
-7. **On the API Settings page** (November 2025 UI)
+7. **On the API Keys page** (November 2025 UI - UPDATED)
    ```
    Page Layout:
    
    ┌──────────────────────────────────────────────────────────┐
-   │ API Settings                                              │
+   │ API Keys                                                  │
+   │ Configure API keys to securely control access            │
    ├──────────────────────────────────────────────────────────┤
    │                                                           │
-   │ Configuration                                             │
+   │ Publishable key                                           │
    │ ─────────────────────────────────────────────────────    │
-   │ URL: https://rpkkkbufdwxmjaerbhbn.supabase.co           │
-   │                                                           │
-   │ Project API keys                                          │
-   │ ─────────────────────────────────────────────────────    │
-   │                                                           │
-   │ 🔓 anon / public                                         │
-   │    This key is safe to use in a browser if you have      │
-   │    enabled Row Level Security for your tables.           │
+   │ This key is safe to use in a browser if you have         │
+   │ enabled Row Level Security (RLS) for your tables and     │
+   │ configured policies.                                      │
    │    ┌──────────────────────────────────┐                 │
-   │    │ eyJhbGci... [Hidden] 👁️ [📋]    │                 │
+   │    │ sb_publishable_1bWfa8oHqDM... 📋│                 │
    │    └──────────────────────────────────┘                 │
    │                                                           │
-   │ 🔐 service_role ⚠️  SECRET              ← THIS ONE      │
-   │    This key has the ability to bypass Row Level          │
-   │    Security. Never share it publicly.                    │
-   │    ┌──────────────────────────────────┐                 │
-   │    │ eyJhbGci... [Hidden] 👁️ [📋]    │                 │
-   │    └──────────────────────────────────┘                 │
+   │ Secret keys                          ⚠️  ← THIS SECTION │
+   │ ─────────────────────────────────────────────────────    │
+   │ These API keys allow privileged access to your           │
+   │ project's APIs. Use in servers, functions, workers or    │
+   │ other backend components of your application.            │
    │                                                           │
+   │ ┌─────────────────────────────────────────────────────┐ │
+   │ │ NAME    │ API KEY                  │ LAST SEEN      │ │
+   │ ├─────────────────────────────────────────────────────┤ │
+   │ │ default │ sb_secret_TCaP5••••••••• │ a few secs ago │ │
+   │ │         │ 👁️ 📋                   │                │ │
+   │ └─────────────────────────────────────────────────────┘ │
+   │                                        + New secret key  │
    └──────────────────────────────────────────────────────────┘
    
    Security Markers:
-   ✅ Look for: "service_role" label
-   ✅ Warning text: "bypass Row Level Security"
-   ✅ 🔐 lock icon or ⚠️ warning icon
-   ❌ DO NOT copy "anon" or "public" key
+   ✅ Look for: "Secret keys" section (table format)
+   ✅ Key name: "default" in the NAME column
+   ✅ Warning text: "privileged access"
+   ✅ Key starts with: "sb_secret_"
+   ❌ DO NOT copy "Publishable key" (that's the old "anon" key)
    ```
 
 #### Phase 5: Secure Key Extraction
@@ -170,12 +173,14 @@
    ```
    Click: 👁️ (eye icon) to reveal
    
-   The key will display:
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz...
+   The key will display (November 2025 format):
+   sb_secret_TCaP5xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    
-   Length: ~500-800 characters
-   Format: Three parts separated by dots (.)
-   Starts: eyJhbG
+   Length: Variable (typically 40-100 characters)
+   Format: Single string (no dots)
+   Starts: sb_secret_
+   
+   Note: This is the NEW key format. Legacy keys started with eyJhbG
    ```
 
 9. **Copy the key SECURELY**
@@ -512,9 +517,9 @@ Once service role key is securely in ~/.zshrc:
 ```
 1. Private browser → supabase.com/dashboard
 2. Login → Select "Alex AI" project
-3. Project Settings (bottom left) → API
-4. Find "service_role" key
-5. Click copy icon 📋
+3. Project Settings (bottom left) → API Keys
+4. Scroll to "Secret keys" section → Find "default" key
+5. Click copy icon 📋 (key starts with sb_secret_...)
 6. Close browser immediately
 7. Terminal → backup ~/.zshrc
 8. Add: export SUPABASE_SERVICE_ROLE_KEY="[paste]"

@@ -46,9 +46,10 @@ You chose this before sleeping. Here's what to do:
 
 1. **Go to:** https://supabase.com/dashboard
 2. **Login** → Select your project (e.g., "trange-new-world" or "Alex AI")
-3. **Click:** Project Settings (bottom of left sidebar) → API
-4. **Find:** "service_role" key (NOT "anon")
-5. **Copy** the key (long string starting with `eyJhbG...`)
+3. **Click:** Project Settings (bottom of left sidebar) → API Keys
+4. **Scroll to:** "Secret keys" section (NOT "Publishable key")
+5. **Copy** the "default" secret key (starts with `sb_secret_...`)
+   - Click the copy icon 📋 or reveal eye icon 👁️ to see it
 6. **Come back here** with the key
 
 ### Step 2: Add Key to ~/.zshrc (1 minute)
