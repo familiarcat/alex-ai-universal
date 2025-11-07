@@ -64,7 +64,13 @@ async function run() {
 
     let action = 'skipped';
     if (ingestResult) {
-      action = ingestResult.success ? 'ingested' : `ingest failed (${ingestResult.warning})`;
+      if (ingestResult.success && ingestResult.via === 'supabase') {
+        action = 'stored directly in Supabase';
+      } else if (ingestResult.success) {
+        action = 'ingested via webhook';
+      } else {
+        action = `ingest failed (${ingestResult.warning})`;
+      }
     }
 
     log(`• ${crew.name}`);

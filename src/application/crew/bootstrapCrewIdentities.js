@@ -4,6 +4,7 @@ const { CREW_ROSTER, computeSimilarity } = require('../../domain/crew/identity')
 const { fetchIdentitySnippet } = require('../../infrastructure/memory-alpha/IdentityRepository');
 const { fetchLatestCrewMemory, isSupabaseConfigured } = require('../../infrastructure/supabase/CrewMemoryRepository');
 const { ingestCrewIdentity } = require('../../infrastructure/n8n/KnowledgeIngestClient');
+const { storeIdentitySnapshot } = require('../../infrastructure/supabase/KnowledgeBaseRepository');
 
 async function bootstrapCrewIdentities(options = {}) {
   const {
@@ -22,6 +23,30 @@ async function bootstrapCrewIdentities(options = {}) {
       ingestResult = await ingestCrewIdentity(crew, snippetResult.snippet, {
         sourceUrl: snippetResult.sourceUrl
       });
+
+      if (!ingestResult.success) {
+        const supabaseInsert = await storeIdentitySnapshot(crew, snippetResult.snippet, {
+          sourceUrl: snippetResult.sourceUrl
+        });
+
+        if (supabaseInsert.success) {
+          ingestResult = { success: true, via: 'supabase' };
+        } else {
+          ingestResult = {
+            success: false,
+            warning: supabaseInsert.warning,
+            via: 'supabase'
+          };
+        }
+      } else {
+        // Also persist to Supabase for durability, but ignore errors if webhook succeeded
+        const supabaseInsert = await storeIdentitySnapshot(crew, snippetResult.snippet, {
+          sourceUrl: snippetResult.sourceUrl
+        });
+        if (!supabaseInsert.success) {
+          warnings.push(supabaseInsert.warning);
+        }
+      }
     }
 
     const similarity = computeSimilarity(
