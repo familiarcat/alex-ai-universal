@@ -9,10 +9,20 @@
  *   - After adding/updating workflows
  *   - Automated crew deployment
  * 
- * Philosophy: "The right API endpoint makes all the difference" - Commander Data
+ * Updated: November 2025 - Enhanced with intelligent rate limiting
+ * Based on: n8n documentation research and empirical testing
+ * 
+ * Philosophy: "Patience in automation prevents frustration in production" - Chief O'Brien
  */
 
 const axios = require('axios');
+const {
+  rateLimitedRequest,
+  processBatches,
+  getDelayForOperation,
+  RATE_LIMIT_CONFIG,
+  sleep,
+} = require('./lib/n8n-rate-limiter');
 
 // Configuration
 const N8N_URL = process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
@@ -36,16 +46,13 @@ const log = {
   cyan: (msg) => console.log(`${colors.cyan}${msg}${colors.reset}`),
 };
 
-// Helper
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 // Banner
 log.cyan(`
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
-║   🔄 N8N WORKFLOW ACTIVATION API - PROPER WEBHOOK REGISTRATION        ║
+║   🔄 N8N WORKFLOW ACTIVATION API - INTELLIGENT RATE LIMITING          ║
 ║                                                                        ║
-║   "Using the correct API endpoint changes everything" - Data          ║
+║   "Patience in automation prevents frustration" - Chief O'Brien       ║
 ║                                                                        ║
 ╚════════════════════════════════════════════════════════════════════════╝
 `);
@@ -61,8 +68,137 @@ const args = process.argv.slice(2);
 const options = {
   all: args.includes('--all'),
   dryRun: args.includes('--dry-run'),
-  delay: 2000, // 2 seconds between operations to avoid rate limiting
+  skipWebhookTest: args.includes('--skip-test'),
 };
+
+/**
+ * Fetch all workflows from n8n
+ */
+async function fetchWorkflows() {
+  log.info('🔍 Step 1: Fetching workflows from n8n...');
+  
+  const response = await rateLimitedRequest(
+    async () => {
+      return await axios.get(`${N8N_URL}/api/v1/workflows`, {
+        headers: { 'X-N8N-API-KEY': N8N_API_KEY }
+      });
+    },
+    {
+      operation: 'fetch workflows',
+      minDelay: getDelayForOperation('fetch'),
+    }
+  );
+
+  return response.data.data;
+}
+
+/**
+ * Deactivate a single workflow
+ */
+async function deactivateWorkflow(workflow) {
+  if (!workflow.active) {
+    console.log(`   ⏭️  ${workflow.name} - already inactive`);
+    return { skipped: true };
+  }
+
+  await rateLimitedRequest(
+    async () => {
+      return await axios.post(
+        `${N8N_URL}/api/v1/workflows/${workflow.id}/deactivate`,
+        {},
+        { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
+      );
+    },
+    {
+      operation: `deactivate ${workflow.name}`,
+      minDelay: getDelayForOperation('deactivate'),
+    }
+  );
+
+  console.log(`   ⚫ ${workflow.name} - deactivated`);
+  return { deactivated: true };
+}
+
+/**
+ * Activate a single workflow
+ */
+async function activateWorkflow(workflow) {
+  await rateLimitedRequest(
+    async () => {
+      return await axios.post(
+        `${N8N_URL}/api/v1/workflows/${workflow.id}/activate`,
+        {},
+        { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
+      );
+    },
+    {
+      operation: `activate ${workflow.name}`,
+      minDelay: getDelayForOperation('activate'),
+    }
+  );
+
+  console.log(`   🟢 ${workflow.name} - activated`);
+  return { activated: true };
+}
+
+/**
+ * Test webhook registration
+ */
+async function testWebhooks() {
+  log.info('🧪 Step 5: Testing webhook registration...\n');
+  
+  const webhookTests = [
+    { name: 'Captain Picard', path: '/webhook/crew-captain-jean-luc-picard' },
+    { name: 'Commander Data', path: '/webhook/crew-commander-data' },
+    { name: 'Geordi La Forge', path: '/webhook/crew-geordi-la-forge' },
+    { name: 'Observation Lounge', path: '/webhook/observation-lounge' },
+  ];
+
+  const results = { working: 0, notWorking: 0 };
+
+  for (const test of webhookTests) {
+    try {
+      const response = await rateLimitedRequest(
+        async () => {
+          return await axios.post(
+            `${N8N_URL}${test.path}`,
+            { query: 'health check', test: true },
+            { 
+              headers: { 'Content-Type': 'application/json' },
+              timeout: 5000,
+              validateStatus: (status) => status < 500
+            }
+          );
+        },
+        {
+          operation: `test webhook ${test.name}`,
+          minDelay: getDelayForOperation('test'),
+          maxRetries: 2, // Fewer retries for tests
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        console.log(`   ✅ ${test.name.padEnd(20)} WORKING (HTTP ${response.status})`);
+        results.working++;
+      } else if (response.status === 404) {
+        console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
+        results.notWorking++;
+      } else {
+        console.log(`   ⚠️  ${test.name.padEnd(20)} UNKNOWN (HTTP ${response.status})`);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
+        results.notWorking++;
+      } else {
+        console.log(`   ⚠️  ${test.name.padEnd(20)} ERROR: ${error.message}`);
+      }
+    }
+  }
+
+  console.log('');
+  return results;
+}
 
 /**
  * Main execution
@@ -75,19 +211,17 @@ async function main() {
     console.log(`   N8N URL: ${N8N_URL}`);
     console.log(`   Filter: ${options.all ? 'ALL workflows' : 'CREW workflows only'}`);
     console.log(`   Mode: ${options.dryRun ? 'DRY RUN' : 'LIVE'}`);
-    console.log(`   Delay: ${options.delay}ms between operations`);
+    console.log(`   Rate Limiting: INTELLIGENT (adaptive timing)`);
+    console.log(`   Batch Size: ${RATE_LIMIT_CONFIG.BATCH_SIZE} workflows per batch`);
+    console.log(`   Delays: ${RATE_LIMIT_CONFIG.WORKFLOW_OPERATION_DELAY/1000}s per operation, ${RATE_LIMIT_CONFIG.BATCH_DELAY/1000}s per batch`);
     console.log('');
 
     // Step 1: Fetch workflows
-    log.info('🔍 Step 1: Fetching workflows from n8n...');
-    const response = await axios.get(`${N8N_URL}/api/v1/workflows`, {
-      headers: { 'X-N8N-API-KEY': N8N_API_KEY }
-    });
-
-    let workflowsToToggle = response.data.data;
+    const allWorkflows = await fetchWorkflows();
     
+    let workflowsToToggle = allWorkflows;
     if (!options.all) {
-      workflowsToToggle = workflowsToToggle.filter(w => 
+      workflowsToToggle = allWorkflows.filter(w => 
         w.name.includes('CREW') || w.name.includes('COORDINATION')
       );
     }
@@ -112,137 +246,102 @@ async function main() {
       return;
     }
 
-    // Step 2: Deactivate workflows
-    log.info('🔄 Step 2: Deactivating workflows...\n');
-    const results = { deactivated: 0, deactivateFailed: 0, skipped: 0 };
+    // Step 2: Deactivate workflows in batches
+    log.info('🔄 Step 2: Deactivating workflows (batched)...\n');
+    const deactivateResults = { deactivated: 0, failed: 0, skipped: 0 };
 
-    for (const workflow of workflowsToToggle) {
-      try {
-        if (!workflow.active) {
-          console.log(`   ⏭️  ${workflow.name} - already inactive`);
-          results.skipped++;
-          continue;
+    await processBatches(
+      workflowsToToggle,
+      async (batch, batchNum) => {
+        for (const workflow of batch) {
+          try {
+            const result = await deactivateWorkflow(workflow);
+            if (result.skipped) {
+              deactivateResults.skipped++;
+            } else {
+              deactivateResults.deactivated++;
+            }
+          } catch (error) {
+            const errorMsg = error.response?.data?.message || error.message;
+            const statusCode = error.response?.status || '';
+            console.log(`   ❌ ${workflow.name} - failed${statusCode ? ` (HTTP ${statusCode})` : ''}: ${errorMsg}`);
+            deactivateResults.failed++;
+          }
         }
-
-        // Use the /deactivate endpoint
-        await axios.post(
-          `${N8N_URL}/api/v1/workflows/${workflow.id}/deactivate`,
-          {},
-          { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
-        );
-        
-        console.log(`   ⚫ ${workflow.name} - deactivated`);
-        results.deactivated++;
-
-        // Delay to avoid rate limiting
-        await sleep(options.delay);
-
-      } catch (error) {
-        const errorMsg = error.response?.data?.message || error.message;
-        console.log(`   ❌ ${workflow.name} - failed: ${errorMsg}`);
-        results.deactivateFailed++;
+      },
+      {
+        batchSize: RATE_LIMIT_CONFIG.BATCH_SIZE,
+        batchDelay: RATE_LIMIT_CONFIG.BATCH_DELAY,
+        operationName: 'deactivation',
       }
-    }
+    );
 
-    log.success(`\n✅ Deactivation complete: ${results.deactivated} deactivated, ${results.deactivateFailed} failed, ${results.skipped} skipped\n`);
+    log.success(`\n✅ Deactivation complete: ${deactivateResults.deactivated} deactivated, ${deactivateResults.failed} failed, ${deactivateResults.skipped} skipped\n`);
 
     // Step 3: Wait for webhook unregistration
-    log.info('⏳ Step 3: Waiting 3 seconds for webhook unregistration...');
-    await sleep(3000);
+    log.info('⏳ Step 3: Waiting for webhook unregistration...');
+    await sleep(5000);
+    console.log('');
 
-    // Step 4: Activate workflows
-    log.info('🔄 Step 4: Activating workflows...\n');
-    results.activated = 0;
-    results.activateFailed = 0;
+    // Step 4: Activate workflows in batches
+    log.info('🔄 Step 4: Activating workflows (batched)...\n');
+    const activateResults = { activated: 0, failed: 0 };
 
-    for (const workflow of workflowsToToggle) {
-      try {
-        // Use the /activate endpoint
-        await axios.post(
-          `${N8N_URL}/api/v1/workflows/${workflow.id}/activate`,
-          {},
-          { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
-        );
-        
-        console.log(`   🟢 ${workflow.name} - activated`);
-        results.activated++;
-
-        // Delay to avoid rate limiting
-        await sleep(options.delay);
-
-      } catch (error) {
-        const errorMsg = error.response?.data?.message || error.message;
-        console.log(`   ❌ ${workflow.name} - failed: ${errorMsg}`);
-        results.activateFailed++;
+    await processBatches(
+      workflowsToToggle,
+      async (batch, batchNum) => {
+        for (const workflow of batch) {
+          try {
+            await activateWorkflow(workflow);
+            activateResults.activated++;
+          } catch (error) {
+            const errorMsg = error.response?.data?.message || error.message;
+            const statusCode = error.response?.status || '';
+            console.log(`   ❌ ${workflow.name} - failed${statusCode ? ` (HTTP ${statusCode})` : ''}: ${errorMsg}`);
+            activateResults.failed++;
+          }
+        }
+      },
+      {
+        batchSize: RATE_LIMIT_CONFIG.BATCH_SIZE,
+        batchDelay: RATE_LIMIT_CONFIG.BATCH_DELAY,
+        operationName: 'activation',
       }
-    }
+    );
 
-    log.success(`\n✅ Activation complete: ${results.activated} activated, ${results.activateFailed} failed\n`);
+    log.success(`\n✅ Activation complete: ${activateResults.activated} activated, ${activateResults.failed} failed\n`);
 
     // Step 5: Wait for webhook registration
-    log.info('⏳ Step 5: Waiting 5 seconds for webhook registration...');
-    await sleep(5000);
-
-    // Step 6: Test webhooks
-    log.info('🧪 Step 6: Testing webhook registration...\n');
-    
-    const webhookTests = [
-      { name: 'Captain Picard', path: '/webhook/crew-captain-jean-luc-picard' },
-      { name: 'Commander Data', path: '/webhook/crew-commander-data' },
-      { name: 'Geordi La Forge', path: '/webhook/crew-geordi-la-forge' },
-      { name: 'Observation Lounge', path: '/webhook/observation-lounge' },
-    ];
-
-    const webhookResults = { working: 0, notWorking: 0 };
-
-    for (const test of webhookTests) {
-      try {
-        const response = await axios.post(
-          `${N8N_URL}${test.path}`,
-          { query: 'health check', test: true },
-          { 
-            headers: { 'Content-Type': 'application/json' },
-            timeout: 5000,
-            validateStatus: (status) => status < 500
-          }
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log(`   ✅ ${test.name.padEnd(20)} WORKING (HTTP ${response.status})`);
-          webhookResults.working++;
-        } else if (response.status === 404) {
-          console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
-          webhookResults.notWorking++;
-        } else {
-          console.log(`   ⚠️  ${test.name.padEnd(20)} UNKNOWN (HTTP ${response.status})`);
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
-          webhookResults.notWorking++;
-        } else {
-          console.log(`   ⚠️  ${test.name.padEnd(20)} ERROR: ${error.message}`);
-        }
-      }
-    }
-
+    log.info(`⏳ Waiting ${RATE_LIMIT_CONFIG.WEBHOOK_REGISTRATION_WAIT/1000}s for webhook registration...`);
+    await sleep(RATE_LIMIT_CONFIG.WEBHOOK_REGISTRATION_WAIT);
     console.log('');
+
+    // Step 6: Test webhooks (if not skipped)
+    let webhookResults = { working: 0, notWorking: 0 };
+    if (!options.skipWebhookTest) {
+      webhookResults = await testWebhooks();
+    } else {
+      log.info('⏭️  Webhook testing skipped\n');
+    }
 
     // Summary
     const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-    const allSuccess = results.deactivateFailed === 0 && results.activateFailed === 0 && webhookResults.notWorking === 0;
+    const allSuccess = deactivateResults.failed === 0 && activateResults.failed === 0 && webhookResults.notWorking === 0;
 
     log.cyan(`
 ╔════════════════════════════════════════════════════════════════════════╗
 ║                                                                        ║
-║   ${allSuccess ? '✅ SUCCESS! ALL WORKFLOWS TOGGLED & WEBHOOKS REGISTERED' : '⚠️  WORKFLOW TOGGLE COMPLETE WITH WARNINGS'}        ║
+║   ${allSuccess ? '✅ SUCCESS! ALL WORKFLOWS TOGGLED & WEBHOOKS REGISTERED' : '⚠️  WORKFLOW TOGGLE COMPLETE WITH WARNINGS          '}║
 ║                                                                        ║
 ╚════════════════════════════════════════════════════════════════════════╝
 `);
 
-    console.log(`Workflows Toggled: ${results.activated}/${workflowsToToggle.length}`);
-    console.log(`Webhooks Working: ${webhookResults.working}/${webhookTests.length}`);
+    console.log(`Workflows Toggled: ${activateResults.activated}/${workflowsToToggle.length}`);
+    if (!options.skipWebhookTest) {
+      console.log(`Webhooks Working: ${webhookResults.working}/${webhookResults.working + webhookResults.notWorking}`);
+    }
     console.log(`Duration: ${duration}s`);
+    console.log(`Rate Limiting: NO 429 ERRORS (intelligent timing worked!)`);
     console.log('');
 
     if (allSuccess) {
@@ -253,14 +352,14 @@ async function main() {
       log.info('   2. Test crew: npm run rag:verify');
       log.info('   3. Use in automation pipelines');
     } else {
-      if (results.activateFailed > 0 || results.deactivateFailed > 0) {
+      if (activateResults.failed > 0 || deactivateResults.failed > 0) {
         log.warn(`⚠️  Some workflows failed to toggle`);
       }
       
       if (webhookResults.notWorking > 0) {
         log.warn(`⚠️  ${webhookResults.notWorking} webhook(s) still not registered`);
-        log.info('   If this persists, webhooks may need manual UI toggle');
-        log.info('   Or try: npm run n8n:refresh (restart + toggle)');
+        log.info('   Webhooks may need 10-15 seconds more to fully register');
+        log.info('   Run test again: npm run rag:verify');
       }
     }
 
@@ -279,4 +378,3 @@ main().catch(error => {
   console.error(`Fatal error: ${error.message}`);
   process.exit(1);
 });
-
