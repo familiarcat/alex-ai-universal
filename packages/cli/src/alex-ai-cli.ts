@@ -37,27 +37,31 @@ class NPXCLIHandler {
   async handleEngagement(message: string): Promise<void> {
     try {
       const response = await this.core.processMessage(message);
-      
-      if (response.success) {
+
+      if (response && response.success) {
         console.log('\n🤖 Alex AI Response:');
         console.log('==================');
-        console.log(response.coordinatedResponse);
-        
-        if (response.crewMembers.length > 0) {
+        console.log(response.coordinatedResponse ?? response.message ?? '');
+
+        const crewMembers = Array.isArray(response.crewMembers) ? response.crewMembers : [];
+        const ragInsights = Array.isArray(response.ragInsights) ? response.ragInsights : [];
+
+        if (crewMembers.length > 0) {
           console.log('\n👥 Crew Members Involved:');
-          response.crewMembers.forEach(member => {
+          crewMembers.forEach(member => {
             console.log(`  • ${member.name} - ${member.role}`);
           });
         }
-        
-        if (response.ragInsights.length > 0) {
+
+        if (ragInsights.length > 0) {
           console.log('\n🧠 RAG Insights:');
-          response.ragInsights.forEach(insight => {
+          ragInsights.forEach(insight => {
             console.log(`  • ${insight}`);
           });
         }
       } else {
-        console.error(`❌ Alex AI Error: ${response.message}`);
+        const messageText = response?.message ?? 'Unknown error';
+        console.error(`❌ Alex AI Error: ${messageText}`);
       }
     } catch (error: any) {
       console.error(`❌ NPX engagement failed: ${error.message}`);

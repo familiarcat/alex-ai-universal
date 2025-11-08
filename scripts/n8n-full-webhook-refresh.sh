@@ -38,6 +38,12 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
+# Rate limiting / caching configuration
+API_DELAY_MS="${N8N_API_DELAY_MS:-1500}"
+WORKFLOW_CACHE="$(mktemp)"
+export API_DELAY_MS WORKFLOW_CACHE
+trap 'rm -f "$WORKFLOW_CACHE"' EXIT
+
 echo -e "${CYAN}"
 cat << "EOF"
 ╔════════════════════════════════════════════════════════════════════════╗
@@ -57,7 +63,8 @@ echo "   1. Deactivate all crew workflows (via API)"
 echo "   2. Restart n8n Docker container (clear cache)"
 echo "   3. Activate all crew workflows (via API)"
 echo "   4. Prime crew identities from Memory Alpha"
-echo "   5. Test webhook registration"
+echo "   5. Warm webhooks inside the container (server-side)"
+echo "   6. Test webhook registration"
 echo ""
 echo -e "${YELLOW}⏱️  Expected duration: ~1 minute${NC}"
 echo ""
@@ -71,6 +78,69 @@ fi
 echo ""
 
 ################################################################################
+# PHASE 0: Gather workflow metadata (cached for subsequent phases)
+################################################################################
+
+echo -e "${BLUE}🔍 Phase 0: Gathering crew workflow metadata...${NC}"
+
+WORKFLOW_TOTAL=$(node <<'NODE'
+const axios = require('axios');
+const fs = require('fs');
+
+const N8N_URL = process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
+const N8N_API_KEY = process.env.N8N_API_KEY;
+const CACHE_PATH = process.env.WORKFLOW_CACHE;
+
+(async () => {
+  const listResponse = await axios.get(`${N8N_URL}/api/v1/workflows`, {
+    headers: { 'X-N8N-API-KEY': N8N_API_KEY }
+  });
+
+  const workflows = listResponse.data.data || [];
+  const targets = workflows.filter(w =>
+    /CREW|COORDINATION|KNOWLEDGE INGEST|ANTI-HALLUCINATION|PROJECT/i.test(w.name)
+  );
+
+  const enriched = [];
+
+  for (const wf of targets) {
+    const detail = await axios.get(`${N8N_URL}/api/v1/workflows/${wf.id}`, {
+      headers: { 'X-N8N-API-KEY': N8N_API_KEY }
+    });
+
+    const webhookNodes = (detail.data.nodes || [])
+      .filter(node => node.type === 'n8n-nodes-base.webhook')
+      .map(node => ({
+        method: (node.parameters?.httpMethod || 'POST').toUpperCase(),
+        path: node.parameters?.path || ''
+      }))
+      .filter(node => node.path);
+
+    enriched.push({
+      id: wf.id,
+      name: wf.name,
+      active: wf.active,
+      webhooks: webhookNodes
+    });
+  }
+
+  fs.writeFileSync(CACHE_PATH, JSON.stringify(enriched, null, 2));
+  console.log(enriched.length);
+})().catch(error => {
+  console.error(error.message || error);
+  process.exit(1);
+});
+NODE
+)
+
+if [[ -z "$WORKFLOW_TOTAL" ]]; then
+  echo -e "${RED}❌ Failed to cache workflow metadata${NC}"
+  exit 1
+fi
+
+echo -e "   ${GREEN}Cached metadata for ${WORKFLOW_TOTAL} workflows${NC}\n"
+
+################################################################################
 # PHASE 1: Deactivate workflows via API
 ################################################################################
 
@@ -79,39 +149,39 @@ node scripts/n8n-toggle-workflows-activate-api.js --dry-run > /dev/null 2>&1 || 
 
 # Actually deactivate (just the deactivation part)
 echo "   Running deactivation..."
-node -e "
+node <<'NODE'
 const axios = require('axios');
+const fs = require('fs');
+
 const N8N_URL = process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
 const N8N_API_KEY = process.env.N8N_API_KEY;
+const CACHE_PATH = process.env.WORKFLOW_CACHE;
+const delay = Number(process.env.API_DELAY_MS || '1500');
 
-async function deactivateAll() {
-  const response = await axios.get(\`\${N8N_URL}/api/v1/workflows\`, {
-    headers: { 'X-N8N-API-KEY': N8N_API_KEY }
-  });
-  
-  const crewWorkflows = response.data.data.filter(w => 
-    w.name.includes('CREW') || w.name.includes('COORDINATION')
-  ).filter(w => w.active);
-  
-  console.log(\`   Found \${crewWorkflows.length} active workflows\`);
-  
-  for (const wf of crewWorkflows) {
+(async () => {
+  const workflows = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf8'));
+  const active = workflows.filter(w => w.active);
+  console.log(`   Found ${active.length} active workflows`);
+
+  for (const wf of active) {
     try {
-      await axios.post(
-        \`\${N8N_URL}/api/v1/workflows/\${wf.id}/deactivate\`,
-        {},
-        { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
-      );
-      console.log(\`   ⚫ \${wf.name.substring(0, 50)}...\`);
-      await new Promise(r => setTimeout(r, 1500));
-    } catch (e) {
-      console.log(\`   ❌ Failed: \${wf.name.substring(0, 50)}\`);
+      await axios.post(`${N8N_URL}/api/v1/workflows/${wf.id}/deactivate`, {}, {
+        headers: { 'X-N8N-API-KEY': N8N_API_KEY }
+      });
+      console.log(`   ⚫ ${wf.name.substring(0, 50)}...`);
+    } catch (error) {
+      console.log(`   ❌ Failed: ${wf.name.substring(0, 50)}`);
+    }
+
+    if (delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
-}
-
-deactivateAll().catch(console.error);
-"
+})().then(() => process.exit(0)).catch(error => {
+  console.error(error.message || error);
+  process.exit(1);
+});
+NODE
 
 echo -e "${GREEN}✅ Phase 1 complete${NC}\n"
 sleep 2
@@ -132,39 +202,38 @@ sleep 3
 
 echo -e "${BLUE}🔄 Phase 3: Activating workflows via activation API...${NC}"
 
-node -e "
+node <<'NODE'
 const axios = require('axios');
+const fs = require('fs');
+
 const N8N_URL = process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
 const N8N_API_KEY = process.env.N8N_API_KEY;
+const CACHE_PATH = process.env.WORKFLOW_CACHE;
+const delay = Number(process.env.API_DELAY_MS || '1500');
 
-async function activateAll() {
-  const response = await axios.get(\`\${N8N_URL}/api/v1/workflows\`, {
-    headers: { 'X-N8N-API-KEY': N8N_API_KEY }
-  });
-  
-  const crewWorkflows = response.data.data.filter(w => 
-    w.name.includes('CREW') || w.name.includes('COORDINATION')
-  );
-  
-  console.log(\`   Found \${crewWorkflows.length} workflows to activate\`);
-  
-  for (const wf of crewWorkflows) {
+(async () => {
+  const workflows = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf8'));
+  console.log(`   Found ${workflows.length} workflows to activate`);
+
+  for (const wf of workflows) {
     try {
-      await axios.post(
-        \`\${N8N_URL}/api/v1/workflows/\${wf.id}/activate\`,
-        {},
-        { headers: { 'X-N8N-API-KEY': N8N_API_KEY } }
-      );
-      console.log(\`   🟢 \${wf.name.substring(0, 50)}...\`);
-      await new Promise(r => setTimeout(r, 1500));
-    } catch (e) {
-      console.log(\`   ❌ Failed: \${wf.name.substring(0, 50)}\`);
+      await axios.post(`${N8N_URL}/api/v1/workflows/${wf.id}/activate`, {}, {
+        headers: { 'X-N8N-API-KEY': N8N_API_KEY }
+      });
+      console.log(`   🟢 ${wf.name.substring(0, 50)}...`);
+    } catch (error) {
+      console.log(`   ❌ Failed: ${wf.name.substring(0, 50)}`);
+    }
+
+    if (delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
-}
-
-activateAll().catch(console.error);
-"
+})().then(() => process.exit(0)).catch(error => {
+  console.error(error.message || error);
+  process.exit(1);
+});
+NODE
 
 echo -e "${GREEN}✅ Phase 3 complete${NC}\n"
 
@@ -183,10 +252,130 @@ echo ""
 sleep 2
 
 ################################################################################
-# PHASE 5: Test webhooks
+# PHASE 5: Server-side webhook warmup (inside container)
 ################################################################################
 
-echo -e "${BLUE}🧪 Phase 5: Testing webhook registration...${NC}"
+echo -e "${BLUE}🔥 Phase 5: Warming webhooks inside the n8n container...${NC}"
+
+WEBHOOK_LIST=$(node <<'NODE'
+const fs = require('fs');
+const CACHE_PATH = process.env.WORKFLOW_CACHE;
+const workflows = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf8')) || [];
+
+const lines = [];
+for (const wf of workflows) {
+  (wf.webhooks || []).forEach(hook => {
+    if (!hook.path) return;
+    const name = wf.name.replace(/\|/g, '-');
+    lines.push(`${hook.method || 'POST'}|${hook.path}|${name}`);
+  });
+}
+console.log(lines.join('\n'));
+NODE
+)
+
+if [[ -z "$WEBHOOK_LIST" ]]; then
+  echo -e "   ${YELLOW}⚠️  No webhook-enabled workflows discovered; skipping warmup${NC}\n"
+else
+  SSH_USER="${N8N_SSH_USER:-ubuntu}"
+  SSH_HOST="${N8N_SSH_HOST:-n8n.pbradygeorgen.com}"
+  SSH_KEY="${N8N_SSH_KEY:-$HOME/.ssh/id_rsa}"
+  INSTANCE_ID="${N8N_EC2_INSTANCE_ID:-i-0afdf313f61f22df0}"
+  AVAIL_ZONE="${N8N_EC2_AZ:-us-east-2b}"
+  AWS_REGION="${N8N_EC2_REGION:-us-east-2}"
+
+  SSH_TARGET="$SSH_HOST"
+  if command -v aws >/dev/null 2>&1; then
+    EC2_IP=$(aws ec2 describe-instances \
+      --instance-ids "$INSTANCE_ID" \
+      --region "$AWS_REGION" \
+      --query 'Reservations[0].Instances[0].PublicIpAddress' \
+      --output text 2>/dev/null || echo "")
+    if [[ -n "$EC2_IP" && "$EC2_IP" != "None" ]]; then
+      SSH_TARGET="$EC2_IP"
+      echo -e "   ${GREEN}Using EC2 public IP: $SSH_TARGET${NC}"
+    else
+      echo -e "   ${YELLOW}Falling back to SSH host: $SSH_HOST${NC}"
+    fi
+  fi
+
+  ensure_ssh_access() {
+    if ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" exit 2>/dev/null; then
+      return 0
+    fi
+
+    if command -v aws >/dev/null 2>&1 && [[ -f "$HOME/.ssh/id_rsa.pub" ]]; then
+      echo "   Injecting SSH key via EC2 Instance Connect..."
+      aws ec2-instance-connect send-ssh-public-key \
+        --instance-id "$INSTANCE_ID" \
+        --availability-zone "$AVAIL_ZONE" \
+        --instance-os-user "$SSH_USER" \
+        --ssh-public-key "file://$HOME/.ssh/id_rsa.pub" \
+        --region "$AWS_REGION" >/dev/null 2>&1 || true
+      sleep 3
+    fi
+
+    ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" exit 2>/dev/null
+  }
+
+  if ! ensure_ssh_access; then
+    echo -e "   ${YELLOW}⚠️  Unable to reach EC2 host; skipping container warmup${NC}\n"
+  else
+    echo -e "   ${BLUE}📡 Establishing remote session for warmup...${NC}"
+
+    CONTAINER_NAME=$(ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" \
+      "docker ps --format '{{.Names}}' | grep -i n8n | head -1" 2>/dev/null || echo "")
+
+    if [[ -z "$CONTAINER_NAME" ]]; then
+      echo -e "   ${YELLOW}⚠️  No running n8n container detected; skipping warmup${NC}\n"
+    else
+      ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" "cat <<'EOF' >/tmp/crew-webhooks.list
+$WEBHOOK_LIST
+EOF"
+
+      ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" "docker cp /tmp/crew-webhooks.list $CONTAINER_NAME:/tmp/crew-webhooks.list"
+
+      ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" "docker exec $CONTAINER_NAME /bin/sh -s <<'EOSWARM'
+set -e
+echo \"      Running warmup inside container $CONTAINER_NAME\"
+SUCCESS=0
+TOTAL=0
+PAYLOAD='{\"warmup\":true,\"source\":\"crew-auto-warmup\"}'
+while IFS='|' read -r METHOD PATH NAME; do
+  [ -z \"\$PATH\" ] && continue
+  TOTAL=\$((TOTAL + 1))
+  METHOD=\$(echo \"\$METHOD\" | tr '[:lower:]' '[:upper:]')
+  if [ \"\$METHOD\" = \"GET\" ]; then
+    TEST_STATUS=\$(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5678/webhook-test/\$PATH\" || echo 000)
+    PROD_STATUS=\$(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:5678/webhook/\$PATH\" || echo 000)
+  else
+    TEST_STATUS=\$(curl -s -o /dev/null -w \"%{http_code}\" -X \"\$METHOD\" -H \"Content-Type: application/json\" -d \"\$PAYLOAD\" \"http://localhost:5678/webhook-test/\$PATH\" || echo 000)
+    PROD_STATUS=\$(curl -s -o /dev/null -w \"%{http_code}\" -X \"\$METHOD\" -H \"Content-Type: application/json\" -d \"\$PAYLOAD\" \"http://localhost:5678/webhook/\$PATH\" || echo 000)
+  fi
+  if [ \"\$PROD_STATUS\" = \"200\" ] || [ \"\$PROD_STATUS\" = \"201\" ]; then
+    SUCCESS=\$((SUCCESS + 1))
+    echo \"      ✅ \$NAME (HTTP \$PROD_STATUS)\"
+  else
+    echo \"      ❌ \$NAME (test:\$TEST_STATUS prod:\$PROD_STATUS)\"
+  fi
+  sleep 1
+done < /tmp/crew-webhooks.list
+echo \"      Summary: \$SUCCESS/\$TOTAL production webhooks returned 200/201\"
+EOSWARM
+"
+
+      ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" "docker exec $CONTAINER_NAME rm -f /tmp/crew-webhooks.list >/dev/null 2>&1 || true"
+      ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" "$SSH_USER@$SSH_TARGET" "rm -f /tmp/crew-webhooks.list >/dev/null 2>&1 || true"
+      echo -e "   ${GREEN}✅ Server-side warmup complete${NC}\n"
+    fi
+  fi
+fi
+
+################################################################################
+# PHASE 6: Test webhooks
+################################################################################
+
+echo -e "${BLUE}🧪 Phase 6: Testing webhook registration...${NC}"
 echo "   Waiting 5 seconds for webhooks to register..."
 sleep 5
 

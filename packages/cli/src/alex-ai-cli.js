@@ -84,25 +84,27 @@ var NPXCLIHandler = /** @class */ (function () {
                         return [4 /*yield*/, this.core.processMessage(message)];
                     case 1:
                         response = _a.sent();
-                        if (response.success) {
+                    if (response && response.success) {
                             console.log('\n🤖 Alex AI Response:');
                             console.log('==================');
-                            console.log(response.coordinatedResponse);
-                            if (response.crewMembers.length > 0) {
+                        console.log((response.coordinatedResponse !== null && response.coordinatedResponse !== void 0 ? response.coordinatedResponse : response.message) || '');
+                        crewMembers = Array.isArray(response.crewMembers) ? response.crewMembers : [];
+                        ragInsights = Array.isArray(response.ragInsights) ? response.ragInsights : [];
+                        if (crewMembers.length > 0) {
                                 console.log('\n👥 Crew Members Involved:');
-                                response.crewMembers.forEach(function (member) {
+                            crewMembers.forEach(function (member) {
                                     console.log("  \u2022 ".concat(member.name, " - ").concat(member.role));
                                 });
                             }
-                            if (response.ragInsights.length > 0) {
+                        if (ragInsights.length > 0) {
                                 console.log('\n🧠 RAG Insights:');
-                                response.ragInsights.forEach(function (insight) {
+                            ragInsights.forEach(function (insight) {
                                     console.log("  \u2022 ".concat(insight));
                                 });
                             }
                         }
                         else {
-                            console.error("\u274C Alex AI Error: ".concat(response.message));
+                        console.error("\u274C Alex AI Error: ".concat((response === null || response === void 0 ? void 0 : response.message) || 'Unknown error'));
                         }
                         return [3 /*break*/, 4];
                     case 2:
