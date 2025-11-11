@@ -36,7 +36,7 @@ module.exports = {
   restoreMocks: true,
   
   // Module name mapping
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@alex-ai/(.*)$': '<rootDir>/packages/$1/src'
   },
   

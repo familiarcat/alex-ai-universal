@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-<<<<<<< HEAD
 
 /**
  * Simple Alex AI CLI - Minimal Working Version (JavaScript)
@@ -368,11 +367,8 @@ program
     console.log('  scenario-analysis - Comprehensive project scenario analysis');
     console.log('  crew-consciousness - Crew consciousness and project analysis');
     console.log('  anti-hallucination - Anti-hallucination system management');
-<<<<<<< HEAD
     console.log('  n8n-integration   - N8N bi-directional sync system');
     console.log('  debugging         - Cursor AI debugging system');
-=======
->>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5
     console.log('  help              - Show this help');
     console.log('');
     console.log('Examples:');
@@ -387,7 +383,6 @@ program
     console.log('  alex-ai anti-hallucination enable');
     console.log('  alex-ai anti-hallucination test');
     console.log('  alex-ai anti-hallucination dashboard');
-<<<<<<< HEAD
     console.log('  alex-ai n8n-integration sync');
     console.log('  alex-ai n8n-integration status');
     console.log('  alex-ai n8n-integration daemon');
@@ -437,28 +432,3 @@ program.parse();
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
-=======
-});
-// Initialize crew self-discovery CLI
-const crewDiscoveryCLI = new core_2.CrewSelfDiscoveryCLI();
-crewDiscoveryCLI.initializeCommands(program);
-// Initialize N8N workflow CLI
-const n8nWorkflowCLI = new core_3.N8NWorkflowCLI();
-n8nWorkflowCLI.initializeCommands(program);
-// Initialize scenario analysis CLI
-const scenarioAnalysisCLI = new core_4.ScenarioAnalysisCLI();
-scenarioAnalysisCLI.initializeCommands(program);
-// Initialize crew consciousness CLI
-const crewConsciousnessCLI = new core_5.CrewConsciousnessCLI();
-crewConsciousnessCLI.initializeCommands(program);
-// Initialize anti-hallucination CLI
-const antiHallucinationCLI = new anti_hallucination_cli_1.AntiHallucinationCLI();
-antiHallucinationCLI.setupCommands(program);
-// Parse command line arguments
-program.parse();
-// If no command provided, show help
-if (!process.argv.slice(2).length) {
-    program.outputHelp();
-}
-//# sourceMappingURL=simple-cli.js.map
->>>>>>> ab4898606e192fe0b56b73b7224a3746d57250d5

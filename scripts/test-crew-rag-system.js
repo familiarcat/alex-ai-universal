@@ -13,9 +13,28 @@
  */
 
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const { loadCrewCredentials } = require('./utils/load-crew-credentials');
+
+const creds = loadCrewCredentials();
 
 // n8n webhook base URL
-const N8N_BASE_URL = 'https://n8n.pbradygeorgen.com/webhook';
+const N8N_BASE_URL = (process.env.N8N_WEBHOOK_BASE || `${creds.n8n.baseUrl}/webhook`).replace(/\/$/, '');
+
+// Optional Supabase context for crew memories
+let supabase = null;
+try {
+  if (creds.supabase.url && creds.supabase.key) {
+    const { createClient } = require('@supabase/supabase-js');
+    supabase = createClient(creds.supabase.url, creds.supabase.key, {
+      auth: { persistSession: false },
+    });
+  }
+} catch (error) {
+  // Supabase context is optional; log later if used
+  supabase = null;
+}
 
 // Color codes for pretty output
 const colors = {
@@ -154,9 +173,64 @@ function printWarning(message) {
 }
 
 /**
+ * Load recent milestone context from MILESTONE_*.md files
+ */
+function loadMilestoneContext(limit = 5) {
+  try {
+    const root = process.cwd();
+    const milestoneFiles = fs
+      .readdirSync(root)
+      .filter((name) => /^MILESTONE.*\.md$/i.test(name))
+      .map((name) => ({
+        name,
+        fullPath: path.join(root, name),
+        mtime: fs.statSync(path.join(root, name)).mtimeMs,
+      }))
+      .sort((a, b) => b.mtime - a.mtime)
+      .slice(0, limit);
+
+    return milestoneFiles.map(({ name, fullPath }) => {
+      const content = fs.readFileSync(fullPath, 'utf8');
+      const snippet = content.split('\n').slice(0, 40).join('\n');
+      return {
+        file: name,
+        snippet,
+      };
+    });
+  } catch (error) {
+    printWarning(`Failed to load milestone context: ${error.message}`);
+    return [];
+  }
+}
+
+/**
+ * Fetch recent crew memories from Supabase (optional)
+ */
+async function fetchRecentMemories(limit = 5) {
+  if (!supabase) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('crew_memories')
+      .select('id, crew_member, content, created_at')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      printWarning(`Supabase memory fetch failed: ${error.message}`);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    printWarning(`Supabase memory fetch failed: ${error.message}`);
+    return [];
+  }
+}
+
+/**
  * Test a crew member's webhook
  */
-async function testCrewWebhook(crewMember) {
+async function testCrewWebhook(crewMember, sharedContext) {
   const url = `${N8N_BASE_URL}/${crewMember.webhook}`;
   
   try {
@@ -165,6 +239,7 @@ async function testCrewWebhook(crewMember) {
       source: 'Alex AI Crew Test System',
       priority: 'routine',
       timestamp: new Date().toISOString(),
+      context: sharedContext,
     }, {
       timeout: 30000,
       headers: {
@@ -188,7 +263,7 @@ async function testCrewWebhook(crewMember) {
 /**
  * Send observation to RAG system
  */
-async function sendObservationToRAG(crewMember) {
+async function sendObservationToRAG(crewMember, sharedContext) {
   const url = `${N8N_BASE_URL}/knowledge-ingest`;
   
   try {
@@ -202,6 +277,7 @@ async function sendObservationToRAG(crewMember) {
       metadata: {
         webhook: crewMember.webhook,
         test_run: true,
+        context: sharedContext,
       },
     }, {
       timeout: 15000,
@@ -226,7 +302,7 @@ async function sendObservationToRAG(crewMember) {
 /**
  * Test coordination workflow
  */
-async function testCoordinationWorkflow(workflow) {
+async function testCoordinationWorkflow(workflow, sharedContext) {
   const url = `${N8N_BASE_URL}/${workflow.webhook}`;
   
   try {
@@ -236,6 +312,7 @@ async function testCoordinationWorkflow(workflow) {
       goal: 'Validate end-to-end RAG system and crew coordination',
       timestamp: new Date().toISOString(),
       test: true,
+      context: sharedContext,
     }, {
       timeout: 15000,
       headers: {
@@ -259,7 +336,7 @@ async function testCoordinationWorkflow(workflow) {
 /**
  * Test Democratic Observation Lounge collaboration
  */
-async function testObservationLoungeCollaboration() {
+async function testObservationLoungeCollaboration(sharedContext) {
   const url = `${N8N_BASE_URL}/coordination-observation-lounge`;
   
   const collaborationTask = {
@@ -273,6 +350,7 @@ async function testObservationLoungeCollaboration() {
     })),
     timestamp: new Date().toISOString(),
     mode: 'democratic_collaboration',
+    sharedContext,
   };
   
   try {
@@ -350,6 +428,24 @@ async function runTests() {
   console.log('╚═══════════════════════════════════════════════════════════════════════════════╝');
   console.log(colors.reset);
   
+  const milestoneContext = loadMilestoneContext();
+  const recentMemories = await fetchRecentMemories(5);
+  const sharedContext = {
+    milestoneContext,
+    recentMemories,
+    generatedAt: new Date().toISOString(),
+  };
+
+  if (milestoneContext.length === 0) {
+    printWarning('No MILESTONE_*.md files found for context enrichment.');
+  }
+  if (supabase && recentMemories.length === 0) {
+    printWarning('Supabase connection established but no recent memories were retrieved.');
+  }
+  if (!supabase) {
+    printWarning('Supabase credentials not available; skipping crew memory enrichment.');
+  }
+
   const results = [];
   
   // Phase 1: Test all crew member webhooks
@@ -357,7 +453,7 @@ async function runTests() {
   printInfo(`Testing ${crewMembers.length} crew member webhooks...`);
   
   for (const crewMember of crewMembers) {
-    const result = await testCrewWebhook(crewMember);
+    const result = await testCrewWebhook(crewMember, sharedContext);
     results.push({ ...result, type: 'webhook' });
     // Small delay to avoid overwhelming the server
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -368,7 +464,7 @@ async function runTests() {
   printInfo('Sending crew observations to Supabase RAG system...');
   
   for (const crewMember of crewMembers) {
-    const result = await sendObservationToRAG(crewMember);
+    const result = await sendObservationToRAG(crewMember, sharedContext);
     results.push({ ...result, type: 'rag' });
     // Small delay to allow RAG processing
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -379,14 +475,14 @@ async function runTests() {
   printInfo('Testing crew coordination systems...');
   
   for (const workflow of coordinationWorkflows) {
-    const result = await testCoordinationWorkflow(workflow);
+    const result = await testCoordinationWorkflow(workflow, sharedContext);
     results.push({ ...result, type: 'coordination' });
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   
   // Phase 4: Test Democratic Observation Lounge
   printHeader('PHASE 4: DEMOCRATIC OBSERVATION LOUNGE COLLABORATION');
-  const collaborationResult = await testObservationLoungeCollaboration();
+  const collaborationResult = await testObservationLoungeCollaboration(sharedContext);
   results.push({ ...collaborationResult, type: 'collaboration' });
   
   // Print summary

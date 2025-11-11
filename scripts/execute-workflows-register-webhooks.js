@@ -11,26 +11,84 @@
  */
 
 const axios = require('axios');
+const { loadCrewCredentials } = require('./utils/load-crew-credentials');
 
-const N8N_API_BASE = 'https://n8n.pbradygeorgen.com/api/v1';
-const N8N_API_KEY = process.env.N8N_API_KEY || '';
+const creds = loadCrewCredentials();
+const N8N_API_KEY = creds.n8n.apiKey || '';
+if (!N8N_API_KEY) {
+  console.error('❌ N8N API key not found. Set N8N_OWNER_API_KEY or N8N_API_KEY in your environment.');
+  process.exit(1);
+}
 
-// Workflow IDs to execute (from the n8n UI - these need to be fetched)
-const workflowsToExecute = [
-  { name: 'Captain Jean-Luc Picard', pattern: 'Captain Jean-Luc Picard' },
-  { name: 'Commander William Riker', pattern: 'Commander William Riker' },
-  { name: 'Commander Data', pattern: 'Commander Data' },
-  { name: 'Geordi La Forge', pattern: 'Geordi La Forge' },
-  { name: 'Lieutenant Worf', pattern: 'Lieutenant Worf' },
-  { name: 'Counselor Deanna Troi', pattern: 'Counselor Deanna Troi' },
-  { name: 'Dr. Beverly Crusher', pattern: 'Dr. Beverly Crusher' },
-  { name: 'Lieutenant Uhura', pattern: 'Lieutenant Uhura' },
-  { name: 'Chief Miles O\'Brien', pattern: 'Chief Miles O\'Brien' },
-  { name: 'Quark', pattern: 'Quark' },
-  { name: 'Democratic Collaboration', pattern: 'Democratic Collaboration' },
-  { name: 'Observation Lounge', pattern: 'Observation Lounge' },
-  { name: 'Knowledge Ingest', pattern: 'Knowledge Ingest' },
-];
+const apiClient = axios.create({
+  baseURL: creds.n8n.baseUrl,
+  headers: {
+    'X-N8N-API-KEY': N8N_API_KEY,
+    'Content-Type': 'application/json',
+  },
+  timeout: 30000,
+  withCredentials: true,
+});
+
+let sessionCookie;
+let sessionClient;
+
+async function getSessionClient(force = false) {
+  if (sessionClient && sessionCookie && !force) {
+    return sessionClient;
+  }
+
+  const email = creds.n8n.email;
+  const password = creds.n8n.password;
+
+  if (!email || !password) {
+    printError(
+      'Owner session required for manual execution. Set N8N_EMAIL and N8N_PASSWORD in your environment.'
+    );
+    return null;
+  }
+
+  try {
+    printInfo('Obtaining n8n owner session for manual workflow execution...');
+    const response = await axios.post(
+      `${creds.n8n.baseUrl}/rest/login`,
+      {
+        emailOrLdapLoginId: email,
+        password,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 15000,
+      }
+    );
+
+    const setCookie = response.headers['set-cookie'];
+    const authCookie = Array.isArray(setCookie)
+      ? setCookie.find((cookie) => cookie.startsWith('n8n-auth='))
+      : setCookie;
+
+    if (!authCookie) {
+      printError('Session login succeeded but no n8n-auth cookie was returned.');
+      return null;
+    }
+
+    sessionCookie = authCookie.split(';')[0];
+    sessionClient = axios.create({
+      baseURL: creds.n8n.baseUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: sessionCookie,
+      },
+      timeout: 30000,
+      withCredentials: true,
+    });
+
+    return sessionClient;
+  } catch (error) {
+    printError(`Failed to create owner session: ${error.message}`);
+    return null;
+  }
+}
 
 const colors = {
   reset: '\x1b[0m',
@@ -62,11 +120,7 @@ function printInfo(message) {
 
 async function getAllWorkflows() {
   try {
-    const response = await axios.get(`${N8N_API_BASE}/workflows`, {
-      headers: {
-        'X-N8N-API-KEY': N8N_API_KEY,
-      },
-    });
+    const response = await apiClient.get('/api/v1/workflows');
     return response.data.data || response.data;
   } catch (error) {
     printError(`Failed to fetch workflows: ${error.message}`);
@@ -74,38 +128,105 @@ async function getAllWorkflows() {
   }
 }
 
+async function fetchWorkflow(workflowId, workflowName) {
+  try {
+    const response = await apiClient.get(`/api/v1/workflows/${workflowId}`);
+    const data = response.data?.data || response.data;
+    if (!data || !data.id) {
+      printError(`${workflowName} - Unable to load workflow definition for manual run.`);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    printError(`${workflowName} - Failed to fetch workflow: ${error.message}`);
+    return null;
+  }
+}
+
+function sanitizeWorkflowData(workflow) {
+  const {
+    id,
+    name,
+    nodes,
+    connections,
+    settings,
+    active,
+    staticData,
+    pinData,
+    versionId,
+    meta,
+    tags,
+  } = workflow;
+
+  return {
+    id,
+    name,
+    nodes,
+    connections,
+    settings: settings || {},
+    active: active ?? false,
+    staticData: staticData ?? null,
+    pinData,
+    versionId,
+    meta,
+    tags,
+  };
+}
+
+function buildManualRunPayload(workflow) {
+  return {
+    workflowData: sanitizeWorkflowData(workflow),
+    runData: {},
+  };
+}
+
 async function executeWorkflow(workflowId, workflowName) {
   try {
     printInfo(`Executing ${workflowName} (ID: ${workflowId})...`);
-    
-    const response = await axios.post(
-      `${N8N_API_BASE}/workflows/${workflowId}/execute`,
-      {},
-      {
-        headers: {
-          'X-N8N-API-KEY': N8N_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        timeout: 30000,
-      }
+
+    const workflow = await fetchWorkflow(workflowId, workflowName);
+    if (!workflow) {
+      return { success: false, workflowName, error: 'workflow-load-failed' };
+    }
+
+    const payload = buildManualRunPayload(workflow);
+    const sessionAwareClient = await getSessionClient();
+    if (!sessionAwareClient) {
+      return { success: false, workflowName, error: 'session-login-failed' };
+    }
+
+    const response = await sessionAwareClient.post(
+      `/rest/workflows/${workflowId}/run`,
+      payload
     );
-    
+
     if (response.status === 200 || response.status === 201) {
-      printSuccess(`${workflowName} - Executed successfully (webhook now registered)`);
+      const waiting = response.data?.waitingForWebhook;
+      printInfo(
+        `${workflowName} - Manual run response: ${JSON.stringify(response.data ?? {})}`
+      );
+      if (waiting) {
+        printSuccess(`${workflowName} - Manual execution waiting for webhook (webhook registered)`);
+      } else {
+        printSuccess(`${workflowName} - Manual execution triggered (status ${response.status})`);
+      }
       return { success: true, workflowName };
-    } else {
-      printError(`${workflowName} - Unexpected status: ${response.status}`);
-      return { success: false, workflowName, error: `Status ${response.status}` };
     }
+
+    printError(`${workflowName} - Unexpected status: ${response.status}`);
+    return { success: false, workflowName, error: `Status ${response.status}` };
   } catch (error) {
-    // Some workflows might fail execution if they require input, but that's OK
-    // The webhook should still register
-    if (error.response && error.response.status === 400) {
-      printSuccess(`${workflowName} - Triggered (webhook registered, execution expected input)`);
-      return { success: true, workflowName, note: 'Expected input error (OK)' };
-    }
-    
     printError(`${workflowName} - Execution failed: ${error.message}`);
+    const status = error.response?.status;
+    const details = error.response?.data;
+    if (status) {
+      printError(`${workflowName} - HTTP ${status} response: ${JSON.stringify(details)}`);
+      if (status === 401 || status === 403) {
+        sessionCookie = undefined;
+        sessionClient = undefined;
+      }
+      return { success: false, workflowName, error: `HTTP_${status}` };
+    }
     return { success: false, workflowName, error: error.message };
   }
 }
@@ -117,7 +238,7 @@ async function main() {
   const allWorkflows = await getAllWorkflows();
   
   if (allWorkflows.length === 0) {
-    printError('No workflows found or API access failed. Check N8N_API_KEY.');
+    printError('No workflows found or API access failed. Verify N8N_OWNER_API_KEY / N8N_API_KEY credentials.');
     process.exit(1);
   }
   

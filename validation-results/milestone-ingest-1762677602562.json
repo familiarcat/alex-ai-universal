@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "error": "Request failed with status code 404",
+  "status": 404,
+  "milestone": {
+    "title": "🚧 Milestone v2.4.1 — Webhook Diagnostics & Credential Audit",
+    "overview": "Executed the full crew automation sequence to register and validate every production webhook. Workflows are active, but endpoints still return HTTP 404/401, confirming we need owner-level n8n credentials before automation can complete.",
+    "deliverables": "",
+    "status": "",
+    "nextSteps": "1. Provision the workflow owner’s API key (or enable login tokens for automation).\n2. Re-run execution and registration scripts to register all endpoints.\n3. Confirm milestone ingestion via `push-milestone-to-rag.js` once `knowledge-ingest` responds 200.\n\nUntil the owner credentials are in place, automation can only report failures—not fix them. This milestone captures the diagnostic state before we obtain those keys.",
+    "sourceFile": "MILESTONE_v2.4.1_WEBHOOK_DIAGNOSTICS.md",
+    "timestamp": "2025-11-09T08:40:02.447Z"
+  }
+}

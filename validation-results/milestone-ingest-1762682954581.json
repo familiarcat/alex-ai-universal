@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "error": "Request failed with status code 404",
+  "status": 404,
+  "milestone": {
+    "title": "🧩 Milestone v2.4.3 — Shell & Secrets Refactor",
+    "overview": "# 🧩 Milestone v2.4.3 — Shell & Secrets Refactor",
+    "deliverables": "",
+    "status": "",
+    "nextSteps": "",
+    "sourceFile": "MILESTONE_v2.4.3_SHELL_SECRETS_REFACTOR.md",
+    "timestamp": "2025-11-09T10:09:14.380Z"
+  }
+}

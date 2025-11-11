@@ -1,0 +1,326 @@
+{
+  "summary": {
+    "total": 63,
+    "byCrew": {
+      "picard": 7,
+      "jean_luc_picard": 1,
+      "william_riker": 1,
+      "beverly_crusher": 1,
+      "data": 5,
+      "geordi_la_forge": 1,
+      "worf": 3,
+      "uhura": 3,
+      "counselor_deanna_troi": 1,
+      "quark": 3,
+      "system_wide": 24,
+      "cursor_ai_integration": 1,
+      "riker": 2,
+      "geordi": 2,
+      "counselor_troi": 2,
+      "crusher": 2,
+      "all_crew_members": 4
+    }
+  },
+  "issues": [
+    {
+      "id": 1,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 2,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 3,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 4,
+      "crew_member": "Captain Jean-Luc Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 5,
+      "crew_member": "Commander William Riker",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 6,
+      "crew_member": "Dr. Beverly Crusher",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 7,
+      "crew_member": "Commander Data",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 8,
+      "crew_member": "Lieutenant Commander Geordi La Forge",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 9,
+      "crew_member": "Lieutenant Worf",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 10,
+      "crew_member": "Lieutenant Uhura",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 11,
+      "crew_member": "Counselor Deanna Troi",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 13,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 14,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 15,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 16,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 17,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 18,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 19,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 20,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 21,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 22,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 23,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 24,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 25,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 26,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 27,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 28,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 29,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 30,
+      "crew_member": "Cursor-AI-Integration",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 31,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 32,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 33,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 34,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 35,
+      "crew_member": "Commander Data",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 36,
+      "crew_member": "Commander Data",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 37,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 38,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 39,
+      "crew_member": "System-Wide",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 40,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 41,
+      "crew_member": "Commander Data",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 42,
+      "crew_member": "Commander Riker",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 43,
+      "crew_member": "Lieutenant Commander Geordi",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 44,
+      "crew_member": "Lieutenant Worf",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 45,
+      "crew_member": "Counselor Troi",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 46,
+      "crew_member": "Dr. Crusher",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 47,
+      "crew_member": "Lieutenant Uhura",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 49,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 50,
+      "crew_member": "All Crew Members",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 51,
+      "crew_member": "All Crew Members",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 52,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 53,
+      "crew_member": "Commander Data",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 54,
+      "crew_member": "Commander Riker",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 55,
+      "crew_member": "Lieutenant Commander Geordi",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 56,
+      "crew_member": "Lieutenant Worf",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 57,
+      "crew_member": "Counselor Troi",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 58,
+      "crew_member": "Dr. Crusher",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 59,
+      "crew_member": "Lieutenant Uhura",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 61,
+      "crew_member": "Captain Picard",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 62,
+      "crew_member": "All Crew Members",
+      "reason": "missing_crew_profile"
+    },
+    {
+      "id": 63,
+      "crew_member": "All Crew Members",
+      "reason": "missing_crew_profile"
+    }
+  ]
+}
