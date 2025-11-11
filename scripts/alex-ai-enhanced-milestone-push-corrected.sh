@@ -179,8 +179,10 @@ analyze_todo_completion() {
     
     for file in "${todo_files[@]}"; do
         # Count completed TODOs (marked with ✅ or [x])
-        local completed=$(grep -c "✅\|\[x\]\|DONE\|COMPLETE" "$file" 2>/dev/null || echo "0")
-        local remaining=$(grep -c "TODO\|FIXME\|HACK\|NOTE" "$file" 2>/dev/null || echo "0")
+        local completed
+        local remaining
+        completed=$(grep -c "✅\|\[x\]\|DONE\|COMPLETE" "$file" 2>/dev/null) || completed=0
+        remaining=$(grep -c "TODO\|FIXME\|HACK\|NOTE" "$file" 2>/dev/null) || remaining=0
         
         completed_todos=$((completed_todos + completed))
         remaining_todos=$((remaining_todos + remaining))

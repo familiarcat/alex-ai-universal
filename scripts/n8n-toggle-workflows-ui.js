@@ -16,6 +16,8 @@
 
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Helper for delays
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -34,6 +36,7 @@ const BETWEEN_TOGGLE_DELAY = Number(process.env.N8N_UI_BETWEEN_TOGGLE_DELAY_MS |
 const POST_TOGGLE_PROPAGATION_DELAY = Number(process.env.N8N_UI_POST_TOGGLE_PROPAGATION_DELAY_MS || 15000);
 const INITIAL_LOAD_WAIT = Number(process.env.N8N_UI_INITIAL_LOAD_WAIT_MS || 12000);
 const MAX_NAV_ATTEMPTS = Number(process.env.N8N_UI_MAX_NAV_ATTEMPTS || 5);
+const OUTPUT_ROOT = path.join(process.cwd(), 'reports', 'n8n-toggle-runs');
 
 // Colors
 const colors = {
@@ -52,6 +55,46 @@ const log = {
   error: (msg) => console.log(`${colors.red}${msg}${colors.reset}`),
   cyan: (msg) => console.log(`${colors.cyan}${msg}${colors.reset}`),
 };
+
+async function ensureDirectory(dirPath) {
+  await fs.promises.mkdir(dirPath, { recursive: true });
+}
+
+async function isLoginScreen(page) {
+  return page.evaluate(() => {
+    const form = document.querySelector('form');
+    if (!form) return false;
+    const emailInput = form.querySelector('input[type="email"]');
+    const passwordInput = form.querySelector('input[type="password"]');
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (!emailInput || !passwordInput || !submitButton) return false;
+    const buttonText = submitButton.textContent || '';
+    return /sign\s*in/i.test(buttonText.trim());
+  });
+}
+
+async function ensureAuthenticated(page) {
+  const loginDetected = await isLoginScreen(page);
+  if (!loginDetected) {
+    return false;
+  }
+
+  if (!N8N_EMAIL || !N8N_PASSWORD) {
+    throw new Error('Login required but N8N_EMAIL or N8N_PASSWORD not set');
+  }
+
+  log.info('   🔐 Logging into n8n UI...');
+  await page.type('input[type="email"]', N8N_EMAIL, { delay: 40 });
+  await page.type('input[type="password"]', N8N_PASSWORD, { delay: 35 });
+
+  await Promise.all([
+    page.click('button[type="submit"]'),
+    page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 60000 }).catch(() => {}),
+  ]);
+
+  await sleep(INITIAL_LOAD_WAIT);
+  return true;
+}
 
 // Banner
 log.cyan(`
@@ -76,6 +119,18 @@ if (!N8N_API_KEY) {
 async function main() {
   const startTime = Date.now();
   let browser;
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const outputDir = path.join(OUTPUT_ROOT, timestamp);
+  const screenshotDir = path.join(outputDir, 'screenshots');
+  const summary = {
+    timestamp: new Date().toISOString(),
+    baseUrl: N8N_URL,
+    runDirectory: path.relative(process.cwd(), outputDir),
+    workflows: [],
+    errors: [],
+    webhookTests: [],
+  };
+  await ensureDirectory(screenshotDir);
   
   try {
     log.info('📋 Configuration:');
@@ -94,16 +149,25 @@ async function main() {
       w.name.includes('CREW') || w.name.includes('COORDINATION')
     );
 
-    log.success(`✅ Found ${crewWorkflows.length} crew/coordination workflows\n`);
+    const maxWorkflowsEnv = process.env.N8N_UI_MAX_WORKFLOWS
+      ? Number(process.env.N8N_UI_MAX_WORKFLOWS)
+      : null;
+    const workflowsToProcess = Number.isFinite(maxWorkflowsEnv) && maxWorkflowsEnv > 0
+      ? crewWorkflows.slice(0, maxWorkflowsEnv)
+      : crewWorkflows;
 
-    if (crewWorkflows.length === 0) {
+    log.success(`✅ Found ${crewWorkflows.length} crew/coordination workflows (processing ${workflowsToProcess.length})\n`);
+    summary.discoveredWorkflows = crewWorkflows.length;
+    summary.processedWorkflows = workflowsToProcess.length;
+
+    if (workflowsToProcess.length === 0) {
       log.warn('⚠️  No crew workflows to toggle');
       return;
     }
 
     // Display workflows
     log.info('📊 Workflows to toggle:');
-    crewWorkflows.forEach((w, i) => {
+    workflowsToProcess.forEach((w, i) => {
       const status = w.active ? '🟢' : '⚫';
       console.log(`   ${i + 1}. ${status} ${w.name}`);
     });
@@ -128,6 +192,10 @@ async function main() {
     });
 
     const page = await browser.newPage();
+    await page.setUserAgent(
+      process.env.N8N_UI_USER_AGENT ||
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+    );
     await page.setRequestInterception(true);
     page.on('request', (request) => {
       const resourceType = request.resourceType();
@@ -179,39 +247,34 @@ async function main() {
     log.info(`   ⏳ Waiting ${INITIAL_LOAD_WAIT / 1000}s for page to fully load...`);
     await sleep(INITIAL_LOAD_WAIT);
 
-    // Take a screenshot for debugging
-    await page.screenshot({ path: '/tmp/n8n-initial-load.png' });
-    log.info('   📸 Screenshot saved: /tmp/n8n-initial-load.png');
+    const initialScreenshot = path.join(screenshotDir, 'initial-load.png');
+    await page.screenshot({ path: initialScreenshot, fullPage: true });
+    log.info(`   📸 Screenshot saved: ${initialScreenshot}`);
 
-    // Check if we need to login
-    const currentUrl = page.url();
-    log.info(`   Current URL: ${currentUrl}`);
-
-    if (currentUrl.includes('/signin') || currentUrl.includes('/login')) {
-      log.info('   🔐 Login required...');
-      
-      if (!N8N_EMAIL || !N8N_PASSWORD) {
-        log.error('❌ Login required but N8N_EMAIL or N8N_PASSWORD not set');
-        log.info('   Set them in ~/.zshrc:');
-        log.info('   export N8N_EMAIL="your-email@example.com"');
-        log.info('   export N8N_PASSWORD="your-password"');
-        await browser.close();
-        process.exit(1);
-      }
-
-      // Login
-      await page.type('input[type="email"]', N8N_EMAIL);
-      await page.type('input[type="password"]', N8N_PASSWORD);
-      await page.click('button[type="submit"]');
-      await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
-      log.success('   ✅ Logged in');
-    } else {
-      log.info('   ✅ Already authenticated or no auth required');
+    let loginAttempted = false;
+    try {
+      loginAttempted = await ensureAuthenticated(page);
+    } catch (loginError) {
+      await browser.close();
+      throw loginError;
     }
 
-    await sleep(2000);
-    await page.screenshot({ path: '/tmp/n8n-after-auth.png' });
-    log.info('   📸 Screenshot saved: /tmp/n8n-after-auth.png\n');
+    if (loginAttempted) {
+      log.success('   ✅ Login completed');
+      await sleep(2000);
+      const postLoginShot = path.join(screenshotDir, 'after-login.png');
+      await page.screenshot({ path: postLoginShot, fullPage: true });
+      log.info(`   📸 Screenshot saved: ${postLoginShot}`);
+    } else {
+      log.info('   ✅ Session already authenticated');
+    }
+
+    const currentUrl = page.url();
+    log.info(`   Current URL: ${currentUrl}\n`);
+
+    if (await isLoginScreen(page)) {
+      throw new Error('Login screen still visible after authentication attempt. Check credentials.');
+    }
 
     // Step 4: Toggle each workflow
     log.info('🔄 Step 4: Toggling workflows via UI...\n');
@@ -219,11 +282,21 @@ async function main() {
     const results = {
       success: 0,
       failed: 0,
-      total: crewWorkflows.length
+      total: workflowsToProcess.length
     };
 
-    for (let i = 0; i < crewWorkflows.length; i++) {
-      const workflow = crewWorkflows[i];
+    for (let i = 0; i < workflowsToProcess.length; i++) {
+      const workflow = workflowsToProcess[i];
+      const workflowSummary = {
+        id: workflow.id,
+        name: workflow.name,
+        toggledOff: false,
+        toggledOn: false,
+        errors: [],
+        screenshots: {},
+        status: 'pending',
+      };
+      summary.workflows.push(workflowSummary);
       
       try {
         log.info(`   🔄 Processing [${i + 1}/${crewWorkflows.length}]: ${workflow.name}`);
@@ -246,6 +319,13 @@ async function main() {
               waitUntil: 'networkidle0', 
               timeout: 60000 
             });
+            if (await ensureAuthenticated(page)) {
+              log.info('      🔐 Session refreshed; reloading workflow after login...');
+              await page.goto(workflowUrl, { waitUntil: 'networkidle0', timeout: 60000 });
+            }
+            if (await isLoginScreen(page)) {
+              throw new Error('Login screen still visible; unable to access workflow editor');
+            }
             break;
           } catch (error) {
             navAttempts++;
@@ -261,6 +341,10 @@ async function main() {
         // Wait for workflow editor to fully load
         log.info(`      ⏳ Waiting ${BETWEEN_PAGE_SLEEP / 1000}s for workflow editor to load...`);
         await sleep(BETWEEN_PAGE_SLEEP);
+        const workflowShotName = `${workflow.name.replace(/[^\w\d-]+/g, '_').slice(0, 120) || workflow.id}.png`;
+        const workflowShotPath = path.join(screenshotDir, workflowShotName);
+        await page.screenshot({ path: workflowShotPath, fullPage: true });
+        workflowSummary.screenshots.editor = path.relative(process.cwd(), workflowShotPath);
 
         // Find the active toggle switch
         // N8N typically uses a switch/toggle button in the top-right
@@ -299,36 +383,43 @@ async function main() {
         if (workflow.active) {
           log.info(`      ⚫ Toggling OFF...`);
           await page.click(toggleSelector);
+          workflowSummary.toggledOff = true;
           await sleep(BETWEEN_TOGGLE_DELAY); // Longer delay for state change
           log.info(`      ✅ Deactivated`);
         }
 
         log.info(`      🟢 Toggling ON...`);
         await page.click(toggleSelector);
+        workflowSummary.toggledOn = true;
         await sleep(POST_TOGGLE_PROPAGATION_DELAY); // Longer delay for webhook registration
         log.info(`      ✅ Activated`);
 
         log.success(`      ✅ ${workflow.name} - toggled successfully\n`);
         results.success++;
+        workflowSummary.status = 'success';
 
       } catch (error) {
         log.error(`      ❌ ${workflow.name} - failed: ${error.message}`);
         results.failed++;
+        workflowSummary.status = 'failed';
+        workflowSummary.errors.push(error.message);
         
         // Take screenshot of failure
-        const screenshotPath = `/tmp/n8n-toggle-failed-${workflow.id}.png`;
+        const failureShotPath = path.join(screenshotDir, `${workflow.id}-failed.png`);
         try {
-          await page.screenshot({ path: screenshotPath });
-          log.info(`      📸 Error screenshot: ${screenshotPath}`);
+          await page.screenshot({ path: failureShotPath, fullPage: true });
+          workflowSummary.screenshots.failure = path.relative(process.cwd(), failureShotPath);
+          log.info(`      📸 Error screenshot: ${failureShotPath}`);
         } catch (screenshotError) {
           log.warn(`      ⚠️  Could not save screenshot: ${screenshotError.message}`);
+          workflowSummary.errors.push(`Screenshot failed: ${screenshotError.message}`);
         }
         
         log.info(''); // Blank line for readability
       }
 
       // O'Brien's Rate Limiting: Delay between workflows
-      if (i < crewWorkflows.length - 1) {
+      if (i < workflowsToProcess.length - 1) {
         log.info(`   ⏳ Waiting ${BETWEEN_WORKFLOW_DELAY / 1000}s before next workflow (rate limiting)...\n`);
         await sleep(BETWEEN_WORKFLOW_DELAY);
       }
@@ -344,7 +435,7 @@ async function main() {
     // Step 6: Test webhooks
     log.info('🧪 Step 6: Testing webhook registration...\n');
     
-    const webhookTests = [
+    const webhookChecks = [
       { name: 'Captain Picard', path: '/webhook/crew-captain-jean-luc-picard' },
       { name: 'Commander Data', path: '/webhook/crew-commander-data' },
       { name: 'Geordi La Forge', path: '/webhook/crew-geordi-la-forge' },
@@ -353,7 +444,7 @@ async function main() {
 
     const webhookResults = { working: 0, notWorking: 0 };
 
-    for (const test of webhookTests) {
+    for (const test of webhookChecks) {
       try {
         // Use axios directly (not through rate limiter) for testing
         // Rate limiter is for n8n API, webhooks are different endpoints
@@ -370,18 +461,50 @@ async function main() {
         if (response.status === 200 || response.status === 201) {
           console.log(`   ✅ ${test.name.padEnd(20)} WORKING (HTTP ${response.status})`);
           webhookResults.working++;
+          summary.webhookTests.push({
+            name: test.name,
+            path: test.path,
+            status: 'working',
+            httpStatus: response.status,
+          });
         } else if (response.status === 404) {
           console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
           webhookResults.notWorking++;
+          summary.webhookTests.push({
+            name: test.name,
+            path: test.path,
+            status: 'not_registered',
+            httpStatus: response.status,
+          });
         } else {
           console.log(`   ⚠️  ${test.name.padEnd(20)} UNKNOWN (HTTP ${response.status})`);
+          summary.webhookTests.push({
+            name: test.name,
+            path: test.path,
+            status: 'unknown',
+            httpStatus: response.status,
+          });
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.log(`   ❌ ${test.name.padEnd(20)} NOT REGISTERED (HTTP 404)`);
           webhookResults.notWorking++;
+          summary.webhookTests.push({
+            name: test.name,
+            path: test.path,
+            status: 'not_registered',
+            httpStatus: 404,
+            error: error.message,
+          });
         } else {
           console.log(`   ⚠️  ${test.name.padEnd(20)} ERROR: ${error.message}`);
+          summary.webhookTests.push({
+            name: test.name,
+            path: test.path,
+            status: 'error',
+            httpStatus: error.response?.status,
+            error: error.message,
+          });
         }
       }
       
@@ -408,7 +531,7 @@ async function main() {
 `);
 
     console.log(`Workflows Toggled: ${results.success}/${results.total}`);
-    console.log(`Webhooks Working: ${webhookResults.working}/${webhookTests.length}`);
+    console.log(`Webhooks Working: ${webhookResults.working}/${webhookChecks.length}`);
     console.log(`Duration: ${duration}s`);
     console.log('');
 
@@ -421,7 +544,7 @@ async function main() {
     } else {
       if (results.failed > 0) {
         log.warn(`⚠️  ${results.failed} workflow(s) failed to toggle`);
-        log.info('   Check screenshots in /tmp/ for details');
+        log.info(`   Check screenshots in ${screenshotDir} for details`);
       }
       
       if (webhookResults.notWorking > 0) {
@@ -430,12 +553,32 @@ async function main() {
       }
     }
 
+    summary.results = results;
+    summary.webhookResults = webhookResults;
+    summary.durationSeconds = Number(duration);
+
+    const summaryPath = path.join(outputDir, 'summary.json');
+    summary.summaryFile = path.relative(process.cwd(), summaryPath);
+    await fs.promises.writeFile(summaryPath, JSON.stringify(summary, null, 2), 'utf8');
+    log.success(`📝 Summary saved -> ${summaryPath}\n`);
+    console.log(JSON.stringify(summary, null, 2));
+
   } catch (error) {
     log.error(`\n❌ Fatal error: ${error.message}`);
     console.error(error.stack);
+    summary.errors.push(error.message);
     
     if (browser) {
       await browser.close();
+    }
+    try {
+      const summaryPath = path.join(outputDir, 'summary.json');
+      summary.summaryFile = path.relative(process.cwd(), summaryPath);
+      await fs.promises.writeFile(summaryPath, JSON.stringify(summary, null, 2), 'utf8');
+      log.warn(`⚠️  Partial summary saved -> ${summaryPath}`);
+      console.log(JSON.stringify(summary, null, 2));
+    } catch (_) {
+      // ignore
     }
     
     process.exit(1);

@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowFirehoseDelivery",
+      "Effect": "Allow",
+      "Principal": {"Service": "firehose.amazonaws.com"},
+      "Action": ["s3:PutObject","s3:PutObjectAcl","s3:AbortMultipartUpload"],
+      "Resource": ["arn:aws:s3:::aws-waf-logs-n8n-1762852850/*"],
+      "Condition": {
+        "StringEquals": {"aws:SourceAccount": "860268930466"},
+        "ArnLike": {"aws:SourceArn": "arn:aws:firehose:us-east-1:860268930466:deliverystream/aws-waf-logs-n8n-1762852850"}
+      }
+    }
+  ]
+}

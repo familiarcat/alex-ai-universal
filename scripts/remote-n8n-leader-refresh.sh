@@ -93,6 +93,14 @@ if [[ "$REFRESH_OK" -ne 1 ]]; then
   node scripts/crew-webhook-refresh-via-api.js || true
 fi
 
+echo "🎭 Running UI-based toggle automation for diagnostic capture..."
+if node scripts/n8n-toggle-workflows-ui.js; then
+  echo "   ✅ UI automation completed"
+else
+  echo "   ⚠️  UI automation reported errors (see above output)"
+fi
+node scripts/process-toggle-summary.js || true
+
 echo "🧠 Running local RAG verification query..."
 node scripts/rag-query.js "\${QUERY}"
 
