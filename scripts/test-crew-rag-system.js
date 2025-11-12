@@ -69,8 +69,8 @@ const crewMembers = [
     testObservation: 'Data analysis: MCP browser controls achieved 100% success rate with zero errors. Efficiency metrics: 6 minutes for 12 workflow toggles. Recommendation: Adopt as standard.',
   },
   {
-    name: 'Geordi La Forge',
-    webhook: 'crew-geordi-la-forge',
+    name: 'Lieutenant Commander Geordi La Forge',
+    webhook: 'crew-lieutenant-commander-geordi-la-forge',
     specialty: 'Infrastructure Engineering',
     testObservation: 'Engineering report: The unified rate limiter architecture successfully consolidated rate limiting logic. All systems nominal. N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN ensures persistence.',
   },
@@ -104,24 +104,25 @@ const crewMembers = [
     specialty: 'Pragmatic Solutions',
     testObservation: 'Pragmatic assessment: MCP browser controls solved the rate limiting problem without over-engineering. Simple, effective solution. This is how it should be done.',
   },
-  {
-    name: 'Quark',
-    webhook: 'crew-quark',
-    specialty: 'Business Intelligence',
-    testObservation: 'Cost-benefit analysis: 6 minutes of automation time vs. hours of manual work. ROI: Excellent. The MCP browser controls are a profitable investment.',
-  },
+  // Quark workflow currently inactive in production; keep definition commented for future activation.
+  // {
+  //   name: 'Quark',
+  //   webhook: 'crew-quark',
+  //   specialty: 'Business Intelligence',
+  //   testObservation: 'Cost-benefit analysis: 6 minutes of automation time vs. hours of manual work. ROI: Excellent. The MCP browser controls are a profitable investment.',
+  // },
 ];
 
 // Coordination workflows
 const coordinationWorkflows = [
   {
     name: 'Democratic Collaboration',
-    webhook: 'coordination-democratic-collaboration',
+    webhook: 'llm-collaboration',
     description: 'Democratic decision-making and consensus building',
   },
   {
     name: 'Observation Lounge',
-    webhook: 'coordination-observation-lounge',
+    webhook: 'observation-lounge',
     description: 'Crew coordination and strategic planning hub',
   },
 ];
@@ -170,6 +171,22 @@ function printInfo(message) {
  */
 function printWarning(message) {
   console.log(colors.yellow + '⚠️  ' + message + colors.reset);
+}
+
+function formatAxiosError(error) {
+  if (!error) return 'Unknown error';
+  if (error.response) {
+    const status = error.response.status;
+    const data =
+      typeof error.response.data === 'object'
+        ? JSON.stringify(error.response.data)
+        : error.response.data;
+    return `Request failed with status ${status}${data ? ` – ${data}` : ''}`;
+  }
+  if (error.request) {
+    return `No response received (${error.message})`;
+  }
+  return error.message || 'Unknown error';
 }
 
 /**
@@ -255,8 +272,9 @@ async function testCrewWebhook(crewMember, sharedContext) {
       return { success: false, crewMember, error: `Status ${response.status}` };
     }
   } catch (error) {
-    printError(`${crewMember.name} - Webhook failed: ${error.message}`);
-    return { success: false, crewMember, error: error.message };
+    const message = formatAxiosError(error);
+    printError(`${crewMember.name} - Webhook failed: ${message}`);
+    return { success: false, crewMember, error: message };
   }
 }
 
@@ -294,8 +312,9 @@ async function sendObservationToRAG(crewMember, sharedContext) {
       return { success: false, crewMember, error: `Status ${response.status}` };
     }
   } catch (error) {
-    printError(`${crewMember.name} - RAG storage failed: ${error.message}`);
-    return { success: false, crewMember, error: error.message };
+    const message = formatAxiosError(error);
+    printError(`${crewMember.name} - RAG storage failed: ${message}`);
+    return { success: false, crewMember, error: message };
   }
 }
 
@@ -328,8 +347,9 @@ async function testCoordinationWorkflow(workflow, sharedContext) {
       return { success: false, workflow, error: `Status ${response.status}` };
     }
   } catch (error) {
-    printError(`${workflow.name} - Coordination failed: ${error.message}`);
-    return { success: false, workflow, error: error.message };
+    const message = formatAxiosError(error);
+    printError(`${workflow.name} - Coordination failed: ${message}`);
+    return { success: false, workflow, error: message };
   }
 }
 
@@ -337,7 +357,7 @@ async function testCoordinationWorkflow(workflow, sharedContext) {
  * Test Democratic Observation Lounge collaboration
  */
 async function testObservationLoungeCollaboration(sharedContext) {
-  const url = `${N8N_BASE_URL}/coordination-observation-lounge`;
+  const url = `${N8N_BASE_URL}/observation-lounge`;
   
   const collaborationTask = {
     task: 'Plan next steps for Alex AI development',
@@ -373,8 +393,9 @@ async function testObservationLoungeCollaboration(sharedContext) {
       return { success: false, error: `Status ${response.status}` };
     }
   } catch (error) {
-    printError(`Observation Lounge - Collaboration failed: ${error.message}`);
-    return { success: false, error: error.message };
+    const message = formatAxiosError(error);
+    printError(`Observation Lounge - Collaboration failed: ${message}`);
+    return { success: false, error: message };
   }
 }
 
