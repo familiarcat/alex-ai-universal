@@ -445,7 +445,7 @@ async function runTests() {
   if (!supabase) {
     printWarning('Supabase credentials not available; skipping crew memory enrichment.');
   }
-
+  
   const results = [];
   
   // Phase 1: Test all crew member webhooks

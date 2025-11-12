@@ -183,7 +183,7 @@ function buildManualRunPayload(workflow) {
 async function executeWorkflow(workflowId, workflowName) {
   try {
     printInfo(`Executing ${workflowName} (ID: ${workflowId})...`);
-
+    
     const workflow = await fetchWorkflow(workflowId, workflowName);
     if (!workflow) {
       return { success: false, workflowName, error: 'workflow-load-failed' };
@@ -199,7 +199,7 @@ async function executeWorkflow(workflowId, workflowName) {
       `/rest/workflows/${workflowId}/run`,
       payload
     );
-
+    
     if (response.status === 200 || response.status === 201) {
       const waiting = response.data?.waitingForWebhook;
       printInfo(
@@ -213,8 +213,8 @@ async function executeWorkflow(workflowId, workflowName) {
       return { success: true, workflowName };
     }
 
-    printError(`${workflowName} - Unexpected status: ${response.status}`);
-    return { success: false, workflowName, error: `Status ${response.status}` };
+      printError(`${workflowName} - Unexpected status: ${response.status}`);
+      return { success: false, workflowName, error: `Status ${response.status}` };
   } catch (error) {
     printError(`${workflowName} - Execution failed: ${error.message}`);
     const status = error.response?.status;

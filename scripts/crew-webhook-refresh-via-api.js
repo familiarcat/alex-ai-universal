@@ -367,4 +367,16 @@ if (require.main === module) {
   main();
 }
 
+module.exports = {
+  fetchAllWorkflows,
+  fetchWorkflow,
+  collectWebhookPaths,
+  sanitizeWorkflowData,
+  triggerWorkflow,
+  checkWebhookRegistration,
+  ensureSession,
+  n8nBaseUrl,
+};
+
+
 

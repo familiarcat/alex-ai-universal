@@ -255,9 +255,9 @@ async function main() {
     try {
       loginAttempted = await ensureAuthenticated(page);
     } catch (loginError) {
-      await browser.close();
+        await browser.close();
       throw loginError;
-    }
+      }
 
     if (loginAttempted) {
       log.success('   ✅ Login completed');
