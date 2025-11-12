@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [240, 304],
-      "webhookId": "obrien-pragmatic-solutions-webhook"
+      "webhookId": "f3cbab01-d75b-4e6f-993f-9f934123c6d6"
     },
     {
       "parameters": {
@@ -114,67 +114,17 @@
     },
     {
       "parameters": {
-        "authentication": "genericCredentialType",
-        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "={{ $env.SUPABASE_API_KEY }}"
-            },
-            {
-              "name": "Authorization",
-              "value": "Bearer {{ $env.SUPABASE_API_KEY }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "Prefer",
-              "value": "return=representation"
-            }
-          ]
-        },
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
         "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "crew_member",
-              "value": "chief_obrien"
-            },
-            {
-              "name": "memory_type",
-              "value": "solution"
-            },
-            {
-              "name": "content",
-              "value": "={{ $json.choices[0].message.content }}"
-            },
-            {
-              "name": "context",
-              "value": "={{ JSON.stringify($('crew_directive').item.json) }}"
-            },
-            {
-              "name": "created_at",
-              "value": "={{ new Date().toISOString() }}"
-            }
-          ]
-        },
-        "options": {}
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'chief_obrien',\n      knowledgeType: 'troubleshooting_guide',\n      priority: 'medium',\n      title: 'Chief O\\'Brien Pragmatic Advisory',\n      summary: summaryLine.trim() || 'Pragmatic field-tested guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'chief_obrien']\n    }\n  };\n})() }}"
       },
       "id": "memory_storage",
       "name": "O'Brien Memory Storage",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [1136, 112],
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "supabase_api_auth",
-          "name": "Supabase API Auth"
-        }
-      }
+      "position": [1136, 112]
     },
     {
       "parameters": {

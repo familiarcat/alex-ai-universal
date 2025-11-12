@@ -86,6 +86,7 @@
   "integrations": {
     "n8n": {
       "enabled": true,
+      "workflowId": "hEHWeCy2L0dTHQKJ",
       "webhookPath": "/webhook/crew-chief-obrien",
       "workflowName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production"
     },

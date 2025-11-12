@@ -22,8 +22,11 @@
     },
     {
       "parameters": {
-        "authentication": "genericCredentialType",
-        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'riker',\n      knowledgeType: 'problem_solution',\n      priority: 'high',\n      title: 'Tactical Execution Plan',\n      summary: summaryLine.trim() || 'Tactical execution guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'riker']\n    }\n  };\n})() }}",
         "options": {}
       },
       "id": "memory_retrieval",

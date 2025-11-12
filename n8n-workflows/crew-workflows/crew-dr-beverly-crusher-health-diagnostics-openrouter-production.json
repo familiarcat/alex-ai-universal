@@ -67,8 +67,11 @@
     },
     {
       "parameters": {
-        "authentication": "genericCredentialType",
-        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'crusher',\n      knowledgeType: 'medical_assessment',\n      priority: 'high',\n      title: 'Health Diagnostics Advisory',\n      summary: summaryLine.trim() || 'Medical diagnostics guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'crusher']\n    }\n  };\n})() }}",
         "options": {}
       },
       "id": "1175a043-190f-4d06-88b3-7d7557084458",
