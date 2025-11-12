@@ -47,6 +47,7 @@ function loadCrewCredentials() {
     supabase: {
       url: supabaseUrl,
       key: supabaseKey,
+      serviceKey: supabaseKey,
     },
   };
 }
