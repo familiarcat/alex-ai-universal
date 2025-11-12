@@ -1,0 +1,120 @@
+name: Sync Supabase Secrets to n8n
+
+on:
+  workflow_dispatch:
+    inputs:
+      restart_n8n:
+        description: "Restart n8n after applying secrets"
+        required: false
+        default: "true"
+      validation_title:
+        description: "Override title for validation memory"
+        required: false
+        default: "Single Source of Truth"
+      validation_summary:
+        description: "Override summary for validation memory"
+        required: false
+        default: "Crew only reads secrets from ~/.zshrc locally"
+      validation_analysis:
+        description: "Override analysis for validation memory"
+        required: false
+        default: "When developing locally, load secrets from ~/.zshrc and sync them to AWS Parameter Store so production inherits them automatically."
+      validation_tags:
+        description: "Comma-separated tags for validation memory"
+        required: false
+        default: "policy,rag,automation"
+  push:
+    paths:
+      - "scripts/prepare-supabase-ssm.js"
+      - "scripts/sync-supabase-secrets.js"
+      - "scripts/apply-supabase-secrets.js"
+      - "scripts/validate-crew-memory-storage.js"
+      - ".github/workflows/supabase-sync.yml"
+
+jobs:
+  sync-and-validate:
+    runs-on: ubuntu-latest
+    env:
+      # Supabase credentials surface as environment variables so scripts can read them.
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+      # n8n access (API + URL for validation script)
+      N8N_URL: ${{ secrets.N8N_URL }}
+      N8N_OWNER_API_KEY: ${{ secrets.N8N_OWNER_API_KEY }}
+      N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
+      # Parameter store namespace (defaults to /alex-ai/supabase if unset)
+      ALEX_AI_PARAMETER_NAMESPACE: ${{ secrets.ALEX_AI_PARAMETER_NAMESPACE }}
+    steps:
+      - name: Ensure required secrets are present
+        run: |
+          REQUIRED=(SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY N8N_URL N8N_OWNER_API_KEY AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_REGION N8N_SSH_USER N8N_SSH_HOST N8N_SSH_KEY)
+          MISSING=()
+          for var in "${REQUIRED[@]}"; do
+            if [ -z "${!var}" ]; then
+              MISSING+=("$var")
+            fi
+          done
+          if [ "${#MISSING[@]}" -ne 0 ]; then
+            echo "Missing required secrets: ${MISSING[*]}" >&2
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (if package-lock exists)
+        if: exists('package-lock.json')
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Push Supabase secrets to Parameter Store
+        run: node scripts/sync-supabase-secrets.js
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.N8N_SSH_KEY }}
+
+      - name: Apply secrets and restart n8n on remote host
+        env:
+          REMOTE_PATH: ${{ secrets.N8N_REMOTE_PATH }}
+          RESTART_N8N: ${{ github.event.inputs.restart_n8n || 'true' }}
+        run: |
+          REMOTE_DIR=${REMOTE_PATH:-/home/${{ secrets.N8N_SSH_USER }}/alex-ai-universal}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.N8N_SSH_USER }}@${{ secrets.N8N_SSH_HOST }} "\
+            set -euo pipefail; \
+            cd \"${REMOTE_DIR}\"; \
+            git pull --ff-only || true; \
+            node scripts/apply-supabase-secrets.js --output /etc/n8n/env.d/50-supabase.env; \
+            if [ \"${RESTART_N8N}\" = \"true\" ]; then \
+              sudo systemctl restart n8n || sudo docker compose restart n8n; \
+            fi \
+          "
+
+      - name: Validate crew-memory-storage workflow
+        env:
+          VALIDATION_TITLE: ${{ github.event.inputs.validation_title }}
+          VALIDATION_SUMMARY: ${{ github.event.inputs.validation_summary }}
+          VALIDATION_ANALYSIS: ${{ github.event.inputs.validation_analysis }}
+          VALIDATION_TAGS: ${{ github.event.inputs.validation_tags }}
+        run: |
+          node scripts/validate-crew-memory-storage.js \
+            --title "${VALIDATION_TITLE:-Single Source of Truth}" \
+            --summary "${VALIDATION_SUMMARY:-Crew only reads secrets from ~/.zshrc locally}" \
+            --analysis "${VALIDATION_ANALYSIS:-When developing locally, load secrets from ~/.zshrc and sync them to AWS Parameter Store so production inherits them automatically.}" \
+            --tags "${VALIDATION_TAGS:-policy,rag,automation}"
+
+

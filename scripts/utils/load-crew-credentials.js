@@ -10,6 +10,8 @@
  */
 'use strict';
 
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 try {
@@ -17,6 +19,37 @@ try {
 } catch (_) {
   // dotenv is optional; ignore if not installed
 }
+
+function hydrateFromZshrc() {
+  const zshrcPath = path.join(os.homedir(), '.zshrc');
+
+  if (!fs.existsSync(zshrcPath)) {
+    return;
+  }
+
+  try {
+    const contents = fs.readFileSync(zshrcPath, 'utf8');
+    const exportRegex = /^\s*export\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/gm;
+
+    let match;
+    while ((match = exportRegex.exec(contents)) !== null) {
+      const [, key, rawValue] = match;
+      if (process.env[key]) continue;
+
+      let value = rawValue.trim();
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith('\'') && value.endsWith('\''))) {
+        value = value.slice(1, -1);
+      }
+
+      if (value.length === 0) continue;
+      process.env[key] = value;
+    }
+  } catch (error) {
+    // If parsing fails, fall back silently; the caller will handle missing envs.
+  }
+}
+
+hydrateFromZshrc();
 
 function normalize(value) {
   if (!value) return undefined;
