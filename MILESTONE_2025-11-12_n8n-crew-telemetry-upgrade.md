@@ -11,9 +11,11 @@
 - The sync script reuses existing credentials (`loadCrewCredentials`) and resolves remote workflow IDs automatically to avoid drift.
 - GitHub Actions workflow `supabase-sync` now pushes Supabase credentials to AWS Parameter Store, applies them on the n8n host, restarts the service, and verifies the `crew-memory-storage` webhook end-to-end.
 - Added automation helpers (`prepare-supabase-ssm`, `sync-supabase-secrets`, `apply-supabase-secrets`, `update-github-secrets-and-run-workflow`, `validate-crew-memory-storage`, `collect-automation-secrets`) so local devs can pull secrets from `~/.zshrc`, sync them to CI, and confirm storage success without manual intervention.
+- The GitHub automation includes workflow enabling and run polling, surfacing next steps when the initial run requires manual approval.
 
 ## Follow-Up
 - Several crew LLM prompts still return empty payloads; once the testing approach is chosen, refine agent prompts to guarantee actionable summaries.
 - Decide between a repo-based E2E framework (`test/e2e`) or dedicated n8n test workflows for validating the DDD pipeline (client ⇄ n8n ⇄ Supabase).
 - After the testing architecture is selected, standardize prompt templates and add regression coverage for knowledge ingest / retrieval paths.
+- Approve the `supabase-sync` workflow in GitHub Actions UI once (GitHub security requirement); automation will handle all subsequent runs.
 
