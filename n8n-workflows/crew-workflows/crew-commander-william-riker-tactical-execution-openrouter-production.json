@@ -23,6 +23,7 @@
     {
       "parameters": {
         "authentication": "none",
+        "requestMethod": "POST",
         "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
         "sendBody": true,
         "jsonParameters": true,
@@ -100,7 +101,9 @@
     },
     {
       "parameters": {
-        "options": {}
+        "respondWith": "json",
+        "options": {},
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_riker',\n  crew_name: 'Commander William Riker',\n  role: 'First Officer',\n  summary: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander William Riker Directive').item.json || null,\n  memory: $('Commander William Riker Memory Storage').item.json || null,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander William Riker AI Agent').item.json?.model || null,\n    usage: $('Commander William Riker AI Agent').item.json?.usage || null\n  }\n} }}"
       },
       "id": "crew_response",
       "name": "Commander William Riker Response",
@@ -113,11 +116,11 @@
     }
   ],
   "connections": {
-    "Captain Jean-Luc Picard Directive": {
+    "Commander William Riker Directive": {
       "main": [
         [
           {
-            "node": "Captain Jean-Luc Picard Memory Retrieval",
+            "node": "Commander William Riker Memory Retrieval",
             "type": "main",
             "index": 0
           }
@@ -128,11 +131,6 @@
       "main": [
         [
           {
-            "node": "Captain Jean-Luc Picard AI Agent",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Commander William Riker AI Agent",
             "type": "main",
             "index": 0
@@ -140,7 +138,7 @@
         ]
       ]
     },
-    "Captain Jean-Luc Picard AI Agent": {
+    "Commander William Riker AI Agent": {
       "main": [
         [
           {
@@ -155,45 +153,7 @@
       "main": [
         [
           {
-            "node": "Captain Jean-Luc Picard Memory Storage",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Commander William Riker Memory Storage",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Captain Jean-Luc Picard Memory Retrieval": {
-      "main": [
-        [
-          {
-            "node": "LLM Selection Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Captain Jean-Luc Picard Memory Storage": {
-      "main": [
-        [
-          {
-            "node": "Captain Jean-Luc Picard Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Commander William Riker Directive": {
-      "main": [
-        [
-          {
-            "node": "Commander William Riker Memory Retrieval",
             "type": "main",
             "index": 0
           }
@@ -205,17 +165,6 @@
         [
           {
             "node": "LLM Selection Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Commander William Riker AI Agent": {
-      "main": [
-        [
-          {
-            "node": "Observation Lounge Communication",
             "type": "main",
             "index": 0
           }
@@ -237,13 +186,6 @@
   "settings": {},
   "staticData": null,
   "meta": null,
-  "pinData": {},
-  "versionId": "f701f2e5-362b-4e33-aa3b-a6e520fb2fe7",
-  "triggerCount": 1,
-  "createdAt": "2025-08-27T02:33:04.181Z",
-  "updatedAt": "2025-09-21T21:31:48.158Z",
-  "tags": [],
-  "_downloadedAt": "2025-09-21T21:33:26.797Z",
-  "_category": "crew-workflows",
-  "_source": "remote-n8n"
+  "pinData": null,
+  "versionId": "original-sync-restored"
 }

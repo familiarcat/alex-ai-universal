@@ -1,4 +1,5 @@
 {
+  "id": "ZUHhG7P3mhTWW6qb",
   "name": "Crew Memory Storage Workflow",
   "nodes": [
     {
@@ -27,20 +28,25 @@
     },
     {
       "parameters": {
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "supabaseApi",
-        "operation": "insert",
-        "table": "crew_memories",
-        "columns": "id, timestamp, crew_member, crew_member_name, knowledge_type, priority, title, summary, detailed_analysis, key_findings, conclusions, recommendations, referenced_documents, related_topics, applicable_scenarios, general_principles, tags, keywords, complexity_level, confidence_level, prime_directive_compliance, ambiguity_level, project_specificity, semantic_text, validated_by, conflict_resolutions, storage_timestamp, last_accessed, access_count",
-        "options": {
-          "upsert": true
-        }
+        "authentication": "none",
+        "requestMethod": "POST",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' }) }}",
+        "bodyParametersJson": "={{ JSON.stringify($json) }}",
+        "options": {}
       },
       "id": "supabase-storage",
       "name": "Supabase Crew Memory Storage",
-      "type": "n8n-nodes-base.supabase",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -79,23 +85,31 @@
       "name": "Generate Vector Embedding",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [680, 500]
+      "position": [
+        680,
+        500
+      ]
     },
     {
       "parameters": {
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "supabaseApi",
-        "operation": "update",
-        "table": "crew_memories",
-        "updateKey": "id",
-        "columns": "vector_embedding",
-        "options": {}
+        "authentication": "none",
+        "requestMethod": "PATCH",
+        "url": "={{ `https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?id=eq.${$json.id}` }}",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json' }) }}",
+        "bodyParametersJson": "={{ JSON.stringify({ vector_embedding: $json.embedding?.data?.[0]?.embedding || null }) }}"
       },
       "id": "vector-storage",
       "name": "Store Vector Embedding",
-      "type": "n8n-nodes-base.supabase",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [900, 500]
+      "position": [
+        900,
+        500
+      ]
     },
     {
       "parameters": {

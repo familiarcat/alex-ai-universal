@@ -101,7 +101,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { \"crew_member\": \"Lieutenant Uhura\", \"response\": $json.choices[0].message.content, \"timestamp\": new Date().toISOString() } }}",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'lieutenant_uhura',\n  crew_name: 'Lieutenant Uhura',\n  role: 'Communications Officer',\n  summary: $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Lieutenant Uhura Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Lieutenant Uhura AI Agent').item.json?.model || null,\n    usage: $('Lieutenant Uhura AI Agent').item.json?.usage || null\n  }\n} }}",
         "options": {}
       },
       "id": "03b4c2e3-5399-452e-96c5-326e416a06f2",

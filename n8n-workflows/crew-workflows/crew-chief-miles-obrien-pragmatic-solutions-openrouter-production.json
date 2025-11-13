@@ -128,10 +128,9 @@
     },
     {
       "parameters": {
-        "respondWith": "allIncomingItems",
-        "options": {
-          "responseCode": "={{ $json.choices ? 200 : 500 }}"
-        }
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'chief_obrien',\n  crew_name: \"Chief Miles O'Brien\",\n  role: 'Transporter Chief',\n  summary: $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content || null,\n  request: $(\"Chief O'Brien Directive\").item.json || null,\n  memory: $(\"O'Brien Memory Storage\").item.json || null,\n  metadata: {\n    generated_at: $now,\n    model: $(\"Chief O'Brien AI Agent\").item.json?.model || null,\n    usage: $(\"Chief O'Brien AI Agent\").item.json?.usage || null,\n    pragmatic_mode: $(\"Pragmatic Analysis\").item.json?.chiefMode || null\n  }\n} }}",
+        "options": {}
       },
       "id": "webhook_response",
       "name": "Send O'Brien's Response",

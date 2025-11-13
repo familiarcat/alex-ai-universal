@@ -99,67 +99,61 @@ gh api -X PUT "repos/${REPO}/actions/workflows/${WORKFLOW_NAME}/enable" >/dev/nu
 
 echo "Secrets updated. Triggering workflow $WORKFLOW_NAME"
 
-START_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+echo "Capturing existing workflow run baseline..."
+BASELINE_RUN_NUMBER=$(gh run list --repo "$REPO" --workflow "$WORKFLOW_NAME" --limit 1 --json number --jq '.[0].number // 0' 2>/tmp/gh_baseline_error.log || echo 0)
+if [ -s /tmp/gh_baseline_error.log ]; then
+  echo "⚠️  Could not determine baseline run: $(< /tmp/gh_baseline_error.log)"
+fi
+BASELINE_RUN_NUMBER=${BASELINE_RUN_NUMBER:-0}
 
 gh workflow run "$WORKFLOW_NAME" --repo "$REPO"
 
-POLL_INTERVAL=${POLL_INTERVAL:-10}
-POLL_TIMEOUT=${POLL_TIMEOUT:-600}
+POLL_INTERVAL=${POLL_INTERVAL:-5}
+POLL_TIMEOUT=${POLL_TIMEOUT:-120}
 MAX_ATTEMPTS=$((POLL_TIMEOUT / POLL_INTERVAL))
 
 echo "Waiting for workflow_dispatch run to appear..."
 
+RUN_NUMBER=""
 RUN_ID=""
-RUN_STATUS=""
-RUN_CONCLUSION=""
 RUN_URL=""
 
 for ((attempt = 1; attempt <= MAX_ATTEMPTS; attempt++)); do
-  RUN_DATA=$(gh api "repos/${REPO}/actions/workflows/${WORKFLOW_NAME}/runs?event=workflow_dispatch&per_page=20")
-  RUN_INFO=$(RUN_JSON="$RUN_DATA" node - "$START_TS" <<'NODE'
-const start = new Date(process.argv[1]);
-const raw = process.env.RUN_JSON || '';
-if (!raw.trim()) process.exit(0);
-const data = JSON.parse(raw);
-const run = data.workflow_runs
-  .filter((item) => item.event === 'workflow_dispatch')
-  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-  .find((item) => new Date(item.created_at) >= start);
-if (!run) process.exit(0);
-console.log(run.status || '');
-console.log(run.conclusion || '');
-console.log(run.id || '');
-console.log(run.html_url || '');
-NODE
-) || true
+  if ! LATEST_RUN=$(gh run list --repo "$REPO" --workflow "$WORKFLOW_NAME" --limit 1 --json number,status,url,databaseId 2>/tmp/gh_run_error.log); then
+    ERR_MSG=$(< /tmp/gh_run_error.log)
+    echo "… polling failed (attempt ${attempt}/${MAX_ATTEMPTS}): ${ERR_MSG:-unknown error}. Retrying in ${POLL_INTERVAL}s..."
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
+  CURRENT_NUMBER=$(echo "$LATEST_RUN" | jq -r '.[0].number // 0' 2>/dev/null || echo 0)
+  CURRENT_STATUS=$(echo "$LATEST_RUN" | jq -r '.[0].status // ""' 2>/dev/null || echo "")
+  CURRENT_URL=$(echo "$LATEST_RUN" | jq -r '.[0].url // ""' 2>/dev/null || echo "")
+  CURRENT_ID=$(echo "$LATEST_RUN" | jq -r '.[0].databaseId // 0' 2>/dev/null || echo 0)
 
-  if [ -n "$RUN_INFO" ]; then
-    IFS=$'\n' read -r RUN_STATUS RUN_CONCLUSION RUN_ID RUN_URL <<<"$RUN_INFO"
-    echo "↻ Run ${RUN_ID:-unknown} status: ${RUN_STATUS:-unknown} (conclusion: ${RUN_CONCLUSION:-pending})"
-    if [ "${RUN_STATUS}" = "completed" ]; then
-      break
-    fi
+  if [ "$CURRENT_NUMBER" -gt "$BASELINE_RUN_NUMBER" ]; then
+    RUN_NUMBER="$CURRENT_NUMBER"
+    RUN_URL="$CURRENT_URL"
+    RUN_ID="$CURRENT_ID"
+    echo "↻ Detected new run ${RUN_NUMBER} (status: ${CURRENT_STATUS:-unknown})"
+    break
   else
-    echo "… waiting (no dispatch detected yet, attempt ${attempt}/${MAX_ATTEMPTS})"
+    echo "… waiting (latest run ${CURRENT_NUMBER} <= baseline ${BASELINE_RUN_NUMBER}, attempt ${attempt}/${MAX_ATTEMPTS})"
   fi
 
   sleep "$POLL_INTERVAL"
 done
 
-if [ -z "$RUN_ID" ]; then
-  echo "❌ No workflow_dispatch run detected. If this is the first run of a new workflow, visit GitHub Actions UI and approve it manually." >&2
+if [ -z "$RUN_NUMBER" ]; then
+  echo "❌ No workflow_dispatch run detected within ${POLL_TIMEOUT}s. Visit GitHub Actions UI to verify the workflow state." >&2
   exit 1
 fi
 
-if [ "$RUN_STATUS" != "completed" ]; then
-  echo "❌ Workflow run $RUN_ID did not complete within timeout. Inspect $RUN_URL" >&2
+WATCH_TARGET="${RUN_ID:-$RUN_NUMBER}"
+echo "Watching run ${RUN_NUMBER} (this may take a minute)..."
+if ! gh run watch "$WATCH_TARGET" --repo "$REPO" --exit-status; then
+  echo "❌ Workflow run $RUN_NUMBER failed. Inspect ${RUN_URL:-'Actions UI'} for details." >&2
   exit 1
 fi
 
-if [ "${RUN_CONCLUSION}" != "success" ]; then
-  echo "❌ Workflow run $RUN_ID concluded with status '${RUN_CONCLUSION}'. Inspect $RUN_URL" >&2
-  exit 1
-fi
-
-echo "✅ Workflow run $RUN_ID completed successfully. See $RUN_URL"
+echo "✅ Workflow run $RUN_NUMBER completed successfully. See ${RUN_URL:-'(no url)'}"
 

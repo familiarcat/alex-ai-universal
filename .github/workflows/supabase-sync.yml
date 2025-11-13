@@ -35,16 +35,20 @@ jobs:
   sync-and-validate:
     runs-on: ubuntu-latest
     env:
-      # Supabase credentials surface as environment variables so scripts can read them.
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
-      # n8n access (API + URL for validation script)
       N8N_URL: ${{ secrets.N8N_URL }}
       N8N_OWNER_API_KEY: ${{ secrets.N8N_OWNER_API_KEY }}
       N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
-      # Parameter store namespace (defaults to /alex-ai/supabase if unset)
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      N8N_SSH_USER: ${{ secrets.N8N_SSH_USER }}
+      N8N_SSH_HOST: ${{ secrets.N8N_SSH_HOST }}
+      N8N_SSH_KEY: ${{ secrets.N8N_SSH_KEY }}
+      N8N_REMOTE_PATH: ${{ secrets.N8N_REMOTE_PATH }}
       ALEX_AI_PARAMETER_NAMESPACE: ${{ secrets.ALEX_AI_PARAMETER_NAMESPACE }}
     steps:
       - name: Ensure required secrets are present
@@ -81,6 +85,17 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Push Supabase secrets to Parameter Store
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          N8N_URL: ${{ secrets.N8N_URL }}
+          N8N_OWNER_API_KEY: ${{ secrets.N8N_OWNER_API_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ALEX_AI_PARAMETER_NAMESPACE: ${{ secrets.ALEX_AI_PARAMETER_NAMESPACE }}
         run: node scripts/sync-supabase-secrets.js
 
       - name: Add SSH key
@@ -106,6 +121,13 @@ jobs:
 
       - name: Validate crew-memory-storage workflow
         env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          N8N_URL: ${{ secrets.N8N_URL }}
+          N8N_OWNER_API_KEY: ${{ secrets.N8N_OWNER_API_KEY }}
+          N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
           VALIDATION_TITLE: ${{ github.event.inputs.validation_title }}
           VALIDATION_SUMMARY: ${{ github.event.inputs.validation_summary }}
           VALIDATION_ANALYSIS: ${{ github.event.inputs.validation_analysis }}

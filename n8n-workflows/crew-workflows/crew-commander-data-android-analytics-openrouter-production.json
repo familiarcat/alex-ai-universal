@@ -100,6 +100,8 @@
     },
     {
       "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_data',\n  crew_name: 'Commander Data',\n  role: 'Operations Officer',\n  summary: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander Data Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander Data AI Agent').item.json?.model || null,\n    usage: $('Commander Data AI Agent').item.json?.usage || null\n  }\n} }}",
         "options": {}
       },
       "id": "crew_response",

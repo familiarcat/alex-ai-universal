@@ -101,7 +101,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { \"crew_member\": \"Dr. Beverly Crusher\", \"response\": $json.choices[0].message.content, \"timestamp\": new Date().toISOString() } }}",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'dr_crusher',\n  crew_name: 'Dr. Beverly Crusher',\n  role: 'Chief Medical Officer',\n  summary: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Dr. Beverly Crusher Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Dr. Beverly Crusher AI Agent').item.json?.model || null,\n    usage: $('Dr. Beverly Crusher AI Agent').item.json?.usage || null\n  }\n} }}",
         "options": {}
       },
       "id": "9c11db66-6680-49cc-b9b5-611f828c44fa",

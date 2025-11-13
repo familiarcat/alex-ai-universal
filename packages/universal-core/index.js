@@ -7,6 +7,45 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
+
+const DEFAULT_WEBHOOK_TIMEOUT_MS = Number(process.env.ALEX_AI_WEBHOOK_TIMEOUT_MS || 20000);
+const DEFAULT_WEBHOOK_THROTTLE_MS = Number(process.env.ALEX_AI_WEBHOOK_THROTTLE_MS || 250);
+const MAX_CREW_WEBHOOKS = Number(process.env.ALEX_AI_MAX_CREW_WEBHOOKS || 4);
+
+const LOAD_CREW_CREDENTIALS_PATH = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  'scripts',
+  'utils',
+  'load-crew-credentials.js'
+);
+
+let loadCrewCredentials = null;
+try {
+  const credentialModule = require(LOAD_CREW_CREDENTIALS_PATH);
+  if (typeof credentialModule === 'function') {
+    loadCrewCredentials = credentialModule;
+  } else if (credentialModule && typeof credentialModule.loadCrewCredentials === 'function') {
+    loadCrewCredentials = credentialModule.loadCrewCredentials;
+  }
+} catch (error) {
+  if (process.env.ALEX_AI_DEBUG === 'true') {
+    console.warn(`⚠️  Unable to load crew credentials helper: ${error.message}`);
+  }
+}
+
+function debugLog(...args) {
+  if (process.env.ALEX_AI_DEBUG === 'true') {
+    console.log('[alex-ai:cli]', ...args);
+  }
+}
+
+function delay(ms) {
+  if (!ms) return Promise.resolve();
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const CREW_DIRECTORY = path.resolve(__dirname, '..', '..', 'crew-members');
 const keywordBoosts = {
@@ -54,6 +93,235 @@ function loadCrewProfiles() {
 function normalizeArray(value) {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+let cachedCredentials = null;
+let cachedCredentialTimestamp = 0;
+
+function getCrewCredentials() {
+  if (!loadCrewCredentials) return null;
+  const now = Date.now();
+  if (cachedCredentials && now - cachedCredentialTimestamp < 60000) {
+    return cachedCredentials;
+  }
+  try {
+    const credentials = loadCrewCredentials();
+    cachedCredentials = credentials;
+    cachedCredentialTimestamp = now;
+    return credentials;
+  } catch (error) {
+    debugLog(`Failed to load crew credentials: ${error.message}`);
+    return null;
+  }
+}
+
+function normalizeWebhookUrl(baseUrl, webhookPath) {
+  if (!webhookPath) return null;
+  if (webhookPath.startsWith('http://') || webhookPath.startsWith('https://')) {
+    return webhookPath;
+  }
+  const sanitizedBase = (baseUrl || '').replace(/\/$/, '');
+  if (webhookPath.startsWith('/')) {
+    return `${sanitizedBase}${webhookPath}`;
+  }
+  return `${sanitizedBase}/${webhookPath}`;
+}
+
+async function postWebhookJson(url, payload, timeoutMs = DEFAULT_WEBHOOK_TIMEOUT_MS) {
+  if (typeof globalThis.fetch !== 'function') {
+    throw new Error('fetch is not available in this Node.js runtime (Node 18+ required).');
+  }
+
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer =
+    controller && Number.isFinite(timeoutMs) && timeoutMs > 0
+      ? setTimeout(() => controller.abort(), timeoutMs)
+      : null;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      signal: controller ? controller.signal : undefined
+    });
+
+    const rawText = await response.text();
+    let data = null;
+    if (rawText) {
+      try {
+        data = JSON.parse(rawText);
+      } catch (_) {
+        data = rawText;
+      }
+    }
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      data,
+      headers: response.headers ? Object.fromEntries(response.headers.entries()) : {}
+    };
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+function stringifyForSummary(value, fallback = '') {
+  if (value == null) return fallback;
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+  try {
+    const serialized = JSON.stringify(value);
+    return serialized.length > 600 ? `${serialized.slice(0, 597)}…` : serialized;
+  } catch (error) {
+    return fallback || String(value);
+  }
+}
+
+function summarizeCrewPayload(payload, success, statusCode) {
+  if (!success) {
+    if (payload && typeof payload === 'object') {
+      const message =
+        payload.error ||
+        payload.message ||
+        payload.status ||
+        stringifyForSummary(payload, '');
+      return message || `Request failed with status ${statusCode}`;
+    }
+    if (typeof payload === 'string') {
+      return payload;
+    }
+    return `Request failed with status ${statusCode}`;
+  }
+
+  if (!payload) {
+    return 'Received empty response payload.';
+  }
+
+  if (typeof payload === 'string') {
+    return payload;
+  }
+
+  const preferredFields = [
+    'summary',
+    'status',
+    'message',
+    'result',
+    'analysis',
+    'content',
+    'response'
+  ];
+
+  for (const field of preferredFields) {
+    if (typeof payload[field] === 'string') {
+      return payload[field];
+    }
+    if (payload[field] && typeof payload[field] === 'object') {
+      return stringifyForSummary(payload[field]);
+    }
+  }
+
+  if (payload.data) {
+    if (typeof payload.data === 'string') {
+      return payload.data;
+    }
+    if (payload.data.summary || payload.data.message) {
+      return stringifyForSummary(payload.data.summary || payload.data.message);
+    }
+  }
+
+  return stringifyForSummary(payload, 'Received structured response.');
+}
+
+async function gatherLiveCrewReports(assignments, crewMap, message) {
+  const diagnostics = [];
+  const reports = [];
+
+  const credentials = getCrewCredentials();
+  if (!credentials || !credentials.n8n || !credentials.n8n.baseUrl) {
+    diagnostics.push('Live crew telemetry unavailable (missing N8N credentials).');
+    return { reports, diagnostics };
+  }
+
+  const webhookBase = (
+    process.env.N8N_WEBHOOK_BASE ||
+    `${credentials.n8n.baseUrl.replace(/\/$/, '')}/webhook`
+  ).replace(/\/$/, '');
+
+  const requestId = crypto.randomUUID();
+  const maxCrew = Number.isFinite(MAX_CREW_WEBHOOKS) && MAX_CREW_WEBHOOKS > 0 ? MAX_CREW_WEBHOOKS : 4;
+
+  for (const assignment of assignments.slice(0, maxCrew)) {
+    const crew = crewMap.get(assignment.crewMemberId);
+    if (!crew) continue;
+
+    const n8nConfig = crew.integrations && crew.integrations.n8n;
+    const webhookPath =
+      (n8nConfig && n8nConfig.webhookPath) ||
+      `/webhook/${String(crew.id).replace(/_/g, '-')}`;
+    const url = normalizeWebhookUrl(webhookBase, webhookPath.replace(/^\/webhook\//, ''));
+    if (!url) {
+      diagnostics.push(`Missing webhook path for ${crew.name}.`);
+      continue;
+    }
+
+    const payload = {
+      request_id: requestId,
+      crew_member: crew.id,
+      crew_name: crew.name,
+      role: crew.role,
+      priority: 'user_request',
+      timestamp: new Date().toISOString(),
+      query: message,
+      source: 'alex-ai-npx-cli',
+      context: {
+        matchedKeywords: assignment.matchedKeywords,
+        score: assignment.score
+      }
+    };
+
+    try {
+      debugLog(`POST ${url}`);
+      const response = await postWebhookJson(url, payload);
+      const summary = summarizeCrewPayload(response.data, response.ok, response.status);
+      reports.push({
+        crewId: crew.id,
+        crewName: crew.name,
+        role: crew.role,
+        success: response.ok,
+        status: response.status,
+        summary,
+        receivedAt: new Date().toISOString(),
+        payload: response.data
+      });
+
+      if (!response.ok) {
+        diagnostics.push(
+          `${crew.name} webhook responded with status ${response.status}: ${summary}`
+        );
+      }
+    } catch (error) {
+      diagnostics.push(`${crew.name} webhook error: ${error.message}`);
+      reports.push({
+        crewId: crew.id,
+        crewName: crew.name,
+        role: crew.role,
+        success: false,
+        status: 'error',
+        summary: error.message,
+        receivedAt: new Date().toISOString(),
+        payload: null
+      });
+    }
+
+    await delay(DEFAULT_WEBHOOK_THROTTLE_MS);
+  }
+
+  return { reports, diagnostics };
 }
 
 function scoreCrewMember(crew, lowerQuery) {
@@ -185,7 +453,7 @@ function buildActionPlan(assignments, crewMap, message) {
   return actions.slice(0, 3);
 }
 
-function buildCrewBriefing(message, assignments, crewMap) {
+function buildCrewBriefing(message, assignments, crewMap, crewReports = [], diagnostics = []) {
   const lines = [];
   lines.push('## Observation Lounge Coordination');
   lines.push('');
@@ -235,15 +503,52 @@ function buildCrewBriefing(message, assignments, crewMap) {
   lines.push('');
   lines.push('_Crew coordination complete. Request deeper analysis or implementation support at any time._');
 
+  if (crewReports.length > 0 || diagnostics.length > 0) {
+    lines.push('');
+    lines.push('### Live Crew Responses');
+    if (crewReports.length === 0) {
+      lines.push('- No live responses available.');
+    } else {
+      crewReports.forEach((report) => {
+        const header = `- **${report.crewName} — ${report.role || 'Crew Specialist'}**`;
+        lines.push(header);
+        if (report.success) {
+          lines.push(`  - ${report.summary || 'Response received.'}`);
+        } else {
+          lines.push(`  - ⚠️ ${report.summary || 'No response received.'}`);
+        }
+        if (report.payload && typeof report.payload === 'object' && report.payload.recommendations) {
+          const recs = Array.isArray(report.payload.recommendations)
+            ? report.payload.recommendations
+            : [report.payload.recommendations];
+          recs.slice(0, 3).forEach((rec) => {
+            if (rec) {
+              lines.push(`    • ${typeof rec === 'string' ? rec : stringifyForSummary(rec)}`);
+            }
+          });
+        }
+      });
+    }
+
+    diagnostics.forEach((messageText) => {
+      lines.push(`> ⚠️ ${messageText}`);
+    });
+  }
+
   return lines.join('\n');
 }
 
-function buildRAGInsights(assignments, crewMap) {
+function buildRAGInsights(assignments, crewMap, crewReports = []) {
+  const reportMap = new Map(crewReports.map((report) => [report.crewId, report]));
   return assignments.slice(0, 3).map(assignment => {
     const crew = crewMap.get(assignment.crewMemberId);
     if (!crew) return `Crew member ${assignment.crewMemberId} is on standby.`;
     const focus = chooseFocus(crew);
-    return `${crew.name} is prepared to handle ${focus.toLowerCase()} — ${assignment.reason}`;
+    const report = reportMap.get(assignment.crewMemberId);
+    const summarySuffix = report
+      ? ` Current telemetry: ${report.summary}`
+      : '';
+    return `${crew.name} is prepared to handle ${focus.toLowerCase()} — ${assignment.reason}.${summarySuffix}`;
   });
 }
 
@@ -271,14 +576,20 @@ function formatCrewForResponse(assignments, crewMap) {
   });
 }
 
-function buildWorkflowResults(assignments, crewMap) {
+function buildWorkflowResults(assignments, crewMap, crewReports = []) {
+  const reportMap = new Map(crewReports.map((report) => [report.crewId, report]));
   return assignments.slice(0, 3).map(assignment => {
     const crew = crewMap.get(assignment.crewMemberId);
+    const report = reportMap.get(assignment.crewMemberId);
     if (!crew) {
       return {
         crewMember: assignment.crewMemberId,
         matchedKeywords: assignment.matchedKeywords,
-        score: assignment.score
+        score: assignment.score,
+        success: report ? report.success : false,
+        responseSummary: report ? report.summary : null,
+        responseStatus: report ? report.status : null,
+        receivedAt: report ? report.receivedAt : null
       };
     }
     return {
@@ -287,7 +598,11 @@ function buildWorkflowResults(assignments, crewMap) {
       score: assignment.score,
       workflowId: crew.integrations?.n8n?.workflowId || null,
       webhookPath: crew.integrations?.n8n?.webhookPath || null,
-      reason: assignment.reason
+      reason: assignment.reason,
+      success: report ? report.success : true,
+      responseSummary: report ? report.summary : null,
+      responseStatus: report ? report.status : null,
+      receivedAt: report ? report.receivedAt : null
     };
   });
 }
@@ -314,20 +629,38 @@ function createCore() {
       await core.initialize();
       const { members, map } = crewCache;
       const assignments = assignCrew(message, members);
-      const responseText = buildCrewBriefing(message, assignments, map);
+      const { reports, diagnostics } = await gatherLiveCrewReports(assignments, map, message);
+      const responseText = buildCrewBriefing(message, assignments, map, reports, diagnostics);
+      const workflowResults = buildWorkflowResults(assignments, map, reports);
+
+      if (diagnostics.length > 0) {
+        workflowResults.push({
+          crewMember: 'system',
+          matchedKeywords: [],
+          score: 0,
+          workflowId: null,
+          webhookPath: null,
+          reason: 'Diagnostics',
+          success: false,
+          responseSummary: diagnostics.join(' | '),
+          responseStatus: 'diagnostic',
+          receivedAt: new Date().toISOString()
+        });
+      }
 
       return {
         success: true,
         message: responseText,
         coordinatedResponse: responseText,
         crewMembers: formatCrewForResponse(assignments, map),
-        ragInsights: buildRAGInsights(assignments, map),
-        n8nWorkflowResults: buildWorkflowResults(assignments, map),
+        ragInsights: buildRAGInsights(assignments, map, reports),
+        n8nWorkflowResults: workflowResults,
         crossPlatformSync: {
           platformsSynced: 1,
           memoriesShared: 0,
           crewConsciousnessUpdated: false
-        }
+        },
+        diagnostics
       };
     },
 

@@ -100,6 +100,8 @@
     },
     {
       "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'geordi_la_forge',\n  crew_name: 'Lieutenant Commander Geordi La Forge',\n  role: 'Chief Engineer',\n  summary: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Lieutenant Commander Geordi La Forge Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.model || null,\n    usage: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.usage || null\n  }\n} }}",
         "options": {}
       },
       "id": "crew_response",

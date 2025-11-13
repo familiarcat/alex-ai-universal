@@ -100,6 +100,8 @@
     },
     {
       "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'counselor_troi',\n  crew_name: 'Counselor Deanna Troi',\n  role: 'Ship Counselor',\n  summary: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Counselor Deanna Troi Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Counselor Deanna Troi AI Agent').item.json?.model || null,\n    usage: $('Counselor Deanna Troi AI Agent').item.json?.usage || null\n  }\n} }}",
         "options": {}
       },
       "id": "crew_response",
