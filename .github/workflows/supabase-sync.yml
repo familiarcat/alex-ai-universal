@@ -70,7 +70,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies (if package-lock exists)
-        if: exists('package-lock.json')
+        if: ${{ hashFiles('package-lock.json') != '' }}
         run: npm ci
 
       - name: Configure AWS credentials
