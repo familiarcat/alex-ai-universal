@@ -77,6 +77,17 @@ async function main() {
   const count = Number(process.env.HARNESS_COUNT || 5);
   const crews = ['picard', 'riker', 'data', 'la_forge', 'worf', 'troi', 'crusher', 'uhura', 'quark', 'chief_obrien'];
   const results: HarnessResult[] = [];
+  const supabaseUrl = process.env.SUPABASE_URL?.trim();
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const supabaseUrlIsValid = (() => {
+    if (!supabaseUrl) return false;
+    try {
+      new URL(supabaseUrl);
+      return !supabaseUrl.startsWith('***');
+    } catch {
+      return false;
+    }
+  })();
 
   for (let i = 0; i < count; i++) {
     const crew = crews[i % crews.length];
@@ -89,14 +100,18 @@ async function main() {
     results.push({ id: memoryId, crew_member: crew, title: payload.title });
   }
 
-  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (supabaseUrlIsValid && supabaseKey) {
     for (const result of results) {
-      const record = await fetchMemoryRecord(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, result.id);
+      const record = await fetchMemoryRecord(supabaseUrl!, supabaseKey, result.id);
       if (!record) {
         throw new Error(`Memory ${result.id} not found in Supabase`);
       }
       console.log(`Verified memory ${result.id} for crew ${record.crew_member}`);
     }
+  } else {
+    console.warn(
+      'Skipping Supabase verification because SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY are missing or masked.'
+    );
   }
 
   console.log(`Harness complete. Inserted ${results.length} memories.`);
