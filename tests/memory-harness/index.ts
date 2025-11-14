@@ -37,8 +37,25 @@ function generateMemoryPayload(index: number, crew: string): MemoryPayload {
   };
 }
 
+function resolveWebhookUrl() {
+  const trimmedOverride = process.env.MEMORY_WEBHOOK_URL?.trim();
+  if (trimmedOverride) {
+    return trimmedOverride;
+  }
+
+  const base =
+    process.env.N8N_URL?.trim().replace(/\/$/, '') ||
+    'https://n8n.pbradygeorgen.com';
+  return `${base}/webhook/crew-memory-storage`;
+}
+
 async function sendMemory(payload: MemoryPayload) {
-  const url = process.env.MEMORY_WEBHOOK_URL || `${process.env.N8N_URL}/webhook/crew-memory-storage`;
+  const url = resolveWebhookUrl();
+  if (!/^https?:\/\//i.test(url)) {
+    throw new Error(
+      `Memory harness requires a valid webhook URL; received "${url}". Set MEMORY_WEBHOOK_URL or N8N_URL secrets.`
+    );
+  }
   const response = await axios.post(url, { body: payload });
   return response.data;
 }
