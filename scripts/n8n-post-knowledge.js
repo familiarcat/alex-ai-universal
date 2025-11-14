@@ -45,7 +45,7 @@ async function main() {
   loadSecrets(['N8N_ORCH_URL', 'N8N_INGEST_URL']);
   const orchUrl = process.env.N8N_ORCH_URL;
   const ingestUrl =
-    process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/ingest-knowledge';
+    process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/knowledge-ingest';
 
   // Base knowledge doc (for direct ingest)
   const knowledgeDoc = {
