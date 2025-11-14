@@ -2,6 +2,8 @@
 
 import axios from 'axios';
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
 type MemoryPayload = {
   crewMember: string;
@@ -115,6 +117,14 @@ async function main() {
   }
 
   console.log(`Harness complete. Inserted ${results.length} memories.`);
+
+  const outputPath = path.join(__dirname, 'output.json');
+  fs.writeFileSync(
+    outputPath,
+    JSON.stringify({ memoryIds: results.map((result) => result.id) }, null, 2),
+    'utf8'
+  );
+  console.log(`Memory IDs written to ${outputPath}`);
 }
 
 main().catch((error) => {
