@@ -18,7 +18,10 @@ const path = require('path');
 
 const namespace = process.env.ALEX_AI_PARAMETER_NAMESPACE || '/alex-ai/supabase';
 const outputIndex = process.argv.indexOf('--output');
+const formatIndex = process.argv.indexOf('--format');
+const explicitFormat = formatIndex !== -1 ? process.argv[formatIndex + 1] : undefined;
 const shouldPrint = process.argv.includes('--print') || outputIndex === -1;
+const format = explicitFormat || (shouldPrint ? 'exports' : 'file');
 const outputFile =
   outputIndex === -1 ? null : path.resolve(process.argv[outputIndex + 1] || '');
 
@@ -52,6 +55,13 @@ function renderExports(values) {
   return lines.join('\n');
 }
 
+function renderPlain(values) {
+  return Object.entries(values)
+    .filter(([, value]) => value)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n');
+}
+
 function main() {
   const envValues = {};
 
@@ -61,7 +71,9 @@ function main() {
       const value = fetchParameter(slug);
       if (value) envValues[key] = value;
     } catch (err) {
-      console.warn(err.message.trim());
+      if (slug !== 'supabase-api-key') {
+        console.error(err.message.trim());
+      }
     }
   });
 
@@ -70,9 +82,19 @@ function main() {
     process.exit(1);
   }
 
+  if (format === 'json') {
+    console.log(JSON.stringify(envValues, null, 2));
+    return;
+  }
+
+  if (format === 'plain') {
+    console.log(renderPlain(envValues));
+    return;
+  }
+
   const rendered = renderExports(envValues);
 
-  if (shouldPrint) {
+  if (format === 'exports') {
     console.log(rendered);
     return;
   }
