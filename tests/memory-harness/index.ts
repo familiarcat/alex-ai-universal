@@ -39,14 +39,17 @@ function generateMemoryPayload(index: number, crew: string): MemoryPayload {
 
 function resolveWebhookUrl() {
   const trimmedOverride = process.env.MEMORY_WEBHOOK_URL?.trim();
-  if (trimmedOverride) {
+  if (trimmedOverride && /^https?:\/\//i.test(trimmedOverride)) {
     return trimmedOverride;
   }
 
-  const base =
-    process.env.N8N_URL?.trim().replace(/\/$/, '') ||
-    'https://n8n.pbradygeorgen.com';
-  return `${base}/webhook/crew-memory-storage`;
+  const baseCandidate = process.env.N8N_URL?.trim();
+  const sanitizedBase =
+    baseCandidate && /^https?:\/\//i.test(baseCandidate)
+      ? baseCandidate.replace(/\/$/, '')
+      : 'https://n8n.pbradygeorgen.com';
+
+  return `${sanitizedBase}/webhook/crew-memory-storage`;
 }
 
 async function sendMemory(payload: MemoryPayload) {
