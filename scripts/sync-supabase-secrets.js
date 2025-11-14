@@ -26,6 +26,7 @@ function discoverSecrets() {
     ['SUPABASE_SERVICE_ROLE_KEY', env.SUPABASE_SERVICE_ROLE_KEY || supabase.serviceKey],
     ['SUPABASE_ANON_KEY', env.SUPABASE_ANON_KEY],
     ['SUPABASE_API_KEY', env.SUPABASE_API_KEY],
+    ['OPENAI_API_KEY', env.OPENAI_API_KEY],
   ];
 
   return entries.filter(([, value]) => Boolean(value));

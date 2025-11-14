@@ -57,14 +57,17 @@
     {
       "parameters": {
         "url": "https://api.openai.com/v1/embeddings",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "openAiApi",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Content-Type",
               "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{ `Bearer ${$env.OPENAI_API_KEY}` }}"
             }
           ]
         },
@@ -94,8 +97,7 @@
       "position": [
         680,
         500
-      ],
-      "disabled": true
+      ]
     },
     {
       "parameters": {
@@ -116,8 +118,7 @@
       "position": [
         900,
         500
-      ],
-      "disabled": true
+      ]
     },
     {
       "parameters": {

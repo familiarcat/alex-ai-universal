@@ -25,7 +25,13 @@ const format = explicitFormat || (shouldPrint ? 'exports' : 'file');
 const outputFile =
   outputIndex === -1 ? null : path.resolve(process.argv[outputIndex + 1] || '');
 
-const PARAMETERS = ['supabase-url', 'supabase-service-role-key', 'supabase-anon-key', 'supabase-api-key'];
+const PARAMETERS = [
+  'supabase-url',
+  'supabase-service-role-key',
+  'supabase-anon-key',
+  'supabase-api-key',
+  'openai-api-key',
+];
 
 function fetchParameter(name) {
   const parameterName = `${namespace}/${name}`;
