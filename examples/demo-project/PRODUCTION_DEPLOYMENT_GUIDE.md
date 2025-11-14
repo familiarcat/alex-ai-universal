@@ -118,7 +118,7 @@ gcloud auth login
 
 # 3. Deploy function
 gcloud functions deploy alex-ai-dashboard \
-  --runtime nodejs18 \
+  --runtime nodejs20 \
   --trigger-http \
   --allow-unauthenticated
 ```

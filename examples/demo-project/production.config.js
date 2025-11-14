@@ -84,7 +84,7 @@ module.exports = {
             lambda: {
                 timeout: 30,
                 memory: 512,
-                runtime: 'nodejs18.x'
+                runtime: 'nodejs20.x'
             }
         }
     }
