@@ -26,6 +26,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm ci
+          cache: 'npm'
+          cache-dependency-path: tests/memory-harness/package-lock.json
+      - name: Install harness dependencies
+        run: npm ci --prefix tests/memory-harness
       - name: Run memory harness
-        run: npm run test:memory
+        run: npm --prefix tests/memory-harness run start
+      - name: Upload harness output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: memory-harness-output
+          path: tests/memory-harness/output.json

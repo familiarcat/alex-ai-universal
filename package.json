@@ -80,7 +80,7 @@
     "rag:setup-orchestrator": "node scripts/setup-orchestrator-workflow.js",
     "rag:force-register": "node scripts/n8n-force-register-webhooks.js",
     "rag:run": "node scripts/n8n-run-workflow.js",
-    "test:memory": "NODE_PATH=./node_modules ts-node tests/memory-harness/index.ts",
+    "test:memory": "npm --prefix tests/memory-harness run start",
     "verify:ddd": "NODE_PATH=./node_modules node scripts/ci-verify-client-n8n-supabase.js",
     "e2e:verify": "bash ./scripts/e2e-verify-all.sh",
     "innovation:plan": "bash ./scripts/innovation-day-runner.sh",
@@ -105,6 +105,7 @@
     "pg": "^8.16.3",
     "prettier": "^3.2.5",
     "puppeteer": "^23.6.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "engines": {

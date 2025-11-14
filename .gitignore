@@ -30,6 +30,9 @@ Thumbs.db
 logs/
 *.log
 
+# Test harness artifacts
+tests/memory-harness/output.json
+
 # Runtime data
 pids/
 *.pid
