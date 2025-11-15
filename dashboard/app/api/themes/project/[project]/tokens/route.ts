@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProjectTheme, getTokensForTheme } from '../../../../../lib/themes';
+import { getProjectTheme, getTokensForTheme } from '@/lib/themes';
 
 export async function GET(_req: Request, { params }: { params: { project: string } }) {
   const project = params?.project;

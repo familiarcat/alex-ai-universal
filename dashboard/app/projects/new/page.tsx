@@ -241,19 +241,20 @@ export default function NewProjectPage() {
   
   // Update iframe state for crossfade
   useEffect(() => {
-    const newKey = `${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`;
-    const newUrl = `/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`;
-    
-    if (previewIframeState.current !== newKey) {
-      setPreviewIframeState({
-        current: newKey,
-        currentUrl: newUrl,
-        previous: previewIframeState.current,
-        previousUrl: previewIframeState.currentUrl,
-        isLoaded: false // New iframe not loaded yet
-      });
-    }
-  }, [debouncedPreview, previewIframeState.current, previewIframeState.currentUrl]);
+    const nextKey = `${debouncedPreview.theme}-${debouncedPreview.headline}-${debouncedPreview.subheadline}`;
+    const nextUrl = `/projects/preview?headline=${encodeURIComponent(debouncedPreview.headline)}&subheadline=${encodeURIComponent(debouncedPreview.subheadline)}&description=${encodeURIComponent(debouncedPreview.description)}&theme=${encodeURIComponent(debouncedPreview.theme)}`;
+
+    setPreviewIframeState((prev) => {
+      if (prev.current === nextKey) return prev;
+      return {
+        current: nextKey,
+        currentUrl: nextUrl,
+        previous: prev.current,
+        previousUrl: prev.currentUrl,
+        isLoaded: false,
+      };
+    });
+  }, [debouncedPreview]);
 
   return (
     <div style={containerStyle}>

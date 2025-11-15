@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
@@ -7,14 +7,7 @@ const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchMemories();
-    if (showStats) {
-      fetchStats();
-    }
-  }, [agentName, limit]);
-
-  const fetchMemories = async () => {
+  const fetchMemories = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get('/api/memories/retrieve', {
@@ -31,16 +24,23 @@ const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [agentName, limit]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await axios.get('/api/memories/stats');
       setStats(response.data);
     } catch (err) {
       console.error('Error fetching stats:', err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMemories();
+    if (showStats) {
+      fetchStats();
+    }
+  }, [fetchMemories, fetchStats, showStats]);
 
   const getMemoryTypeColor = (type) => {
     const colors = {

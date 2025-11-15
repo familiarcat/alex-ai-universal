@@ -2,44 +2,22 @@
 
 import Link from 'next/link';
 
-export default function ThemeTemplatePage() {
-  return (
-    <div style={{ padding: 24 }}>
-      <div style={{ maxWidth: 860, margin: '0 auto' }}>
-        <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>Theme Template</h1>
-        <div style={{ opacity: 0.8, marginBottom: 16 }}>
-          Use this page to preview and validate universal theme tokens. Switch themes in the navbar and verify variables apply correctly.
-        </div>
+const TOKEN_KEYS = [
+  '--primary',
+  '--secondary',
+  '--accent',
+  '--background',
+  '--surface',
+  '--text',
+  '--heading',
+  '--text-muted',
+  '--border',
+  '--shadow',
+  '--on-primary',
+  '--scrim',
+];
 
-        <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
-          {[
-            '--primary','--secondary','--accent','--background','--surface','--text','--heading','--text-muted','--border','--shadow','--on-primary','--scrim'
-          ].map((k) => (
-            <div key={k} style={{ border: 'var(--border)', borderRadius: 12, padding: 16, background: 'var(--surface)' }}>
-              <div style={{ fontWeight: 700, marginBottom: 8 }}>{k}</div>
-              <div
-                style={{
-                  height: 60,
-                  borderRadius: 8,
-                  border: '1px solid var(--border)',
-                  background: `var(${k})`
-                }}
-              />
-              <div style={{ fontSize: 12, opacity: 0.7, marginTop: 8 }}>value of var({k})</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
-          <Link href="/gallery" style={{ border: 'var(--border)', padding: '8px 12px', borderRadius: 8, textDecoration: 'none', color: 'var(--text)' }}>← Back to Gallery</Link>
-          <Link href="/dashboard" style={{ border: 'var(--border)', padding: '8px 12px', borderRadius: 8, textDecoration: 'none', color: 'var(--text)' }}>Dashboard</Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function ThemeTemplate() {
+function ThemeShowcase() {
   const card = {
     background: 'var(--surface)',
     border: '1px solid var(--border)',
@@ -99,6 +77,55 @@ export default function ThemeTemplate() {
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+export default function ThemeTemplatePage() {
+  return (
+    <div style={{ padding: 24 }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gap: 32 }}>
+        <div>
+          <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>Theme Template</h1>
+          <div style={{ opacity: 0.8, marginBottom: 16 }}>
+            Use this page to preview and validate universal theme tokens. Switch themes in the navbar and verify variables apply correctly.
+          </div>
+
+          <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
+            {TOKEN_KEYS.map((token) => (
+              <div key={token} style={{ border: 'var(--border)', borderRadius: 12, padding: 16, background: 'var(--surface)' }}>
+                <div style={{ fontWeight: 700, marginBottom: 8 }}>{token}</div>
+                <div
+                  style={{
+                    height: 60,
+                    borderRadius: 8,
+                    border: '1px solid var(--border)',
+                    background: `var(${token})`,
+                  }}
+                />
+                <div style={{ fontSize: 12, opacity: 0.7, marginTop: 8 }}>value of var({token})</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
+            <Link
+              href="/gallery"
+              style={{ border: 'var(--border)', padding: '8px 12px', borderRadius: 8, textDecoration: 'none', color: 'var(--text)' }}
+            >
+              ← Back to Gallery
+            </Link>
+            <Link
+              href="/dashboard"
+              style={{ border: 'var(--border)', padding: '8px 12px', borderRadius: 8, textDecoration: 'none', color: 'var(--text)' }}
+            >
+              Dashboard
+            </Link>
+          </div>
+        </div>
+
+        <ThemeShowcase />
+      </div>
     </div>
   );
 }

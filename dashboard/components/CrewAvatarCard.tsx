@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function CrewAvatarCard({ member, status, avatarUrl }: { member: string; status?: { history?: string; suggestions?: string[] }, avatarUrl?: string }) {
@@ -50,7 +51,14 @@ export default function CrewAvatarCard({ member, status, avatarUrl }: { member: 
     <div style={{ border: 'var(--border)', borderRadius: 12, padding: 16, background: 'var(--surface, rgba(0,0,0,0.1))' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         {avatarUrl ? (
-          <img src={avatarUrl} alt={member} width={36} height={36} style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)' }} />
+          <Image
+            src={avatarUrl}
+            alt={member}
+            width={36}
+            height={36}
+            style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)' }}
+            unoptimized
+          />
         ) : (
           <div style={{ fontSize: 28 }}>{avatarEmoji}</div>
         )}

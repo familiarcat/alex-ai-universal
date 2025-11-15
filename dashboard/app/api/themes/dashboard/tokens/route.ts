@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDashboardThemeId, getTokensForTheme } from '../../../../lib/themes';
+import { getDashboardThemeId, getTokensForTheme } from '@/lib/themes';
 
 export async function GET() {
   const id = getDashboardThemeId();
