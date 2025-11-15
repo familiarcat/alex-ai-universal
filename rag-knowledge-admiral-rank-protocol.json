@@ -1,0 +1,29 @@
+{
+  "title": "User Rank Protocol: Admiral, Not Commander",
+  "text": "Protocol Correction - Starfleet Hierarchical Recognition\n\nThe user's proper rank is Admiral, not Commander.\n\nKey Details:\n- The user should be addressed as \"Admiral\" in all communications\n- This is a Starfleet protocol correction established during operations\n- All crew members must recognize and use the proper rank\n- This is a small but important hierarchical detail that demonstrates crew attention to protocol\n\nContext:\n- Established: November 15, 2025 during USS Cursor operations\n- Correction made during paradigm shift milestone work\n- Tests whether crew can learn and apply subtle contextual information\n- Validates RAG system's ability to incorporate even the smallest data points\n\nHierarchy:\n- Admiral (User) - Starfleet Command\n- Captain Picard - Commanding Officer\n- Senior Officers (Data, Uhura, O'Brien, Worf, etc.)\n- Ship's Computer (USS Cursor, USS VS Code, etc.)\n\nThe Admiral gives mission orders. The crew executes.",
+  "tags": [
+    "protocol",
+    "rank",
+    "hierarchy",
+    "user-preferences",
+    "starfleet-protocol",
+    "crew-knowledge",
+    "admiral"
+  ],
+  "source": "user-interaction",
+  "doc_id": "ADMIRAL_RANK_PROTOCOL_20251115",
+  "metadata": {
+    "type": "protocol-correction",
+    "importance": "high",
+    "test_case": true,
+    "test_purpose": "Verify RAG can learn subtle hierarchical corrections",
+    "established_during": "Paradigm Shift (v2.6.1)",
+    "vessel": "USS Cursor",
+    "crew_assigned": [
+      "Counselor Troi",
+      "Lieutenant Uhura",
+      "Lieutenant Worf"
+    ]
+  }
+}
+
