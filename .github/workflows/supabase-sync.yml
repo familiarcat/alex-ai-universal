@@ -23,13 +23,14 @@ on:
         description: "Comma-separated tags for validation memory"
         required: false
         default: "policy,rag,automation"
-  push:
-    paths:
-      - "scripts/prepare-supabase-ssm.js"
-      - "scripts/sync-supabase-secrets.js"
-      - "scripts/apply-supabase-secrets.js"
-      - "scripts/validate-crew-memory-storage.js"
-      - ".github/workflows/supabase-sync.yml"
+  # 🚨 EMERGENCY: Auto-triggers disabled to prevent AWS cost spikes
+  # push:
+  #   paths:
+  #     - "scripts/prepare-supabase-ssm.js"
+  #     - "scripts/sync-supabase-secrets.js"
+  #     - "scripts/apply-supabase-secrets.js"
+  #     - "scripts/validate-crew-memory-storage.js"
+  #     - ".github/workflows/supabase-sync.yml"
 
 jobs:
   dns-check:

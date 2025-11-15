@@ -1,10 +1,12 @@
 name: Deploy Alex AI Dashboard
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # 🚨 EMERGENCY: Auto-triggers disabled to prevent AWS cost spikes
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
