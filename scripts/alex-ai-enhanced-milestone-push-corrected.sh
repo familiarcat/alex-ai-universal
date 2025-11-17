@@ -438,7 +438,11 @@ main() {
     local changes_summary=$(analyze_git_changes "$milestone_name")
     
     # Analyze commit messages for completed tasks
-    local completed_tasks=($(analyze_commit_messages "$milestone_name"))
+    # Use mapfile to properly handle multi-word accomplishments
+    local completed_tasks=()
+    while IFS= read -r line; do
+        [ -n "$line" ] && completed_tasks+=("$line")
+    done < <(analyze_commit_messages "$milestone_name")
     local completed_tasks_count=${#completed_tasks[@]}
     
     # Analyze TODO completion
