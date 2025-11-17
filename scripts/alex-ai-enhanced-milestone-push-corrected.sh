@@ -196,23 +196,29 @@ analyze_commit_messages() {
             
             # Scripts
             if [[ "$file" =~ \.(sh|js|ts|py)$ ]] && [[ "$file" =~ scripts/ ]]; then
+                local script_name=$(basename "$file" .sh .js .ts .py | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
                 if [[ "$basename" =~ deploy|setup|install ]]; then
-                    completed_tasks+=("Deployment automation: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("Deployment automation: $script_name")
                 elif [[ "$basename" =~ restart|monitor|health|check ]]; then
-                    completed_tasks+=("System monitoring: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("System monitoring: $script_name")
                 elif [[ "$basename" =~ crew|analysis|strategy ]]; then
-                    completed_tasks+=("Crew analysis: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("Crew analysis: $script_name")
+                elif [[ "$basename" =~ terraform|docker|infrastructure ]]; then
+                    completed_tasks+=("Infrastructure automation: $script_name")
                 else
-                    completed_tasks+=("Script enhancement: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("Script enhancement: $script_name")
                 fi
             fi
             
             # Documentation
             if [[ "$file" =~ \.(md|txt)$ ]] && [[ "$file" =~ docs/|\.backup-ec2-emergency/ ]]; then
+                local doc_name=$(basename "$file" .md .txt | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
                 if [[ "$basename" =~ README|GUIDE|SETUP|INSTRUCTIONS ]]; then
-                    completed_tasks+=("Documentation: $(basename "$file" .md .txt | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("Documentation: $doc_name")
                 elif [[ "$basename" =~ ANALYSIS|REPORT|SUMMARY|STRATEGY ]]; then
-                    completed_tasks+=("Analysis report: $(basename "$file" .md .txt | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                    completed_tasks+=("Analysis report: $doc_name")
+                elif [[ "$basename" =~ CREW|DEPLOYMENT|TERRAFORM|DOCKER ]]; then
+                    completed_tasks+=("Technical documentation: $doc_name")
                 fi
             fi
             
@@ -227,12 +233,14 @@ analyze_commit_messages() {
             
             # Lambda functions
             if [[ "$file" =~ scripts/lambda/ ]]; then
-                completed_tasks+=("AWS Lambda function: $(basename "$file" .js .ts | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                local lambda_name=$(basename "$file" .js .ts | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                completed_tasks+=("AWS Lambda function: $lambda_name")
             fi
             
             # Monitoring scripts
             if [[ "$file" =~ scripts/monitoring/ ]]; then
-                completed_tasks+=("Monitoring system: $(basename "$file" .js .ts | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                local monitor_name=$(basename "$file" .js .ts | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                completed_tasks+=("Monitoring system: $monitor_name")
             fi
             
         done <<< "$all_changed_files"
