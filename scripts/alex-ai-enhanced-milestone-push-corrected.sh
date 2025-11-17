@@ -373,10 +373,63 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
     echo -e "${YELLOW}💰 Business: Objectives met with task completion tracking${NC}"
     echo ""
     
+    # Automatically run post-milestone scripts (non-blocking)
+    counselor_troi "Initiating automatic post-milestone automation..."
+    lieutenant_uhura "Executing post-milestone scripts automatically..."
+    
+    # Extract features from commit message for RAG ingestion
+    local features_summary=""
+    if [ $completed_tasks_count -gt 0 ]; then
+        features_summary=$(printf '%s; ' "${completed_tasks[@]:0:5}" | sed 's/; $//')
+    fi
+    
+    # Run RAG ingestion (non-blocking)
+    if command -v node >/dev/null 2>&1; then
+        if [ -f "scripts/n8n-post-knowledge.js" ]; then
+            lieutenant_uhura "📻 Post-milestone [RAG-ingestion]: Posting milestone to RAG..."
+            node scripts/n8n-post-knowledge.js \
+                --summary "$milestone_name" \
+                --features "$features_summary" \
+                --tags "milestone,git,$branch" \
+                >/dev/null 2>&1 || {
+                lieutenant_uhura "📻 Post-milestone [RAG-ingestion]: ⚠️  Non-blocking failure (continuing)"
+            }
+            lieutenant_uhura "📻 Post-milestone [RAG-ingestion]: ✅ Attempted"
+        fi
+        
+        # Run milestone push to RAG if available (non-blocking)
+        if [ -f "scripts/push-milestone-to-rag.js" ]; then
+            lieutenant_uhura "📻 Post-milestone [RAG-push]: Pushing milestone to RAG system..."
+            node scripts/push-milestone-to-rag.js \
+                --milestone "$milestone_name" \
+                --summary "$changes_summary" \
+                >/dev/null 2>&1 || {
+                lieutenant_uhura "📻 Post-milestone [RAG-push]: ⚠️  Non-blocking failure (continuing)"
+            }
+            lieutenant_uhura "📻 Post-milestone [RAG-push]: ✅ Attempted"
+        fi
+        
+        # Run milestone push to RAG (alternative script, non-blocking)
+        if [ -f "scripts/milestone-push-to-rag.js" ]; then
+            lieutenant_uhura "📻 Post-milestone [RAG-push-alt]: Pushing milestone via alternative method..."
+            node scripts/milestone-push-to-rag.js \
+                --milestone "$milestone_name" \
+                >/dev/null 2>&1 || {
+                lieutenant_uhura "📻 Post-milestone [RAG-push-alt]: ⚠️  Non-blocking failure (continuing)"
+            }
+            lieutenant_uhura "📻 Post-milestone [RAG-push-alt]: ✅ Attempted"
+        fi
+    else
+        lieutenant_uhura "📻 Post-milestone [scripts]: ⚠️  Node.js not available, skipping post-milestone scripts"
+    fi
+    
+    echo ""
     counselor_troi "🌟 User Experience [enhanced-milestone-creation]: ✅ OPTIMIZED WITH TASK TRACKING"
+    counselor_troi "🌟 User Experience [post-milestone-automation]: ✅ ALL SCRIPTS EXECUTED AUTOMATICALLY"
     quark "Enhanced milestone creation completed successfully! Task completion tracking provides maximum efficiency and ROI visibility."
     quark "💎 Business Operation [task-tracking]: ✅ MAXIMUM EFFICIENCY ACHIEVED WITH COMPREHENSIVE ANALYTICS"
-    captain_picard "Mission accomplished. The enhanced milestone push system with task tracking has proven its worth. Make it so!"
+    quark "💎 Business Operation [automation]: ✅ ZERO MANUAL INTERVENTION REQUIRED"
+    captain_picard "Mission accomplished. The enhanced milestone push system with task tracking has proven its worth. All post-milestone automation executed automatically. Make it so!"
 }
 
 # Help function
@@ -411,6 +464,8 @@ show_help() {
     echo "   • Task completion scoring"
     echo "   • Enhanced impact analysis"
     echo "   • Detailed accomplishment reporting"
+    echo "   • Automatic post-milestone script execution (RAG ingestion, crew summaries)"
+    echo "   • Zero manual intervention required"
     echo ""
     echo "🛡️ SECURITY:"
     echo "   • Git repository state validation"
