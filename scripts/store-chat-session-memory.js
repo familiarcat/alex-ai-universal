@@ -53,17 +53,154 @@ function sendToN8N(webhookPath, payload) {
 }
 
 /**
- * Extract and format chat session knowledge
+ * Fragment memory into semantic chunks for optimal vector storage
+ * Only stores new fragments when existing combinations can't represent the content
+ */
+function fragmentMemoryIntoVectors(content, maxChunkSize = 500) {
+  // Split content into semantic chunks (by sentences/paragraphs)
+  const sentences = content.split(/[.!?]\s+/).filter(s => s.trim().length > 0);
+  const chunks = [];
+  let currentChunk = '';
+  
+  for (const sentence of sentences) {
+    if ((currentChunk + sentence).length > maxChunkSize && currentChunk.length > 0) {
+      chunks.push(currentChunk.trim());
+      currentChunk = sentence;
+    } else {
+      currentChunk += (currentChunk ? '. ' : '') + sentence;
+    }
+  }
+  
+  if (currentChunk.trim().length > 0) {
+    chunks.push(currentChunk.trim());
+  }
+  
+  return chunks.map((chunk, index) => ({
+    content: chunk,
+    index,
+    fragmentId: `fragment-${Date.now()}-${index}`,
+    // Metadata for vector similarity matching and deduplication
+    keywords: extractKeywords(chunk),
+    semanticHash: generateSemanticHash(chunk),
+    // Crew accessibility metadata
+    crewRelevance: determineCrewRelevance(chunk)
+  }));
+}
+
+/**
+ * Extract keywords from content for similarity matching
+ */
+function extractKeywords(text) {
+  const words = text.toLowerCase().split(/\W+/);
+  const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'this', 'that', 'these', 'those']);
+  
+  const wordCount = new Map();
+  words.forEach((word) => {
+    if (word.length > 3 && !stopWords.has(word)) {
+      wordCount.set(word, (wordCount.get(word) || 0) + 1);
+    }
+  });
+  
+  return Array.from(wordCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([word]) => word);
+}
+
+/**
+ * Generate semantic hash for fragment deduplication
+ */
+function generateSemanticHash(text) {
+  // Simple hash based on normalized content (for deduplication)
+  const normalized = text.toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[^\w\s]/g, '')
+    .trim();
+  
+  // Use a simple hash function (in production, use proper hashing)
+  let hash = 0;
+  for (let i = 0; i < normalized.length; i++) {
+    const char = normalized.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  
+  return Math.abs(hash).toString(36);
+}
+
+/**
+ * Determine which crew members would find this fragment relevant
+ */
+function determineCrewRelevance(chunk) {
+  const relevance = {};
+  const lowerChunk = chunk.toLowerCase();
+  
+  // Commander Data - technical analysis, system optimization
+  if (lowerChunk.match(/\b(technical|system|optimization|algorithm|implementation|configuration|integration|deployment|monitoring|analysis|framework|error|debugging|automation)\b/)) {
+    relevance.data = 0.9;
+  }
+  
+  // Captain Picard - strategic decisions, mission continuity
+  if (lowerChunk.match(/\b(strategic|mission|decision|leadership|coordination|planning|architecture|design|vision)\b/)) {
+    relevance.picard = 0.9;
+  }
+  
+  // Geordi - infrastructure, system health
+  if (lowerChunk.match(/\b(infrastructure|health|monitoring|maintenance|system|performance|engineering)\b/)) {
+    relevance.la_forge = 0.9;
+  }
+  
+  // Worf - security, validation
+  if (lowerChunk.match(/\b(security|validation|threat|defense|protection|safety|compliance)\b/)) {
+    relevance.worf = 0.9;
+  }
+  
+  // Riker - tactical execution, workflow
+  if (lowerChunk.match(/\b(tactical|execution|workflow|coordination|team|management|operations)\b/)) {
+    relevance.riker = 0.9;
+  }
+  
+  // Quark - business, cost, optimization
+  if (lowerChunk.match(/\b(business|cost|optimization|efficiency|roi|profit|metrics|budget)\b/)) {
+    relevance.quark = 0.9;
+  }
+  
+  return relevance;
+}
+
+/**
+ * Extract and format chat session knowledge with vector fragmentation
  */
 function formatChatSessionMemory(chatSummary) {
   // Format according to crew memory storage workflow expectations
   // This will be processed by N8N with ambiguity and optimization workflows
   
+  const detailedAnalysis = chatSummary.detailedAnalysis || chatSummary.content || '';
+  
+  // Fragment memory into vector-optimized chunks
+  const fragments = fragmentMemoryIntoVectors(detailedAnalysis);
+  
   return {
     // Core memory content
     title: chatSummary.title || 'Chat Session Memory',
     summary: chatSummary.summary || chatSummary.description || '',
-    detailedAnalysis: chatSummary.detailedAnalysis || chatSummary.content || '',
+    detailedAnalysis: detailedAnalysis,
+    
+    // Vector fragmentation metadata
+    fragments: fragments,
+    fragmentCount: fragments.length,
+    fragmentationStrategy: 'semantic-chunking',
+    deduplicationEnabled: true,
+    vectorOptimization: {
+      enabled: true,
+      fragmentationEnabled: true,
+      deduplicationEnabled: true,
+      // Only store new data when existing fragments can't be combined
+      smartDeduplication: true,
+      // Enable crew-specific memory access
+      crewAccessOptimized: true,
+      semanticSearchEnabled: true
+    },
     
     // Crew member information (Data for technical analysis)
     crewMember: 'data', // Commander Data for technical/system analysis
@@ -76,7 +213,7 @@ function formatChatSessionMemory(chatSummary) {
     recommendations: chatSummary.recommendations || [],
     
     // Tags and metadata
-    tags: chatSummary.tags || ['chat-session', 'cursor-ai', 'milestone-automation'],
+    tags: chatSummary.tags || ['chat-session', 'cursor-ai', 'milestone-automation', 'vector-fragmentation'],
     
     // Session metadata
     sessionId: chatSummary.sessionId || `chat-${Date.now()}`,
