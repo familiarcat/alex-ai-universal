@@ -196,18 +196,26 @@ analyze_commit_messages() {
             
             # Scripts
             if [[ "$file" =~ \.(sh|js|ts|py)$ ]] && [[ "$file" =~ scripts/ ]]; then
-                local script_base=$(basename "$file" .sh .js .ts .py)
-                local script_name=$(echo "$script_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g')
-                if [[ "$basename" =~ deploy|setup|install ]]; then
-                    completed_tasks+=("Deployment automation: $script_name")
-                elif [[ "$basename" =~ restart|monitor|health|check ]]; then
-                    completed_tasks+=("System monitoring: $script_name")
-                elif [[ "$basename" =~ crew|analysis|strategy ]]; then
-                    completed_tasks+=("Crew analysis: $script_name")
-                elif [[ "$basename" =~ terraform|docker|infrastructure ]]; then
-                    completed_tasks+=("Infrastructure automation: $script_name")
-                else
-                    completed_tasks+=("Script enhancement: $script_name")
+                # Remove extension properly (handle one extension at a time)
+                local script_base="$basename"
+                script_base="${script_base%.sh}"
+                script_base="${script_base%.js}"
+                script_base="${script_base%.ts}"
+                script_base="${script_base%.py}"
+                local script_name=$(echo "$script_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g' | xargs)
+                # Only add if we have a meaningful name
+                if [ ${#script_name} -gt 5 ]; then
+                    if [[ "$basename" =~ deploy|setup|install ]]; then
+                        completed_tasks+=("Deployment automation: $script_name")
+                    elif [[ "$basename" =~ restart|monitor|health|check ]]; then
+                        completed_tasks+=("System monitoring: $script_name")
+                    elif [[ "$basename" =~ crew|analysis|strategy ]]; then
+                        completed_tasks+=("Crew analysis: $script_name")
+                    elif [[ "$basename" =~ terraform|docker|infrastructure ]]; then
+                        completed_tasks+=("Infrastructure automation: $script_name")
+                    else
+                        completed_tasks+=("Script enhancement: $script_name")
+                    fi
                 fi
             fi
             
