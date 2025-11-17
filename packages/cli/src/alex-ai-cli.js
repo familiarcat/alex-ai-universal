@@ -72,6 +72,73 @@ var NPXCLIHandler = /** @class */ (function () {
         });
     };
     /**
+     * Check if message is a cost analysis request
+     */
+    NPXCLIHandler.prototype.isCostAnalysisRequest = function (message) {
+        var costKeywords = [
+            'compare costs',
+            'cost analysis',
+            'cost comparison',
+            'aws costs',
+            'ec2 costs',
+            'cost report',
+            'analyze costs',
+            'cost breakdown',
+            'show costs',
+            'what are the costs',
+            'how much does it cost',
+            'cost estimate',
+            'emergency cost',
+            'ec2 emergency'
+        ];
+        var lowerMessage = message.toLowerCase();
+        return costKeywords.some(function (keyword) { return lowerMessage.includes(keyword); });
+    };
+    /**
+     * Handle cost analysis requests
+     */
+    NPXCLIHandler.prototype.handleCostAnalysis = function (options) {
+        return __awaiter(this, void 0, void 0, function () {
+            var costScriptPath, child_process_1, child;
+            return __generator(this, function (_a) {
+                try {
+                    costScriptPath = path.join(__dirname, '..', '..', '..', '.backup-ec2-emergency', 'compare-and-analyze-costs.js');
+                    child_process_1 = require('child_process');
+                    console.log('💰 Running EC2 Emergency Cost Analysis...');
+                    console.log('==========================================\n');
+                    child = child_process_1.spawn('node', [costScriptPath], {
+                        stdio: 'inherit',
+                        cwd: process.cwd()
+                    });
+                    child.on('close', function (code) {
+                        if (code === 0) {
+                            console.log('\n✅ Cost analysis complete!');
+                            console.log('📊 Reports saved to: .backup-ec2-emergency/');
+                            console.log('   • COST_ANALYSIS_REPORT.txt');
+                            console.log('   • COST_ANALYSIS_REPORT.json');
+                            console.log('   • EXECUTIVE_SUMMARY.md');
+                        }
+                        else {
+                            console.error("\n❌ Cost analysis failed with code ".concat(code));
+                        }
+                        process.exit(code || 0);
+                    });
+                    child.on('error', function (error) {
+                        console.error("❌ Failed to run cost analysis: ".concat(error.message));
+                        console.error('   Make sure the cost analysis script exists at:');
+                        console.error("   ".concat(costScriptPath));
+                        process.exit(1);
+                    });
+                }
+                catch (error) {
+                    console.error("❌ Cost analysis failed: ".concat(error.message));
+                    process.exit(1);
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    /**
      * Handle NPX engagement without creating project files
      */
     NPXCLIHandler.prototype.handleEngagement = function (message) {
@@ -81,6 +148,11 @@ var NPXCLIHandler = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, 3, 4]);
+                        // Check for cost analysis requests
+                        if (this.isCostAnalysisRequest(message)) {
+                            console.log('💰 Cost analysis request detected!');
+                            return [2 /*return*/, this.handleCostAnalysis()];
+                        }
                         return [4 /*yield*/, this.core.processMessage(message)];
                     case 1:
                         response = _a.sent();
@@ -216,6 +288,31 @@ program
         }
     });
 }); });
+// Cost analysis command
+program
+    .command('costs')
+    .alias('cost')
+    .description('Analyze EC2 emergency costs and compare backup vs current configurations')
+    .option('-f, --format <type>', 'Output format: text, json, or summary', 'text')
+    .action(function (options) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, npxHandler.handleCostAnalysis({ format: options.format })];
+            case 1:
+                _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                error_5 = _a.sent();
+                console.error("\u274C Cost analysis failed: ".concat(error_5.message));
+                process.exit(1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 // N8N integration command
 program
     .command('n8n')
@@ -271,6 +368,7 @@ program
                                 console.log('\n📋 Available Commands:');
                                 console.log('  • Ask any question for crew assistance');
                                 console.log('  • "status" - Show system status');
+                                console.log('  • "compare costs" or "cost analysis" - Run EC2 cost analysis');
                                 console.log('  • "n8n start" - Start N8N integration');
                                 console.log('  • "exit" - Quit chat mode');
                                 console.log('');

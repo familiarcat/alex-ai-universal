@@ -36,6 +36,13 @@ class NPXCLIHandler {
    */
   async handleEngagement(message: string): Promise<void> {
     try {
+      // Check for cost analysis requests
+      if (this.isCostAnalysisRequest(message)) {
+        console.log('💰 Cost analysis request detected!');
+        await this.handleCostAnalysis();
+        return;
+      }
+      
       const response = await this.core.processMessage(message);
 
       if (response && response.success) {
@@ -69,6 +76,72 @@ class NPXCLIHandler {
       // Ensure process exits properly
       process.exit(0);
     }
+  }
+
+  /**
+   * Handle cost analysis requests
+   */
+  async handleCostAnalysis(options?: { format?: 'text' | 'json' | 'summary' }): Promise<void> {
+    try {
+      const costScriptPath = path.join(__dirname, '..', '..', '..', '.backup-ec2-emergency', 'compare-and-analyze-costs.js');
+      const { spawn } = require('child_process');
+      
+      console.log('💰 Running EC2 Emergency Cost Analysis...');
+      console.log('==========================================\n');
+      
+      const child = spawn('node', [costScriptPath], {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      });
+      
+      child.on('close', (code: number) => {
+        if (code === 0) {
+          console.log('\n✅ Cost analysis complete!');
+          console.log('📊 Reports saved to: .backup-ec2-emergency/');
+          console.log('   • COST_ANALYSIS_REPORT.txt');
+          console.log('   • COST_ANALYSIS_REPORT.json');
+          console.log('   • EXECUTIVE_SUMMARY.md');
+        } else {
+          console.error(`\n❌ Cost analysis failed with code ${code}`);
+        }
+        process.exit(code || 0);
+      });
+      
+      child.on('error', (error: Error) => {
+        console.error(`❌ Failed to run cost analysis: ${error.message}`);
+        console.error('   Make sure the cost analysis script exists at:');
+        console.error(`   ${costScriptPath}`);
+        process.exit(1);
+      });
+    } catch (error: any) {
+      console.error(`❌ Cost analysis failed: ${error.message}`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Check if message is a cost analysis request
+   */
+  private isCostAnalysisRequest(message: string): boolean {
+    const costKeywords = [
+      'compare costs',
+      'cost analysis',
+      'cost comparison',
+      'aws costs',
+      'ec2 costs',
+      'cost report',
+      'analyze costs',
+      'cost breakdown',
+      'show costs',
+      'what are the costs',
+      'how much does it cost',
+      'cost estimate',
+      'emergency cost',
+      'ec2 emergency'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return costKeywords.some(keyword => lowerMessage.includes(keyword));
   }
 
   /**
@@ -163,6 +236,21 @@ program
     }
   });
 
+// Cost analysis command
+program
+  .command('costs')
+  .alias('cost')
+  .description('Analyze EC2 emergency costs and compare backup vs current configurations')
+  .option('-f, --format <type>', 'Output format: text, json, or summary', 'text')
+  .action(async (options: { format?: string }) => {
+    try {
+      await npxHandler.handleCostAnalysis({ format: options.format as any });
+    } catch (error: any) {
+      console.error(`❌ Cost analysis failed: ${error.message}`);
+      process.exit(1);
+    }
+  });
+
 // Interactive mode
 program
   .command('chat')
@@ -190,6 +278,7 @@ program
           console.log('\n📋 Available Commands:');
           console.log('  • Ask any question for crew assistance');
           console.log('  • "status" - Show system status');
+          console.log('  • "compare costs" or "cost analysis" - Run EC2 cost analysis');
           console.log('  • "n8n start" - Start N8N integration');
           console.log('  • "exit" - Quit chat mode');
           console.log('');
