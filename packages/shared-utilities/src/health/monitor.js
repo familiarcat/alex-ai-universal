@@ -84,4 +84,70 @@ class HealthMonitor {
   }
 }
 
+
+  /**
+   * Cost monitoring integration
+   */
+  async checkCostHealth() {
+    const { StrategicCostMonitor } = require('../monitoring/strategic-cost-monitor');
+    const monitor = new StrategicCostMonitor();
+    
+    // Register cost monitoring points
+    // This would be populated from actual system configurations
+    const costHealth = {
+      status: 'monitoring_enabled',
+      points: monitor.monitoringPoints.length,
+      alerts: monitor.getAlerts().length
+    };
+    
+    return costHealth;
+  }
+  
+  /**
+   * Enhanced health check with cost awareness
+   */
+  async checkHealthWithCosts() {
+    const health = await this.checkHealth();
+    const costHealth = await this.checkCostHealth();
+    
+    return {
+      ...health,
+      costHealth,
+      overallStatus: health.systemHealth === 'healthy' && costHealth.alerts === 0 ? 'healthy' : 'degraded'
+    };
+  }
+
+
+  /**
+   * Cost monitoring integration
+   */
+  async checkCostHealth() {
+    const { StrategicCostMonitor } = require('../monitoring/strategic-cost-monitor');
+    const monitor = new StrategicCostMonitor();
+    
+    // Register cost monitoring points
+    // This would be populated from actual system configurations
+    const costHealth = {
+      status: 'monitoring_enabled',
+      points: monitor.monitoringPoints.length,
+      alerts: monitor.getAlerts().length
+    };
+    
+    return costHealth;
+  }
+  
+  /**
+   * Enhanced health check with cost awareness
+   */
+  async checkHealthWithCosts() {
+    const health = await this.checkHealth();
+    const costHealth = await this.checkCostHealth();
+    
+    return {
+      ...health,
+      costHealth,
+      overallStatus: health.systemHealth === 'healthy' && costHealth.alerts === 0 ? 'healthy' : 'degraded'
+    };
+  }
+
 module.exports = { HealthMonitor };
