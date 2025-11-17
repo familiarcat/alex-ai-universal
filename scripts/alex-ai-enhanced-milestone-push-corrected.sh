@@ -4,8 +4,16 @@
 # ====================================================================
 # This enhanced script includes comprehensive task tracking between pushes
 # and provides detailed analysis of what was accomplished
+# 
+# Default: Fully automated, no prompts, non-interactive
 
 set -euo pipefail
+
+# Set non-interactive defaults (no prompts)
+export GIT_EDITOR=true
+export GIT_TERMINAL_PROMPT=0
+export DEBIAN_FRONTEND=noninteractive
+export GIT_MERGE_AUTOEDIT=no
 
 # Color codes for crew member output
 RED='\033[0;31m'
@@ -321,8 +329,8 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
 📈 Progress: Enhanced milestone tracking with comprehensive task analysis"
     
     commander_riker "🎖️ Tactical Action [git-commit]: Committing enhanced milestone..."
-    GIT_EDITOR=true git commit -m "$commit_message" >/dev/null 2>&1 || {
-        # If commit fails, try without editor (in case there are no changes)
+    git commit -m "$commit_message" >/dev/null 2>&1 || {
+        # If commit fails, try without verify (in case there are no changes)
         git commit -m "$commit_message" --no-verify >/dev/null 2>&1 || {
             commander_riker "🎖️ Tactical Action [git-commit]: ❌ FAILED"
             exit 1
@@ -330,10 +338,10 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
     }
     commander_riker "🎖️ Tactical Action [milestone-commit]: ✅ COMPLETED"
     
-    # Push to remote (non-interactive)
+    # Push to remote (non-interactive - defaults set at top of script)
     lieutenant_uhura "Transmitting enhanced milestone to remote repository..."
     lieutenant_uhura "📻 Transmission [git-push]: Pushing to origin/$branch..."
-    GIT_TERMINAL_PROMPT=0 git push origin "$branch" >/dev/null 2>&1 || {
+    git push origin "$branch" >/dev/null 2>&1 || {
         lieutenant_uhura "📻 Transmission [git-push]: ❌ FAILED"
         exit 1
     }
