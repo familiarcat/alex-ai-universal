@@ -15,7 +15,7 @@ export GIT_TERMINAL_PROMPT=0
 export DEBIAN_FRONTEND=noninteractive
 export GIT_MERGE_AUTOEDIT=no
 
-# Color codes for crew member output
+# Color codes for crew member output (define early for error handling)
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -24,6 +24,19 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
+
+# Error handling function - exits with clear error message
+error_exit() {
+    local error_msg="$1"
+    local exit_code="${2:-1}"
+    echo -e "${RED}❌ ERROR: $error_msg${NC}" >&2
+    echo -e "${RED}📍 Exit Code: $exit_code${NC}" >&2
+    echo -e "${YELLOW}💡 This error will be logged for monitoring${NC}" >&2
+    exit "$exit_code"
+}
+
+# Trap errors and ensure we always exit with a message
+trap 'error_exit "Script failed at line $LINENO" $?' ERR
 
 # Crew member functions (theme-gated)
 # Set ALEX_AI_THEME=off to silence themed logs
@@ -254,8 +267,7 @@ main() {
     # Security validation
     lieutenant_worf "Validating git repository state..."
     if ! git status &>/dev/null; then
-        lieutenant_worf "⚔️ Security Check [git-repo]: ❌ FAILED - Not a git repository"
-        exit 1
+        error_exit "Not a git repository. Cannot create milestone." 1
     fi
     lieutenant_worf "⚔️ Security Check [git-repo]: ✅ PASSED"
     
@@ -329,21 +341,28 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
 📈 Progress: Enhanced milestone tracking with comprehensive task analysis"
     
     commander_riker "🎖️ Tactical Action [git-commit]: Committing enhanced milestone..."
-    git commit -m "$commit_message" >/dev/null 2>&1 || {
-        # If commit fails, try without verify (in case there are no changes)
-        git commit -m "$commit_message" --no-verify >/dev/null 2>&1 || {
-            commander_riker "🎖️ Tactical Action [git-commit]: ❌ FAILED"
-            exit 1
+    # Check if there are changes to commit
+    if git diff --cached --quiet && git diff --quiet; then
+        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] No changes to commit - milestone will be informational only"
+        # Create an empty commit if no changes (for milestone tracking)
+        git commit --allow-empty -m "$commit_message" >/dev/null 2>&1 || {
+            error_exit "Failed to create milestone commit (even with --allow-empty). Check git configuration." 1
         }
-    }
+    else
+        git commit -m "$commit_message" >/dev/null 2>&1 || {
+            # If commit fails, try without verify (in case hooks fail)
+            git commit -m "$commit_message" --no-verify >/dev/null 2>&1 || {
+                error_exit "Failed to commit milestone. Git error occurred." 1
+            }
+        }
+    fi
     commander_riker "🎖️ Tactical Action [milestone-commit]: ✅ COMPLETED"
     
     # Push to remote (non-interactive - defaults set at top of script)
     lieutenant_uhura "Transmitting enhanced milestone to remote repository..."
     lieutenant_uhura "📻 Transmission [git-push]: Pushing to origin/$branch..."
     git push origin "$branch" >/dev/null 2>&1 || {
-        lieutenant_uhura "📻 Transmission [git-push]: ❌ FAILED"
-        exit 1
+        error_exit "Failed to push milestone to remote. Check network connection and git credentials." 1
     }
     lieutenant_uhura "📻 Transmission [git-push]: ✅ SUCCESS"
     
@@ -464,9 +483,7 @@ if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 fi
 
 if [ $# -lt 1 ]; then
-    captain_picard "Error: Milestone name is required"
-    echo "Use --help for usage information"
-    exit 1
+    error_exit "Milestone name is required. Usage: $0 \"Milestone Name\" [workspace] [branch]" 1
 fi
 
 main "$@"
