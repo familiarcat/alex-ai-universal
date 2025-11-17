@@ -296,13 +296,29 @@ analyze_commit_messages() {
             commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-TASK] $task"
         done
     else
-        # Fallback: extract from milestone name
+        # Fallback: extract from milestone name (as single accomplishment)
         local fallback=$(echo "$milestone_name" | sed 's/v[0-9.]*_//' | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')
         if [ ${#fallback} -gt 5 ]; then
             completed_tasks+=("$fallback")
             commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Using milestone name as accomplishment: $fallback"
         fi
     fi
+    
+    # Filter out accomplishments that are too short or are just single words
+    local filtered_tasks=()
+    for task in "${completed_tasks[@]}"; do
+        # Skip if it's just a single word or too short
+        if [ ${#task} -gt 10 ] && [[ "$task" =~ [[:space:]] ]]; then
+            filtered_tasks+=("$task")
+        fi
+    done
+    
+    # If we filtered everything out, keep at least the milestone-based accomplishments
+    if [ ${#filtered_tasks[@]} -eq 0 ] && [ ${#completed_tasks[@]} -gt 0 ]; then
+        filtered_tasks=("${completed_tasks[@]}")
+    fi
+    
+    completed_tasks=("${filtered_tasks[@]}")
     
     printf '%s\n' "${completed_tasks[@]}"
 }
