@@ -307,18 +307,29 @@ analyze_commit_messages() {
     # Filter out accomplishments that are too short, file extensions, or invalid
     local filtered_tasks=()
     for task in "${completed_tasks[@]}"; do
-        # Skip empty, too short, or file extensions
-        if [ -z "$task" ] || [ ${#task} -lt 10 ]; then
+        # Skip empty
+        [ -z "$task" ] && continue
+        
+        # Skip file extensions (starts with . and is short)
+        if [[ "$task" =~ ^\. ]] && [ ${#task} -lt 5 ]; then
             continue
         fi
-        # Skip if it's just a file extension (starts with .)
-        if [[ "$task" =~ ^\. ]]; then
+        
+        # Skip if too short (less than 10 chars)
+        if [ ${#task} -lt 10 ]; then
             continue
         fi
-        # Skip if it's just a single word without context
+        
+        # Skip if it's just a single word without context (and short)
         if [[ ! "$task" =~ [[:space:]] ]] && [ ${#task} -lt 20 ]; then
             continue
         fi
+        
+        # Skip common non-meaningful patterns
+        if [[ "$task" =~ ^\.(sh|js|ts|py|md|txt|json|yml|yaml)$ ]]; then
+            continue
+        fi
+        
         # Keep meaningful accomplishments
         filtered_tasks+=("$task")
     done
