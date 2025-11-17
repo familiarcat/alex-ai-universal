@@ -260,20 +260,23 @@ analyze_commit_messages() {
     
     # Remove duplicates and limit to meaningful accomplishments
     local unique_tasks=()
-    for task in "${completed_tasks[@]}"; do
-        local is_duplicate=0
-        for existing in "${unique_tasks[@]}"; do
-            if [ "$task" = "$existing" ]; then
-                is_duplicate=1
-                break
+    if [ ${#completed_tasks[@]} -gt 0 ]; then
+        for task in "${completed_tasks[@]}"; do
+            local is_duplicate=0
+            if [ ${#unique_tasks[@]} -gt 0 ]; then
+                for existing in "${unique_tasks[@]}"; do
+                    if [ "$task" = "$existing" ]; then
+                        is_duplicate=1
+                        break
+                    fi
+                done
+            fi
+            if [ $is_duplicate -eq 0 ] && [ ${#task} -gt 5 ]; then
+                unique_tasks+=("$task")
             fi
         done
-        if [ $is_duplicate -eq 0 ] && [ ${#task} -gt 5 ]; then
-            unique_tasks+=("$task")
-        fi
-    done
-    
-    completed_tasks=("${unique_tasks[@]}")
+        completed_tasks=("${unique_tasks[@]}")
+    fi
     
     if [ ${#completed_tasks[@]} -gt 0 ]; then
         commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Accomplishments extracted: ${#completed_tasks[@]}"
@@ -518,7 +521,7 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
     # Automatically run post-milestone scripts (completely silent, non-blocking)
     # Extract features from commit message for RAG ingestion
     local features_summary=""
-    if [ $completed_tasks_count -gt 0 ]; then
+    if [ $completed_tasks_count -gt 0 ] && [ ${#completed_tasks[@]} -gt 0 ]; then
         features_summary=$(printf '%s; ' "${completed_tasks[@]:0:5}" | sed 's/; $//')
     fi
     
