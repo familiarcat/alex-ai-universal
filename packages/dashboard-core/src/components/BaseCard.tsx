@@ -5,7 +5,7 @@
  * Supports theming, editing, and data binding
  */
 
-import React from 'react';
+import * as React from 'react';
 import { DashboardComponent, DashboardTheme } from '../types';
 
 export interface BaseCardProps {

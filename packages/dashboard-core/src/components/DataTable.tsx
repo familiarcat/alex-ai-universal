@@ -5,7 +5,8 @@
  * Supports editing, sorting, filtering, and theming
  */
 
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { BaseCard, BaseCardProps } from './BaseCard';
 import { DashboardComponent, DashboardTheme } from '../types';
 

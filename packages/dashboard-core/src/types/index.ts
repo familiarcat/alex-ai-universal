@@ -157,6 +157,8 @@ export interface DashboardProps {
   className?: string;
 }
 
+import * as React from 'react';
+
 export interface ComponentRegistry {
   [type: string]: {
     component: React.ComponentType<any>;

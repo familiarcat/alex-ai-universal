@@ -5,7 +5,7 @@
  * Supports drag-and-drop reordering and responsive breakpoints
  */
 
-import React from 'react';
+import * as React from 'react';
 import { DashboardComponent, DashboardTheme, LayoutConfig } from '../types';
 
 export interface GridLayoutProps {

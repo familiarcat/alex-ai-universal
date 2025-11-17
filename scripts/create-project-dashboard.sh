@@ -122,12 +122,12 @@ export const ${PACKAGE_NAME}Theme: DashboardTheme = {
 EOF
 
 # Create main dashboard page
-cat > "$DASHBOARD_DIR/src/pages/dashboard.tsx" << 'EOF'
+cat > "$DASHBOARD_DIR/src/pages/dashboard.tsx" << EOF
 'use client';
 
 import { GridLayout, DataTable, DataChart, BaseCard } from '@alex-ai/dashboard-core';
 import { DashboardProject, DashboardComponent } from '@alex-ai/dashboard-core';
-import { projectTheme } from '../theme';
+import { ${PACKAGE_NAME}Theme as projectTheme } from '../theme';
 
 interface DashboardPageProps {
   project: DashboardProject;

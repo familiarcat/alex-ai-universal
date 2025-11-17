@@ -5,7 +5,7 @@
  * Supports multiple chart types and theming
  */
 
-import React from 'react';
+import * as React from 'react';
 import { BaseCard, BaseCardProps } from './BaseCard';
 import { DashboardComponent, DashboardTheme } from '../types';
 
