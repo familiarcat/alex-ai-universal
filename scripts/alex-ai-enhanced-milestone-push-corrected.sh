@@ -304,18 +304,33 @@ analyze_commit_messages() {
         fi
     fi
     
-    # Filter out accomplishments that are too short or are just single words
+    # Filter out accomplishments that are too short, file extensions, or invalid
     local filtered_tasks=()
     for task in "${completed_tasks[@]}"; do
-        # Skip if it's just a single word or too short
-        if [ ${#task} -gt 10 ] && [[ "$task" =~ [[:space:]] ]]; then
-            filtered_tasks+=("$task")
+        # Skip empty, too short, or file extensions
+        if [ -z "$task" ] || [ ${#task} -lt 10 ]; then
+            continue
         fi
+        # Skip if it's just a file extension (starts with .)
+        if [[ "$task" =~ ^\. ]]; then
+            continue
+        fi
+        # Skip if it's just a single word without context
+        if [[ ! "$task" =~ [[:space:]] ]] && [ ${#task} -lt 20 ]; then
+            continue
+        fi
+        # Keep meaningful accomplishments
+        filtered_tasks+=("$task")
     done
     
     # If we filtered everything out, keep at least the milestone-based accomplishments
     if [ ${#filtered_tasks[@]} -eq 0 ] && [ ${#completed_tasks[@]} -gt 0 ]; then
-        filtered_tasks=("${completed_tasks[@]}")
+        # Keep only the longest/most meaningful ones
+        for task in "${completed_tasks[@]}"; do
+            if [ ${#task} -gt 15 ]; then
+                filtered_tasks+=("$task")
+            fi
+        done
     fi
     
     completed_tasks=("${filtered_tasks[@]}")
