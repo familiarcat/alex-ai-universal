@@ -18,7 +18,8 @@ export type ComponentRole =
   | 'table'
   | 'form'
   | 'card'
-  | 'list';
+  | 'list'
+  | 'project-manager';
 
 export type Intent = 
   | 'acquire' 

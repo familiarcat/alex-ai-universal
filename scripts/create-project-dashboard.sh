@@ -121,11 +121,12 @@ export const ${PACKAGE_NAME}Theme: DashboardTheme = {
 };
 EOF
 
-# Create main dashboard page
+# Create main dashboard page with ProjectManager
 cat > "$DASHBOARD_DIR/src/pages/dashboard.tsx" << EOF
 'use client';
 
-import { GridLayout, DataTable, DataChart, BaseCard } from '@alex-ai/dashboard-core';
+import { GridLayout, DataTable, DataChart, BaseCard, ProjectManager } from '@alex-ai/dashboard-core';
+import { useProjectManager } from '@alex-ai/dashboard-core';
 import { DashboardProject, DashboardComponent } from '@alex-ai/dashboard-core';
 import { ${PACKAGE_NAME}Theme as projectTheme } from '../theme';
 
@@ -134,8 +135,26 @@ interface DashboardPageProps {
 }
 
 export default function DashboardPage({ project }: DashboardPageProps) {
+  // Auto-initialize ProjectManager for all Alex AI projects
+  const { projects, createProject, updateProject, deleteProject } = useProjectManager({
+    storageKey: 'alex-ai-projects',
+    autoSave: true
+  });
+
   const renderComponent = (component: DashboardComponent) => {
     switch (component.type) {
+      case 'project-manager':
+        return (
+          <ProjectManager
+            component={component}
+            theme={projectTheme}
+            projects={projects}
+            onProjectCreate={createProject}
+            onProjectUpdate={updateProject}
+            onProjectDelete={deleteProject}
+            editable={project.config?.editable !== false}
+          />
+        );
       case 'table':
         return <DataTable component={component} theme={projectTheme} />;
       case 'chart':
@@ -145,14 +164,36 @@ export default function DashboardPage({ project }: DashboardPageProps) {
     }
   };
 
+  // Ensure ProjectManager component exists in project
+  const componentsWithManager = project.components || [];
+  const hasProjectManager = componentsWithManager.some(c => c.type === 'project-manager');
+  
+  const finalComponents = hasProjectManager 
+    ? componentsWithManager
+    : [
+        {
+          id: 'project-manager-default',
+          type: 'project-manager' as const,
+          title: 'Alex AI Projects',
+          editable: true,
+          deletable: false,
+          config: {
+            showCreateButton: true,
+            showEditButton: true,
+            showDeleteButton: true
+          }
+        },
+        ...componentsWithManager
+      ];
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: projectTheme.colors.background }}>
       <GridLayout
-        components={project.components}
-        config={project.layout.config}
+        components={finalComponents}
+        config={project.layout?.config || { columns: 2, gap: 16 }}
         theme={projectTheme}
         renderComponent={renderComponent}
-        editable={project.config?.editable}
+        editable={project.config?.editable !== false}
       />
     </div>
   );

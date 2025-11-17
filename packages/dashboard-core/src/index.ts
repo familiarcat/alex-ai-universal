@@ -14,18 +14,19 @@ export * from './types';
 export { BaseCard } from './components/BaseCard';
 export { DataTable } from './components/DataTable';
 export { DataChart } from './components/DataChart';
+export { ProjectManager } from './components/ProjectManager';
 export type { BaseCardProps } from './components/BaseCard';
 export type { DataTableProps } from './components/DataTable';
 export type { DataChartProps, ChartType } from './components/DataChart';
+export type { ProjectManagerProps, Project } from './components/ProjectManager';
 
 // Layouts
 export { GridLayout } from './layouts/GridLayout';
 export type { GridLayoutProps } from './layouts/GridLayout';
 
-// Hooks (to be implemented)
-// export { useDashboard } from './hooks/useDashboard';
-// export { useDashboardData } from './hooks/useDashboardData';
-// export { useDashboardTheme } from './hooks/useDashboardTheme';
+// Hooks
+export { useProjectManager } from './hooks/useProjectManager';
+export type { UseProjectManagerOptions, UseProjectManagerReturn } from './hooks/useProjectManager';
 
 // Utils (to be implemented)
 // export { validateComponent } from './utils/validation';
