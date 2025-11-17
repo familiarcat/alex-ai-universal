@@ -100,10 +100,10 @@ class NPXCLIHandler {
       console.log('🌐 Make changes in N8N UI and watch local files update automatically');
       
     } else if (lowerMessage.includes('status') || lowerMessage.includes('check')) {
-      console.log('📊 N8N Integration Status:');
-      console.log('  • Sync System: Active');
-      console.log('  • Bi-directional: Enabled');
-      console.log('  • Real-time Updates: Active');
+      console.log('  📊 N8N Integration Status:');
+      console.log('    • Sync System: Active');
+      console.log('    • Bi-directional: Enabled');
+      console.log('    • Real-time Updates: Active');
     }
   }
 }
