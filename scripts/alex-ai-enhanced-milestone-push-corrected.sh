@@ -271,10 +271,13 @@ main() {
     fi
     lieutenant_worf "⚔️ Security Check [git-repo]: ✅ PASSED"
     
-    # Check for uncommitted changes
+    # Check for uncommitted changes and auto-stage them
     if ! git diff --quiet || ! git diff --cached --quiet; then
-        lieutenant_worf "⚔️ Security Check [uncommitted-changes]: ⚠️ WARNING"
-        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-WARN] Uncommitted changes detected"
+        lieutenant_worf "⚔️ Security Check [uncommitted-changes]: ⚠️ WARNING - Changes detected"
+        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Auto-staging uncommitted changes for milestone"
+        # Auto-stage all changes (will be committed as part of milestone)
+        git add . >/dev/null 2>&1
+        lieutenant_worf "⚔️ Security Check [auto-staged]: ✅ Changes staged automatically"
     else
         lieutenant_worf "⚔️ Security Check [uncommitted-changes]: ✅ CLEAN"
     fi
@@ -323,7 +326,9 @@ main() {
     
     # Create milestone commit with task summary
     commander_riker "Creating enhanced milestone commit with task tracking..."
-    commander_riker "🎖️ Tactical Action [git-add]: Staging all changes..."
+    # Note: Changes are already auto-staged above if they existed
+    # This ensures we have the latest state
+    commander_riker "🎖️ Tactical Action [git-add]: Ensuring all changes are staged..."
     git add . >/dev/null 2>&1
     
     # Create detailed commit message with task summary
