@@ -196,7 +196,8 @@ analyze_commit_messages() {
             
             # Scripts
             if [[ "$file" =~ \.(sh|js|ts|py)$ ]] && [[ "$file" =~ scripts/ ]]; then
-                local script_name=$(basename "$file" .sh .js .ts .py | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                local script_base=$(basename "$file" .sh .js .ts .py)
+                local script_name=$(echo "$script_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g')
                 if [[ "$basename" =~ deploy|setup|install ]]; then
                     completed_tasks+=("Deployment automation: $script_name")
                 elif [[ "$basename" =~ restart|monitor|health|check ]]; then
@@ -212,7 +213,8 @@ analyze_commit_messages() {
             
             # Documentation
             if [[ "$file" =~ \.(md|txt)$ ]] && [[ "$file" =~ docs/|\.backup-ec2-emergency/ ]]; then
-                local doc_name=$(basename "$file" .md .txt | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                local doc_base=$(basename "$file" .md .txt)
+                local doc_name=$(echo "$doc_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g')
                 if [[ "$basename" =~ README|GUIDE|SETUP|INSTRUCTIONS ]]; then
                     completed_tasks+=("Documentation: $doc_name")
                 elif [[ "$basename" =~ ANALYSIS|REPORT|SUMMARY|STRATEGY ]]; then
@@ -233,13 +235,15 @@ analyze_commit_messages() {
             
             # Lambda functions
             if [[ "$file" =~ scripts/lambda/ ]]; then
-                local lambda_name=$(basename "$file" .js .ts | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                local lambda_base=$(basename "$file" .js .ts)
+                local lambda_name=$(echo "$lambda_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g')
                 completed_tasks+=("AWS Lambda function: $lambda_name")
             fi
             
             # Monitoring scripts
             if [[ "$file" =~ scripts/monitoring/ ]]; then
-                local monitor_name=$(basename "$file" .js .ts | tr '_' '-' | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+                local monitor_base=$(basename "$file" .js .ts)
+                local monitor_name=$(echo "$monitor_base" | tr '_-' ' ' | sed 's/\b\(.\)/\u\1/g')
                 completed_tasks+=("Monitoring system: $monitor_name")
             fi
             
