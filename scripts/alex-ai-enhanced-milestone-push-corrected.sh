@@ -155,30 +155,138 @@ analyze_git_changes() {
 
 analyze_commit_messages() {
     local milestone_name="$1"
-    local commit_messages=$(git log --oneline --since="1 week ago" --pretty=format:"%s" 2>/dev/null || echo "")
-    local task_keywords=("fix" "add" "implement" "create" "update" "refactor" "optimize" "enhance" "remove" "delete" "complete" "finish")
     local completed_tasks=()
     
-    commander_data "Analyzing commit messages for completed tasks..."
+    commander_data "Analyzing accomplishments from file changes and milestone context..."
+    
+    # Extract accomplishments from milestone name
+    local milestone_lower=$(echo "$milestone_name" | tr '[:upper:]' '[:lower:]')
+    if [[ "$milestone_lower" =~ terraform|docker|deployment ]]; then
+        completed_tasks+=("Infrastructure deployment automation")
+    fi
+    if [[ "$milestone_lower" =~ n8n|restart|monitoring ]]; then
+        completed_tasks+=("N8N server management and monitoring")
+    fi
+    if [[ "$milestone_lower" =~ crew|analysis|strategy ]]; then
+        completed_tasks+=("Crew coordination and analysis")
+    fi
+    if [[ "$milestone_lower" =~ sync|memory|chat ]]; then
+        completed_tasks+=("Memory synchronization system")
+    fi
+    if [[ "$milestone_lower" =~ cost|analysis|optimization ]]; then
+        completed_tasks+=("Cost analysis and optimization")
+    fi
+    if [[ "$milestone_lower" =~ verified|verified|target ]]; then
+        completed_tasks+=("Deployment target verification")
+    fi
+    
+    # Extract accomplishments from staged file changes
+    local staged_files=$(git diff --cached --name-only 2>/dev/null || echo "")
+    local unstaged_files=$(git diff --name-only 2>/dev/null || echo "")
+    local all_changed_files=$(printf '%s\n%s' "$staged_files" "$unstaged_files" | sort -u)
+    
+    if [ -n "$all_changed_files" ]; then
+        # Analyze file types and paths for accomplishments
+        while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            
+            local file_lower=$(echo "$file" | tr '[:upper:]' '[:lower:]')
+            local dir=$(dirname "$file")
+            local basename=$(basename "$file")
+            
+            # Scripts
+            if [[ "$file" =~ \.(sh|js|ts|py)$ ]] && [[ "$file" =~ scripts/ ]]; then
+                if [[ "$basename" =~ deploy|setup|install ]]; then
+                    completed_tasks+=("Deployment automation: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                elif [[ "$basename" =~ restart|monitor|health|check ]]; then
+                    completed_tasks+=("System monitoring: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                elif [[ "$basename" =~ crew|analysis|strategy ]]; then
+                    completed_tasks+=("Crew analysis: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                else
+                    completed_tasks+=("Script enhancement: $(basename "$file" .sh .js .ts .py | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                fi
+            fi
+            
+            # Documentation
+            if [[ "$file" =~ \.(md|txt)$ ]] && [[ "$file" =~ docs/|\.backup-ec2-emergency/ ]]; then
+                if [[ "$basename" =~ README|GUIDE|SETUP|INSTRUCTIONS ]]; then
+                    completed_tasks+=("Documentation: $(basename "$file" .md .txt | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                elif [[ "$basename" =~ ANALYSIS|REPORT|SUMMARY|STRATEGY ]]; then
+                    completed_tasks+=("Analysis report: $(basename "$file" .md .txt | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+                fi
+            fi
+            
+            # Configuration
+            if [[ "$file" =~ \.(json|yml|yaml|tf|tfvars)$ ]]; then
+                if [[ "$file" =~ terraform/ ]]; then
+                    completed_tasks+=("Infrastructure configuration")
+                elif [[ "$file" =~ \.alex-ai-config\.json ]]; then
+                    completed_tasks+=("Alex AI configuration update")
+                fi
+            fi
+            
+            # Lambda functions
+            if [[ "$file" =~ scripts/lambda/ ]]; then
+                completed_tasks+=("AWS Lambda function: $(basename "$file" .js .ts | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+            fi
+            
+            # Monitoring scripts
+            if [[ "$file" =~ scripts/monitoring/ ]]; then
+                completed_tasks+=("Monitoring system: $(basename "$file" .js .ts | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')")
+            fi
+            
+        done <<< "$all_changed_files"
+    fi
+    
+    # Extract from recent commit messages (non-milestone commits)
+    local commit_messages=$(git log --oneline --since="1 week ago" --pretty=format:"%s" 2>/dev/null | grep -v "🎉 MILESTONE:" | head -10 || echo "")
+    local task_keywords=("fix" "add" "implement" "create" "update" "refactor" "optimize" "enhance" "remove" "delete" "complete" "finish" "deploy" "setup" "configure")
     
     if [ -n "$commit_messages" ]; then
         while IFS= read -r commit; do
+            [ -z "$commit" ] && continue
             for keyword in "${task_keywords[@]}"; do
                 if [[ "$commit" =~ $keyword ]]; then
-                    completed_tasks+=("$commit")
+                    # Clean up commit message for display
+                    local clean_commit=$(echo "$commit" | sed 's/^[^:]*: //' | sed 's/^[a-z]/\U&/' | head -c 60)
+                    if [ ${#clean_commit} -gt 0 ]; then
+                        completed_tasks+=("$clean_commit")
+                    fi
                     break
                 fi
             done
         done <<< "$commit_messages"
     fi
     
+    # Remove duplicates and limit to meaningful accomplishments
+    local unique_tasks=()
+    for task in "${completed_tasks[@]}"; do
+        local is_duplicate=0
+        for existing in "${unique_tasks[@]}"; do
+            if [ "$task" = "$existing" ]; then
+                is_duplicate=1
+                break
+            fi
+        done
+        if [ $is_duplicate -eq 0 ] && [ ${#task} -gt 5 ]; then
+            unique_tasks+=("$task")
+        fi
+    done
+    
+    completed_tasks=("${unique_tasks[@]}")
+    
     if [ ${#completed_tasks[@]} -gt 0 ]; then
-        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Completed tasks found: ${#completed_tasks[@]}"
-        for task in "${completed_tasks[@]}"; do
+        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Accomplishments extracted: ${#completed_tasks[@]}"
+        for task in "${completed_tasks[@]:0:10}"; do
             commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-TASK] $task"
         done
     else
-        commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-WARN] No clear task completion patterns found in recent commits"
+        # Fallback: extract from milestone name
+        local fallback=$(echo "$milestone_name" | sed 's/v[0-9.]*_//' | tr '_' ' ' | sed 's/\b\(.\)/\u\1/g')
+        if [ ${#fallback} -gt 5 ]; then
+            completed_tasks+=("$fallback")
+            commander_data "[$(date '+%Y-%m-%d %H:%M:%S')] [DATA-INFO] Using milestone name as accomplishment: $fallback"
+        fi
     fi
     
     printf '%s\n' "${completed_tasks[@]}"
