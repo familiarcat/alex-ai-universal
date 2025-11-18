@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Landing Page - Alex AI Universal
  * 
