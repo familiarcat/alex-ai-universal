@@ -18,17 +18,17 @@ const axios = require('axios');
 const { loadCrewCredentials } = require('./utils/load-crew-credentials');
 
 const WORKFLOW_FILES = [
-  'n8n-workflows/crew-workflows/crew-captain-jean-luc-picard-strategic-leadership-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-commander-data-android-analytics-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-commander-william-riker-tactical-execution-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-counselor-deanna-troi-user-experience-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-dr-beverly-crusher-health-diagnostics-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-lieutenant-commander-geordi-la-forge-infrastructure-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-lieutenant-uhura-communications-io-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-lieutenant-worf-security-compliance-openrouter-production.json',
-  'n8n-workflows/crew-workflows/crew-chief-miles-obrien-pragmatic-solutions-openrouter-production.json',
-  'n8n-workflows/crew-memory-storage-workflow.json'
-];
+  'n8n-workflows/crew-memory-storage-workflow-optimized.json',,
+'n8n-workflows/crew-workflows/crew-captain-jean-luc-picard-strategic-leadership-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-commander-data-android-analytics-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-commander-william-riker-tactical-execution-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-counselor-deanna-troi-user-experience-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-dr-beverly-crusher-health-diagnostics-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-lieutenant-commander-geordi-la-forge-infrastructure-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-lieutenant-uhura-communications-io-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-lieutenant-worf-security-compliance-openrouter-production.json',
+'n8n-workflows/crew-workflows/crew-chief-miles-obrien-pragmatic-solutions-openrouter-production.json'
+];;
 
 async function main() {
   const projectRoot = process.cwd();

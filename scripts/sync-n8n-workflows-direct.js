@@ -57,10 +57,11 @@ function makeRequest(method, path, data = null) {
   });
 }
 
-// Get workflow files
+// Get workflow files - prioritize optimized workflows
 function getWorkflowFiles() {
   const workflowsDir = path.join(process.cwd(), 'n8n-workflows');
   const workflowFiles = [];
+  const optimizedWorkflows = [];
   
   function findJsonFiles(dir) {
     if (!fs.existsSync(dir)) return;
@@ -71,13 +72,21 @@ function getWorkflowFiles() {
       if (stat.isDirectory() && !file.includes('node_modules')) {
         findJsonFiles(filePath);
       } else if (file.endsWith('.json')) {
-        workflowFiles.push(filePath);
+        // Prioritize optimized workflows
+        if (file.includes('optimized') || file.includes('optimized')) {
+          optimizedWorkflows.push(filePath);
+        } else {
+          workflowFiles.push(filePath);
+        }
       }
     });
   }
   
   findJsonFiles(workflowsDir);
-  return workflowFiles.map(f => path.relative(process.cwd(), f));
+  
+  // Return optimized workflows first, then others
+  const allFiles = [...optimizedWorkflows, ...workflowFiles];
+  return allFiles.map(f => path.relative(process.cwd(), f));
 }
 
 // Main sync
@@ -127,11 +136,22 @@ async function syncWorkflows() {
 
       let response;
       if (workflowId && existing) {
-        // Update existing
+        // Update existing - check if this is the optimized version
+        const isOptimized = workflowName.includes('Optimized') || filePath.includes('optimized');
+        if (isOptimized && existing.name !== workflowName) {
+          // If updating to optimized version, we might want to deactivate old one
+          console.log(`   ℹ️  Updating to optimized version: ${workflowName}`);
+        }
+        
         response = await makeRequest('PUT', `/api/v1/workflows/${workflowId}`, payload);
         if (response.status === 200) {
           console.log(`✅ Updated: ${workflowName} (${workflowId})`);
           synced++;
+          
+          // If this is the optimized crew-memory-storage workflow, note that it needs activation
+          if (workflowName.includes('Crew Memory Storage') && workflowName.includes('Optimized')) {
+            console.log(`   ⚠️  Remember to activate this workflow in N8N UI`);
+          }
         } else {
           throw new Error(`HTTP ${response.status}: ${JSON.stringify(response.data)}`);
         }
@@ -141,6 +161,11 @@ async function syncWorkflows() {
         if (response.status === 200 || response.status === 201) {
           console.log(`✅ Created: ${workflowName} (${response.data.id})`);
           created++;
+          
+          // If this is the optimized crew-memory-storage workflow, note that it needs activation
+          if (workflowName.includes('Crew Memory Storage') && workflowName.includes('Optimized')) {
+            console.log(`   ⚠️  Remember to activate this workflow in N8N UI`);
+          }
         } else {
           throw new Error(`HTTP ${response.status}: ${JSON.stringify(response.data)}`);
         }

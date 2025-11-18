@@ -78,12 +78,19 @@ async function main() {
   console.log('═'.repeat(80));
   console.log('\nImporting optimized crew-memory-storage workflow with deduplication...\n');
 
-  const creds = loadCrewCredentials();
-  const N8N_BASE_URL = creds.n8n?.baseUrl || 'https://n8n.pbradygeorgen.com';
-  const N8N_API_KEY = creds.n8n?.apiKey;
+  let creds;
+  try {
+    const { loadCrewCredentials: loadCreds } = require('./utils/load-crew-credentials');
+    creds = loadCreds();
+  } catch (e) {
+    creds = loadCrewCredentials();
+  }
+  
+  const N8N_BASE_URL = creds.n8n?.baseUrl || creds.n8n?.baseUrl || 'https://n8n.pbradygeorgen.com';
+  const N8N_API_KEY = creds.n8n?.apiKey || creds.n8n?.ownerApiKey || creds.n8n?.serviceApiKey;
 
   if (!N8N_API_KEY) {
-    console.error('❌ N8N API key not found in ~/.zshrc (N8N_OWNER_API_KEY)');
+    console.error('❌ N8N API key not found. Please set N8N_OWNER_API_KEY or N8N_API_KEY in your environment.');
     process.exit(1);
   }
 
