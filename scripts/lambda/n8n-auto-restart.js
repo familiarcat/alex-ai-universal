@@ -8,7 +8,7 @@
 const AWS = require('aws-sdk');
 
 const ssm = new AWS.SSM({ region: process.env.AWS_REGION || 'us-east-2' });
-const INSTANCE_ID = process.env.N8N_INSTANCE_ID || 'i-008e2d124532fb313';
+const INSTANCE_ID = process.env.N8N_INSTANCE_ID || 'i-0afdf313f61f22df0';
 
 exports.handler = async (event) => {
   console.log('🔄 N8N Auto-Restart Lambda triggered');

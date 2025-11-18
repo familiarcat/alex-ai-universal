@@ -15,7 +15,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Configuration
-INSTANCE_ID="${N8N_INSTANCE_ID:-i-008e2d124532fb313}"
+INSTANCE_ID="${N8N_INSTANCE_ID:-i-0afdf313f61f22df0}"
 RESTART_METHOD="${RESTART_METHOD:-pm2}" # pm2 or systemd
 
 echo -e "${YELLOW}🔄 Restarting N8N Server...${NC}"

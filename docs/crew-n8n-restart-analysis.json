@@ -1,0 +1,124 @@
+{
+  "analysis": {
+    "task": "N8N Restart and Repopulation",
+    "targetInstance": "i-0afdf313f61f22df0",
+    "objectives": [
+      "Verify AWS CLI configuration points to correct instance",
+      "Update all Docker, Terraform, and N8N references",
+      "Restart N8N instance safely",
+      "Repopulate workflows and configurations",
+      "Verify N8N health and connectivity"
+    ],
+    "crewAssignments": {
+      "data": "Verify AWS CLI and instance status",
+      "geordi": "Update Terraform and Docker configurations",
+      "worf": "Validate security and access",
+      "obrien": "Prepare Docker restart procedures",
+      "riker": "Execute restart and verification",
+      "uhura": "Repopulate N8N workflows",
+      "crusher": "Monitor health post-restart",
+      "troi": "Verify user experience",
+      "quark": "Optimize costs",
+      "picard": "Coordinate overall mission"
+    },
+    "findings": [
+      {
+        "crew": "data",
+        "finding": "Instance i-0afdf313f61f22df0 is running with IP 3.21.117.131, tagged as \"n8n\""
+      },
+      {
+        "crew": "worf",
+        "finding": "Using AWS SSM for secure access (no SSH keys required)"
+      },
+      {
+        "crew": "worf",
+        "finding": "Instance has IAM role with SSM permissions"
+      },
+      {
+        "crew": "uhura",
+        "finding": "N8N script found: scripts/n8n-post-knowledge.js"
+      },
+      {
+        "crew": "uhura",
+        "finding": "N8N script found: scripts/check-n8n-health.js"
+      },
+      {
+        "crew": "uhura",
+        "finding": "N8N script found: scripts/n8n-sync-webhooks.js"
+      },
+      {
+        "crew": "quark",
+        "finding": "Using existing instance prevents new EC2 charges"
+      },
+      {
+        "crew": "quark",
+        "finding": "Docker-based deployment minimizes resource overhead"
+      }
+    ],
+    "recommendations": [
+      {
+        "crew": "geordi",
+        "priority": "medium",
+        "action": "Update terraform/n8n-infrastructure/main.tf to reference instance i-0afdf313f61f22df0 if needed"
+      },
+      {
+        "crew": "geordi",
+        "priority": "medium",
+        "action": "Update terraform/n8n-infrastructure/variables.tf to reference instance i-0afdf313f61f22df0 if needed"
+      },
+      {
+        "crew": "geordi",
+        "priority": "medium",
+        "action": "Update terraform/n8n-infrastructure/outputs.tf to reference instance i-0afdf313f61f22df0 if needed"
+      },
+      {
+        "crew": "geordi",
+        "priority": "high",
+        "action": "Update scripts/restart-n8n-server.sh to use instance i-0afdf313f61f22df0"
+      },
+      {
+        "crew": "obrien",
+        "priority": "high",
+        "action": "Ensure Docker is running on instance before restart"
+      },
+      {
+        "crew": "obrien",
+        "priority": "medium",
+        "action": "Backup N8N data before restart"
+      }
+    ]
+  },
+  "plan": {
+    "phase1_verification": [
+      "Verify AWS CLI configuration",
+      "Confirm instance i-0afdf313f61f22df0 is running",
+      "Check instance tags and IP addresses"
+    ],
+    "phase2_updates": [
+      "Update restart-n8n-server.sh with correct instance ID",
+      "Update deploy-n8n-terraform-docker.sh if needed",
+      "Verify Docker configuration files",
+      "Update any hardcoded instance references"
+    ],
+    "phase3_restart": [
+      "Backup N8N data (if possible)",
+      "Restart N8N Docker container via SSM",
+      "Verify Docker container is running",
+      "Check N8N service health"
+    ],
+    "phase4_repopulation": [
+      "Sync N8N workflows",
+      "Register webhooks",
+      "Verify workflow activation",
+      "Test N8N connectivity"
+    ],
+    "phase5_verification": [
+      "Health check via check-n8n-health.js",
+      "Verify webhook endpoints",
+      "Test crew workflow connectivity",
+      "Confirm DDD workflow (Client => N8N => Supabase)"
+    ]
+  },
+  "timestamp": "2025-11-18T07:44:50.562Z",
+  "targetInstance": "i-0afdf313f61f22df0"
+}
