@@ -91,6 +91,27 @@ export default function NewProjectPage() {
       addComponents(projectId, components as any);
     }
     
+    // Auto-add ProjectManager component to control all Alex AI projects
+    const projectManagerComponent = {
+      id: `project-manager-${projectId}`,
+      type: 'project-manager',
+      title: 'Alex AI Projects',
+      body: 'Manage all your Alex AI projects from here',
+      role: 'project-manager',
+      priority: 5,
+      intent: 'educate' as Intent,
+      tone: 'calm' as Tone,
+      editable: true,
+      deletable: false,
+      updatedAt: Date.now(),
+      config: {
+        showCreateButton: true,
+        showEditButton: true,
+        showDeleteButton: true
+      }
+    };
+    addComponents(projectId, [projectManagerComponent as any]);
+    
     // Store learning in n8n => Supabase (visual selection instead of quiz)
     storeProjectCreationMemory(projectId, theme, businessType, intent, tone);
     
