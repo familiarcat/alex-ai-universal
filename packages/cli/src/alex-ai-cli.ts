@@ -49,6 +49,13 @@ class NPXCLIHandler {
         await this.handleTestExecution();
         return;
       }
+
+      // Check for dashboard view requests
+      if (this.isDashboardViewRequest(message)) {
+        console.log('📊 Dashboard view request detected!');
+        await this.handleDashboardView();
+        return;
+      }
       
       const response = await this.core.processMessage(message);
 
@@ -80,8 +87,10 @@ class NPXCLIHandler {
     } catch (error: any) {
       console.error(`❌ NPX engagement failed: ${error.message}`);
     } finally {
-      // Ensure process exits properly
-      process.exit(0);
+      // Only exit if not handling dashboard view (which keeps process alive)
+      if (!this.isDashboardViewRequest(message)) {
+        process.exit(0);
+      }
     }
   }
 
@@ -173,6 +182,65 @@ class NPXCLIHandler {
     
     const lowerMessage = message.toLowerCase();
     return testKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
+   * Check if message is a dashboard view request
+   */
+  isDashboardViewRequest(message: string): boolean {
+    const dashboardKeywords = [
+      'view the dashboard',
+      'view dashboard',
+      'open dashboard',
+      'show dashboard',
+      'start dashboard',
+      'launch dashboard',
+      'run dashboard',
+      'dashboard',
+      'open the dashboard',
+      'show the dashboard',
+      'start the dashboard'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return dashboardKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
+   * Handle dashboard view requests
+   */
+  async handleDashboardView(): Promise<void> {
+    try {
+      const dashboardScriptPath = path.join(process.cwd(), 'scripts', 'view-dashboard.js');
+      const { spawn } = require('child_process');
+      
+      console.log('📊 Starting Dashboard in Local Development Mode...');
+      console.log('==================================================\n');
+      console.log('🖖 Local sketch pad with live cloud integration');
+      console.log('   • Tests, builds, and runs locally');
+      console.log('   • Opens in browser automatically');
+      console.log('   • Live refresh active');
+      console.log('   • Connects to live Supabase & N8N\n');
+      
+      const child = spawn('node', [dashboardScriptPath], {
+        stdio: 'inherit',
+        cwd: process.cwd(),
+        detached: false // Keep attached so Ctrl+C works
+      });
+      
+      // Don't exit - let the dashboard script handle the process
+      child.on('error', (error: Error) => {
+        console.error(`❌ Failed to start dashboard: ${error.message}`);
+        console.error('   Make sure the dashboard script exists at:');
+        console.error(`   ${dashboardScriptPath}`);
+        process.exit(1);
+      });
+      
+      // The script will keep the process alive
+    } catch (error: any) {
+      console.error(`❌ Dashboard view failed: ${error.message}`);
+      process.exit(1);
+    }
   }
 
   /**
@@ -371,12 +439,20 @@ program
           console.log('\n📋 Available Commands:');
           console.log('  • Ask any question for crew assistance');
           console.log('  • "status" - Show system status');
+          console.log('  • "view the dashboard" - Start local dashboard with live refresh');
           console.log('  • "compare costs" or "cost analysis" - Run EC2 cost analysis');
           console.log('  • "run tests" or "litmus test" - Run end-to-end system tests');
           console.log('  • "n8n start" - Start N8N integration');
           console.log('  • "exit" - Quit chat mode');
           console.log('');
           askQuestion();
+          return;
+        }
+        
+        // Check for dashboard view (doesn't exit process)
+        if (npxHandler.isDashboardViewRequest(input)) {
+          await npxHandler.handleDashboardView();
+          // Dashboard script keeps process alive, so don't ask next question
           return;
         }
         

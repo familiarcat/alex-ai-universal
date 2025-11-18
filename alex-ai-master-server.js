@@ -404,8 +404,8 @@ app.get('/', (req, res) => {
     if (err) {
       log.error('Template render error:', err);
       return res.status(500).send('Template error');
-    }
-    
+        }
+        
     // Cache the HTML
     htmlCache.dashboard.html = html;
     htmlCache.dashboard.timestamp = Date.now();
@@ -458,7 +458,7 @@ app.get('/projects/:id', (req, res) => {
       version: stateVersion
     };
     
-    res.send(html);
+  res.send(html);
   });
   
   log.crew('Riker', `Serving project: ${projectId}`);
@@ -543,25 +543,25 @@ async function startServer() {
   }
   
   server.listen(PORT, () => {
-    console.log('\n');
-    console.log('🖖 ═══════════════════════════════════════════════════════════');
+  console.log('\n');
+  console.log('🖖 ═══════════════════════════════════════════════════════════');
     console.log('   ALEX AI MASTER SERVER - OPTIMIZED VERSION');
-    console.log('═══════════════════════════════════════════════════════════\n');
-    log.success(`Master server online at http://localhost:${PORT}`);
+  console.log('═══════════════════════════════════════════════════════════\n');
+  log.success(`Master server online at http://localhost:${PORT}`);
     log.info('All optimizations active\n');
-    
-    log.crew('Picard', 'Command structure established');
+  
+  log.crew('Picard', 'Command structure established');
     log.crew('Data', 'State management initialized with Supabase persistence');
     log.crew('Geordi', 'API endpoints operational with rate limiting');
     log.crew('Troi', 'UX systems online with WebSocket real-time updates');
     log.crew('Uhura', 'WebSocket server active');
-    
-    console.log('\n📍 AVAILABLE ROUTES:');
-    console.log(`   Dashboard:     http://localhost:${PORT}/`);
-    console.log(`   Alpha Project: http://localhost:${PORT}/projects/alpha`);
-    console.log(`   Beta Project:  http://localhost:${PORT}/projects/beta`);
-    console.log(`   Gamma Project: http://localhost:${PORT}/projects/gamma`);
-    console.log(`   Health Check:  http://localhost:${PORT}/health`);
+  
+  console.log('\n📍 AVAILABLE ROUTES:');
+  console.log(`   Dashboard:     http://localhost:${PORT}/`);
+  console.log(`   Alpha Project: http://localhost:${PORT}/projects/alpha`);
+  console.log(`   Beta Project:  http://localhost:${PORT}/projects/beta`);
+  console.log(`   Gamma Project: http://localhost:${PORT}/projects/gamma`);
+  console.log(`   Health Check:  http://localhost:${PORT}/health`);
     console.log('\n🎯 OPTIMIZATIONS ACTIVE:');
     console.log('   ✅ Compression middleware (70% bandwidth reduction)');
     console.log('   ✅ Static file serving with browser caching');
@@ -570,7 +570,7 @@ async function startServer() {
     console.log('   ✅ Supabase state persistence (DDD architecture)');
     console.log('   ✅ Rate limiting (security)');
     console.log('   ✅ EJS template engine (maintainability)');
-    console.log('\n═══════════════════════════════════════════════════════════\n');
+  console.log('\n═══════════════════════════════════════════════════════════\n');
   });
 }
 

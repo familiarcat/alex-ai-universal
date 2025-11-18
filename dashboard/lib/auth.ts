@@ -98,6 +98,25 @@ export const authConfig: NextAuthConfig = {
     error: "/auth/error",
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Worf's Security: User whitelist check (no new user creation)
+      if (user?.email) {
+        const authorizedUsers = process.env.AUTHORIZED_USERS?.split(',') || [];
+        const isAuthorized = authorizedUsers.some(
+          (authorizedEmail) => authorizedEmail.toLowerCase() === user.email?.toLowerCase()
+        );
+
+        if (!isAuthorized) {
+          // Log security event
+          logSecurityEvent("UNAUTHORIZED_ACCESS_ATTEMPT", {
+            email: user.email,
+            provider: account?.provider || "unknown",
+          });
+          return false; // Reject sign-in
+        }
+      }
+      return true;
+    },
     async session({ session, token }) {
       // Add user ID to session
       if (session.user && token.sub) {

@@ -37,6 +37,10 @@ switch (cmd) {
   case 'chat':
     runLocalCLI(['chat', ...rest]);
     break;
+  case 'dashboard':
+  case 'view-dashboard':
+    runScriptInScripts('view-dashboard.js', rest);
+    break;
   default: {
     console.log('Alex AI CLI');
     console.log('Usage:');
@@ -45,6 +49,7 @@ switch (cmd) {
     console.log('  alex-ai triage [--item <number>|--all]  # triage issues/PRs locally');
     console.log('  alex-ai engage "<message>"  # one-shot engagement via local CLI');
     console.log('  alex-ai chat            # interactive chat via local CLI');
+    console.log('  alex-ai dashboard       # start local dashboard with live refresh');
     process.exitCode = 0;
   }
 }
