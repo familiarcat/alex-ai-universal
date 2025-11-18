@@ -19,6 +19,10 @@ import { useEffect, useState } from 'react';
 import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 import DeleteProjectModal from '@/components/DeleteProjectModal';
 import ThemeSelector from '@/components/ThemeSelector';
+import RAGProjectRecommendations from '@/components/RAGProjectRecommendations';
+import CrewMemoryVisualization from '@/components/CrewMemoryVisualization';
+import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard';
+import LiveRefreshDashboard from '@/components/LiveRefreshDashboard';
 
 export default function DashboardContent() {
   const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
@@ -199,6 +203,34 @@ export default function DashboardContent() {
             >
               <span style={{ fontSize: '20px' }}>+</span> New Project
             </Link>
+          </div>
+        </div>
+
+        {/* Live Refresh System - Top Priority */}
+        <div style={{ marginBottom: '24px' }}>
+          <LiveRefreshDashboard />
+        </div>
+
+        {/* RAG-Powered Features - Visual Hierarchy (Troi & Data) */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px',
+          marginBottom: '40px'
+        }}>
+          {/* Learning Analytics - Top Priority */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <LearningAnalyticsDashboard />
+          </div>
+          
+          {/* Crew Memory Visualization - Secondary */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <CrewMemoryVisualization />
+          </div>
+          
+          {/* RAG Recommendations - Tertiary */}
+          <div style={{ gridColumn: '1 / -1' }}>
+            <RAGProjectRecommendations />
           </div>
         </div>
 

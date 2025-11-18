@@ -10,6 +10,8 @@
     "alex-ai": "bin/alex-ai"
   },
   "scripts": {
+    "dashboard:setup": "node scripts/automate-dashboard-setup.js",
+    "dashboard:watch": "node scripts/start-codebase-watcher.js",
     "crew:up": "bash ./scripts/crew-up.sh",
     "engage": "bash ./scripts/engage-alex-ai-enhanced.sh",
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",
