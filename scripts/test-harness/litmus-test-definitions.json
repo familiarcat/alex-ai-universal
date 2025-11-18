@@ -1,0 +1,203 @@
+{
+  "version": "1.0.0",
+  "description": "Alex AI Universal Litmus Test Definitions - Reusable test cases for end-to-end system validation",
+  "tests": [
+    {
+      "id": "litmus-001",
+      "name": "Supabase Migration Automation Test",
+      "description": "Tests the complete Supabase migration automation workflow using natural language prompts",
+      "naturalLanguagePrompt": "run all migrations",
+      "expectedBehavior": "All migrations applied successfully",
+      "functionalRole": "infrastructure",
+      "testSteps": [
+        {
+          "type": "natural_language",
+          "name": "Execute migration command via natural language",
+          "prompt": "run all migrations",
+          "expectedBehavior": "migrations applied"
+        },
+        {
+          "type": "cli_command",
+          "name": "Verify migration status",
+          "command": "supabase migration list",
+          "expectedOutput": "Local"
+        },
+        {
+          "type": "file_check",
+          "name": "Verify consolidated migration file exists",
+          "path": "supabase/CONSOLIDATED_MIGRATION.sql",
+          "expectedContent": "CONSOLIDATED SUPABASE MIGRATION"
+        }
+      ],
+      "verificationSteps": [
+        {
+          "type": "api_call",
+          "name": "Verify table accessibility",
+          "endpoint": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/alex_ai_memories?limit=1",
+          "method": "GET",
+          "expectedStatus": 200
+        }
+      ],
+      "memoryVerification": {
+        "enabled": true,
+        "verifyStorage": true,
+        "verifyFunctionalRole": true
+      },
+      "tags": ["supabase", "migrations", "infrastructure", "automation"],
+      "priority": "high",
+      "version": "1.0.0"
+    },
+    {
+      "id": "litmus-002",
+      "name": "Chat Session Memory Storage Test",
+      "description": "Tests storing chat sessions to Supabase vector memory system via N8N workflow",
+      "naturalLanguagePrompt": "can we add this chat to our supabase vector memory system",
+      "expectedBehavior": "Chat session stored successfully",
+      "functionalRole": "memory",
+      "testSteps": [
+        {
+          "type": "natural_language",
+          "name": "Request chat session storage",
+          "prompt": "can we add this chat to our supabase vector memory system",
+          "expectedBehavior": "stored"
+        },
+        {
+          "type": "memory_query",
+          "name": "Verify memory storage",
+          "query": "chat session",
+          "expectedResults": {
+            "minCount": 1
+          }
+        }
+      ],
+      "verificationSteps": [
+        {
+          "type": "api_call",
+          "name": "Verify N8N workflow accessible",
+          "endpoint": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "method": "POST",
+          "expectedStatus": 200
+        }
+      ],
+      "memoryVerification": {
+        "enabled": true,
+        "verifyStorage": true,
+        "verifyFunctionalRole": true
+      },
+      "tags": ["memory", "vector-embeddings", "n8n", "chat-session"],
+      "priority": "high",
+      "version": "1.0.0"
+    },
+    {
+      "id": "litmus-003",
+      "name": "Milestone Push Automation Test",
+      "description": "Tests automated milestone push system with zero prompts",
+      "naturalLanguagePrompt": "make a milestone push",
+      "expectedBehavior": "Milestone created successfully",
+      "functionalRole": "automation",
+      "testSteps": [
+        {
+          "type": "natural_language",
+          "name": "Execute milestone push",
+          "prompt": "make a milestone push",
+          "expectedBehavior": "milestone"
+        },
+        {
+          "type": "cli_command",
+          "name": "Verify git commit created",
+          "command": "git log -1 --oneline",
+          "expectedOutput": "milestone"
+        }
+      ],
+      "verificationSteps": [],
+      "memoryVerification": {
+        "enabled": true,
+        "verifyStorage": true,
+        "verifyFunctionalRole": true
+      },
+      "tags": ["milestone", "automation", "git", "ci-cd"],
+      "priority": "high",
+      "version": "1.0.0"
+    },
+    {
+      "id": "litmus-004",
+      "name": "Natural Language CLI Routing Test",
+      "description": "Tests natural language prompt routing to appropriate CLI commands",
+      "naturalLanguagePrompt": "compare costs",
+      "expectedBehavior": "Cost analysis executed",
+      "functionalRole": "cli",
+      "testSteps": [
+        {
+          "type": "natural_language",
+          "name": "Execute cost analysis via natural language",
+          "prompt": "compare costs",
+          "expectedBehavior": "cost"
+        },
+        {
+          "type": "file_check",
+          "name": "Verify cost report generated",
+          "path": ".backup-ec2-emergency/COST_ANALYSIS_REPORT.txt",
+          "expectedContent": "COST ANALYSIS"
+        }
+      ],
+      "verificationSteps": [],
+      "memoryVerification": {
+        "enabled": true,
+        "verifyStorage": true,
+        "verifyFunctionalRole": true
+      },
+      "tags": ["cli", "natural-language", "cost-analysis", "routing"],
+      "priority": "medium",
+      "version": "1.0.0"
+    },
+    {
+      "id": "litmus-005",
+      "name": "End-to-End System Integration Test",
+      "description": "Comprehensive test of entire Alex AI Universal system workflow",
+      "naturalLanguagePrompt": "test the entire alex ai system",
+      "expectedBehavior": "System operational",
+      "functionalRole": "system",
+      "testSteps": [
+        {
+          "type": "cli_command",
+          "name": "Verify CLI initialization",
+          "command": "npx alex-ai --version",
+          "expectedOutput": "alex-ai"
+        },
+        {
+          "type": "api_call",
+          "name": "Verify Supabase connectivity",
+          "endpoint": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/",
+          "method": "GET",
+          "expectedStatus": 200
+        },
+        {
+          "type": "api_call",
+          "name": "Verify N8N connectivity",
+          "endpoint": "https://n8n.pbradygeorgen.com",
+          "method": "GET",
+          "expectedStatus": 200
+        }
+      ],
+      "verificationSteps": [
+        {
+          "type": "memory_query",
+          "name": "Verify system memory accessible",
+          "query": "system",
+          "expectedResults": {
+            "minCount": 1
+          }
+        }
+      ],
+      "memoryVerification": {
+        "enabled": true,
+        "verifyStorage": true,
+        "verifyFunctionalRole": true
+      },
+      "tags": ["system", "integration", "end-to-end", "validation"],
+      "priority": "critical",
+      "version": "1.0.0"
+    }
+  ]
+}
+
