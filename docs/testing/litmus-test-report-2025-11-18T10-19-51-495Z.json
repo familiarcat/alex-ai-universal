@@ -1,0 +1,173 @@
+{
+  "timestamp": "2025-11-18T10:19:51.495Z",
+  "totalTests": 5,
+  "passed": 0,
+  "failed": 5,
+  "errors": 0,
+  "results": [
+    {
+      "testId": "litmus-001",
+      "testName": "Supabase Migration Automation Test",
+      "timestamp": "2025-11-18T10:15:12.665Z",
+      "status": "failed",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "stepName": "Execute migration command via natural language",
+          "status": "failed",
+          "output": "",
+          "error": "spawnSync /bin/sh ETIMEDOUT"
+        },
+        {
+          "stepNumber": 2,
+          "stepName": "Verify migration status",
+          "status": "passed",
+          "output": "\n  \n   Local    | Remote   | Time (UTC) \n  ----------|----------|------------\n   001      | 001      | 001        \n   002      | 002      | 002        \n   003      | 003      | 003        \n   004      | 004      | 004        \n   005      | 005      | 005        \n   006      | 006      | 006        \n   007      | 007      | 007        \n   008      | 008      | 008        \n   009      | 009      | 009        \n   010      | 010      | 010        \n   011      | 011      | 011        \n   20251110 | 2",
+          "error": null
+        },
+        {
+          "stepNumber": 3,
+          "stepName": "Verify consolidated migration file exists",
+          "status": "passed",
+          "output": "-- ============================================================================\n-- CONSOLIDATED SUPABASE MIGRATION\n-- Generated: 2025-11-18T09:52:31.463Z\n-- Total migrations: 13\n-- ============================================================================\n\n-- This file contains all migrations in chronological order.\n-- Execute this entire file in the Supabase Dashboard SQL Editor.\n\n-- ============================================================================\n\n\n-- ============================",
+          "error": null
+        }
+      ],
+      "memoryVerified": false,
+      "functionalRoleVerified": false,
+      "errors": [
+        "Step 1 failed: spawnSync /bin/sh ETIMEDOUT"
+      ]
+    },
+    {
+      "testId": "litmus-002",
+      "testName": "Chat Session Memory Storage Test",
+      "timestamp": "2025-11-18T10:16:15.447Z",
+      "status": "failed",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "stepName": "Request chat session storage",
+          "status": "failed",
+          "output": "",
+          "error": "spawnSync /bin/sh ETIMEDOUT"
+        },
+        {
+          "stepNumber": 2,
+          "stepName": "Verify memory storage",
+          "status": "failed",
+          "output": "[]",
+          "error": "No memory entries found"
+        }
+      ],
+      "memoryVerified": false,
+      "functionalRoleVerified": false,
+      "errors": [
+        "Step 1 failed: spawnSync /bin/sh ETIMEDOUT",
+        "Step 2 failed: No memory entries found"
+      ]
+    },
+    {
+      "testId": "litmus-003",
+      "testName": "Milestone Push Automation Test",
+      "timestamp": "2025-11-18T10:17:17.117Z",
+      "status": "failed",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "stepName": "Execute milestone push",
+          "status": "failed",
+          "output": "",
+          "error": "spawnSync /bin/sh ETIMEDOUT"
+        },
+        {
+          "stepNumber": 2,
+          "stepName": "Verify git commit created",
+          "status": "failed",
+          "output": "3097da3 🎉 MILESTONE: End-to-End Litmus Test System - Natural Language Testing Framework\n",
+          "error": "Expected output not found: milestone"
+        }
+      ],
+      "memoryVerified": false,
+      "functionalRoleVerified": false,
+      "errors": [
+        "Step 1 failed: spawnSync /bin/sh ETIMEDOUT",
+        "Step 2 failed: Expected output not found: milestone"
+      ]
+    },
+    {
+      "testId": "litmus-004",
+      "testName": "Natural Language CLI Routing Test",
+      "timestamp": "2025-11-18T10:18:18.665Z",
+      "status": "failed",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "stepName": "Execute cost analysis via natural language",
+          "status": "failed",
+          "output": "",
+          "error": "spawnSync /bin/sh ETIMEDOUT"
+        },
+        {
+          "stepNumber": 2,
+          "stepName": "Verify cost report generated",
+          "status": "passed",
+          "output": "================================================================================\nEC2 EMERGENCY - COST ANALYSIS REPORT\n================================================================================\n\nGenerated: 2025-11-17T20:26:32.624Z\n\n📁 FILE COMPARISON\n--------------------------------------------------------------------------------\nBackup file exists: ✅\nCurrent file exists: ❌\n\n🔍 CONFIGURATION DIFFERENCES:\n  ⚠️  instance_type:\n     Backup: t3.medium\n     Current: NOT_SET\n  ⚠️  n8n_data_backup",
+          "error": null
+        }
+      ],
+      "memoryVerified": false,
+      "functionalRoleVerified": false,
+      "errors": [
+        "Step 1 failed: spawnSync /bin/sh ETIMEDOUT"
+      ]
+    },
+    {
+      "testId": "litmus-005",
+      "testName": "End-to-End System Integration Test",
+      "timestamp": "2025-11-18T10:19:20.020Z",
+      "status": "failed",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "stepName": "Verify CLI initialization",
+          "status": "failed",
+          "output": "",
+          "error": "spawnSync /bin/sh ETIMEDOUT"
+        },
+        {
+          "stepNumber": 2,
+          "stepName": "Verify Supabase connectivity",
+          "status": "failed",
+          "output": "{\"message\":\"No API key found in request\",\"hint\":\"No `apikey` request header or url param was found.\"}",
+          "error": "Expected status 200, got 401"
+        },
+        {
+          "stepNumber": 3,
+          "stepName": "Verify N8N connectivity",
+          "status": "passed",
+          "output": "<!DOCTYPE html>\n<html lang=\"en\">\n\t<head>\n\t\t<script type=\"module\" crossorigin src=\"/assets/polyfills-JGObYAeq.js\"></script>\n\n\t\t<meta charset=\"utf-8\" />\n\t\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n\t\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\" />\n\t\t<link rel=\"icon\" href=\"/favicon.ico\" />\n\t\t<meta name=\"n8n:config:rest-endpoint\" content=\"cmVzdA==\"><meta name=\"n8n:config:sentry\" content=\"eyJkc24iOiIiLCJlbnZpcm9ubWVudCI6ImRldmVsb3BtZW50IiwicmVsZWFzZSI6Im44bkAxLjEx",
+          "error": null
+        }
+      ],
+      "memoryVerified": false,
+      "functionalRoleVerified": false,
+      "errors": [
+        "Step 1 failed: spawnSync /bin/sh ETIMEDOUT",
+        "Step 2 failed: Expected status 200, got 401"
+      ]
+    }
+  ],
+  "summary": {
+    "memoryVerification": {
+      "total": 5,
+      "verified": 0,
+      "failed": 5
+    },
+    "functionalRoleVerification": {
+      "total": 5,
+      "verified": 0,
+      "failed": 5
+    }
+  }
+}
