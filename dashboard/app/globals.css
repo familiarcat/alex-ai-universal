@@ -1,7 +1,8 @@
 /* Alex AI Platform Global Styles */
+/* Universal Styling System - Counselor Troi's UX Memories Applied */
 
 :root {
-  /* fallback defaults */
+  /* Color System - Dashboard Theme */
   --bg: #0b0b10;
   --text: #e5e7eb;
   --text-muted: #a1a1aa;
@@ -15,6 +16,52 @@
   --elevation: 0 6px 18px rgba(0,0,0,0.22);
   --blur: 0px;
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  
+  /* Universal Icon Sizing System - Counselor Troi's Recommendation */
+  --icon-xs: 12px;
+  --icon-sm: 16px;
+  --icon-md: 24px;
+  --icon-lg: 32px;
+  --icon-xl: 48px;
+  --icon-2xl: 64px;
+  
+  /* Universal Spacing Scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  
+  /* Universal Typography Scale */
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-lg: 18px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
+  --font-3xl: 48px;
+  --font-4xl: 64px;
+  
+  /* Border Radius - Consistent Rounding */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+  
+  /* Shadow System */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.2);
+  
+  /* Transition Timing */
+  --transition-fast: 0.15s;
+  --transition-base: 0.2s;
+  --transition-slow: 0.3s;
 }
 
 * {

@@ -1,0 +1,176 @@
+{
+  "timestamp": "2025-11-18T00:46:51.360Z",
+  "context": "Universal UI/UX methodology and icon sizing system",
+  "crew": {
+    "counselor_troi": {
+      "name": "Counselor Deanna Troi",
+      "role": "UX Lead - Drawing from memories and empathic design principles",
+      "assessment": "Universal styling system needed for consistent user experience",
+      "findings": [
+        "Dashboard not displaying properly on auth routes",
+        "Inconsistent icon sizing across components",
+        "No universal styling system",
+        "Missing responsive icon scaling",
+        "Accessibility concerns with icon sizes"
+      ],
+      "recommendations": [
+        "Create universal icon sizing system (16px, 24px, 32px, 48px)",
+        "Implement CSS variable system for consistent styling",
+        "Ensure dashboard displays correctly on all routes",
+        "Add loading states and error boundaries",
+        "Implement responsive icon scaling",
+        "Ensure minimum 24x24px touch targets"
+      ],
+      "troiMemories": {
+        "iconSizing": {
+          "principle": "Icons should scale proportionally with text and maintain visual hierarchy",
+          "standards": {
+            "small": "16px - For inline icons, buttons, and compact spaces",
+            "medium": "24px - Standard size for most UI elements",
+            "large": "32px - For headers, hero sections, and emphasis",
+            "xlarge": "48px - For landing pages and major CTAs",
+            "responsive": "Icons should scale with viewport and text size"
+          },
+          "accessibility": "Minimum 24x24px touch target for mobile, 44x44px recommended"
+        },
+        "universalStyling": {
+          "principle": "Consistent styling system across all routes and components",
+          "requirements": [
+            "CSS variables for theming",
+            "Consistent spacing scale (4px, 8px, 16px, 24px, 32px)",
+            "Typography scale (12px, 14px, 16px, 18px, 24px, 32px, 48px)",
+            "Color system with semantic naming",
+            "Border radius consistency",
+            "Shadow system (sm, md, lg)",
+            "Transition timing (0.2s standard)"
+          ]
+        },
+        "dashboardDisplay": {
+          "principle": "Dashboard should display correctly regardless of route or auth state",
+          "requirements": [
+            "Proper loading states",
+            "Error boundaries",
+            "Fallback UI for missing data",
+            "Consistent layout structure",
+            "Responsive breakpoints",
+            "Accessibility compliance"
+          ]
+        }
+      },
+      "priority": "CRITICAL"
+    },
+    "commander_data": {
+      "name": "Commander Data",
+      "assessment": "Technical implementation of universal styling system",
+      "findings": [
+        "Auth pages found: 1",
+        "Dashboard pages found: 3",
+        "Icon usage patterns: 7 components",
+        "No centralized icon sizing system",
+        "Inconsistent CSS variable usage"
+      ],
+      "recommendations": [
+        "Create icon sizing utility system",
+        "Implement CSS variable system in root layout",
+        "Create universal spacing scale",
+        "Implement typography scale",
+        "Add responsive breakpoint system"
+      ],
+      "priority": "HIGH"
+    },
+    "lieutenant_geordi": {
+      "name": "Lieutenant Commander Geordi La Forge",
+      "assessment": "Practical implementation and browser compatibility",
+      "findings": [
+        "Need consistent icon rendering across browsers",
+        "CSS variables provide good browser support",
+        "Responsive design needs viewport-based scaling",
+        "Touch targets need mobile optimization"
+      ],
+      "recommendations": [
+        "Use CSS custom properties for theming",
+        "Implement viewport-based icon scaling",
+        "Ensure touch target sizes (44x44px minimum)",
+        "Test across all modern browsers",
+        "Implement fallbacks for older browsers"
+      ],
+      "priority": "HIGH"
+    },
+    "commander_riker": {
+      "name": "Commander William Riker",
+      "assessment": "Tactical implementation plan",
+      "executionPlan": [
+        "1. Create universal icon sizing system",
+        "2. Implement CSS variable system",
+        "3. Fix dashboard display on auth routes",
+        "4. Add loading states",
+        "5. Test across all routes",
+        "6. Verify responsive behavior"
+      ],
+      "priority": "HIGH"
+    }
+  },
+  "recommendations": {
+    "iconSystem": {
+      "sizes": {
+        "xs": "12px",
+        "sm": "16px",
+        "md": "24px",
+        "lg": "32px",
+        "xl": "48px",
+        "2xl": "64px"
+      },
+      "implementation": "CSS variables and utility classes",
+      "responsive": "Scale with viewport and text size",
+      "accessibility": "Minimum 24x24px, recommended 44x44px for touch"
+    },
+    "universalStyling": {
+      "cssVariables": [
+        "--icon-xs: 12px",
+        "--icon-sm: 16px",
+        "--icon-md: 24px",
+        "--icon-lg: 32px",
+        "--icon-xl: 48px",
+        "--icon-2xl: 64px",
+        "--spacing-xs: 4px",
+        "--spacing-sm: 8px",
+        "--spacing-md: 16px",
+        "--spacing-lg: 24px",
+        "--spacing-xl: 32px",
+        "--spacing-2xl: 48px",
+        "--font-xs: 12px",
+        "--font-sm: 14px",
+        "--font-md: 16px",
+        "--font-lg: 18px",
+        "--font-xl: 24px",
+        "--font-2xl: 32px",
+        "--font-3xl: 48px"
+      ],
+      "utilityClasses": [
+        ".icon-xs { font-size: var(--icon-xs); }",
+        ".icon-sm { font-size: var(--icon-sm); }",
+        ".icon-md { font-size: var(--icon-md); }",
+        ".icon-lg { font-size: var(--icon-lg); }",
+        ".icon-xl { font-size: var(--icon-xl); }"
+      ]
+    },
+    "dashboardDisplay": {
+      "requirements": [
+        "Ensure dashboard layout loads on all routes",
+        "Add proper loading states",
+        "Implement error boundaries",
+        "Handle auth state properly",
+        "Ensure consistent styling regardless of route"
+      ],
+      "implementation": "Create root layout with universal styles"
+    },
+    "implementation": [
+      "Create universal-styles.css with CSS variables",
+      "Create Icon component with size props",
+      "Update root layout to include universal styles",
+      "Fix auth/signin route to display dashboard properly",
+      "Add loading states to all routes",
+      "Implement responsive icon scaling"
+    ]
+  }
+}

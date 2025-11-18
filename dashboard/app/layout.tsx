@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import { StateProvider } from '@/lib/state-manager';
 import DashboardChrome from '@/components/DashboardChrome';
 import './globals.css';
+import '../styles/universal.css';
 import GlobalThemeStyles from '@/components/GlobalThemeStyles';
 
 export const metadata: Metadata = {

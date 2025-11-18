@@ -13,19 +13,38 @@ function arg(name, def = '') {
 function post(urlString, json) {
   const data = Buffer.from(JSON.stringify(json));
   return new Promise((resolve, reject) => {
-    const req = https.request(
+    const TIMEOUT_MS = 5000; // 5 second timeout
+    let req;
+    const timeout = setTimeout(() => {
+      if (req) req.destroy();
+      reject(new Error(`Request timeout after ${TIMEOUT_MS}ms`));
+    }, TIMEOUT_MS);
+
+    req = https.request(
       urlString,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Content-Length': data.length },
+        timeout: TIMEOUT_MS,
       },
       (res) => {
         let body = '';
         res.on('data', (c) => (body += c));
-        res.on('end', () => resolve({ status: res.statusCode, body }));
+        res.on('end', () => {
+          clearTimeout(timeout);
+          resolve({ status: res.statusCode, body });
+        });
       },
     );
-    req.on('error', reject);
+    req.on('error', (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
+    req.on('timeout', () => {
+      req.destroy();
+      clearTimeout(timeout);
+      reject(new Error(`Request timeout after ${TIMEOUT_MS}ms`));
+    });
     req.write(data);
     req.end();
   });

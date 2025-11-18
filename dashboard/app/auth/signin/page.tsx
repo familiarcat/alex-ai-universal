@@ -4,11 +4,13 @@
 // Alex AI Universal - Sign In Page
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Team Alpha: Lieutenant Worf (Security) + Counselor Troi (UX)
+// Universal Styling: Counselor Troi's UX Memories Applied
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { Icon } from "@/components/Icon";
 
 export default function SignIn() {
   const searchParams = useSearchParams();
@@ -30,21 +32,65 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-md w-full mx-4">
-        <div className="bg-white shadow-2xl rounded-2xl p-8">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--bg)',
+      padding: 'var(--spacing-md)'
+    }}>
+      <div style={{
+        maxWidth: '448px',
+        width: '100%'
+      }}>
+        <div style={{
+          background: 'var(--card)',
+          border: 'var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'var(--spacing-xl)',
+          boxShadow: 'var(--shadow-lg)'
+        }}>
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <div style={{
+            textAlign: 'center',
+            marginBottom: 'var(--spacing-xl)'
+          }}>
+            <div style={{
+              fontSize: 'var(--font-3xl)',
+              marginBottom: 'var(--spacing-md)'
+            }}>
+              <Icon size="2xl">🖖</Icon>
+            </div>
+            <h1 style={{
+              fontSize: 'var(--font-2xl)',
+              fontWeight: 700,
+              color: 'var(--text)',
+              marginBottom: 'var(--spacing-sm)'
+            }}>
               Alex AI Universal
             </h1>
-            <p className="text-gray-600">Sign in to access your dashboard</p>
+            <p style={{
+              color: 'var(--text-muted)',
+              fontSize: 'var(--font-md)'
+            }}>
+              Sign in to access your dashboard
+            </p>
           </div>
 
           {/* Error Display */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 text-sm">
+            <div style={{
+              marginBottom: 'var(--spacing-lg)',
+              padding: 'var(--spacing-md)',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: 'var(--radius-md)'
+            }}>
+              <p style={{
+                color: '#dc2626',
+                fontSize: 'var(--font-sm)'
+              }}>
                 {error === "OAuthSignin"
                   ? "Error connecting to authentication provider"
                   : error === "OAuthCallback"
@@ -72,13 +118,50 @@ export default function SignIn() {
           <button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-300 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'var(--spacing-md)',
+              padding: 'var(--spacing-md) var(--spacing-lg)',
+              background: isLoading ? 'var(--card-alt)' : 'var(--card)',
+              border: 'var(--border)',
+              borderRadius: 'var(--radius-lg)',
+              fontWeight: 600,
+              color: 'var(--text)',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1,
+              boxShadow: 'var(--shadow-md)',
+              transition: 'all var(--transition-base)',
+              minHeight: '44px' // Touch target (Dr. Crusher's recommendation)
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.background = 'var(--card-alt)';
+                e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.background = 'var(--card)';
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+              }
+            }}
           >
             {isLoading ? (
-              <div className="w-6 h-6 border-3 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+              <div style={{
+                width: 'var(--icon-md)',
+                height: 'var(--icon-md)',
+                border: '3px solid var(--text-muted)',
+                borderTopColor: 'var(--accent)',
+                borderRadius: 'var(--radius-full)',
+                animation: 'spin 1s linear infinite'
+              }} />
             ) : (
               <>
-                <svg className="w-6 h-6" viewBox="0 0 24 24">
+                <Icon size="md">
+                  <svg viewBox="0 0 24 24" style={{ width: '100%', height: '100%' }}>
                   <path
                     fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -96,30 +179,33 @@ export default function SignIn() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                   <path fill="none" d="M1 1h22v22H1z" />
-                </svg>
+                  </svg>
+                </Icon>
                 <span>Sign in with Google</span>
               </>
             )}
           </button>
 
           {/* Security Notice */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <div className="flex items-start gap-2 text-sm text-gray-600">
-              <svg
-                className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-              <p className="leading-relaxed">
-                <strong className="text-gray-900">Secured by Lieutenant Worf.</strong>
+          <div style={{
+            marginTop: 'var(--spacing-xl)',
+            paddingTop: 'var(--spacing-lg)',
+            borderTop: 'var(--border)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 'var(--spacing-sm)'
+            }}>
+              <Icon size="md" ariaLabel="Security">
+                🔒
+              </Icon>
+              <p style={{
+                fontSize: 'var(--font-sm)',
+                color: 'var(--text-muted)',
+                lineHeight: 1.6
+              }}>
+                <strong style={{ color: 'var(--text)' }}>Secured by Lieutenant Worf.</strong>
                 <br />
                 Your authentication is protected with NextAuth.js and Google OAuth.
                 We never store your password.
@@ -129,17 +215,46 @@ export default function SignIn() {
         </div>
 
         {/* Footer */}
-        <p className="text-center mt-6 text-sm text-gray-600">
+        <p style={{
+          textAlign: 'center',
+          marginTop: 'var(--spacing-lg)',
+          fontSize: 'var(--font-sm)',
+          color: 'var(--text-muted)'
+        }}>
           By signing in, you agree to our{" "}
-          <a href="/terms" className="text-blue-600 hover:underline">
+          <a href="/terms" style={{
+            color: 'var(--accent)',
+            textDecoration: 'none'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none';
+          }}>
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="/privacy" className="text-blue-600 hover:underline">
+          <a href="/privacy" style={{
+            color: 'var(--accent)',
+            textDecoration: 'none'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none';
+          }}>
             Privacy Policy
           </a>
         </p>
       </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

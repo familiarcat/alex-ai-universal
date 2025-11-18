@@ -591,15 +591,27 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
         features_summary=$(printf '%s; ' "${completed_tasks[@]:0:5}" | sed 's/; $//')
     fi
     
-    # Run RAG ingestion (completely silent, non-interactive, non-blocking)
+    # Run RAG ingestion (completely silent, non-interactive, non-blocking with timeout)
     if command -v node >/dev/null 2>&1; then
-        # Only run the primary RAG ingestion script (silently)
+        # Only run the primary RAG ingestion script (silently, with timeout to prevent hanging)
         if [ -f "scripts/n8n-post-knowledge.js" ]; then
-            node scripts/n8n-post-knowledge.js \
-                --summary "$milestone_name" \
-                --features "$features_summary" \
-                --tags "milestone,git,$branch" \
-                >/dev/null 2>&1 || true
+            # Use timeout command if available, otherwise run in background with kill after delay
+            if command -v timeout >/dev/null 2>&1; then
+                timeout 10s node scripts/n8n-post-knowledge.js \
+                    --summary "$milestone_name" \
+                    --features "$features_summary" \
+                    --tags "milestone,git,$branch" \
+                    >/dev/null 2>&1 || true
+            else
+                # Fallback: run in background and kill after 10 seconds
+                (node scripts/n8n-post-knowledge.js \
+                    --summary "$milestone_name" \
+                    --features "$features_summary" \
+                    --tags "milestone,git,$branch" \
+                    >/dev/null 2>&1 &)
+                local post_pid=$!
+                (sleep 10 && kill $post_pid 2>/dev/null || true) &
+            fi
         fi
     fi
     

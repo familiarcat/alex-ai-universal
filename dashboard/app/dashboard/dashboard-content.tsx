@@ -159,26 +159,47 @@ export default function DashboardContent() {
             />
           </div>
           
-          <Link
-            href="/projects/new"
-            style={{
-              padding: '14px 24px',
-              background: 'var(--accent)',
-              color: '#0a0015',
-              borderRadius: 'var(--radius)',
-              textDecoration: 'none',
-              fontWeight: 600,
-              fontSize: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 4px 12px rgba(0, 255, 170, 0.3)',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <span style={{ fontSize: '20px' }}>+</span> New Project
-          </Link>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <Link
+              href="/dashboard/analytics"
+              style={{
+                padding: '12px 24px',
+                background: 'var(--card-alt)',
+                color: 'var(--text)',
+                textDecoration: 'none',
+                borderRadius: 'var(--radius)',
+                fontWeight: 600,
+                fontSize: '15px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: '1px solid var(--border)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>📊</span> Analytics
+            </Link>
+            <Link
+              href="/projects/new"
+              style={{
+                padding: '14px 24px',
+                background: 'var(--accent)',
+                color: '#0a0015',
+                borderRadius: 'var(--radius)',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 4px 12px rgba(0, 255, 170, 0.3)',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>+</span> New Project
+            </Link>
+          </div>
         </div>
 
         {/* Projects */}
