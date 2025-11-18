@@ -42,6 +42,13 @@ class NPXCLIHandler {
         await this.handleCostAnalysis();
         return;
       }
+
+      // Check for test requests
+      if (this.isTestRequest(message)) {
+        console.log('🧪 Test execution request detected!');
+        await this.handleTestExecution();
+        return;
+      }
       
       const response = await this.core.processMessage(message);
 
@@ -142,6 +149,72 @@ class NPXCLIHandler {
     
     const lowerMessage = message.toLowerCase();
     return costKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
+   * Check if message is a test request
+   */
+  private isTestRequest(message: string): boolean {
+    const testKeywords = [
+      'run tests',
+      'run litmus',
+      'test system',
+      'litmus test',
+      'test alex ai',
+      'verify system',
+      'test harness',
+      'run test suite',
+      'execute tests',
+      'system test',
+      'end to end test',
+      'e2e test'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return testKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
+   * Handle test execution requests
+   */
+  async handleTestExecution(options?: { testId?: string; all?: boolean }): Promise<void> {
+    try {
+      // Use process.cwd() to get project root (where CLI is executed from)
+      // This works whether CLI is run via npx or directly
+      const projectRoot = process.cwd();
+      const testScriptPath = path.join(projectRoot, 'scripts', 'test-harness', 'run-litmus-tests.js');
+      const { spawn } = require('child_process');
+      
+      console.log('🧪 Running Alex AI Universal Litmus Tests...');
+      console.log('==========================================\n');
+      
+      const child = spawn('node', [testScriptPath], {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      });
+      
+      child.on('close', (code: number) => {
+        if (code === 0) {
+          console.log('\n✅ Litmus tests complete!');
+          console.log('📊 Reports saved to: docs/testing/');
+          console.log('   • litmus-test-report-*.json');
+          console.log('   • litmus-test-report-*.md');
+        } else {
+          console.error(`\n❌ Tests failed with code ${code}`);
+        }
+        process.exit(code || 0);
+      });
+      
+      child.on('error', (error: Error) => {
+        console.error(`❌ Failed to run tests: ${error.message}`);
+        console.error('   Make sure the test harness script exists at:');
+        console.error(`   ${testScriptPath}`);
+        process.exit(1);
+      });
+    } catch (error: any) {
+      console.error(`❌ Test execution failed: ${error.message}`);
+      process.exit(1);
+    }
   }
 
   /**
@@ -251,6 +324,25 @@ program
     }
   });
 
+// Test command
+program
+  .command('test')
+  .alias('litmus')
+  .description('Run Alex AI Universal Litmus Tests - End-to-end system validation')
+  .option('-a, --all', 'Run all tests', true)
+  .option('-i, --id <testId>', 'Run specific test by ID (e.g., litmus-001)')
+  .action(async (options: { all?: boolean; id?: string }) => {
+    try {
+      await npxHandler.handleTestExecution({ 
+        all: options.all, 
+        testId: options.id 
+      });
+    } catch (error: any) {
+      console.error(`❌ Test execution failed: ${error.message}`);
+      process.exit(1);
+    }
+  });
+
 // Interactive mode
 program
   .command('chat')
@@ -279,6 +371,7 @@ program
           console.log('  • Ask any question for crew assistance');
           console.log('  • "status" - Show system status');
           console.log('  • "compare costs" or "cost analysis" - Run EC2 cost analysis');
+          console.log('  • "run tests" or "litmus test" - Run end-to-end system tests');
           console.log('  • "n8n start" - Start N8N integration');
           console.log('  • "exit" - Quit chat mode');
           console.log('');
