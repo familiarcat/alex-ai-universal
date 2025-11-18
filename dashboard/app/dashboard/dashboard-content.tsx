@@ -23,6 +23,7 @@ import RAGProjectRecommendations from '@/components/RAGProjectRecommendations';
 import CrewMemoryVisualization from '@/components/CrewMemoryVisualization';
 import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard';
 import LiveRefreshDashboard from '@/components/LiveRefreshDashboard';
+import N8NWorkflowBento from '@/components/N8NWorkflowBento';
 
 export default function DashboardContent() {
   const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
@@ -232,6 +233,40 @@ export default function DashboardContent() {
           <div style={{ gridColumn: '1 / -1' }}>
             <RAGProjectRecommendations />
           </div>
+        </div>
+
+        {/* N8N Workflow Visualization - Bento Grid (Uhura & Data) */}
+        <div style={{
+          marginBottom: '40px'
+        }}>
+          <div className="card" style={{
+            padding: 'var(--spacing-lg)',
+            borderRadius: 'var(--radius)',
+            border: 'var(--border)',
+            background: 'var(--card)',
+            marginBottom: 'var(--spacing-lg)'
+          }}>
+            <h2 style={{
+              fontSize: 'var(--font-xl)',
+              color: 'var(--accent)',
+              marginBottom: 'var(--spacing-sm)'
+            }}>
+              ⚙️ n8n Workflow Visualization
+            </h2>
+            <p style={{
+              fontSize: 'var(--font-sm)',
+              color: 'var(--text-muted)',
+              marginBottom: 0
+            }}>
+              Visualize and manage your n8n workflows with interactive Mermaid diagrams
+            </p>
+          </div>
+          <N8NWorkflowBento 
+            onWorkflowSelect={(id) => {
+              console.log('Selected workflow:', id);
+              // Navigate to workflow details or open modal
+            }}
+          />
         </div>
 
         {/* Projects */}

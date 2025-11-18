@@ -1,0 +1,23 @@
+graph TD
+    schedule_Trigger["Schedule Trigger"]
+    metrics_Collection["Metrics Collection"]
+    alert_Check{"Alert Check}"
+    alert_Processing["Alert Processing"]
+    dashboard_Generation["Dashboard Generation"]
+    database_Storage["Database Storage"]
+    monitoring_Log["Monitoring Log"]
+    no_Alerts["No Alerts"]
+
+    schedule_Trigger --> metrics_Collection
+    metrics_Collection --> alert_Check
+    alert_Check --> alert_Processing
+    alert_Check --> no_Alerts
+    alert_Processing --> dashboard_Generation
+    no_Alerts --> dashboard_Generation
+    dashboard_Generation --> database_Storage
+    database_Storage --> monitoring_Log
+
+    classDef action fill:#2196f3,stroke:#1565c0,color:#fff
+    class schedule_Trigger,metrics_Collection,alert_Processing,dashboard_Generation,database_Storage,monitoring_Log,no_Alerts action
+    classDef condition fill:#ff9800,stroke:#e65100,color:#fff
+    class alert_Check condition

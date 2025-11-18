@@ -1,0 +1,22 @@
+graph TD
+    prompt_Interception((("Prompt Interception"))
+    prompt_Analysis["Prompt Analysis"]
+    crew_Splitter["Crew Splitter"]
+    lLM_Optimization["LLM Optimization"]
+    crew_Response_Genera["Crew Response Generation"]
+    response_Processing["Response Processing"]
+    hallucination_Analys["Hallucination Analysis"]
+    response_Return["Response Return"]
+
+    prompt_Interception --> prompt_Analysis
+    prompt_Analysis --> crew_Splitter
+    crew_Splitter --> lLM_Optimization
+    lLM_Optimization --> crew_Response_Genera
+    crew_Response_Genera --> response_Processing
+    response_Processing --> hallucination_Analys
+    hallucination_Analys --> response_Return
+
+    classDef trigger fill:#4caf50,stroke:#2e7d32,color:#fff
+    class prompt_Interception trigger
+    classDef action fill:#2196f3,stroke:#1565c0,color:#fff
+    class prompt_Analysis,crew_Splitter,lLM_Optimization,crew_Response_Genera,response_Processing,hallucination_Analys,response_Return action
