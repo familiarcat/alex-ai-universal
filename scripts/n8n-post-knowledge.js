@@ -66,13 +66,18 @@ async function main() {
   const ingestUrl =
     process.env.N8N_INGEST_URL || 'https://n8n.pbradygeorgen.com/webhook/knowledge-ingest';
 
-  // Base knowledge doc (for direct ingest)
+  // Base knowledge doc (for direct ingest) - Enhanced with milestone tagging
   const knowledgeDoc = {
     title: summary,
     text: features.length ? `Features:\n- ${features.join('\n- ')}` : summary,
-    tags,
+    tags: [...tags, 'milestone', 'git-milestone', 'role-infrastructure', 'intention-milestone_tracking'],
     source: 'milestone',
     doc_id: `MILESTONE_${Date.now()}`,
+    crewMember: 'data', // Commander Data for technical milestones
+    knowledgeType: 'milestone',
+    priority: 'medium',
+    platform: 'git',
+    sessionId: `milestone-${Date.now()}`
   };
 
   // Orchestrator expects summary/features/tags

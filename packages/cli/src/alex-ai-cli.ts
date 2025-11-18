@@ -90,11 +90,13 @@ class NPXCLIHandler {
    */
   async handleCostAnalysis(options?: { format?: 'text' | 'json' | 'summary' }): Promise<void> {
     try {
-      const costScriptPath = path.join(__dirname, '..', '..', '..', '.backup-ec2-emergency', 'compare-and-analyze-costs.js');
+      // Use real-time AWS cost analysis script
+      const costScriptPath = path.join(process.cwd(), 'scripts', 'aws-real-time-cost-analysis.js');
       const { spawn } = require('child_process');
       
-      console.log('💰 Running EC2 Emergency Cost Analysis...');
+      console.log('💰 Running AWS Real-Time Cost Analysis...');
       console.log('==========================================\n');
+      console.log('🔍 Querying AWS for actual resource usage and costs...\n');
       
       const child = spawn('node', [costScriptPath], {
         stdio: 'inherit',
@@ -105,9 +107,8 @@ class NPXCLIHandler {
         if (code === 0) {
           console.log('\n✅ Cost analysis complete!');
           console.log('📊 Reports saved to: .backup-ec2-emergency/');
-          console.log('   • COST_ANALYSIS_REPORT.txt');
-          console.log('   • COST_ANALYSIS_REPORT.json');
-          console.log('   • EXECUTIVE_SUMMARY.md');
+          console.log('   • AWS_REAL_TIME_COST_ANALYSIS.txt');
+          console.log('   • AWS_REAL_TIME_COST_ANALYSIS.json');
         } else {
           console.error(`\n❌ Cost analysis failed with code ${code}`);
         }

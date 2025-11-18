@@ -38,7 +38,7 @@ variable "ssh_key_name" {
 variable "instance_type" {
   description = "EC2 instance type for n8n"
   type        = string
-  default     = "t3.medium"
+  default     = "t3.micro"  # Optimized for cost - sufficient for n8n workloads
 }
 
 variable "n8n_version" {

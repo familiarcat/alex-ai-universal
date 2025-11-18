@@ -600,11 +600,17 @@ $(printf '%s\n' "${completed_tasks[@]}" | head -5 | sed 's/^/- /')
                 timeout 10s node scripts/n8n-post-knowledge.js \
                     --summary "$milestone_name" \
                     --features "$features_summary" \
+                    --tags "milestone,git,$branch,role-infrastructure,intention-milestone_tracking"
+                    --summary "$milestone_name" \
+                    --features "$features_summary" \
                     --tags "milestone,git,$branch" \
                     >/dev/null 2>&1 || true
             else
                 # Fallback: run in background and kill after 10 seconds
                 (node scripts/n8n-post-knowledge.js \
+                    --summary "$milestone_name" \
+                    --features "$features_summary" \
+                    --tags "milestone,git,$branch,role-infrastructure,intention-milestone_tracking"
                     --summary "$milestone_name" \
                     --features "$features_summary" \
                     --tags "milestone,git,$branch" \
