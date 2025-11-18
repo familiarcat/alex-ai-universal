@@ -21,8 +21,13 @@ export default function SignIn() {
   const error = searchParams?.get("error");
   
   // Form state for custom auth
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // ⚠️ SECURITY: Auto-fill only in development (Worf's Security Violation #DEV-001)
+  const isDevelopment = process.env.NODE_ENV === "development" || 
+                        process.env.NEXT_PUBLIC_ENV === "development" ||
+                        window.location.hostname === "localhost";
+  
+  const [email, setEmail] = useState(isDevelopment ? "admin@alex-ai.local" : "");
+  const [password, setPassword] = useState(isDevelopment ? "admin" : "");
   const [isLoading, setIsLoading] = useState(false);
   const [authMethod, setAuthMethod] = useState<"custom" | "google" | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -148,6 +153,46 @@ export default function SignIn() {
             </p>
           </div>
 
+          {/* Security Warning - Development Auto-Fill (Worf's Security Violation #DEV-001) */}
+          {isDevelopment && (
+            <div style={{
+              marginBottom: 'var(--spacing-lg)',
+              padding: 'var(--spacing-md)',
+              background: 'rgba(251, 191, 36, 0.1)',
+              border: '1px solid rgba(251, 191, 36, 0.3)',
+              borderRadius: 'var(--radius-md)'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 'var(--spacing-sm)'
+              }}>
+                <span style={{ fontSize: '16px' }}>⚠️</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{
+                    color: '#f59e0b',
+                    fontSize: 'var(--font-sm)',
+                    fontWeight: 600,
+                    margin: 0,
+                    marginBottom: '4px'
+                  }}>
+                    🛡️ Lieutenant Worf - Security Violation #DEV-001
+                  </p>
+                  <p style={{
+                    color: 'rgba(251, 191, 36, 0.9)',
+                    fontSize: 'var(--font-xs)',
+                    margin: 0,
+                    lineHeight: 1.5
+                  }}>
+                    <strong>DEVELOPMENT ONLY:</strong> Credentials are auto-filled for convenience. 
+                    This is a security violation and MUST be disabled before production deployment. 
+                    Status: PENDING PRODUCTION SECURITY REVIEW.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Error Display */}
           {(error || authError) && (
             <div style={{
@@ -211,7 +256,7 @@ export default function SignIn() {
                   minHeight: '44px',
                   boxSizing: 'border-box'
                 }}
-                placeholder="your.email@example.com"
+                placeholder="admin@alex-ai.local"
               />
             </div>
 
