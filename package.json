@@ -19,6 +19,7 @@
     "cursor:layout:restore": "node scripts/restore-cursor-layout.js",
     "cursor:state:capture": "node scripts/capture-cursor-state.js",
     "cursor:state:recover": "node scripts/recover-cursor-state.js",
+    "cursor:test": "bash scripts/test-cursor-startup.sh",
     "crew:up": "bash ./scripts/crew-up.sh",
     "engage": "bash ./scripts/engage-alex-ai-enhanced.sh",
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",
