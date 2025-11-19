@@ -19,11 +19,9 @@ export default function Mermaid({ chart, theme = "dark" }: MermaidProps) {
     async function render() {
       setError(null);
       try {
-        // Load Mermaid from CDN (no local install needed)
-        const mermaid: any = await import(
-          // pinned major for stability; update as needed
-          "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
-        );
+        // Load Mermaid from local package (installed via npm)
+        const mermaidModule = await import("mermaid");
+        const mermaid = mermaidModule.default;
 
         mermaid.initialize({ startOnLoad: false, theme, securityLevel: "loose" });
         const { svg } = await mermaid.render(id, chart);
