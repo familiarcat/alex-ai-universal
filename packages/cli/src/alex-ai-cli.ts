@@ -603,6 +603,8 @@ program
           console.log('  • Ask any question for crew assistance');
           console.log('  • "status" - Show system status');
           console.log('  • "view the dashboard" - Start local dashboard with live refresh');
+          console.log('  • "organize the crew in the Observation Lounge" - Full crew coordination');
+          console.log('  • "observation lounge" or "crew meeting" - Crew discussion session');
           console.log('  • "compare costs" or "cost analysis" - Run EC2 cost analysis');
           console.log('  • "run tests" or "litmus test" - Run end-to-end system tests');
           console.log('  • "n8n start" - Start N8N integration');
