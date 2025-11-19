@@ -8,7 +8,7 @@ import path from 'path';
  * - Reads webhook from env (N8N_LOUNGE_LATEST_WEBHOOK or N8N_URL + /webhook/lounge-latest)
  */
 
-function buildWebhookUrl(): string | null {
+function buildWebhookUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_N8N_LOUNGE_LATEST_WEBHOOK || process.env.N8N_LOUNGE_LATEST_WEBHOOK;
   const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
 
@@ -26,10 +26,6 @@ export async function GET() {
   try {
     const primary = buildWebhookUrl();
     const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
-    if (!primary) {
-      return NextResponse.json({ error: 'N8N not configured' }, { status: 500 });
-    }
-
     const baseNorm = base.replace(/\/$/, '');
     const candidates = Array.from(new Set([
       primary,

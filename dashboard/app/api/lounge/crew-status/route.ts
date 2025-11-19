@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-function buildWebhookUrl(): string | null {
+function buildWebhookUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_N8N_CREW_STATUS_WEBHOOK || process.env.N8N_CREW_STATUS_WEBHOOK;
   const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
   if (explicit) {
@@ -13,7 +13,6 @@ function buildWebhookUrl(): string | null {
 export async function GET() {
   try {
     const url = buildWebhookUrl();
-    if (!url) return NextResponse.json({ crew: [], error: 'n8n not configured' }, { status: 200 });
 
     // Try POST for richer payload; fallback to GET
     let data: any = null;
