@@ -180,7 +180,7 @@ export async function GET(
     const workflowId = params.id;
 
     // Try to load workflow from n8n-workflows directory
-    const workflowsDir = path.join(process.cwd(), '..', 'n8n-workflows');
+    const workflowsDir = path.resolve(process.cwd(), '..', 'n8n-workflows');
     const workflowFiles = findWorkflowFiles(workflowsDir);
     
     // Find workflow by ID or name
