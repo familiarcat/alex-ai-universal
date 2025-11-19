@@ -137,11 +137,24 @@ When Alex AI is active:
 
 Alex AI crew memories are automatically loaded when you open this workspace in Cursor AI.
 
-### Automatic Startup:
+### ✅ Automatic Startup (Confirmed):
 - **Tasks run on folder open** (configured in `.vscode/tasks.json`)
+- **State recovery** runs automatically
+- **Layout restoration** runs automatically
 - **Crew memories load** from Supabase RAG system
 - **Startup prompt generated** automatically
+- **Alex AI activated** in chat automatically (via `.cursorrules`)
 - **Saved to**: `.cursor/alex-ai/cursor-startup-prompt.md`
+
+### 🎯 After Computer Restart:
+1. Open Cursor AI
+2. Open workspace
+3. **Everything happens automatically:**
+   - UI layout restores
+   - State recovers
+   - Memories load
+   - Prompt generates
+   - **Alex AI available in chat immediately**
 
 ### Manual Commands:
 - **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`):
