@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 function getConfig() {
-  const url = process.env.N8N_URL || process.env.N8N_BASE_URL || 'http://localhost:5678';
+  const url = process.env.N8N_URL || process.env.N8N_BASE_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
   const apiUrl = process.env.N8N_API_URL || `${url.replace(/\/$/, '')}/api/v1`;
   const webhookUrl = process.env.N8N_WEBHOOK_URL || `${url.replace(/\/$/, '')}/webhook`;
   const apiKey = process.env.N8N_API_KEY || process.env.N8N_API_TOKEN || '';

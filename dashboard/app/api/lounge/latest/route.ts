@@ -10,29 +10,27 @@ import path from 'path';
 
 function buildWebhookUrl(): string | null {
   const explicit = process.env.NEXT_PUBLIC_N8N_LOUNGE_LATEST_WEBHOOK || process.env.N8N_LOUNGE_LATEST_WEBHOOK;
-  const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL;
+  const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
 
   if (explicit) {
     if (/^https?:\/\//i.test(explicit)) return explicit;
     if (explicit.startsWith('/')) {
-      if (!base) return null;
       return `${base.replace(/\/$/, '')}${explicit}`;
     }
   }
 
-  if (!base) return null;
   return `${base.replace(/\/$/, '')}/webhook/lounge-latest`;
 }
 
 export async function GET() {
   try {
     const primary = buildWebhookUrl();
-    const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || '';
-    if (!primary && !base) {
+    const base = process.env.NEXT_PUBLIC_N8N_URL || process.env.N8N_URL || 'https://n8n.pbradygeorgen.com';
+    if (!primary) {
       return NextResponse.json({ error: 'N8N not configured' }, { status: 500 });
     }
 
-    const baseNorm = base ? base.replace(/\/$/, '') : '';
+    const baseNorm = base.replace(/\/$/, '');
     const candidates = Array.from(new Set([
       primary,
       baseNorm ? `${baseNorm}/webhook/lounge-latest` : null,

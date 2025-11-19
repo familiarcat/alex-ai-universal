@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server';
 
 function adviceWebhook(): string | null {
   const explicit = process.env.N8N_CREW_ADVICE_WEBHOOK || process.env.NEXT_PUBLIC_N8N_CREW_ADVICE_WEBHOOK;
-  const base = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL;
+  const base = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
   if (explicit) {
     if (/^https?:\/\//i.test(explicit)) return explicit;
-    if (explicit.startsWith('/')) return base ? `${base.replace(/\/$/, '')}${explicit}` : null;
+    if (explicit.startsWith('/')) return `${base.replace(/\/$/, '')}${explicit}`;
   }
-  return base ? `${base.replace(/\/$/, '')}/webhook/crew-advice` : null;
+  return `${base.replace(/\/$/, '')}/webhook/crew-advice`;
 }
 
 export async function POST(req: Request) {
