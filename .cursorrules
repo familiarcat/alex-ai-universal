@@ -170,4 +170,11 @@ Alex AI crew memories are automatically loaded when you open this workspace in C
 - **Auto-restore**: Configured in `.vscode/tasks.json` (runs on folder open)
 - **Layout file**: `.cursor/workspace-layout.json`
 
-See `docs/CURSOR_AI_STARTUP_INTEGRATION.md` and `docs/CURSOR_AI_LAYOUT_PERSISTENCE.md` for complete guides.
+### State Recovery:
+- **Capture state**: `npm run cursor:state:capture` (before closing)
+- **Recover state**: `npm run cursor:state:recover` (on startup, auto-runs)
+- **Auto-recovery**: Configured in `.vscode/tasks.json` (runs on folder open)
+- **State file**: `.cursor/workspace-state.json`
+- **Recovers**: Layout, Alex AI memories, prompt, workspace config
+
+See `docs/CURSOR_AI_STARTUP_INTEGRATION.md`, `docs/CURSOR_AI_LAYOUT_PERSISTENCE.md`, and `docs/CURSOR_AI_STATE_RECOVERY.md` for complete guides.
