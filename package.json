@@ -15,6 +15,8 @@
     "admin:setup": "node scripts/automate-admin-setup.js",
     "cursor:memories": "node scripts/load-crew-memories.js",
     "cursor:prompt": "node scripts/generate-cursor-prompt.js",
+    "cursor:layout:capture": "node scripts/capture-cursor-layout.js",
+    "cursor:layout:restore": "node scripts/restore-cursor-layout.js",
     "crew:up": "bash ./scripts/crew-up.sh",
     "engage": "bash ./scripts/engage-alex-ai-enhanced.sh",
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",

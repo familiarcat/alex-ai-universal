@@ -15,6 +15,11 @@
     "includeCrewMemories": true,
     "autoActivateAlexAI": true,
     "memoryContext": "full"
+  },
+  "layout": {
+    "autoRestore": true,
+    "layoutFile": ".cursor/workspace-layout.json",
+    "restoreOnStartup": true
   }
 }
 

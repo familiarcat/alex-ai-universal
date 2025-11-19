@@ -47,6 +47,22 @@
       "runOptions": {
         "runOn": "folderOpen"
       }
+    },
+    {
+      "label": "📐 Restore Cursor AI Layout",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "cursor:layout:restore"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
     }
   ]
 }
