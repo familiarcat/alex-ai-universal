@@ -49,11 +49,18 @@ class NPXCLIHandler {
         await this.handleTestExecution();
         return;
       }
-
+      
       // Check for dashboard view requests
       if (this.isDashboardViewRequest(message)) {
         console.log('📊 Dashboard view request detected!');
         await this.handleDashboardView();
+        return;
+      }
+
+      // Check for Observation Lounge requests
+      if (this.isObservationLoungeRequest(message)) {
+        console.log('🎭 Observation Lounge request detected!');
+        await this.handleObservationLounge(message);
         return;
       }
       
@@ -87,9 +94,9 @@ class NPXCLIHandler {
     } catch (error: any) {
       console.error(`❌ NPX engagement failed: ${error.message}`);
     } finally {
-      // Only exit if not handling dashboard view (which keeps process alive)
-      if (!this.isDashboardViewRequest(message)) {
-        process.exit(0);
+      // Only exit if not handling dashboard view or Observation Lounge (which keep process alive)
+      if (!this.isDashboardViewRequest(message) && !this.isObservationLoungeRequest(message)) {
+      process.exit(0);
       }
     }
   }
@@ -240,6 +247,162 @@ class NPXCLIHandler {
     } catch (error: any) {
       console.error(`❌ Dashboard view failed: ${error.message}`);
       process.exit(1);
+    }
+  }
+
+  /**
+   * Handle Observation Lounge requests
+   */
+  async handleObservationLounge(message: string): Promise<void> {
+    try {
+      const https = require('https');
+      const { URL } = require('url');
+      
+      // Parse the message to extract parameters
+      const lowerMessage = message.toLowerCase();
+      const isCinematic = lowerMessage.includes('cinematic') || lowerMessage.includes('cinematic format');
+      const crewMembers = lowerMessage.includes('all') ? 'all' : undefined;
+      
+      // Extract topic from message
+      let topic = message;
+      if (lowerMessage.includes('organize the crew')) {
+        // Extract topic after "organize the crew"
+        const match = message.match(/organize the crew[^.]*\.(.*?)(?:and|$)/i);
+        topic = match ? match[1].trim() : 'Crew coordination and findings';
+      }
+      
+      // Determine discussion type
+      let discussionType = 'collaborative';
+      if (isCinematic) {
+        discussionType = 'cinematic';
+      } else if (lowerMessage.includes('findings')) {
+        discussionType = 'findings_review';
+      } else if (lowerMessage.includes('strategic') || lowerMessage.includes('strategy')) {
+        discussionType = 'strategic';
+      }
+      
+      const n8nUrl = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
+      const webhookUrl = new URL('/webhook/observation-lounge', n8nUrl);
+      
+      const payload = {
+        topic: topic || 'Crew coordination session',
+        context: {
+          source: 'cursor-ai',
+          message: message,
+          format: isCinematic ? 'cinematic' : 'standard'
+        },
+        crew_members: crewMembers || 'all',
+        discussion_type: discussionType,
+        priority: lowerMessage.includes('urgent') || lowerMessage.includes('critical') ? 'high' : 'medium',
+        format: isCinematic ? 'cinematic' : 'standard'
+      };
+      
+      console.log('🎭 Organizing Crew in Observation Lounge...');
+      console.log('==========================================\n');
+      console.log('📋 Session Parameters:');
+      console.log(`   Topic: ${payload.topic}`);
+      console.log(`   Format: ${payload.format}`);
+      console.log(`   Discussion Type: ${discussionType}`);
+      console.log(`   Crew Members: ${payload.crew_members}`);
+      console.log(`   Priority: ${payload.priority}`);
+      console.log('\n🚀 Triggering DDD Flow:');
+      console.log('   Client (Cursor AI) → n8n.pbradygeorgen.com → Supabase');
+      console.log('   All crew memories will be retrieved and coordinated\n');
+      
+      const postData = JSON.stringify(payload);
+      
+      const options = {
+        hostname: webhookUrl.hostname,
+        port: webhookUrl.port || 443,
+        path: webhookUrl.pathname,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+      
+      return new Promise((resolve, reject) => {
+        const req = https.request(options, (res) => {
+          let data = '';
+          res.on('data', (chunk) => { data += chunk; });
+          res.on('end', () => {
+            try {
+              const response = JSON.parse(data);
+              
+              if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+                console.log('✅ Observation Lounge Session Initiated!\n');
+                
+                if (response.session) {
+                  console.log('📊 Session Details:');
+                  console.log(`   Session ID: ${response.session.id}`);
+                  console.log(`   Status: ${response.session.status}`);
+                  console.log(`   Participants: ${response.session.participants || 'All crew'}`);
+                  console.log(`   Total Crew: ${response.session.total_crew || 10}\n`);
+                }
+                
+                if (response.crew_insights) {
+                  console.log('👥 Crew Insights:');
+                  Object.entries(response.crew_insights).forEach(([crew, insight]: [string, any]) => {
+                    if (insight.status === 'success') {
+                      console.log(`   ✅ ${crew}: ${insight.summary || 'Analysis complete'}`);
+                    }
+                  });
+                  console.log('');
+                }
+                
+                if (response.synthesis) {
+                  console.log('🎯 Synthesized Findings:');
+                  if (typeof response.synthesis === 'string') {
+                    console.log(`   ${response.synthesis}\n`);
+                  } else if (response.synthesis.summary) {
+                    console.log(`   ${response.synthesis.summary}\n`);
+                  }
+                }
+                
+                if (response.recommendations && response.recommendations.length > 0) {
+                  console.log('💡 Recommendations:');
+                  response.recommendations.forEach((rec: string, idx: number) => {
+                    console.log(`   ${idx + 1}. ${rec}`);
+                  });
+                  console.log('');
+                }
+                
+                if (isCinematic) {
+                  console.log('🎬 Cinematic Format:');
+                  console.log('   Crew responses will be formatted in cinematic narrative style');
+                  console.log('   Full session details stored in Supabase for future reference\n');
+                }
+                
+                console.log('💾 Memories stored in Supabase via n8n workflow');
+                console.log('🔄 DDD Flow Complete: Client → n8n → Supabase\n');
+                
+                resolve();
+              } else {
+                console.error(`❌ Observation Lounge returned status ${res.statusCode}`);
+                console.error(`   Response: ${data.substring(0, 200)}`);
+                reject(new Error(`HTTP ${res.statusCode}`));
+              }
+            } catch (error: any) {
+              console.error('❌ Failed to parse Observation Lounge response:', error.message);
+              console.log('📄 Raw response:', data.substring(0, 500));
+              reject(error);
+            }
+          });
+        });
+        
+        req.on('error', (error: Error) => {
+          console.error('❌ Failed to connect to Observation Lounge:', error.message);
+          console.error(`   URL: ${webhookUrl.toString()}`);
+          reject(error);
+        });
+        
+        req.write(postData);
+        req.end();
+      });
+    } catch (error: any) {
+      console.error(`❌ Observation Lounge failed: ${error.message}`);
+      throw error;
     }
   }
 
@@ -453,6 +616,14 @@ program
         if (npxHandler.isDashboardViewRequest(input)) {
           await npxHandler.handleDashboardView();
           // Dashboard script keeps process alive, so don't ask next question
+          return;
+        }
+
+        // Check for Observation Lounge (doesn't exit process)
+        if (npxHandler.isObservationLoungeRequest(input)) {
+          await npxHandler.handleObservationLounge(input);
+          console.log('');
+          askQuestion();
           return;
         }
         

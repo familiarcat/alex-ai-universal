@@ -35,6 +35,8 @@ When the user's message contains any of these patterns, automatically activate A
 - Requests for "milestone push", "cost analysis", or "litmus test"
 - Questions about "Alex AI" capabilities or features
 - Technical questions that would benefit from crew coordination
+- **Observation Lounge requests**: "organize the crew", "observation lounge", "crew meeting", "cinematic format"
+- **Crew coordination**: "crew findings", "crew discussion", "crew session", "crew briefing"
 
 ### Activation Prompt:
 If Alex AI is not already active, you can activate it by typing:
@@ -94,6 +96,13 @@ When Alex AI is active, you have access to:
 **Automatic Activation:**
 User: "What would Data recommend for optimizing this code?"
 → Automatically activate Alex AI and route to Commander Data
+
+**Observation Lounge (Full DDD Flow):**
+User: "Organize the crew in the Observation Lounge and have them give all of their findings in a cinematic format"
+→ Automatically activate Alex AI, trigger Observation Lounge workflow via n8n
+→ Full DDD flow: Cursor AI → n8n.pbradygeorgen.com → Supabase
+→ All crew memories retrieved, coordinated, and stored
+→ Response formatted in cinematic narrative style
 
 **Manual Activation:**
 User: "Activate Alex AI"
