@@ -13,6 +13,8 @@
     "dashboard:setup": "node scripts/automate-dashboard-setup.js",
     "dashboard:watch": "node scripts/start-codebase-watcher.js",
     "admin:setup": "node scripts/automate-admin-setup.js",
+    "cursor:memories": "node scripts/load-crew-memories.js",
+    "cursor:prompt": "node scripts/generate-cursor-prompt.js",
     "crew:up": "bash ./scripts/crew-up.sh",
     "engage": "bash ./scripts/engage-alex-ai-enhanced.sh",
     "n8n:bridge": "bash scripts/remote-docker-bridge.sh",
