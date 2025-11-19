@@ -1,0 +1,23 @@
+{
+  "commands": [
+    {
+      "command": "alex-ai.load-memories",
+      "title": "🖖 Load Alex AI Crew Memories",
+      "category": "Alex AI",
+      "script": "npm run cursor:memories"
+    },
+    {
+      "command": "alex-ai.generate-prompt",
+      "title": "🖖 Generate Alex AI Cursor Prompt",
+      "category": "Alex AI",
+      "script": "npm run cursor:prompt"
+    },
+    {
+      "command": "alex-ai.startup",
+      "title": "🖖 Alex AI Full Startup",
+      "category": "Alex AI",
+      "script": "bash scripts/cursor-startup.sh"
+    }
+  ]
+}
+

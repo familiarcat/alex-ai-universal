@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🖖 Load Alex AI Crew Memories",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "cursor:memories"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "🖖 Generate Alex AI Cursor Prompt",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "cursor:prompt"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "🖖 Alex AI Startup (Load Memories + Generate Prompt)",
+      "dependsOn": [
+        "🖖 Load Alex AI Crew Memories",
+        "🖖 Generate Alex AI Cursor Prompt"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
+

@@ -121,3 +121,38 @@ When Alex AI is active:
 ---
 
 **Remember:** Alex AI enhances your capabilities while maintaining complete project integrity.
+
+---
+
+## 🚀 CURSOR AI STARTUP INTEGRATION
+
+Alex AI crew memories are automatically loaded when you open this workspace in Cursor AI.
+
+### Automatic Startup:
+- **Tasks run on folder open** (configured in `.vscode/tasks.json`)
+- **Crew memories load** from Supabase RAG system
+- **Startup prompt generated** automatically
+- **Saved to**: `.cursor/alex-ai/cursor-startup-prompt.md`
+
+### Manual Commands:
+- **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`):
+  - "🖖 Load Alex AI Crew Memories"
+  - "🖖 Generate Alex AI Cursor Prompt"
+  - "🖖 Alex AI Full Startup"
+- **Terminal**:
+  - `npm run cursor:memories` - Load memories
+  - `npm run cursor:prompt` - Generate prompt
+  - `bash scripts/cursor-startup.sh` - Full startup
+
+### Usage:
+1. Open Cursor AI workspace (memories auto-load)
+2. Open chat
+3. Copy prompt from `.cursor/alex-ai/cursor-startup-prompt.md`
+4. Paste into chat to activate Alex AI with full crew context
+
+### Configuration:
+- `.vscode/tasks.json` - Automatic tasks (runs on folder open)
+- `.cursor/settings.json` - Cursor AI specific settings
+- `.vscode/settings.json` - Workspace settings
+
+See `docs/CURSOR_AI_STARTUP_INTEGRATION.md` for complete guide.

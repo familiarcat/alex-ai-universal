@@ -1,0 +1,20 @@
+{
+  "alex-ai": {
+    "autoLoadMemories": true,
+    "memoryScript": "scripts/load-crew-memories.js",
+    "promptScript": "scripts/generate-cursor-prompt.js",
+    "updateInterval": 3600000,
+    "outputDirectory": ".cursor/alex-ai"
+  },
+  "files.watcherExclude": {
+    "**/.cursor/alex-ai/**": true
+  },
+  "files.exclude": {
+    ".cursor/alex-ai/crew-memories-*.md": false,
+    ".cursor/alex-ai/crew-memories-*.json": true
+  },
+  "task.autoDetect": "on",
+  "task.quickOpen.detail": true,
+  "task.quickOpen.skip": false
+}
+
