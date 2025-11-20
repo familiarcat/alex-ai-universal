@@ -7,12 +7,14 @@
 
 const { getMCPCache } = require('./mcp-context-cache');
 const { getMCPMemoryStorage } = require('./mcp-memory-storage');
+const { getMCPOpenRouterOptimizer } = require('./mcp-openrouter-optimizer');
 const https = require('https');
 
 class MCPWorkflowService {
   constructor() {
     this.mcpCache = getMCPCache();
     this.memoryStorage = null;
+    this.openRouterOptimizer = null;
   }
 
   /**
@@ -25,6 +27,15 @@ class MCPWorkflowService {
     } catch (e) {
       // Memory storage optional for some workflows
     }
+    
+    // Initialize OpenRouter optimizer
+    this.openRouterOptimizer = getMCPOpenRouterOptimizer();
+    try {
+      this.openRouterOptimizer.initialize();
+    } catch (e) {
+      // OpenRouter optional for some workflows
+    }
+    
     return true;
   }
 
@@ -98,6 +109,8 @@ class MCPWorkflowService {
         return await this.memoryStoreWorkflow(workflowData);
       case 'crew-analysis':
         return await this.crewAnalysisWorkflow(workflowData);
+      case 'llm-call':
+        return await this.llmCallWorkflow(workflowData);
       default:
         throw new Error(`Unknown workflow: ${workflowName}`);
     }
@@ -180,6 +193,47 @@ class MCPWorkflowService {
   }
 
   /**
+   * LLM Call Workflow (with OpenRouter optimization)
+   */
+  async llmCallWorkflow(data) {
+    const {
+      prompt,
+      taskType,
+      complexity = 'medium',
+      crewMember,
+      budgetConstraint = null,
+      estimatedTokens = 1500
+    } = data;
+
+    if (!this.openRouterOptimizer) {
+      this.initialize();
+    }
+
+    // Use OpenRouter optimizer with MCP caching
+    const result = await this.openRouterOptimizer.callOpenRouter(
+      prompt,
+      {
+        taskType,
+        complexity,
+        crewMember,
+        budgetConstraint,
+        estimatedTokens
+      },
+      {
+        useCache: true
+      }
+    );
+
+    return {
+      success: true,
+      workflow: 'llm-call',
+      result: result,
+      modelSelection: result.modelSelection,
+      method: 'mcp-openrouter-optimized'
+    };
+  }
+
+  /**
    * Crew Analysis Workflow (MCP-enhanced)
    */
   async crewAnalysisWorkflow(data) {
@@ -249,8 +303,10 @@ class MCPWorkflowService {
         'knowledge-ingest': 'Available',
         'milestone-push': 'Available',
         'memory-store': 'Available',
-        'crew-analysis': 'Available'
-      }
+        'crew-analysis': 'Available',
+        'llm-call': 'Available (with OpenRouter optimization)'
+      },
+      openRouter: this.openRouterOptimizer ? this.openRouterOptimizer.getStats() : null
     };
   }
 }
