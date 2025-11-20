@@ -1,0 +1,269 @@
+/**
+ * 🖖 MCP Workflow Service
+ * 
+ * Provides workflow orchestration using MCP context caching instead of n8n.
+ * Handles workflow state, API calls, and context sharing.
+ */
+
+const { getMCPCache } = require('./mcp-context-cache');
+const { getMCPMemoryStorage } = require('./mcp-memory-storage');
+const https = require('https');
+
+class MCPWorkflowService {
+  constructor() {
+    this.mcpCache = getMCPCache();
+    this.memoryStorage = null;
+  }
+
+  /**
+   * Initialize workflow service
+   */
+  initialize() {
+    this.memoryStorage = getMCPMemoryStorage();
+    try {
+      this.memoryStorage.initialize();
+    } catch (e) {
+      // Memory storage optional for some workflows
+    }
+    return true;
+  }
+
+  /**
+   * Execute workflow with MCP caching
+   */
+  async executeWorkflow(workflowName, workflowData, options = {}) {
+    const {
+      useCache = true,
+      cacheTTL = 3600000, // 1 hour
+      retries = 3
+    } = options;
+
+    // Check cache first
+    if (useCache) {
+      const cacheKey = this.mcpCache.generateCacheKey(JSON.stringify({
+        workflow: workflowName,
+        data: workflowData
+      }), options);
+      
+      const cached = this.mcpCache.getContext(cacheKey);
+      if (cached && this.isValidCache(cached, cacheTTL)) {
+        console.log(`   ✅ Using cached workflow result (MCP efficiency)`);
+        return JSON.parse(cached.content);
+      }
+    }
+
+    // Execute workflow
+    let result;
+    let attempts = 0;
+    
+    while (attempts < retries) {
+      try {
+        result = await this.runWorkflow(workflowName, workflowData);
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= retries) {
+          throw error;
+        }
+        // Exponential backoff
+        await this.sleep(Math.pow(2, attempts) * 1000);
+      }
+    }
+
+    // Cache result
+    if (useCache && result) {
+      this.mcpCache.storeContext(
+        JSON.stringify(result),
+        null,
+        {
+          sessionId: `workflow-${workflowName}-${Date.now()}`,
+          tags: ['workflow', workflowName]
+        }
+      );
+    }
+
+    return result;
+  }
+
+  /**
+   * Run specific workflow
+   */
+  async runWorkflow(workflowName, workflowData) {
+    switch (workflowName) {
+      case 'knowledge-ingest':
+        return await this.knowledgeIngestWorkflow(workflowData);
+      case 'milestone-push':
+        return await this.milestonePushWorkflow(workflowData);
+      case 'memory-store':
+        return await this.memoryStoreWorkflow(workflowData);
+      case 'crew-analysis':
+        return await this.crewAnalysisWorkflow(workflowData);
+      default:
+        throw new Error(`Unknown workflow: ${workflowName}`);
+    }
+  }
+
+  /**
+   * Knowledge Ingest Workflow (replaces n8n webhook)
+   */
+  async knowledgeIngestWorkflow(data) {
+    if (!this.memoryStorage) {
+      this.initialize();
+    }
+
+    const {
+      content,
+      title,
+      category = 'knowledge',
+      tags = [],
+      metadata = {}
+    } = data;
+
+    // Store via MCP memory storage
+    const result = await this.memoryStorage.storeMemory({
+      title: title || 'Knowledge Entry',
+      content,
+      category,
+      tags,
+      sessionId: metadata.sessionId || `knowledge-${Date.now()}`,
+      metadata
+    });
+
+    return {
+      success: true,
+      workflow: 'knowledge-ingest',
+      result: result,
+      method: 'mcp-direct'
+    };
+  }
+
+  /**
+   * Milestone Push Workflow (enhanced MCP version)
+   */
+  async milestonePushWorkflow(data) {
+    const {
+      milestonePath,
+      milestoneData
+    } = data;
+
+    // Use MCP-enhanced milestone push
+    const { execSync } = require('child_process');
+    const path = require('path');
+    const scriptPath = path.join(__dirname, '..', 'push-milestone-to-rag.js');
+
+    try {
+      const output = execSync(`node "${scriptPath}" "${milestonePath}"`, {
+        encoding: 'utf8',
+        cwd: path.dirname(scriptPath)
+      });
+
+      return {
+        success: true,
+        workflow: 'milestone-push',
+        output: output,
+        method: 'mcp-enhanced'
+      };
+    } catch (error) {
+      throw new Error(`Milestone push failed: ${error.message}`);
+    }
+  }
+
+  /**
+   * Memory Store Workflow (uses MCP memory storage)
+   */
+  async memoryStoreWorkflow(data) {
+    if (!this.memoryStorage) {
+      this.initialize();
+    }
+
+    return await this.memoryStorage.storeMemory(data);
+  }
+
+  /**
+   * Crew Analysis Workflow (MCP-enhanced)
+   */
+  async crewAnalysisWorkflow(data) {
+    const {
+      query,
+      crewMembers = [],
+      sessionId
+    } = data;
+
+    // Check cache for crew analysis
+    const cacheKey = this.mcpCache.generateCacheKey(JSON.stringify({
+      query,
+      crewMembers
+    }), { sessionId });
+
+    const cached = this.mcpCache.getContext(cacheKey);
+    if (cached) {
+      return JSON.parse(cached.content);
+    }
+
+    // Perform crew analysis (simplified - would integrate with actual crew system)
+    const analysis = {
+      query,
+      crewMembers,
+      analysis: 'Crew analysis performed via MCP',
+      timestamp: new Date().toISOString(),
+      cached: false
+    };
+
+    // Cache analysis
+    this.mcpCache.storeContext(
+      JSON.stringify(analysis),
+      null,
+      {
+        sessionId: sessionId || `crew-analysis-${Date.now()}`,
+        crewMembers,
+        tags: ['crew-analysis', ...crewMembers]
+      }
+    );
+
+    return analysis;
+  }
+
+  /**
+   * Check if cache is valid
+   */
+  isValidCache(context, ttl) {
+    const age = Date.now() - new Date(context.metadata.timestamp).getTime();
+    return age < (ttl || context.ttl || 3600000);
+  }
+
+  /**
+   * Sleep utility
+   */
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Get workflow statistics
+   */
+  getStats() {
+    const cacheStats = this.mcpCache.getStats();
+    return {
+      cache: cacheStats,
+      workflows: {
+        'knowledge-ingest': 'Available',
+        'milestone-push': 'Available',
+        'memory-store': 'Available',
+        'crew-analysis': 'Available'
+      }
+    };
+  }
+}
+
+// Singleton instance
+let mcpWorkflowServiceInstance = null;
+
+function getMCPWorkflowService() {
+  if (!mcpWorkflowServiceInstance) {
+    mcpWorkflowServiceInstance = new MCPWorkflowService();
+  }
+  return mcpWorkflowServiceInstance;
+}
+
+module.exports = { getMCPWorkflowService, MCPWorkflowService };
+
