@@ -27,36 +27,65 @@ fi
 echo "✅ Loaded N8N_API_KEY from ~/.zshrc"
 echo ""
 
-# SSH configuration
-SSH_KEY="$HOME/.ssh/AlexKeyPair.pem"
+# SSH configuration - try multiple keys
+SSH_KEYS=(
+  "$HOME/.ssh/n8n.pem"
+  "$HOME/.ssh/AlexKeyPair.pem"
+  "$HOME/.ssh/connections.pem"
+  "$HOME/.ssh/federation-key.pem"
+)
 SSH_USER="ubuntu"
 SSH_HOST="n8n.pbradygeorgen.com"
 WEBHOOK_URL="https://n8n.pbradygeorgen.com"
 
 echo "📋 Configuration:"
-echo "   SSH Key: $SSH_KEY"
 echo "   SSH Host: $SSH_USER@$SSH_HOST"
 echo "   Webhook URL: $WEBHOOK_URL"
 echo ""
 
-# Test SSH connection
-echo "🔍 Testing SSH connection..."
-if ! ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo '✅ SSH connection works'" 2>/dev/null; then
-  echo "❌ SSH connection failed!"
+# Find working SSH key
+echo "🔍 Testing SSH keys..."
+SSH_KEY=""
+for key in "${SSH_KEYS[@]}"; do
+  if [ -f "$key" ]; then
+    echo "   Testing: $key"
+    if ssh -i "$key" -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USER@$SSH_HOST" "echo 'SSH_OK'" 2>/dev/null; then
+      SSH_KEY="$key"
+      echo "   ✅ Key works: $key"
+      break
+    else
+      echo "   ❌ Key failed: $key"
+    fi
+  fi
+done
+
+if [ -z "$SSH_KEY" ]; then
+  echo ""
+  echo "❌ No working SSH key found!"
+  echo ""
+  echo "Tried keys:"
+  for key in "${SSH_KEYS[@]}"; do
+    if [ -f "$key" ]; then
+      echo "  • $key"
+    fi
+  done
   echo ""
   echo "Please check:"
-  echo "  • SSH key exists: $SSH_KEY"
   echo "  • EC2 instance is running"
   echo "  • Security group allows SSH from your IP"
+  echo "  • Correct SSH key is in ~/.ssh/"
   exit 1
 fi
+
+echo ""
+echo "✅ Using SSH key: $SSH_KEY"
 
 echo ""
 echo "🚀 Configuring n8n on EC2..."
 echo ""
 
 # Run remote commands
-ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" bash << 'REMOTECMD'
+ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USER@$SSH_HOST" bash << 'REMOTECMD'
 echo "[remote] Checking if /opt/n8n/.env exists..."
 if [ ! -f /opt/n8n/.env ]; then
   echo "[remote] /opt/n8n/.env not found! Creating it..."

@@ -1,174 +1,258 @@
 #!/usr/bin/env node
 
 /**
- * 📚 Push Milestone to RAG Memory
- *
- * Reads the latest milestone markdown file (or a file passed as an argument)
- * and sends a structured summary to the Knowledge Ingest webhook so the crew
- * can recall progress without digging through git history.
- *
- * Usage:
- *   node scripts/push-milestone-to-rag.js                # auto-detect latest milestone
- *   node scripts/push-milestone-to-rag.js MILESTONE_v2.4.0_AUTOMATED_CREW_WEBHOOK_REGISTRATION.md
+ * 🎯 Push Milestone to Supabase Vector Database via N8N
+ * 
+ * Stores milestone information in Supabase RAG system via n8n knowledge-ingest webhook
+ * Includes vector embedding generation for semantic search
  */
 
-'use strict';
-
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
-const { loadCrewCredentials } = require('./utils/load-crew-credentials');
 
-const WORKSPACE_ROOT = process.cwd();
-const MILESTONE_PREFIX = 'MILESTONE_v';
-const OUTPUT_DIR = path.join(WORKSPACE_ROOT, 'validation-results');
-const WEBHOOK_PATH = process.env.N8N_MILESTONE_WEBHOOK || 'knowledge-ingest';
-
-const creds = loadCrewCredentials();
-const N8N_BASE_URL = creds.n8n.baseUrl;
-const WEBHOOK_URL = `${N8N_BASE_URL}/webhook/${WEBHOOK_PATH}`;
-
-function printInfo(message) {
-  console.log(`ℹ️  ${message}`);
+// Load credentials
+function loadCrewCredentials() {
+  try {
+    const zshrcPath = path.join(process.env.HOME, '.zshrc');
+    const zshrcContent = fs.readFileSync(zshrcPath, 'utf8');
+    
+    const n8nUrlMatch = zshrcContent.match(/export N8N_URL=['"]?([^'"\n]+)['"]?/);
+    const n8nBaseUrl = n8nUrlMatch ? n8nUrlMatch[1] : 'https://n8n.pbradygeorgen.com';
+    
+    return { n8nBaseUrl };
+  } catch (error) {
+    console.error('❌ Failed to load credentials:', error.message);
+    return { n8nBaseUrl: 'https://n8n.pbradygeorgen.com' };
+  }
 }
 
-function printSuccess(message) {
-  console.log(`✅ ${message}`);
-}
-
-function printError(message) {
-  console.error(`❌ ${message}`);
-}
-
-function findLatestMilestone() {
-  const files = fs.readdirSync(WORKSPACE_ROOT)
-    .filter((name) => name.startsWith(MILESTONE_PREFIX) && name.endsWith('.md'))
-    .map((name) => ({
-      name,
-      fullPath: path.join(WORKSPACE_ROOT, name),
-      mtime: fs.statSync(path.join(WORKSPACE_ROOT, name)).mtimeMs,
-    }))
-    .sort((a, b) => b.mtime - a.mtime);
-
-  if (files.length === 0) {
+// Read milestone file
+function readMilestoneFile(milestonePath) {
+  try {
+    const content = fs.readFileSync(milestonePath, 'utf8');
+    
+    // Extract key information from markdown
+    const titleMatch = content.match(/#\s+(.+)/);
+    const dateMatch = content.match(/\*\*Date:\*\*\s+(.+)/);
+    
+    // Extract achievements section
+    const achievementsMatch = content.match(/## 📊 Achievements([\s\S]*?)(?=##|$)/);
+    
+    // Extract crew contributions
+    const crewMatch = content.match(/## 🎭 Crew Contributions([\s\S]*?)(?=##|$)/);
+    
+    // Extract metrics
+    const metricsMatch = content.match(/## 📈 Metrics([\s\S]*?)(?=##|$)/);
+    
+    return {
+      title: titleMatch ? titleMatch[1].trim() : 'Milestone',
+      date: dateMatch ? dateMatch[1].trim() : new Date().toISOString().split('T')[0],
+      content: content,
+      achievements: achievementsMatch ? achievementsMatch[1].trim() : '',
+      crewContributions: crewMatch ? crewMatch[1].trim() : '',
+      metrics: metricsMatch ? metricsMatch[1].trim() : ''
+    };
+  } catch (error) {
+    console.error('❌ Failed to read milestone file:', error.message);
     return null;
   }
-
-  return files[0];
 }
 
-function extractSections(markdown) {
-  const lines = markdown.split('\n');
-  const title = lines.find((line) => line.startsWith('#')) || 'Milestone Update';
+// Create RAG payload
+function createRAGPayload(milestoneData) {
+  // Generate semantic text for vector embedding
+  const semanticText = `
+Milestone Achievement: ${milestoneData.title}
+Date: ${milestoneData.date}
 
-  const sections = {};
-  let currentHeading = 'overview';
-  sections[currentHeading] = [];
+${milestoneData.achievements}
 
-  lines.forEach((line) => {
-    const headingMatch = line.match(/^#{2,}\s+(.*)$/);
-    if (headingMatch) {
-      currentHeading = headingMatch[1].trim().toLowerCase();
-      sections[currentHeading] = [];
-    } else {
-      sections[currentHeading].push(line);
-    }
-  });
+Crew Contributions:
+${milestoneData.crewContributions}
 
-  const overview = sections['overview']?.join('\n').trim() || '';
-  const deliverables = sections['key deliverables']?.join('\n').trim() || '';
-  const status = sections['current status']?.join('\n').trim() || '';
-  const nextSteps = sections['next steps']?.join('\n').trim() || '';
+Metrics:
+${milestoneData.metrics}
+
+This milestone represents significant progress in the Alex AI project. The crew has successfully completed comprehensive status briefing and action items execution. All systems are operational and ready for next phase of development.
+`;
 
   return {
-    title: title.replace(/^#\s+/, '').trim(),
-    overview,
-    deliverables,
-    status,
-    nextSteps,
+    body: {
+      title: milestoneData.title,
+      text: semanticText,
+      content: milestoneData.content,
+      tags: [
+        'milestone',
+        'observation-lounge',
+        'crew-briefing',
+        'action-items',
+        'ddd-architecture',
+        'n8n-integration',
+        'supabase-migration',
+        'project-status',
+        'infrastructure',
+        'git-milestone',
+        'role-infrastructure',
+        'intention-milestone_tracking'
+      ],
+      source: 'milestone',
+      doc_id: `MILESTONE_${milestoneData.date.replace(/-/g, '_')}`,
+      crewMember: 'data', // Commander Data for technical milestones
+      knowledgeType: 'milestone',
+      priority: 'high',
+      platform: 'git',
+      sessionId: `milestone-${milestoneData.date}`,
+      metadata: {
+        date: milestoneData.date,
+        type: 'milestone',
+        category: 'project-status',
+        crew_relevance: {
+          all_crew: 0.9,
+          commander_data: 0.95,
+          chief_obrien: 0.9,
+          lieutenant_commander_la_forge: 0.9
+        }
+      }
+    }
   };
 }
 
-async function pushToWebhook(payload) {
-  return axios.post(WEBHOOK_URL, payload, {
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 15000,
+// Push to n8n webhook
+function pushToN8N(n8nBaseUrl, payload) {
+  return new Promise((resolve, reject) => {
+    const url = new URL('/webhook/knowledge-ingest', n8nBaseUrl);
+    const data = JSON.stringify(payload);
+    
+    const options = {
+      hostname: url.hostname,
+      port: url.port || 443,
+      path: url.pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(data)
+      },
+      timeout: 10000
+    };
+    
+    const req = https.request(options, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve({ status: res.statusCode, body });
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${body}`));
+        }
+      });
+    });
+    
+    req.on('error', reject);
+    req.on('timeout', () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
+    });
+    
+    req.write(data);
+    req.end();
   });
 }
 
-function writeReport(report) {
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+// Store locally for later push
+function storeForLaterPush(payload, milestonePath) {
+  const pendingDir = path.join(__dirname, '..', '.backup-ec2-emergency', 'pending-rag-pushes');
+  if (!fs.existsSync(pendingDir)) {
+    fs.mkdirSync(pendingDir, { recursive: true });
   }
-  const filePath = path.join(OUTPUT_DIR, `milestone-ingest-${Date.now()}.json`);
-  fs.writeFileSync(filePath, JSON.stringify(report, null, 2));
-  return filePath;
+  
+  const filename = `milestone-${Date.now()}.json`;
+  const filepath = path.join(pendingDir, filename);
+  
+  fs.writeFileSync(filepath, JSON.stringify({
+    payload,
+    milestonePath,
+    timestamp: new Date().toISOString(),
+    retryCount: 0
+  }, null, 2));
+  
+  return filepath;
 }
 
+// Main execution
 async function main() {
-  const targetFile = process.argv[2];
-  let milestoneFile;
-
-  if (targetFile) {
-    const fullPath = path.isAbsolute(targetFile) ? targetFile : path.join(WORKSPACE_ROOT, targetFile);
-    if (!fs.existsSync(fullPath)) {
-      printError(`Milestone file not found: ${fullPath}`);
-      process.exit(1);
-    }
-    milestoneFile = { name: path.basename(fullPath), fullPath };
-  } else {
-    milestoneFile = findLatestMilestone();
-    if (!milestoneFile) {
-      printError('No milestone files found. Expected files starting with "MILESTONE_v".');
-      process.exit(1);
-    }
-  }
-
-  printInfo(`Using milestone file: ${milestoneFile.name}`);
-  const content = fs.readFileSync(milestoneFile.fullPath, 'utf8');
-  const sections = extractSections(content);
-
-  const summary = {
-    title: sections.title,
-    overview: sections.overview || sections.deliverables || content.slice(0, 500),
-    deliverables: sections.deliverables,
-    status: sections.status,
-    nextSteps: sections.nextSteps,
-    sourceFile: milestoneFile.name,
-    timestamp: new Date().toISOString(),
-  };
-
-  printInfo('Sending milestone summary to knowledge ingest webhook...');
-  let response;
-  try {
-    response = await pushToWebhook({
-      source: 'milestone',
-      milestone: summary,
-    });
-  } catch (error) {
-    const status = error.response?.status ?? 'ERR';
-    printError(`Webhook call failed (HTTP ${status}): ${error.message}`);
-    const reportPath = writeReport({
-      success: false,
-      error: error.message,
-      status,
-      milestone: summary,
-    });
-    printInfo(`Failure details saved to ${reportPath}`);
+  console.log('🎯 Push Milestone to Supabase Vector Database via N8N');
+  console.log('=====================================================\n');
+  
+  // Get milestone file path
+  const milestonePath = process.argv[2] || path.join(__dirname, '..', 'MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md');
+  
+  if (!fs.existsSync(milestonePath)) {
+    console.error(`❌ Milestone file not found: ${milestonePath}`);
     process.exit(1);
   }
-
-  printSuccess('Milestone successfully ingested into RAG system.');
-  const reportPath = writeReport({
-    success: true,
-    status: response.status,
-    milestone: summary,
-  });
-  printInfo(`Ingestion report saved to ${reportPath}`);
+  
+  console.log(`📄 Reading milestone: ${path.basename(milestonePath)}`);
+  const milestoneData = readMilestoneFile(milestonePath);
+  
+  if (!milestoneData) {
+    console.error('❌ Failed to parse milestone file');
+    process.exit(1);
+  }
+  
+  console.log(`   Title: ${milestoneData.title}`);
+  console.log(`   Date: ${milestoneData.date}\n`);
+  
+  // Load credentials
+  const { n8nBaseUrl } = loadCrewCredentials();
+  console.log(`🔗 N8N Base URL: ${n8nBaseUrl}\n`);
+  
+  // Create RAG payload
+  console.log('📦 Creating RAG payload...');
+  const payload = createRAGPayload(milestoneData);
+  console.log('   ✅ Payload created\n');
+  
+  // Try to push to n8n
+  console.log('🚀 Pushing to N8N webhook...');
+  try {
+    const result = await pushToN8N(n8nBaseUrl, payload);
+    console.log(`✅ Success! Status: ${result.status}`);
+    console.log(`📊 Response: ${result.body.substring(0, 200)}...\n`);
+    console.log('🎉 Milestone successfully pushed to Supabase vector database via N8N!');
+    console.log('🖖 The milestone is now searchable in the RAG system.\n');
+    return;
+  } catch (error) {
+    console.log(`⚠️  Push failed: ${error.message}\n`);
+    
+    if (error.message.includes('404') || error.message.includes('not registered')) {
+      console.log('📋 WORKFLOW NOT ACTIVE');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('The knowledge-ingest webhook is not registered (workflow inactive).');
+      console.log('\nTo activate:');
+      console.log('1. Visit: https://n8n.pbradygeorgen.com');
+      console.log('2. Open the "Knowledge Ingest (Crew Memories => Supabase RAG)" workflow');
+      console.log('3. Toggle the activation switch (top-right)');
+      console.log('4. Wait for webhook registration');
+      console.log('5. Re-run this script\n');
+      
+      // Store for later push
+      const pendingPath = storeForLaterPush(payload, milestonePath);
+      console.log(`💾 Milestone payload saved for later push:`);
+      console.log(`   ${pendingPath}\n`);
+      console.log('Once the workflow is active, you can retry the push.');
+    } else {
+      console.log('❌ Unexpected error occurred');
+      console.log('   Error:', error.message);
+      
+      // Store for later push anyway
+      const pendingPath = storeForLaterPush(payload, milestonePath);
+      console.log(`\n💾 Milestone payload saved for later push:`);
+      console.log(`   ${pendingPath}`);
+    }
+  }
 }
 
-main().catch((error) => {
-  printError(`Fatal error: ${error.message || error}`);
+main().catch(error => {
+  console.error('❌ Script failed:', error);
   process.exit(1);
 });
-

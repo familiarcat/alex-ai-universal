@@ -9,9 +9,27 @@ export N8N_BASE_URL="${N8N_BASE_URL:-$N8N_URL}"
 export N8N_API_URL="${N8N_API_URL:-${N8N_URL%/}/api/v1}"
 export N8N_WEBHOOK_URL="${N8N_WEBHOOK_URL:-${N8N_URL%/}/webhook}"
 
-# If N8N_API_KEY is not already present, fall back to the locally configured value
-if [ -z "${N8N_API_KEY}" ]; then
-    export N8N_API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZTA3ZGJlZi0yZDJmLTQ2YjUtYWQ3ZC0yYjIzZTk2ZWE1NjYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzU4NjgxMzY5fQ._vFzyUok70PS3wI0bTSpB9QDxzLGHM3Ou9n4XvZF0aA"
+# Load API key from ~/.zshrc if not already set
+if [ -z "${N8N_API_KEY}" ] && [ -z "${N8N_OWNER_API_KEY}" ]; then
+    # Try to load from ~/.zshrc
+    if [ -f ~/.zshrc ]; then
+        # Prefer N8N_OWNER_API_KEY, fallback to N8N_API_KEY
+        LOADED_KEY=$(grep -E '^export N8N_OWNER_API_KEY=' ~/.zshrc | cut -d'"' -f2 | head -1)
+        if [ -z "$LOADED_KEY" ]; then
+            LOADED_KEY=$(grep -E '^export N8N_API_KEY=' ~/.zshrc | cut -d'"' -f2 | head -1)
+        fi
+        if [ -n "$LOADED_KEY" ]; then
+            export N8N_API_KEY="$LOADED_KEY"
+            export N8N_OWNER_API_KEY="$LOADED_KEY"
+        fi
+    fi
+fi
+
+# Use N8N_OWNER_API_KEY if available, otherwise N8N_API_KEY
+if [ -n "${N8N_OWNER_API_KEY}" ]; then
+    export N8N_API_KEY="${N8N_OWNER_API_KEY}"
+elif [ -n "${N8N_API_KEY}" ]; then
+    export N8N_OWNER_API_KEY="${N8N_API_KEY}"
 fi
 
 echo "✅ N8N credentials ready:"

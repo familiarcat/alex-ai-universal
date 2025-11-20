@@ -48,13 +48,22 @@ class CredentialUpdater {
   updateN8NCredentials(content) {
     console.log('🔗 Updating N8N API Key...');
     
-    const newN8NKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZTA3ZGJlZi0yZDJmLTQ2YjUtYWQ3ZC0yYjIzZTk2ZWE1NjYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzU4NjgxMzY5fQ._vFzyUok70PS3wI0bTSpB9QDxzLGHM3Ou9n4XvZF0aA';
+    // Load from environment or prompt user
+    const newN8NKey = process.env.N8N_OWNER_API_KEY || process.env.N8N_API_KEY;
     
-    // Remove all existing N8N_API_KEY entries
+    if (!newN8NKey) {
+      console.log('⚠️  No N8N API key provided in environment');
+      console.log('   Please set N8N_OWNER_API_KEY or N8N_API_KEY');
+      console.log('   Or use: scripts/secure-update-n8n-api-key.sh <key>');
+      return content; // Don't modify if no key provided
+    }
+    
+    // Remove all existing N8N API key entries
     let updatedContent = content.replace(/export N8N_API_KEY=.*\n/g, '');
+    updatedContent = updatedContent.replace(/export N8N_OWNER_API_KEY=.*\n/g, '');
     
-    // Add the new N8N_API_KEY
-    const n8nExport = `export N8N_API_KEY="${newN8NKey}"\n`;
+    // Add both keys for compatibility
+    const n8nExport = `export N8N_OWNER_API_KEY="${newN8NKey}"\nexport N8N_API_KEY="${newN8NKey}"\n`;
     
     // Find the N8N section and add the key
     const n8nSectionIndex = updatedContent.indexOf('# N8N Workflow Automation Configuration');
@@ -63,7 +72,7 @@ class CredentialUpdater {
       updatedContent = updatedContent.slice(0, nextLineIndex + 1) + n8nExport + updatedContent.slice(nextLineIndex + 1);
     } else {
       // If no N8N section found, add it at the end
-      updatedContent += `\n# N8N Workflow Automation Configuration\nexport N8N_API_KEY="${newN8NKey}"\n`;
+      updatedContent += `\n# N8N Workflow Automation Configuration\n${n8nExport}`;
     }
     
     console.log('✅ N8N API Key updated');

@@ -38,13 +38,22 @@ function findJsonFiles(dir, fileList = []) {
 
 // Extract credentials from ~/.zshrc
 const zshrc = fs.readFileSync(path.join(process.env.HOME, '.zshrc'), 'utf8');
-const N8N_URL = zshrc.match(/export N8N_URL="([^"]+)"/)?.[1];
-const N8N_API_KEY = zshrc.match(/export N8N_API_KEY="([^"]+)"/)?.[1];
-const CREDENTIAL_ID = zshrc.match(/export N8N_SUPABASE_CREDENTIAL_ID="([^"]+)"/)?.[1];
+const N8N_URL = zshrc.match(/export\s+N8N_URL=['"]?([^'"\s]+)['"]?/)?.[1] || 'https://n8n.pbradygeorgen.com';
+// Try owner key first, then regular API key
+const N8N_OWNER_API_KEY = zshrc.match(/export\s+N8N_OWNER_API_KEY=['"]?([^'"\s]+)['"]?/)?.[1];
+const N8N_API_KEY = N8N_OWNER_API_KEY || zshrc.match(/export\s+N8N_API_KEY=['"]?([^'"\s]+)['"]?/)?.[1];
+const CREDENTIAL_ID = zshrc.match(/export\s+N8N_SUPABASE_CREDENTIAL_ID=['"]?([^'"\s]+)['"]?/)?.[1];
 
-if (!N8N_URL || !N8N_API_KEY || !CREDENTIAL_ID) {
+if (!N8N_URL || !N8N_API_KEY) {
   console.error('❌ Missing required credentials in ~/.zshrc');
+  console.error('   Required: N8N_URL, N8N_API_KEY');
+  console.error('   Optional: N8N_SUPABASE_CREDENTIAL_ID (for Supabase node configuration)');
   process.exit(1);
+}
+
+// CREDENTIAL_ID is optional - workflows can be restored without it
+if (!CREDENTIAL_ID) {
+  console.log('⚠️  N8N_SUPABASE_CREDENTIAL_ID not found - Supabase nodes will need manual configuration\n');
 }
 
 console.log('\n╔════════════════════════════════════════════════════════════════════════╗');
@@ -64,11 +73,22 @@ const workflowFiles = findJsonFiles(workflowsDir).map(f => path.relative(process
 console.log(`📦 Found ${workflowFiles.length} workflow files in git\n`);
 
 // Get currently deployed workflows
-const currentWorkflows = JSON.parse(
-  execSync(`curl -s "${N8N_URL}/api/v1/workflows" -H "X-N8N-API-KEY: ${N8N_API_KEY}"`, { encoding: 'utf8' })
+const currentWorkflowsResponse = execSync(
+  `curl -s "${N8N_URL}/api/v1/workflows" -H "X-N8N-API-KEY: ${N8N_API_KEY}"`,
+  { encoding: 'utf8' }
 );
+const currentWorkflows = JSON.parse(currentWorkflowsResponse);
+// Handle different response formats
+let currentWorkflowsList = [];
+if (Array.isArray(currentWorkflows)) {
+  currentWorkflowsList = currentWorkflows;
+} else if (currentWorkflows.data && Array.isArray(currentWorkflows.data)) {
+  currentWorkflowsList = currentWorkflows.data;
+} else if (currentWorkflows.data && Array.isArray(currentWorkflows.data.data)) {
+  currentWorkflowsList = currentWorkflows.data.data;
+}
 
-console.log(`📋 Currently deployed: ${currentWorkflows.data.length} workflows\n`);
+console.log(`📋 Currently deployed: ${currentWorkflowsList.length} workflows\n`);
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
 // Categorize workflows
@@ -135,7 +155,7 @@ workflowFiles.forEach((file, index) => {
     console.log(`[${index + 1}/${workflowFiles.length}] 📦 ${workflowName}`);
     
     // Check if workflow already exists
-    const exists = currentWorkflows.data.find(w => w.name === workflowName);
+    const exists = currentWorkflowsList.find(w => w.name === workflowName);
     if (exists) {
       console.log(`   ⏭️  Already exists (ID: ${exists.id}), skipping\n`);
       skipCount++;
