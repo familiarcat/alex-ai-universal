@@ -42,9 +42,9 @@ variable "instance_type" {
 }
 
 variable "n8n_version" {
-  description = "N8N Docker image version"
+  description = "N8N Docker image version (pinned to stable version for reliability)"
   type        = string
-  default     = "latest"
+  default     = "1.120.4"
 }
 
 variable "supabase_url" {

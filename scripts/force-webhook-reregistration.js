@@ -6,17 +6,16 @@
  * to force N8N to re-register webhooks
  */
 
-const fs = require('fs');
-const path = require('path');
 const https = require('https');
+const { loadCrewCredentials } = require('./utils/load-crew-credentials');
 
-// Read API key directly from ~/.zshrc
-const zshrc = fs.readFileSync(path.join(process.env.HOME, '.zshrc'), 'utf8');
-const N8N_URL = zshrc.match(/export N8N_URL="([^"]+)"/)?.[1] || 'https://n8n.pbradygeorgen.com';
-const N8N_API_KEY = zshrc.match(/export N8N_API_KEY="([^"]+)"/)?.[1];
+// Load credentials using universal credential loader
+const creds = loadCrewCredentials();
+const N8N_URL = creds.n8n.baseUrl || 'https://n8n.pbradygeorgen.com';
+const N8N_API_KEY = creds.n8n.apiKey;
 
 if (!N8N_API_KEY) {
-  console.error('❌ N8N_API_KEY not found in ~/.zshrc');
+  console.error('❌ N8N API key not found. Set N8N_OWNER_API_KEY or N8N_API_KEY in ~/.zshrc');
   process.exit(1);
 }
 
@@ -117,19 +116,142 @@ function extractWebhooks(workflow) {
   return webhooks;
 }
 
+// Progress indicator
+function showProgress(message, current, total) {
+  const percent = total > 0 ? Math.round((current / total) * 100) : 0;
+  const barLength = 30;
+  const filled = Math.round((percent / 100) * barLength);
+  const empty = barLength - filled;
+  const bar = '█'.repeat(filled) + '░'.repeat(empty);
+  process.stdout.write(`\r   ${message} [${bar}] ${percent}% (${current}/${total})`);
+  if (current === total) {
+    process.stdout.write('\n');
+  }
+}
+
 async function main() {
   // Fetch all workflows
   console.log('📋 Fetching workflows...');
-  const workflowsResponse = await makeRequest('GET', '/api/v1/workflows');
-  const workflows = workflowsResponse.data?.data || workflowsResponse.data || [];
-  console.log(`   Found ${workflows.length} workflows\n`);
+  process.stdout.write('   Connecting to n8n API...');
+  
+  let workflows = [];
+  try {
+    const workflowsResponse = await makeRequest('GET', '/api/v1/workflows');
+    process.stdout.write('\r   ✅ Connected to n8n API\n');
+    
+    if (workflowsResponse.status === 200) {
+      process.stdout.write('   Parsing response...');
+      try {
+        const data = typeof workflowsResponse.data === 'string' 
+          ? JSON.parse(workflowsResponse.data) 
+          : workflowsResponse.data;
+        
+        if (Array.isArray(data)) {
+          workflows = data;
+        } else if (data.data && Array.isArray(data.data)) {
+          workflows = data.data;
+        } else if (data.results && Array.isArray(data.results)) {
+          workflows = data.results;
+        } else if (typeof data === 'object' && Object.keys(data).length > 0) {
+          // Try to find array in response
+          for (const key in data) {
+            if (Array.isArray(data[key])) {
+              workflows = data[key];
+              break;
+            }
+          }
+        }
+        process.stdout.write(`\r   ✅ Parsed ${workflows.length} workflows\n\n`);
+      } catch (e) {
+        process.stdout.write(`\r   ⚠️  Failed to parse response: ${e.message}\n`);
+        console.log(`   Response status: ${workflowsResponse.status}`);
+        console.log(`   Response body: ${workflowsResponse.data?.substring(0, 200)}...\n`);
+        return;
+      }
+    } else if (workflowsResponse.status === 401 || workflowsResponse.status === 403) {
+      process.stdout.write('\r   ❌ API unauthorized - check API key\n\n');
+      return;
+    } else {
+      process.stdout.write(`\r   ⚠️  Unexpected status: ${workflowsResponse.status}\n\n`);
+      return;
+    }
+  } catch (error) {
+    process.stdout.write(`\r   ❌ Failed to fetch workflows: ${error.message}\n\n`);
+    return;
+  }
+  
+  if (workflows.length === 0) {
+    console.log('   ⚠️  No workflows found\n');
+    return;
+  }
 
   // Find workflows with webhooks that are returning 404
   console.log('🔍 Identifying workflows with unregistered webhooks...\n');
   const workflowsToFix = [];
+  
+  // Prioritize Knowledge Ingest workflow
+  const knowledgeIngestWorkflow = workflows.find(w => 
+    w.name.toLowerCase().includes('knowledge ingest') || 
+    w.name.toLowerCase().includes('knowledge-ingest') ||
+    w.id === 'Ffdgv5Zd8hGeHJGe'
+  );
 
+  // Check Knowledge Ingest first if it exists
+  if (knowledgeIngestWorkflow) {
+    console.log('🎯 Checking Knowledge Ingest workflow first...');
+    process.stdout.write('   Fetching workflow details...');
+    try {
+      const detailResponse = await makeRequest('GET', `/api/v1/workflows/${knowledgeIngestWorkflow.id}`);
+      process.stdout.write('\r   ✅ Fetched workflow details\n');
+      
+      if (detailResponse.status === 200) {
+        const workflowData = detailResponse.data?.data || detailResponse.data;
+        const webhooks = extractWebhooks(workflowData);
+        
+        process.stdout.write(`   Testing ${webhooks.length} webhook(s)...`);
+        for (let i = 0; i < webhooks.length; i++) {
+          const webhook = webhooks[i];
+          showProgress(`Testing webhook ${i + 1}/${webhooks.length}`, i, webhooks.length);
+          
+          // Specifically check for knowledge-ingest webhook
+          if (webhook.path === 'knowledge-ingest' || webhook.path.includes('knowledge')) {
+            const testResult = await testWebhook(webhook.path, webhook.method);
+            if (!testResult.registered) {
+              workflowsToFix.unshift({ // Add to beginning for priority
+                workflowId: knowledgeIngestWorkflow.id,
+                workflowName: knowledgeIngestWorkflow.name,
+                webhook: webhook.path,
+                method: webhook.method,
+                priority: true, // Mark as priority
+              });
+            } else {
+              console.log(`\n   ✅ Knowledge Ingest webhook is registered`);
+            }
+          }
+        }
+        if (webhooks.length > 0) process.stdout.write('\n');
+      }
+    } catch (error) {
+      process.stdout.write(`\r   ⚠️  Could not check Knowledge Ingest: ${error.message}\n`);
+    }
+  }
+
+  // Check remaining workflows
+  console.log(`\n   Checking ${workflows.length} workflows for webhook issues...`);
+  let checked = 0;
   for (const workflow of workflows) {
-    if (!workflow.active) continue;
+    // Skip Knowledge Ingest if already processed
+    if (knowledgeIngestWorkflow && workflow.id === knowledgeIngestWorkflow.id) {
+      checked++;
+      showProgress('Checking workflows', checked, workflows.length);
+      continue;
+    }
+    
+    if (!workflow.active) {
+      checked++;
+      showProgress('Checking workflows', checked, workflows.length);
+      continue;
+    }
 
     try {
       const detailResponse = await makeRequest('GET', `/api/v1/workflows/${workflow.id}`);
@@ -152,8 +274,11 @@ async function main() {
     } catch (error) {
       // Skip errors
     }
+    checked++;
+    showProgress('Checking workflows', checked, workflows.length);
     await new Promise(resolve => setTimeout(resolve, 100));
   }
+  console.log('');
 
   if (workflowsToFix.length === 0) {
     console.log('✅ All webhooks are registered!\n');
@@ -176,25 +301,57 @@ async function main() {
   });
 
   // Force re-registration: deactivate and reactivate
-  console.log('🔄 Forcing webhook re-registration...\n');
+  // Sort to prioritize Knowledge Ingest
+  const sortedWorkflows = Object.values(workflowsById).sort((a, b) => {
+    const aIsKnowledgeIngest = a.workflowName.toLowerCase().includes('knowledge ingest') || 
+                                a.workflowName.toLowerCase().includes('knowledge-ingest');
+    const bIsKnowledgeIngest = b.workflowName.toLowerCase().includes('knowledge ingest') || 
+                                b.workflowName.toLowerCase().includes('knowledge-ingest');
+    if (aIsKnowledgeIngest && !bIsKnowledgeIngest) return -1;
+    if (!aIsKnowledgeIngest && bIsKnowledgeIngest) return 1;
+    return 0;
+  });
+
+  console.log(`\n🔄 Forcing webhook re-registration for ${sortedWorkflows.length} workflow(s)...\n`);
   let fixed = 0;
   let stillFailed = 0;
+  let processed = 0;
 
-  for (const workflowInfo of Object.values(workflowsById)) {
+  for (const workflowInfo of sortedWorkflows) {
+    const isKnowledgeIngest = workflowInfo.workflowName.toLowerCase().includes('knowledge ingest') || 
+                              workflowInfo.workflowName.toLowerCase().includes('knowledge-ingest');
+    
+    processed++;
+    showProgress(`Processing ${workflowInfo.workflowName}`, processed, sortedWorkflows.length);
+    
     try {
-      console.log(`   🔧 ${workflowInfo.workflowName}...`);
+      if (isKnowledgeIngest) {
+        console.log(`\n   🎯 ${workflowInfo.workflowName} (Priority: Knowledge Ingest)`);
+      } else {
+        console.log(`\n   🔧 ${workflowInfo.workflowName}`);
+      }
       
-      // Deactivate
+      process.stdout.write('      Deactivating...');
       await makeRequest('POST', `/api/v1/workflows/${workflowInfo.workflowId}/deactivate`);
+      process.stdout.write('\r      ✅ Deactivated\n');
+      
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Reactivate (this triggers webhook registration)
+      process.stdout.write('      Activating...');
       await makeRequest('POST', `/api/v1/workflows/${workflowInfo.workflowId}/activate`);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      process.stdout.write('\r      ✅ Activated\n');
+      
+      // Wait longer for Knowledge Ingest to ensure webhook registration
+      const waitTime = isKnowledgeIngest ? 5000 : 2000;
+      process.stdout.write(`      Waiting ${waitTime/1000}s for webhook registration...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+      process.stdout.write('\r      ✅ Wait complete\n');
       
       // Test webhooks again
+      process.stdout.write('      Testing webhooks...');
       let allFixed = true;
-      for (const webhook of workflowInfo.webhooks) {
+      for (let i = 0; i < workflowInfo.webhooks.length; i++) {
+        const webhook = workflowInfo.webhooks[i];
         const testResult = await testWebhook(webhook.path, webhook.method);
         if (!testResult.registered) {
           allFixed = false;
@@ -202,19 +359,20 @@ async function main() {
       }
       
       if (allFixed) {
-        console.log(`      ✅ All webhooks registered`);
+        process.stdout.write('\r      ✅ All webhooks registered!\n');
         fixed++;
       } else {
-        console.log(`      ⚠️  Some webhooks still not registered`);
+        process.stdout.write('\r      ⚠️  Some webhooks still not registered\n');
         stillFailed++;
       }
     } catch (error) {
-      console.log(`      ❌ Failed: ${error.message}`);
+      process.stdout.write(`\r      ❌ Failed: ${error.message}\n`);
       stillFailed++;
     }
 
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
+  console.log('');
 
   console.log(`\n📊 Re-registration Summary:`);
   console.log(`   ✅ Fixed: ${fixed}`);

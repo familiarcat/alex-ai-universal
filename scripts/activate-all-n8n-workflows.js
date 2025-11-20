@@ -67,8 +67,36 @@ async function main() {
   const workflows = await fetchWorkflows();
   console.log(`🔍 Found ${workflows.length} workflows\n`);
 
+  // Prioritize Knowledge Ingest workflow
+  const knowledgeIngestWorkflow = workflows.find(w => 
+    w.name.toLowerCase().includes('knowledge ingest') || 
+    w.name.toLowerCase().includes('knowledge-ingest') ||
+    w.id === 'Ffdgv5Zd8hGeHJGe'
+  );
+
   const results = [];
+  
+  // Activate Knowledge Ingest first if it exists
+  if (knowledgeIngestWorkflow) {
+    console.log('🎯 Prioritizing Knowledge Ingest workflow...\n');
+    if (knowledgeIngestWorkflow.active) {
+      console.log(`⏭️  Already active: ${knowledgeIngestWorkflow.name}`);
+      results.push({ workflow: knowledgeIngestWorkflow, success: true, skipped: true });
+    } else {
+      const result = await activateWorkflow(knowledgeIngestWorkflow);
+      results.push(result);
+      console.log('⏳ Waiting 3 seconds for Knowledge Ingest webhook registration...\n');
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    }
+  }
+
+  // Activate remaining workflows
   for (const workflow of workflows) {
+    // Skip if already processed (Knowledge Ingest)
+    if (knowledgeIngestWorkflow && workflow.id === knowledgeIngestWorkflow.id) {
+      continue;
+    }
+
     if (workflow.active) {
       console.log(`⏭️  Already active: ${workflow.name}`);
       results.push({ workflow, success: true, skipped: true });

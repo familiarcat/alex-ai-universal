@@ -1,9 +1,14 @@
 {
   "project": {
     "name": "alex-ai-universal",
-    "type": "unknown",
-    "framework": "unknown",
-    "language": "unknown"
+    "type": "monorepo",
+    "category": "monorepo",
+    "technology": "node",
+    "framework": "monorepo",
+    "language": "typescript",
+    "packageManager": "npm",
+    "isMonorepo": true,
+    "confidence": 90
   },
   "milestone": {
     "enabled": true,

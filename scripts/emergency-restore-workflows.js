@@ -80,18 +80,31 @@ try {
     let success = 0;
     let failed = 0;
     
+    // Whitelist-based cleanup - ONLY keep allowed fields
+    function cleanWorkflowForCreate(workflow) {
+      return {
+        name: workflow.name,
+        nodes: (workflow.nodes || []).map(node => ({
+          name: node.name,
+          parameters: node.parameters || {},
+          position: node.position || [0, 0],
+          type: node.type,
+          typeVersion: node.typeVersion || 1,
+          // Keep credentials if present (for nodes that need them)
+          ...(node.credentials ? { credentials: node.credentials } : {})
+        })),
+        connections: workflow.connections || {},
+        settings: workflow.settings || {},
+      };
+    }
+
     workflowFiles.forEach((file, index) => {
       try {
         const workflowJson = JSON.parse(fs.readFileSync(file, 'utf8'));
         const workflowName = workflowJson.name || path.basename(file, '.json');
         
-        // Remove read-only fields
-        delete workflowJson.id;
-        delete workflowJson.createdAt;
-        delete workflowJson.updatedAt;
-        delete workflowJson.versionId;
-        delete workflowJson.active;
-        delete workflowJson.tags;
+        // Whitelist cleanup - only keep allowed fields
+        const cleanedWorkflow = cleanWorkflowForCreate(workflowJson);
         
         // Create workflow
         const createResponse = JSON.parse(
@@ -99,13 +112,26 @@ try {
             `curl -s -X POST "${N8N_URL}/api/v1/workflows" ` +
             `-H "X-N8N-API-KEY: ${N8N_API_KEY}" ` +
             `-H "Content-Type: application/json" ` +
-            `-d '${JSON.stringify(workflowJson).replace(/'/g, "'\\''")}'`,
-            { encoding: 'utf8' }
+            `-d '${JSON.stringify(cleanedWorkflow).replace(/'/g, "'\\''")}'`,
+            { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }
           )
         );
         
         if (createResponse.id) {
           console.log(`✅ [${index + 1}/${workflowFiles.length}] ${workflowName} (ID: ${createResponse.id})`);
+          
+          // Activate workflow immediately
+          try {
+            execSync(
+              `curl -s -X POST "${N8N_URL}/api/v1/workflows/${createResponse.id}/activate" ` +
+              `-H "X-N8N-API-KEY: ${N8N_API_KEY}"`,
+              { encoding: 'utf8' }
+            );
+            console.log(`   ✅ Activated`);
+          } catch (activateError) {
+            console.log(`   ⚠️  Created but activation failed`);
+          }
+          
           success++;
         } else {
           console.log(`❌ [${index + 1}/${workflowFiles.length}] ${workflowName} - ${createResponse.message || 'Failed'}`);

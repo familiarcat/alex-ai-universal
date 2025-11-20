@@ -20,11 +20,36 @@ echo ""
 
 # Load AWS credentials from ~/.zshrc
 echo "📋 Loading AWS credentials from ~/.zshrc..."
-export AWS_ACCESS_KEY_ID=$(grep 'export AWS_ACCESS_KEY_ID=' ~/.zshrc | cut -d'=' -f2)
-export AWS_SECRET_ACCESS_KEY=$(grep 'export AWS_SECRET_ACCESS_KEY=' ~/.zshrc | cut -d'=' -f2)
-export AWS_REGION=$(grep 'export AWS_REGION=' ~/.zshrc | cut -d'=' -f2 | tr -d '"')
+
+# Try multiple ways to get credentials
+if grep -q 'export AWS_ACCESS_KEY_ID=' ~/.zshrc; then
+  export AWS_ACCESS_KEY_ID=$(grep 'export AWS_ACCESS_KEY_ID=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/")
+fi
+
+if grep -q 'export AWS_SECRET_ACCESS_KEY=' ~/.zshrc; then
+  export AWS_SECRET_ACCESS_KEY=$(grep 'export AWS_SECRET_ACCESS_KEY=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/")
+fi
+
+# Get region (try multiple sources)
+if grep -q 'export AWS_REGION=' ~/.zshrc; then
+  export AWS_REGION=$(grep 'export AWS_REGION=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/" | tr -d '"')
+elif grep -q 'export AWS_DEFAULT_REGION=' ~/.zshrc; then
+  export AWS_REGION=$(grep 'export AWS_DEFAULT_REGION=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/" | tr -d '"')
+else
+  export AWS_REGION="us-east-2"  # Default region
+fi
+
 export AWS_DEFAULT_REGION=$AWS_REGION
-INSTANCE_ID=$(grep 'export N8N_AWS_INSTANCE_ID=' ~/.zshrc | cut -d'=' -f2)
+
+# Get instance ID (try multiple sources)
+if grep -q 'export N8N_AWS_INSTANCE_ID=' ~/.zshrc; then
+  INSTANCE_ID=$(grep 'export N8N_AWS_INSTANCE_ID=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/")
+elif grep -q 'export AWS_EC2_INSTANCE_ID=' ~/.zshrc; then
+  INSTANCE_ID=$(grep 'export AWS_EC2_INSTANCE_ID=' ~/.zshrc | head -1 | sed 's/.*="\(.*\)"/\1/' | sed "s/.*='\(.*\)'/\1/")
+else
+  # Try to find from existing scripts or use default
+  INSTANCE_ID="i-0afdf313f61f22df0"  # Default instance ID
+fi
 
 echo "✅ Loaded AWS credentials"
 echo "   Region: $AWS_REGION"
@@ -119,17 +144,28 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Try AWS Systems Manager send-command (works even if SSM agent is partially configured)
-COMMAND_SCRIPT=$(cat /tmp/configure-n8n-webhook.sh)
+echo "📤 Sending configuration command to EC2 instance via AWS SSM..."
+echo "   Instance ID: $INSTANCE_ID"
+echo "   Region: $AWS_REGION"
+echo ""
 
-echo "📤 Sending configuration command to EC2 instance..."
+# Use base64 encoding for reliable transmission
+COMMAND_B64=$(base64 < /tmp/configure-n8n-webhook.sh | tr -d '\n')
+
+# Create SSM command with base64-encoded script
+echo "   Encoding script and sending command..."
 COMMAND_ID=$(aws ssm send-command \
   --instance-ids "$INSTANCE_ID" \
   --document-name "AWS-RunShellScript" \
-  --parameters "commands=[\"$COMMAND_SCRIPT\"]" \
+  --parameters "commands=[\"echo $COMMAND_B64 | base64 -d | bash\"]" \
+  --region "$AWS_REGION" \
+  --timeout-seconds 300 \
   --query 'Command.CommandId' \
   --output text 2>&1)
 
-if [ $? -eq 0 ] && [ -n "$COMMAND_ID" ] && [ "$COMMAND_ID" != "None" ]; then
+SSM_EXIT_CODE=$?
+
+if [ $SSM_EXIT_CODE -eq 0 ] && [ -n "$COMMAND_ID" ] && [ "$COMMAND_ID" != "None" ] && [ "$COMMAND_ID" != "null" ]; then
   echo "✅ Command sent! ID: $COMMAND_ID"
   echo ""
   echo "⏳ Waiting for command execution (30 seconds max)..."
@@ -173,10 +209,29 @@ if [ $? -eq 0 ] && [ -n "$COMMAND_ID" ] && [ "$COMMAND_ID" != "None" ]; then
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo ""
 else
-  echo "❌ AWS SSM send-command failed (SSM agent not fully configured)"
+  echo "❌ AWS SSM send-command failed (SSM agent may not be configured)"
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "⚠️  FALLBACK: Manual Configuration Required"
+  echo "🔄 FALLBACK: Trying EC2 Instance Connect..."
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  
+  # Try EC2 Instance Connect as fallback
+  if command -v node >/dev/null 2>&1; then
+    echo "📤 Attempting EC2 Instance Connect method..."
+    if node scripts/aws-ec2-instance-connect-fix.js 2>&1; then
+      echo ""
+      echo "✅ Configuration complete via EC2 Instance Connect!"
+      rm -f /tmp/configure-n8n-webhook.sh
+      exit 0
+    else
+      echo "❌ EC2 Instance Connect also failed"
+    fi
+  fi
+  
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "⚠️  MANUAL CONFIGURATION REQUIRED"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo ""
   echo "AWS Console (browser-based terminal):"

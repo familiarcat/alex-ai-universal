@@ -126,7 +126,7 @@ mkdir -p /opt/n8n
 mkdir -p /home/ubuntu/.n8n
 
 # Create permanent environment file
-cat > /opt/n8n/.env << 'N8N_ENV'
+cat > /opt/n8n/.env << EOF
 # N8N Webhook Configuration (CRITICAL for webhook registration!)
 WEBHOOK_URL=https://${n8n_domain}
 N8N_PROTOCOL=https
@@ -149,10 +149,11 @@ GENERIC_TIMEZONE=America/New_York
 
 # Performance
 N8N_PAYLOAD_SIZE_MAX=16
-N8N_ENV
+
+# Monitoring
 N8N_METRICS=true
 N8N_DIAGNOSTICS_ENABLED=true
-N8N_ENV'
+EOF
 
 chown -R ubuntu:ubuntu /home/ubuntu/.n8n
 chmod 644 /opt/n8n/.env
@@ -165,16 +166,59 @@ echo "🐳 Starting n8n Docker container..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-# Start n8n with environment file
-docker run -d \
-  --name n8n \
-  --restart always \
-  -p 5678:5678 \
-  --env-file /opt/n8n/.env \
-  -v /home/ubuntu/.n8n:/home/node/.n8n \
-  n8nio/n8n:${n8n_version}
+# Install docker-compose for better container management
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
-echo "✅ n8n container started"
+# Create docker-compose.yml for n8n
+# Use actual domain value instead of variable to ensure WEBHOOK_URL is set correctly
+cat > /opt/n8n/docker-compose.yml << DOCKER_COMPOSE
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:${n8n_version}
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    env_file:
+      - /opt/n8n/.env
+    environment:
+      # Explicitly set WEBHOOK_URL with actual domain (critical for webhook registration)
+      - WEBHOOK_URL=https://${n8n_domain}
+      - N8N_PROTOCOL=https
+      - N8N_HOST=${n8n_domain}
+      - N8N_PORT=5678
+      - N8N_EDITOR_BASE_URL=https://${n8n_domain}
+      - GENERIC_TIMEZONE=America/New_York
+      - EXECUTIONS_MODE=regular
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
+      - N8N_PAYLOAD_SIZE_MAX=16
+      - N8N_METRICS=true
+      - N8N_DIAGNOSTICS_ENABLED=true
+    volumes:
+      - /home/ubuntu/.n8n:/home/node/.n8n
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+DOCKER_COMPOSE
+
+# Start n8n using docker-compose (ensures --env-file is always used)
+cd /opt/n8n
+docker-compose up -d
+
+echo "✅ n8n container started with docker-compose"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -209,6 +253,56 @@ chmod +x /usr/local/bin/backup-n8n.sh
 echo "0 2 * * * /usr/local/bin/backup-n8n.sh >> /var/log/n8n-backup.log 2>&1" | crontab -u ubuntu -
 
 echo "✅ Daily backups configured (2 AM)"
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🔧 Installing n8n restart service script..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Copy restart script (will be created by Terraform)
+# This ensures n8n always restarts with --env-file
+cat > /usr/local/bin/restart-n8n.sh << 'RESTART_SCRIPT'
+#!/bin/bash
+set -e
+N8N_DIR="/opt/n8n"
+ENV_FILE="/opt/n8n/.env"
+
+if [ ! -f "$ENV_FILE" ]; then
+  echo "❌ Error: $ENV_FILE not found!"
+  exit 1
+fi
+
+# Stop existing container
+docker stop n8n 2>/dev/null || true
+docker rm n8n 2>/dev/null || true
+
+# Kill any process on port 5678
+lsof -ti:5678 | xargs kill -9 2>/dev/null || true
+sleep 2
+
+# Start with docker-compose (uses --env-file automatically)
+if [ -f "$N8N_DIR/docker-compose.yml" ]; then
+  cd "$N8N_DIR"
+  docker-compose up -d
+else
+  # Fallback to docker run with --env-file
+  docker run -d \
+    --name n8n \
+    --restart always \
+    -p 5678:5678 \
+    --env-file "$ENV_FILE" \
+    -v /home/ubuntu/.n8n:/home/node/.n8n \
+    n8nio/n8n:latest
+fi
+
+sleep 10
+echo "✅ n8n restarted with WEBHOOK_URL from $ENV_FILE"
+RESTART_SCRIPT
+
+chmod +x /usr/local/bin/restart-n8n.sh
+
+echo "✅ Restart script installed at /usr/local/bin/restart-n8n.sh"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -286,6 +380,13 @@ echo "📋 Next steps:"
 echo "   1. Obtain SSL certificate: certbot --nginx -d ${n8n_domain}"
 echo "   2. Verify n8n is running: docker ps"
 echo "   3. Check WEBHOOK_URL: docker exec n8n env | grep WEBHOOK_URL"
+echo "   4. Restart n8n if needed: /usr/local/bin/restart-n8n.sh"
+echo ""
+echo "🔧 WEBHOOK_URL Automation:"
+echo "   ✅ Set in /opt/n8n/.env during instance creation"
+echo "   ✅ Docker container uses --env-file flag"
+echo "   ✅ docker-compose.yml ensures WEBHOOK_URL is always set"
+echo "   ✅ Restart script maintains WEBHOOK_URL on restarts"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
