@@ -149,8 +149,8 @@ resource "aws_instance" "n8n" {
   # Enable detailed monitoring
   monitoring = true
   
-  # User data script for initial setup
-  user_data = templatefile("${path.module}/user-data.sh", {
+  # User data script for initial setup (includes MCP)
+  user_data = templatefile("${path.module}/user-data-with-mcp.sh", {
     n8n_domain     = var.n8n_domain
     n8n_version    = var.n8n_version
     supabase_url   = var.supabase_url
