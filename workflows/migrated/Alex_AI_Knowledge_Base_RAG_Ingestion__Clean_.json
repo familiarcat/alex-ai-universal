@@ -1,0 +1,55 @@
+{
+  "name": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "d3d04114-6335-4ad1-8826-1e4526f2e816",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ingest-knowledge",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Respond"
+      ]
+    },
+    {
+      "id": "7dcc719f-fb99-4867-a797-99a1e1b24323",
+      "type": "transform",
+      "config": {
+        "name": "Respond",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { success: true, received: $json, note: 'Clean workflow OK' } }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          520,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "jdlvuYe6yyEfoKiF",
+    "originalName": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-0xl0a4",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

@@ -1,0 +1,266 @@
+{
+  "name": "Milestone RAG Storage Workflow",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "4a6fecc0-6380-47dd-98df-719e5de91c9a",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Milestone Storage Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "milestone-storage",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Filter LCARS Milestones"
+      ]
+    },
+    {
+      "id": "fe6e5bb8-f518-42c0-a859-ebb3dc4eba49",
+      "type": "transform",
+      "config": {
+        "name": "Filter LCARS Milestones",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.body.milestone_type }}",
+                "operation": "equal",
+                "value2": "lcars_hallucination_integration"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Dr. Crusher's Data Processor",
+        "Other Milestone Types"
+      ]
+    },
+    {
+      "id": "800cbfb1-9193-410f-be7c-c31c4e823d52",
+      "type": "transform",
+      "config": {
+        "name": "Dr. Crusher's Data Processor",
+        "parameters": {
+          "jsCode": "// Dr. Crusher's Medical Data Processing\nconst milestone = $input.first().json.body;\n\n// Extract key medical and technical data\nconst processedData = {\n  milestone_id: milestone.milestone_id || 'LCARS_HALLUCINATION_INTEGRATION_2025_01_18',\n  timestamp: new Date().toISOString(),\n  knowledge_type: 'milestone_achievement',\n  medical_framework: {\n    system_health_classification: milestone.system_health_classification || 'OPTIMAL',\n    hallucination_types: milestone.hallucination_types || [\n      'EXECUTION_BLOCKER',\n      'DATA_INCONSISTENCY', \n      'LOGICAL_CONTRADICTION',\n      'TOOL_INTERFACE_FAILURE',\n      'INFORMATION_GAP',\n      'RESPONSE_DELAY'\n    ],\n    severity_levels: milestone.severity_levels || [\n      'MINOR',\n      'MODERATE',\n      'MAJOR', \n      'CRITICAL'\n    ],\n    vital_signs: milestone.vital_signs || {\n      hallucination_rate: 0,\n      average_resolution_time: 0,\n      crew_collaboration_score: 100,\n      system_reliability: 100,\n      mission_success_rate: 100\n    }\n  },\n  crew_contributions: milestone.crew_contributions || {\n    crusher: {\n      role: 'Chief Medical Officer',\n      contribution: 'Medical framework implementation and system health monitoring',\n      impact: 'Professional-grade AI system health assessment operational',\n      expertise: ['system_health', 'diagnosis', 'treatment', 'prevention']\n    },\n    data: {\n      role: 'Operations Officer',\n      contribution: 'Technical analysis and logical validation systems', \n      impact: 'Enhanced diagnostic capabilities with AI system optimization',\n      expertise: ['technical_analysis', 'logical_assessment', 'system_optimization']\n    },\n    la_forge: {\n      role: 'Chief Engineer',\n      contribution: 'Infrastructure monitoring and system reliability',\n      impact: 'Proactive system maintenance and fault tolerance',\n      expertise: ['infrastructure_health', 'system_monitoring', 'preventive_maintenance']\n    },\n    picard: {\n      role: 'Strategic Commander',\n      contribution: 'Mission continuity and crew coordination oversight',\n      impact: 'Strategic health assessment and mission-critical monitoring',\n      expertise: ['strategic_assessment', 'mission_continuity', 'crew_coordination']\n    }\n  },\n  technical_achievements: milestone.technical_achievements || {\n    lcars_integration: 'Complete',\n    medical_framework: 'Operational',\n    api_endpoints: 'Functional',\n    ui_components: 'Deployed',\n    monitoring_system: 'Active',\n    hallucination_detection: 'Real-time',\n    crew_collaboration: 'Enhanced',\n    system_resilience: 'Validated'\n  },\n  stress_test_results: milestone.stress_test_results || {\n    test_scenario: 'Terminal Execution Blocker',\n    detection_time: 'Immediate',\n    resolution_success: '100%',\n    mission_continuity: '100%',\n    crew_coordination: 'Perfect',\n    system_resilience_score: '10/10'\n  },\n  knowledge_insights: milestone.knowledge_insights || {\n    hallucination_management: 'Collective intelligence provides natural redundancy',\n    crew_collaboration: 'Multi-agent analysis prevents tunnel vision',\n    system_resilience: 'Alternative execution pathways essential',\n    medical_monitoring: 'Professional assessment improves system reliability',\n    knowledge_persistence: 'Vector memory enables pattern recognition'\n  }\n};\n\n// Generate semantic text for vector embedding\nconst semanticText = `\nLCARS Hallucination Monitoring System Integration Complete. \nDr. Beverly Crusher's medical expertise successfully integrated into LCARS Ship's Computer. \nSystem provides real-time medical assessment of AI system health with crew collaboration capabilities. \nMedical framework includes system health classification from OPTIMAL to EMERGENCY, \nhallucination type diagnosis for EXECUTION_BLOCKER, DATA_INCONSISTENCY, LOGICAL_CONTRADICTION, \nTOOL_INTERFACE_FAILURE, INFORMATION_GAP, and RESPONSE_DELAY events. \nSeverity assessment from MINOR to CRITICAL with automated treatment protocols. \nCrew collaboration enhanced with multi-agent analysis including Dr. Crusher's medical assessment, \nCommander Data's technical analysis, Lieutenant Commander La Forge's infrastructure monitoring, \nand Captain Picard's strategic oversight. Real-time monitoring with 30-second health updates, \nAPI endpoints for health status retrieval and event reporting, UI components for dashboard display. \nStress testing validated with terminal execution blocker scenario showing 100% resolution success, \nperfect crew coordination, and 10/10 system resilience score. \nN8N to Supabase integration established for vector memory storage and RAG knowledge retrieval. \nMission continuity maintained at 100% with professional medical oversight of AI operations.\n`;\n\nreturn {\n  json: {\n    ...processedData,\n    semantic_text: semanticText,\n    vector_embedding_ready: true,\n    storage_timestamp: new Date().toISOString()\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          680,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Supabase Milestone Storage",
+        "Generate Vector Embedding"
+      ]
+    },
+    {
+      "id": "2041bd1a-171e-40c3-ac78-1d398c963fed",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Milestone Storage",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "supabaseApi",
+          "operation": "insert",
+          "table": "milestone_knowledge",
+          "columns": "milestone_id, timestamp, knowledge_type, medical_framework, crew_contributions, technical_achievements, stress_test_results, knowledge_insights, semantic_text, vector_embedding_ready, storage_timestamp",
+          "options": {
+            "upsert": true
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          900,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Generate Medical Report"
+      ]
+    },
+    {
+      "id": "10ac2ec3-40a9-4e6c-8990-e0aa069730e2",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Generate Vector Embedding",
+        "parameters": {
+          "url": "https://api.openai.com/v1/embeddings",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "openAiApi",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "model",
+                "value": "text-embedding-3-small"
+              },
+              {
+                "name": "input",
+                "value": "={{ $json.semantic_text }}"
+              },
+              {
+                "name": "encoding_format",
+                "value": "float"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          900,
+          500
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Store Vector Embedding"
+      ]
+    },
+    {
+      "id": "be0069b5-3742-4fe9-9577-2ff8c12098d1",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Store Vector Embedding",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "supabaseApi",
+          "operation": "update",
+          "table": "milestone_knowledge",
+          "updateKey": "milestone_id",
+          "columns": "vector_embedding",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          1120,
+          500
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Generate Medical Report"
+      ]
+    },
+    {
+      "id": "bb332188-9d5c-4670-8c75-11f2636c65f2",
+      "type": "transform",
+      "config": {
+        "name": "Generate Medical Report",
+        "parameters": {
+          "jsCode": "// Dr. Crusher's Medical Report Generation\nconst milestone = $input.first().json;\n\nconst medicalReport = {\n  report_id: `MEDICAL_REPORT_${Date.now()}`,\n  timestamp: new Date().toISOString(),\n  crew: 'Dr. Beverly Crusher - Chief Medical Officer',\n  report_type: 'milestone_achievement_assessment',\n  milestone_id: milestone.milestone_id,\n  assessment: {\n    system_health: 'OPTIMAL',\n    integration_status: 'COMPLETE',\n    medical_framework: 'OPERATIONAL',\n    crew_collaboration: 'ENHANCED',\n    knowledge_storage: 'SUCCESSFUL',\n    stress_testing: 'VALIDATED'\n  },\n  vital_signs: milestone.medical_framework.vital_signs,\n  recommendations: [\n    'Continue current monitoring protocols',\n    'Maintain regular system health assessments', \n    'Document all hallucination events for pattern analysis',\n    'Implement additional redundancy for critical pathways',\n    'Enhance crew collaboration through continued training'\n  ],\n  next_steps: [\n    'Monitor system performance post-integration',\n    'Collect additional stress test data',\n    'Optimize crew collaboration protocols',\n    'Expand knowledge base with additional scenarios'\n  ],\n  medical_notes: `Milestone achievement represents significant advancement in AI system health monitoring. LCARS integration with medical framework provides professional-grade assessment capabilities. Crew collaboration enhanced through multi-agent analysis and consensus building. System resilience validated through real-world stress testing. Knowledge persistence established through vector memory integration. Mission continuity maintained at 100% throughout integration process.`\n};\n\nreturn {\n  json: medicalReport\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          1120,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Milestone Storage Response"
+      ]
+    },
+    {
+      "id": "da36b77f-ec3a-47ec-bf8e-323d375b5c4d",
+      "type": "transform",
+      "config": {
+        "name": "Milestone Storage Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1340,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "aa8c0d4e-a74c-4c44-8738-3d1d56194b52",
+      "type": "transform",
+      "config": {
+        "name": "Other Milestone Types",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.body.milestone_type }}",
+                "operation": "notEqual",
+                "value2": "lcars_hallucination_integration"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          460,
+          500
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Unsupported Milestone Response"
+      ]
+    },
+    {
+      "id": "8e924e09-7068-4a4f-8098-a36b32873afe",
+      "type": "transform",
+      "config": {
+        "name": "Unsupported Milestone Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={\n  \"success\": false,\n  \"message\": \"Milestone type not supported for LCARS integration\",\n  \"supported_types\": [\"lcars_hallucination_integration\"],\n  \"received_type\": \"{{ $json.body.milestone_type }}\",\n  \"crew\": \"Dr. Beverly Crusher - Chief Medical Officer\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          680,
+          500
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "bPKdb3mIWplNcLMQ",
+    "originalName": "Milestone RAG Storage Workflow",
+    "migratedAt": "2025-11-21T11:19:39.213Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979213-uh8c1p",
+  "createdAt": "2025-11-21T11:19:39.213Z",
+  "updatedAt": "2025-11-21T11:19:39.213Z"
+}

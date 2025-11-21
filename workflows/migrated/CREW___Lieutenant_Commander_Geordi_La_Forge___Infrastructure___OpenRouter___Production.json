@@ -1,0 +1,163 @@
+{
+  "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "d1058be9-f9de-4554-9299-c846ca8fcb86",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Commander Geordi La Forge Directive",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-lieutenant-commander-geordi-la-forge",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "ba7c703d-38ce-45bc-9376-9fac8a93746a",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Commander Geordi La Forge Memory Retrieval",
+        "parameters": {
+          "authentication": "none",
+          "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "sendBody": true,
+          "jsonParameters": true,
+          "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'la_forge',\n      knowledgeType: 'engineering_solution',\n      priority: 'high',\n      title: 'Infrastructure Engineering Advisory',\n      summary: summaryLine.trim() || 'Infrastructure guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'la_forge']\n    }\n  };\n})() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "26915b37-d0ca-40ea-a339-3457a8103d71",
+      "type": "workflowExecute",
+      "config": {
+        "name": "LLM Selection Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          368
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Commander Geordi La Forge AI Agent"
+      ]
+    },
+    {
+      "id": "813d6692-06ae-4408-b2a3-c094abf6f878",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Commander Geordi La Forge AI Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge Communication"
+      ]
+    },
+    {
+      "id": "73c446b7-d29c-4e52-8216-55e2adb19c17",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Commander Geordi La Forge Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Commander Geordi La Forge Response"
+      ]
+    },
+    {
+      "id": "469b827d-b28f-411a-8965-dd021077f116",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge Communication",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Commander Geordi La Forge Memory Storage"
+      ]
+    },
+    {
+      "id": "2d9ec741-aac6-4cab-8b76-cdea883aa64b",
+      "type": "transform",
+      "config": {
+        "name": "Lieutenant Commander Geordi La Forge Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ {\n  success: true,\n  crew_member: 'geordi_la_forge',\n  crew_name: 'Lieutenant Commander Geordi La Forge',\n  role: 'Chief Engineer',\n  summary: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Lieutenant Commander Geordi La Forge Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.model || null,\n    usage: $('Lieutenant Commander Geordi La Forge AI Agent').item.json?.usage || null\n  }\n} }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "cJyOFpjcBz0fAyvV",
+    "originalName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.213Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979213-y50mlh",
+  "createdAt": "2025-11-21T11:19:39.213Z",
+  "updatedAt": "2025-11-21T11:19:39.213Z"
+}

@@ -1,0 +1,200 @@
+{
+  "name": "Crew Memory Storage Workflow",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "bfdd46f5-0cf3-4e68-a5b3-2df71f4b1d78",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Crew Memory Storage Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-memory-storage",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Prime Directive Memory Processor"
+      ]
+    },
+    {
+      "id": "e846f8ca-4f48-45ed-b56f-e872793b1f73",
+      "type": "transform",
+      "config": {
+        "name": "Prime Directive Memory Processor",
+        "parameters": {
+          "jsCode": "const CREW_MEMBER_MAP = {\n  picard: 'Captain Jean-Luc Picard',\n  riker: 'Commander William Riker',\n  data: 'Commander Data',\n  la_forge: 'Lieutenant Commander Geordi La Forge',\n  worf: 'Lieutenant Worf',\n  troi: 'Counselor Deanna Troi',\n  crusher: 'Dr. Beverly Crusher',\n  uhura: 'Lieutenant Uhura',\n  quark: 'Quark',\n  chief_obrien: \"Chief Miles O'Brien\",\n  diagnostic_officer: 'Diagnostic Officer',\n};\n\nconst VALID_KNOWLEDGE_TYPES = new Set([\n  'technical_analysis',\n  'strategic_assessment',\n  'medical_assessment',\n  'security_analysis',\n  'engineering_solution',\n  'communication_protocol',\n  'business_optimization',\n  'problem_solution',\n  'reference_documentation',\n  'lesson_learned',\n  'best_practice',\n  'troubleshooting_guide',\n]);\n\nconst VALID_PRIORITIES = new Set(['low', 'medium', 'high', 'critical']);\n\n// Prime Directive Compliance Processing for Crew Memories\nconst incoming = $input.first().json || {};\nconst memory = incoming.body?.body || incoming.body || incoming;\n\nconst memoryId = isUuid(memory.id) ? memory.id : generateUuid();\nconst crewMemberId = normalizeCrewMember(memory.crewMember);\nconst knowledgeType = normalizeKnowledgeType(memory.knowledgeType);\nconst priorityLevel = normalizePriority(memory.priority);\n\n// Extract and process crew memory data\nconst processedMemory = {\n  id: memoryId,\n  timestamp: new Date().toISOString(),\n  crew_member: crewMemberId,\n  crew_member_name: getCrewMemberName(crewMemberId),\n  knowledge_type: knowledgeType,\n  priority: priorityLevel,\n  \n  // Core Knowledge Content (Prime Directive Compliant)\n  title: memory.title || 'Crew Memory Entry',\n  summary: memory.summary || 'Crew memory generated via automated workflow validation.',\n  detailed_analysis: generalizeContent(memory.detailedAnalysis || ''),\n  key_findings: normalizeList(memory.keyFindings),\n  conclusions: normalizeList(memory.conclusions),\n  recommendations: normalizeList(memory.recommendations),\n  \n  // Reference Information (Prime Directive Compliant)\n  referenced_documents: extractReferences(memory.detailedAnalysis || ''),\n  related_topics: normalizeList(memory.tags),\n  applicable_scenarios: extractApplicableScenarios(memory.detailedAnalysis || ''),\n  general_principles: extractGeneralPrinciples(memory.detailedAnalysis || ''),\n  \n  // Technical Metadata\n  tags: normalizeList(memory.tags),\n  keywords: extractKeywords(memory.detailedAnalysis || ''),\n  complexity_level: calculateComplexityLevel(memory.detailedAnalysis || ''),\n  confidence_level: calculateConfidenceLevel(crewMemberId, knowledgeType),\n  \n  // Prime Directive Compliance\n  prime_directive_compliance: 'compliant',\n  ambiguity_level: 7, // High ambiguity for general principles\n  project_specificity: false, // Always false for general principles\n  \n  // Semantic Content for Vector Embedding\n  semantic_text: generateSemanticText(memory, crewMemberId, knowledgeType),\n  \n  // Collaboration Metadata\n  validated_by: [],\n  conflict_resolutions: [],\n  \n  // Storage Metadata\n  storage_timestamp: new Date().toISOString(),\n  last_accessed: new Date().toISOString(),\n  access_count: 0,\n};\n\n// Helper Functions\nfunction getCrewMemberName(crewMember) {\n  return CREW_MEMBER_MAP[crewMember] || 'Unknown Crew Member';\n}\n\nfunction normalizeCrewMember(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (CREW_MEMBER_MAP[normalized]) {\n      return normalized;\n    }\n  }\n  return 'picard';\n}\n\nfunction normalizeKnowledgeType(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (VALID_KNOWLEDGE_TYPES.has(normalized)) {\n      return normalized;\n    }\n  }\n  return 'technical_analysis';\n}\n\nfunction normalizePriority(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (VALID_PRIORITIES.has(normalized)) {\n      return normalized;\n    }\n  }\n  return 'medium';\n}\n\nfunction normalizeList(value) {\n  if (Array.isArray(value)) {\n    return value.filter((entry) => entry !== undefined && entry !== null);\n  }\n  if (value === undefined || value === null || value === '') {\n    return [];\n  }\n  return [value];\n}\n\nfunction generalizeContent(text) {\n  // Remove project-specific details and generalize\n  return text\n    .replace(/\\b[A-Z]{2,}_[A-Z0-9_]+\\b/g, '[PROJECT_REFERENCE]')\n    .replace(/\\b\\d{4}-\\d{2}-\\d{2}\\b/g, '[DATE_REFERENCE]')\n    .replace(/\\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\\b/gi, '[ID_REFERENCE]')\n    .replace(/\\b[a-z]+-ai-[a-z]+\\b/g, '[SYSTEM_REFERENCE]')\n    .replace(/\\b\\/Users\\/[^/\\s]+\\b/g, '[PATH_REFERENCE]');\n}\n\nfunction extractReferences(text) {\n  const references = [];\n  \n  // Extract URLs\n  const urlRegex = /https?:\\/\\/[^\\s]+/g;\n  const urls = text.match(urlRegex);\n  if (urls) references.push(...urls);\n\n  // Extract documentation references\n  const docRegex = /(?:see|refer to|according to|documented in|based on)\\s+([^.!?]+)/gi;\n  const docMatches = text.match(docRegex);\n  if (docMatches) references.push(...docMatches);\n\n  // Extract tool/library references\n  const toolRegex = /(?:using|with|via|through)\\s+([A-Za-z0-9_-]+(?:\\.[a-z]+)?)/gi;\n  const toolMatches = text.match(toolRegex);\n  if (toolMatches) references.push(...toolMatches);\n\n  return [...new Set(references)]; // Remove duplicates\n}\n\nfunction extractApplicableScenarios(text) {\n  const scenarios = [];\n  \n  // Extract scenario patterns\n  const scenarioRegex = /(?:when|if|in case of|during|while)\\s+([^.!?]+)/gi;\n  const matches = text.match(scenarioRegex);\n  if (matches) {\n    scenarios.push(...matches.map((match) => match.replace(/^(?:when|if|in case of|during|while)\\s+/i, '')));\n  }\n  \n  return scenarios.slice(0, 5); // Limit to 5 scenarios\n}\n\nfunction extractGeneralPrinciples(text) {\n  const principles = [];\n  \n  // Extract \"always\", \"never\", \"should\", \"must\" statements\n  const principleRegex = /(?:always|never|should|must|generally|typically|usually|best practice|principle)\\s+([^.!?]+)/gi;\n  const matches = text.match(principleRegex);\n  if (matches) principles.push(...matches);\n\n  // Extract \"it is important to\" statements\n  const importanceRegex = /it is important to\\s+([^.!?]+)/gi;\n  const importanceMatches = text.match(importanceRegex);\n  if (importanceMatches) principles.push(...importanceMatches);\n  \n  return principles.slice(0, 10); // Limit to 10 principles\n}\n\nfunction extractKeywords(text) {\n  const words = text.toLowerCase().split(/\\W+/);\n  const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should']);\n  \n  const wordCount = new Map();\n  words.forEach((word) => {\n    if (word.length > 3 && !stopWords.has(word)) {\n      wordCount.set(word, (wordCount.get(word) || 0) + 1);\n    }\n  });\n\n  return Array.from(wordCount.entries())\n    .sort((a, b) => b[1] - a[1])\n    .slice(0, 15)\n    .map(([word]) => word);\n}\n\nfunction calculateComplexityLevel(text) {\n  const technicalTerms = ['algorithm', 'optimization', 'architecture', 'implementation', 'configuration', 'integration', 'deployment', 'monitoring', 'analysis', 'framework'];\n  const technicalCount = technicalTerms.filter((term) => text.toLowerCase().includes(term)).length;\n  const lengthFactor = Math.min(text.length / 1000, 10);\n  \n  return Math.min(10, Math.max(1, Math.round(technicalCount + lengthFactor)));\n}\n\nfunction calculateConfidenceLevel(crewMember, knowledgeType) {\n  const expertiseMatrix = {\n    picard: { strategic_assessment: 95, mission_continuity: 95, crew_coordination: 90 },\n    riker: { tactical_operations: 95, workflow_management: 95, team_coordination: 90 },\n    data: { technical_analysis: 95, logical_assessment: 95, system_optimization: 90 },\n    la_forge: { infrastructure_health: 95, system_monitoring: 95, preventive_maintenance: 90 },\n    worf: { security_analysis: 95, threat_assessment: 95, defensive_strategies: 90 },\n    troi: { user_experience: 95, psychological_assessment: 95, communication_optimization: 90 },\n    crusher: { system_health: 95, medical_diagnosis: 95, preventive_care: 90 },\n    uhura: { communication_systems: 95, data_transmission: 95, network_optimization: 90 },\n    quark: { business_optimization: 95, cost_analysis: 95, efficiency_metrics: 90 },\n    chief_obrien: { pragmatic_solutions: 95, troubleshooting_guide: 95, operations_management: 90 },\n    diagnostic_officer: { technical_analysis: 90, troubleshooting_guide: 90, reference_documentation: 85 },\n  };\n  \n  const crewExpertise = expertiseMatrix[crewMember] || {};\n  const typeMatch = Object.keys(crewExpertise).find((expertise) => knowledgeType.includes(expertise.split('_')[0]));\n  \n  return typeMatch ? crewExpertise[typeMatch] : 75;\n}\n\nfunction generateSemanticText(memory, crewMember, knowledgeType) {\n  const findings = normalizeList(memory.keyFindings);\n  const conclusions = normalizeList(memory.conclusions);\n  const recommendations = normalizeList(memory.recommendations);\n  const principles = extractGeneralPrinciples(memory.detailedAnalysis || '');\n  const references = extractReferences(memory.detailedAnalysis || '');\n  const scenarios = extractApplicableScenarios(memory.detailedAnalysis || '');\n\n  return `\n    ${memory.title || 'Crew Memory Entry'}. ${memory.summary || ''}.\n    Crew Member: ${getCrewMemberName(crewMember)}.\n    Knowledge Type: ${knowledgeType}.\n    Key Findings: ${findings.join(', ') || 'N/A'}.\n    Conclusions: ${conclusions.join(', ') || 'N/A'}.\n    Recommendations: ${recommendations.join(', ') || 'N/A'}.\n    General Principles: ${principles.join(', ') || 'N/A'}.\n    Referenced Documents: ${references.join(', ') || 'N/A'}.\n    Applicable Scenarios: ${scenarios.join(', ') || 'N/A'}.\n  `.trim();\n}\n\nfunction generateUuid() {\n  const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';\n  return template.replace(/[xy]/g, (c) => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nfunction isUuid(value) {\n  if (!value || typeof value !== 'string') return false;\n  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);\n}\n\nreturn {\n  json: {\n    ...processedMemory,\n    vector_embedding_ready: true,\n    prime_directive_status: 'compliant',\n    processing_timestamp: new Date().toISOString(),\n  },\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Supabase Crew Memory Storage",
+        "Generate Vector Embedding"
+      ]
+    },
+    {
+      "id": "6144cc90-517a-4ce3-8d06-0263961410fd",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Supabase Crew Memory Storage",
+        "parameters": {
+          "authentication": "none",
+          "requestMethod": "POST",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "allowUnauthorizedCerts": false,
+          "responseFormat": "json",
+          "jsonParameters": true,
+          "sendHeaders": true,
+          "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' }) }}",
+          "bodyParametersJson": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          680,
+          300
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Generate Success Report"
+      ]
+    },
+    {
+      "id": "fe063be4-6efa-486c-b268-420218b82853",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Generate Vector Embedding",
+        "parameters": {
+          "url": "https://api.openai.com/v1/embeddings",
+          "authentication": "none",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "={{ `Bearer ${$env.OPENAI_API_KEY}` }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "model",
+                "value": "text-embedding-3-small"
+              },
+              {
+                "name": "input",
+                "value": "={{ $json.semantic_text }}"
+              },
+              {
+                "name": "encoding_format",
+                "value": "float"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          680,
+          500
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Store Vector Embedding"
+      ]
+    },
+    {
+      "id": "efa9523a-b407-48c4-a3e0-b462a1a804c8",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Store Vector Embedding",
+        "parameters": {
+          "authentication": "none",
+          "requestMethod": "PATCH",
+          "url": "={{ `https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?id=eq.${$json.id}` }}",
+          "allowUnauthorizedCerts": false,
+          "responseFormat": "json",
+          "jsonParameters": true,
+          "sendHeaders": true,
+          "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json' }) }}",
+          "bodyParametersJson": "={{ JSON.stringify({ vector_embedding: $json.embedding?.data?.[0]?.embedding || null }) }}"
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          900,
+          500
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Generate Success Report"
+      ]
+    },
+    {
+      "id": "6aa28c08-a9be-4374-889b-d602cefe00a4",
+      "type": "transform",
+      "config": {
+        "name": "Generate Success Report",
+        "parameters": {
+          "jsCode": "// Crew Memory Storage Success Report\nconst payload = $input.first().json;\nconst memory = Array.isArray(payload) ? payload[0] : payload || {};\n\nif (!memory.id) {\n  throw new Error('Supabase response missing memory record');\n}\n\nconst successReport = {\n  report_id: `CREW_MEMORY_REPORT_${Date.now()}`,\n  timestamp: new Date().toISOString(),\n  crew: memory.crew_member_name,\n  report_type: 'crew_memory_storage_success',\n  memory_id: memory.id,\n  \n  storage_status: {\n    supabase_storage: 'successful',\n    vector_embedding: memory.vector_embedding ? 'generated' : 'pending',\n    prime_directive_compliance: memory.prime_directive_compliance,\n    knowledge_type: memory.knowledge_type,\n    confidence_level: memory.confidence_level,\n  },\n  \n  prime_directive_validation: {\n    project_specificity_removed: memory.project_specificity === false,\n    general_principles_extracted: getLength(memory.general_principles),\n    references_documented: getLength(memory.referenced_documents),\n    applicable_scenarios_identified: getLength(memory.applicable_scenarios),\n    ambiguity_level: memory.ambiguity_level,\n  },\n  \n  knowledge_contributions: {\n    key_findings: getLength(memory.key_findings),\n    conclusions: getLength(memory.conclusions),\n    recommendations: getLength(memory.recommendations),\n    general_principles: getLength(memory.general_principles),\n    complexity_level: memory.complexity_level,\n  },\n  \n  integration_status: {\n    library_computer_access: 'enabled',\n    semantic_search: memory.vector_embedding ? 'available' : 'pending',\n    crew_validation: 'ready',\n    collective_intelligence: 'updated',\n  },\n  \n  next_steps: [\n    'Memory available for semantic search across crew',\n    'Ready for validation by other crew members',\n    'Contributing to collective intelligence database',\n    'General principles available for future reference',\n  ],\n  \n  crew_notes:\n    'Crew memory successfully stored with full Prime Directive compliance. Knowledge is generalized and ready for cross-crew retrieval.',\n};\n\nfunction getLength(value) {\n  return Array.isArray(value) ? value.length : 0;\n}\n\nreturn {\n  json: successReport,\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          900,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Crew Memory Storage Response"
+      ]
+    },
+    {
+      "id": "9231d13b-8c28-48c2-b1d0-9f7045b73b5c",
+      "type": "transform",
+      "config": {
+        "name": "Crew Memory Storage Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "FJzMCM2ODvGEjXmM",
+    "originalName": "Crew Memory Storage Workflow",
+    "migratedAt": "2025-11-21T11:19:39.207Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979207-k96k2g",
+  "createdAt": "2025-11-21T11:19:39.207Z",
+  "updatedAt": "2025-11-21T11:19:39.207Z"
+}

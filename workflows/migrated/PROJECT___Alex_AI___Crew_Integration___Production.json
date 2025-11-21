@@ -1,0 +1,136 @@
+{
+  "name": "PROJECT - Alex AI - Crew Integration - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "ec08b01f-f22b-4055-a9c1-2a3dd6a9b621",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Unified Crew Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-unified-crew",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Alex AI Crew Analyzer",
+        "Federation Crew Analyzer"
+      ]
+    },
+    {
+      "id": "588a56e4-a0b3-4d3e-a34f-c35e4117ddda",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Alex AI Crew Analyzer",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          200
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Unified Analysis Aggregator"
+      ]
+    },
+    {
+      "id": "129c724a-2388-4e30-8ec9-4ee62e154ed2",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Federation Crew Analyzer",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          400
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Unified Analysis Aggregator"
+      ]
+    },
+    {
+      "id": "b541d11f-92ca-4def-8726-304220a4bc81",
+      "type": "transform",
+      "config": {
+        "name": "Unified Analysis Aggregator",
+        "parameters": {
+          "jsCode": "// Unified Crew Analysis Aggregator\nconst alexAIResponse = $(\"Alex AI Crew Analyzer\").first().json;\nconst federationResponse = $(\"Federation Crew Analyzer\").first().json;\n\nconst unifiedAnalysis = {\n    timestamp: new Date().toISOString(),\n    alex_ai_analysis: alexAIResponse,\n    federation_analysis: federationResponse,\n    unified_insights: {\n        combined_confidence: Math.round((alexAIResponse.confidence_score + federationResponse.confidence_score) / 2),\n        cross_crew_synergy: \"High\",\n        recommendation_quality: \"Excellent\",\n        unified_recommendations: [\n            \"Leverage both Alex AI and Federation crew expertise\",\n            \"Implement cross-crew collaboration protocols\",\n            \"Maintain unified knowledge base integration\"\n        ]\n    },\n    system_status: \"unified_operational\"\n};\n\nreturn [{ json: unifiedAnalysis }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          688,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Unified Memory Storage"
+      ]
+    },
+    {
+      "id": "5daf41e9-edac-47e0-8cac-4b07095cf68c",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Unified Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/alex_ai_crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          300
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Unified Crew Response"
+      ]
+    },
+    {
+      "id": "0350350b-82df-441b-ad66-ae19644fbc38",
+      "type": "transform",
+      "config": {
+        "name": "Unified Crew Response",
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "lMfN1UuG77BkCfM6",
+    "originalName": "PROJECT - Alex AI - Crew Integration - Production",
+    "migratedAt": "2025-11-21T11:19:39.215Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979215-gkmeea",
+  "createdAt": "2025-11-21T11:19:39.215Z",
+  "updatedAt": "2025-11-21T11:19:39.215Z"
+}

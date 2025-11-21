@@ -1,0 +1,54 @@
+{
+  "name": "PROJECT - Alex AI - Contact Management - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "dd34de65-fbed-434d-9e9d-ba1f9d6524c9",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-contacts",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Respond Success"
+      ]
+    },
+    {
+      "id": "046d4655-f5f7-4d3f-9b63-c1b431da8a11",
+      "type": "transform",
+      "config": {
+        "name": "Respond Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Contacts - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "56NKAB40TerTiNXL",
+    "originalName": "PROJECT - Alex AI - Contact Management - Production",
+    "migratedAt": "2025-11-21T11:19:39.205Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979205-kgoin4",
+  "createdAt": "2025-11-21T11:19:39.205Z",
+  "updatedAt": "2025-11-21T11:19:39.205Z"
+}

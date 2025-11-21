@@ -1,0 +1,113 @@
+{
+  "name": "Knowledge Archive (RAG DELETE - Soft Delete)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "26af51e3-7053-4c78-9585-fd8ef2dc5040",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "knowledge-archive",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate Archive"
+      ]
+    },
+    {
+      "id": "bad0f88a-e1bf-404b-8a70-7da09d0d441a",
+      "type": "transform",
+      "config": {
+        "name": "Validate Archive",
+        "parameters": {
+          "functionCode": "// Validate archive request (soft delete)\nconst body = $input.item.json.body;\n\nif (!body.session_id) {\n  throw new Error('session_id is required for archiving');\n}\n\nconst archiveData = {\n  session_id: body.session_id,\n  archive_reason: body.reason || 'Manual archive',\n  archived_by: body.archived_by || 'system',\n  archived_at: new Date().toISOString()\n};\n\nconsole.log('🗄️ Archiving knowledge:', archiveData.session_id, '| Reason:', archiveData.archive_reason);\n\nreturn { json: archiveData };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Supabase Soft Delete"
+      ]
+    },
+    {
+      "id": "43d53385-06e6-4b2a-a9b3-7d2618ef780a",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Soft Delete",
+        "parameters": {
+          "operation": "delete",
+          "table": "knowledge_base",
+          "filters": {
+            "conditions": [
+              {
+                "column": "session_id",
+                "condition": "equals",
+                "value": "={{ $json.session_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "1a92999a-a0b2-4113-ad75-090ad3ba0000",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"message\": \"Knowledge archived successfully\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "RraXD8vZeF1jYF4t",
+    "originalName": "Knowledge Archive (RAG DELETE - Soft Delete)",
+    "migratedAt": "2025-11-21T11:19:39.210Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979210-xna1ck",
+  "createdAt": "2025-11-21T11:19:39.210Z",
+  "updatedAt": "2025-11-21T11:19:39.210Z"
+}

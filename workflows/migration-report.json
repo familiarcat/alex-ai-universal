@@ -1,0 +1,379 @@
+{
+  "timestamp": "2025-11-21T11:19:38.946Z",
+  "totalWorkflows": 52,
+  "migrated": [
+    {
+      "n8nId": "1jLMbG6FEsE30jey",
+      "n8nName": "UTILITY - AI Controller - OpenRouter - Production",
+      "mcpName": "UTILITY - AI Controller - OpenRouter - Production",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/UTILITY___AI_Controller___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "56NKAB40TerTiNXL",
+      "n8nName": "PROJECT - Alex AI - Contact Management - Production",
+      "mcpName": "PROJECT - Alex AI - Contact Management - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___Contact_Management___Production.json"
+    },
+    {
+      "n8nId": "5XppNRFC6vWhGBBZ",
+      "n8nName": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "mcpName": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Crew___Quark___Business_Intelligence___Budget_Optimization__OpenRouter_Optimized_.json"
+    },
+    {
+      "n8nId": "6AXbtRwpdUIjHmyi",
+      "n8nName": "SYSTEM - Mission Control - OpenRouter - Production",
+      "mcpName": "SYSTEM - Mission Control - OpenRouter - Production",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/SYSTEM___Mission_Control___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "9mQio9lYn9hgQ06s",
+      "n8nName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "mcpName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "steps": 6,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Chief_Miles_O_Brien___Pragmatic_Solutions___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "BBWlzjKJ411IDzCL",
+      "n8nName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "mcpName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Dr__Beverly_Crusher___Health___Diagnostics___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "CtiNENkDpm23QwOK",
+      "n8nName": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "mcpName": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/COORDINATION___Democratic_Collaboration___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "EO0rXQDgXNOpC7gt",
+      "n8nName": "Anti-Hallucination Crew Workflow (HTTP)",
+      "mcpName": "Anti-Hallucination Crew Workflow (HTTP)",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Anti_Hallucination_Crew_Workflow__HTTP_.json"
+    },
+    {
+      "n8nId": "FJzMCM2ODvGEjXmM",
+      "n8nName": "Crew Memory Storage Workflow",
+      "mcpName": "Crew Memory Storage Workflow",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Crew_Memory_Storage_Workflow.json"
+    },
+    {
+      "n8nId": "FappZOihi5sU6cck",
+      "n8nName": "Hallucination Monitoring Dashboard",
+      "mcpName": "Hallucination Monitoring Dashboard",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Hallucination_Monitoring_Dashboard.json"
+    },
+    {
+      "n8nId": "GdtzqaEseO1i4Ttb",
+      "n8nName": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "mcpName": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/ANTI_HALLUCINATION___Crew_Detection___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "JNVUGysrSx7zepxf",
+      "n8nName": "Crew Memory Storage Workflow (Optimized)",
+      "mcpName": "Crew Memory Storage Workflow (Optimized)",
+      "steps": 11,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Crew_Memory_Storage_Workflow__Optimized_.json"
+    },
+    {
+      "n8nId": "JfqWZUw0gU4n1Oft",
+      "n8nName": "Supabase Schema Setup",
+      "mcpName": "Supabase Schema Setup",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Supabase_Schema_Setup.json"
+    },
+    {
+      "n8nId": "K46rgH0vjS7NMyyU",
+      "n8nName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "mcpName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Lieutenant_Worf___Security___Compliance___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "LZRFbLLddymZLkMY",
+      "n8nName": "RAG Health Check (Auto-Remediation)",
+      "mcpName": "RAG Health Check (Auto-Remediation)",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/RAG_Health_Check__Auto_Remediation_.json"
+    },
+    {
+      "n8nId": "PSS0SjngUOxCQUT5",
+      "n8nName": "Documentation Generation from RAG",
+      "mcpName": "Documentation Generation from RAG",
+      "steps": 11,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Documentation_Generation_from_RAG.json"
+    },
+    {
+      "n8nId": "PXoVbAuphRhwsaum",
+      "n8nName": "PROJECT - Alex AI - Job Opportunities - Production",
+      "mcpName": "PROJECT - Alex AI - Job Opportunities - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___Job_Opportunities___Production.json"
+    },
+    {
+      "n8nId": "RK4UUMmb3WhUZDqg",
+      "n8nName": "User Settings Retrieve (Dashboard <= Supabase)",
+      "mcpName": "User Settings Retrieve (Dashboard <= Supabase)",
+      "steps": 6,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/User_Settings_Retrieve__Dashboard____Supabase_.json"
+    },
+    {
+      "n8nId": "RraXD8vZeF1jYF4t",
+      "n8nName": "Knowledge Archive (RAG DELETE - Soft Delete)",
+      "mcpName": "Knowledge Archive (RAG DELETE - Soft Delete)",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Knowledge_Archive__RAG_DELETE___Soft_Delete_.json"
+    },
+    {
+      "n8nId": "SLYo5CCfDht7sWDZ",
+      "n8nName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "mcpName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "steps": 15,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/SYSTEM___Enhanced_Mission_Control___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "SX6Aopi69reKvaBs",
+      "n8nName": "Project Content Delete",
+      "mcpName": "Project Content Delete",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Delete.json"
+    },
+    {
+      "n8nId": "Say3IHgvp6zdLYI7",
+      "n8nName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "mcpName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Captain_Jean_Luc_Picard___Strategic_Leadership___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "T5FqVPDqS5ks3sVx",
+      "n8nName": "PROJECT - Alex AI - Resume Analysis - Production",
+      "mcpName": "PROJECT - Alex AI - Resume Analysis - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___Resume_Analysis___Production.json"
+    },
+    {
+      "n8nId": "Vp9509kJNN7vxp2c",
+      "n8nName": "Project Content Retrieve",
+      "mcpName": "Project Content Retrieve",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Retrieve.json"
+    },
+    {
+      "n8nId": "VpU32Ywg1ONe2wxW",
+      "n8nName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "mcpName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Commander_Data___Android_Analytics___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "XyYkm6y1P8Pw6HbK",
+      "n8nName": "Project Content Delete (Dashboard => Supabase)",
+      "mcpName": "Project Content Delete (Dashboard => Supabase)",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Delete__Dashboard____Supabase_.json"
+    },
+    {
+      "n8nId": "YfWq0T4TeIV2ffh8",
+      "n8nName": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "mcpName": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/ANTI_HALLUCINATION___HTTP_Handler___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "a3WOKLGOqk9ZTsqs",
+      "n8nName": "User Settings Store (Dashboard => Supabase)",
+      "mcpName": "User Settings Store (Dashboard => Supabase)",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/User_Settings_Store__Dashboard____Supabase_.json"
+    },
+    {
+      "n8nId": "a8NPgojFmLTkchG2",
+      "n8nName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "mcpName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Commander_William_Riker___Tactical_Execution___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "aIj0j8QYvaYyGhJj",
+      "n8nName": "Knowledge Update (RAG UPDATE - Versioning)",
+      "mcpName": "Knowledge Update (RAG UPDATE - Versioning)",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Knowledge_Update__RAG_UPDATE___Versioning_.json"
+    },
+    {
+      "n8nId": "afJEJkFCHES9fsRU",
+      "n8nName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "mcpName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/SYSTEM___OpenRouter_Agent_Coordination___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "bPKdb3mIWplNcLMQ",
+      "n8nName": "Milestone RAG Storage Workflow",
+      "mcpName": "Milestone RAG Storage Workflow",
+      "steps": 10,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Milestone_RAG_Storage_Workflow.json"
+    },
+    {
+      "n8nId": "c0HYTqTFtktCE3Fk",
+      "n8nName": "Alex AI Knowledge Base RAG Ingestion",
+      "mcpName": "Alex AI Knowledge Base RAG Ingestion",
+      "steps": 13,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Alex_AI_Knowledge_Base_RAG_Ingestion.json"
+    },
+    {
+      "n8nId": "cJyOFpjcBz0fAyvV",
+      "n8nName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "mcpName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Lieutenant_Commander_Geordi_La_Forge___Infrastructure___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "eJQB5nEXL3UkxvUO",
+      "n8nName": "Knowledge Query (RAG READ - Hybrid Search)",
+      "mcpName": "Knowledge Query (RAG READ - Hybrid Search)",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Knowledge_Query__RAG_READ___Hybrid_Search_.json"
+    },
+    {
+      "n8nId": "fGqL10I7EDA5bzmW",
+      "n8nName": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+      "mcpName": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Knowledge_Ingest__Crew_Memories____Supabase_RAG_.json"
+    },
+    {
+      "n8nId": "i74OzYVUt18w5MyZ",
+      "n8nName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "mcpName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Lieutenant_Uhura___Communications___I_O___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "iFj0GnVytIe4HGBj",
+      "n8nName": "Project Content Store",
+      "mcpName": "Project Content Store",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Store.json"
+    },
+    {
+      "n8nId": "iGOqtyafPm0AGkCC",
+      "n8nName": "Project Content Store (Dashboard => Supabase)",
+      "mcpName": "Project Content Store (Dashboard => Supabase)",
+      "steps": 5,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Store__Dashboard____Supabase_.json"
+    },
+    {
+      "n8nId": "jdlvuYe6yyEfoKiF",
+      "n8nName": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+      "mcpName": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Alex_AI_Knowledge_Base_RAG_Ingestion__Clean_.json"
+    },
+    {
+      "n8nId": "lMfN1UuG77BkCfM6",
+      "n8nName": "PROJECT - Alex AI - Crew Integration - Production",
+      "mcpName": "PROJECT - Alex AI - Crew Integration - Production",
+      "steps": 6,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___Crew_Integration___Production.json"
+    },
+    {
+      "n8nId": "mPv8yyWbwkJNhPjB",
+      "n8nName": "Project Content Retrieve (Supabase => Dashboard)",
+      "mcpName": "Project Content Retrieve (Supabase => Dashboard)",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Project_Content_Retrieve__Supabase____Dashboard_.json"
+    },
+    {
+      "n8nId": "mYJoUvFnsI1tlnXa",
+      "n8nName": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "mcpName": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Crew___Quark___Ferengi_Business_Intelligence__OpenRouter_Optimized_.json"
+    },
+    {
+      "n8nId": "nKAJA2Dilm909Cm4",
+      "n8nName": "Knowledge Embed (Generate AI Embeddings)",
+      "mcpName": "Knowledge Embed (Generate AI Embeddings)",
+      "steps": 6,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Knowledge_Embed__Generate_AI_Embeddings_.json"
+    },
+    {
+      "n8nId": "pf740EpHPzIOEJ8S",
+      "n8nName": "Anti-Hallucination Crew Workflow",
+      "mcpName": "Anti-Hallucination Crew Workflow",
+      "steps": 13,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/Anti_Hallucination_Crew_Workflow.json"
+    },
+    {
+      "n8nId": "r5lPputZcOLgeG5H",
+      "n8nName": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "mcpName": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "steps": 6,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___MCP_Enhancement___Production.json"
+    },
+    {
+      "n8nId": "rNuwkxuIZ2nYm3Zj",
+      "n8nName": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "mcpName": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/UTILITY___Generic_Sub_workflow___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "sjzg92g0v36XZyku",
+      "n8nName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "mcpName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "steps": 7,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/CREW___Counselor_Deanna_Troi___User_Experience___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "vcuWBVUzAADZ8e5r",
+      "n8nName": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "mcpName": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "steps": 8,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/COORDINATION___Observation_Lounge___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "vkxnJcnYPlrwnYdi",
+      "n8nName": "UTILITY - Crew Management - OpenRouter - Production",
+      "mcpName": "UTILITY - Crew Management - OpenRouter - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/UTILITY___Crew_Management___OpenRouter___Production.json"
+    },
+    {
+      "n8nId": "w1PGO3hrExjXlA8F",
+      "n8nName": "PROJECT - Alex AI - MCP Integration - Production",
+      "mcpName": "PROJECT - Alex AI - MCP Integration - Production",
+      "steps": 2,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___MCP_Integration___Production.json"
+    },
+    {
+      "n8nId": "zXnm6wcbhJh3L1aK",
+      "n8nName": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "mcpName": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "steps": 4,
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/workflows/migrated/PROJECT___Alex_AI___Job_Opportunities_Live___Production.json"
+    }
+  ],
+  "failed": [],
+  "skipped": [],
+  "summary": {
+    "total": 52,
+    "migrated": 52,
+    "failed": 0,
+    "skipped": 0,
+    "successRate": "100.0%"
+  }
+}

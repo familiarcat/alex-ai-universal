@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+*.md
+docs/
+scripts/
+dashboard/
+terraform/
+n8n-workflows/
+n8n-backups/
+.backup-ec2-emergency/
+

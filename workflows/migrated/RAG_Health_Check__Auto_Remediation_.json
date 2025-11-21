@@ -1,0 +1,98 @@
+{
+  "name": "RAG Health Check (Auto-Remediation)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "4dcd890c-5120-42f1-8d01-37fc89ffca1f",
+      "type": "transform",
+      "config": {
+        "name": "Schedule Trigger",
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 5
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.scheduleTrigger"
+      },
+      "next": [
+        "Health Check Config"
+      ]
+    },
+    {
+      "id": "63c9f429-fc5b-402a-a76f-abe5495f25a0",
+      "type": "transform",
+      "config": {
+        "name": "Health Check Config",
+        "parameters": {
+          "functionCode": "// Check health of all RAG components\nconst N8N_URL = 'https://n8n.pbradygeorgen.com';\n\nconst healthChecks = {\n  timestamp: new Date().toISOString(),\n  checks: [\n    {\n      name: 'knowledge_base_table',\n      type: 'supabase_table',\n      table: 'knowledge_base',\n      status: 'pending'\n    },\n    {\n      name: 'knowledge-ingest_webhook',\n      type: 'webhook',\n      url: `${N8N_URL}/webhook/knowledge-ingest`,\n      status: 'pending'\n    },\n    {\n      name: 'knowledge-query_webhook',\n      type: 'webhook',\n      url: `${N8N_URL}/webhook/knowledge-query`,\n      status: 'pending'\n    },\n    {\n      name: 'supabase_credential',\n      type: 'credential',\n      credential_id: 'GO5CVfyFiPo32qSk',\n      status: 'pending'\n    }\n  ]\n};\n\nconsole.log('🏥 Running RAG health check...');\n\nreturn { json: healthChecks };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Run Checks"
+      ]
+    },
+    {
+      "id": "93f0fe0a-2196-482b-bc09-6cb4b20348b7",
+      "type": "transform",
+      "config": {
+        "name": "Run Checks",
+        "parameters": {
+          "functionCode": "// Perform health checks and auto-remediate\nconst checks = $input.item.json.checks;\nconst results = [];\nlet failureCount = 0;\n\nfor (const check of checks) {\n  let status = 'healthy';\n  let message = 'OK';\n  let remediation = null;\n  \n  // For now, mark all as healthy (will be enhanced with actual API calls)\n  // Real implementation would ping each endpoint\n  \n  results.push({\n    ...check,\n    status: status,\n    message: message,\n    remediation: remediation,\n    checked_at: new Date().toISOString()\n  });\n}\n\nconsole.log(`🏥 Health check complete: ${results.length - failureCount}/${results.length} healthy`);\n\nreturn {\n  json: {\n    overall_status: failureCount === 0 ? 'healthy' : 'degraded',\n    total_checks: results.length,\n    healthy_checks: results.length - failureCount,\n    failed_checks: failureCount,\n    checks: results,\n    timestamp: new Date().toISOString()\n  }\n};"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Log to Supabase"
+      ]
+    },
+    {
+      "id": "b5a3ee35-86d1-4b4b-91d2-caa0c9c33c9e",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Log to Supabase",
+        "parameters": {
+          "operation": "insert",
+          "table": "rag_health_logs",
+          "columns": "overall_status,total_checks,healthy_checks,failed_checks,checks,timestamp",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "LZRFbLLddymZLkMY",
+    "originalName": "RAG Health Check (Auto-Remediation)",
+    "migratedAt": "2025-11-21T11:19:39.209Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979209-gjog7",
+  "createdAt": "2025-11-21T11:19:39.209Z",
+  "updatedAt": "2025-11-21T11:19:39.209Z"
+}

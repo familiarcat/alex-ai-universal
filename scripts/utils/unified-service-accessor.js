@@ -13,7 +13,7 @@ const { getMCPMonitoring } = require('./mcp-monitoring');
 const { getMCPScheduler } = require('./mcp-scheduler');
 const { loadCrewCredentials } = require('./load-crew-credentials');
 
-// For n8n, we'll use HTTP client pattern
+// For remote MCP, use HTTP client
 const https = require('https');
 
 class UnifiedServiceAccessor {
@@ -27,6 +27,13 @@ class UnifiedServiceAccessor {
       scheduler: null,
     };
     
+    this.mcpRemote = {
+      baseUrl: null,
+      apiKey: null,
+      client: null,
+      enabled: false,
+    };
+    
     this.n8nConfig = {
       baseUrl: null,
       apiKey: null,
@@ -34,6 +41,7 @@ class UnifiedServiceAccessor {
     };
     
     this.initialized = false;
+    this.useRemoteMCP = false; // Toggle between local and remote MCP
   }
 
   /**
@@ -85,6 +93,40 @@ class UnifiedServiceAccessor {
   }
 
   /**
+   * Initialize remote MCP client
+   */
+  initializeRemoteMCP(config = null) {
+    try {
+      if (!config) {
+        const { n8n } = loadCrewCredentials();
+        // Use same base URL as n8n, different port
+        config = {
+          baseUrl: 'https://mcp.pbradygeorgen.com',
+        config = {
+          baseUrl: baseUrl || 'https://mcp.pbradygeorgen.com',
+          apiKey: n8n.apiKey, // Reuse n8n API key for now
+        };
+      }
+      
+      this.mcpRemote.baseUrl = config.baseUrl;
+      this.mcpRemote.apiKey = config.apiKey;
+      
+      // Create remote MCP client (HTTP wrapper)
+      this.mcpRemote.client = {
+        baseUrl: config.baseUrl,
+        apiKey: config.apiKey,
+      };
+      
+      this.mcpRemote.enabled = true;
+      console.log('✅ Remote MCP client initialized');
+      return true;
+    } catch (error) {
+      console.error('❌ Failed to initialize remote MCP client:', error.message);
+      return false;
+    }
+  }
+
+  /**
    * Initialize n8n client
    */
   initializeN8N(config = null) {
@@ -117,8 +159,16 @@ class UnifiedServiceAccessor {
   /**
    * Initialize all services
    */
-  initialize() {
-    this.initializeMCP();
+  initialize(options = {}) {
+    const { useRemoteMCP = true } = options; // Default to remote MCP
+    this.useRemoteMCP = useRemoteMCP;
+    
+    if (useRemoteMCP) {
+      this.initializeRemoteMCP();
+    } else {
+      this.initializeMCP();
+    }
+    
     this.initializeN8N();
     this.initialized = true;
     return true;
@@ -144,11 +194,22 @@ class UnifiedServiceAccessor {
   async executeWorkflow(workflow, options = {}) {
     const useMCP = options.useMCP !== false; // Default to MCP
     
-    if (useMCP && this.mcpServices.workflow) {
+    // Try remote MCP first if enabled
+    if (useMCP && this.useRemoteMCP && this.mcpRemote.enabled) {
+      try {
+        return await this.executeRemoteMCPWorkflow(workflow);
+      } catch (error) {
+        console.warn('⚠️  Remote MCP workflow execution failed, trying local MCP:', error.message);
+        // Fall through to local MCP
+      }
+    }
+    
+    // Try local MCP
+    if (useMCP && !this.useRemoteMCP && this.mcpServices.workflow) {
       try {
         return await this.mcpServices.workflow.executeWorkflow(workflow);
       } catch (error) {
-        console.warn('⚠️  MCP workflow execution failed, falling back to n8n:', error.message);
+        console.warn('⚠️  Local MCP workflow execution failed, falling back to n8n:', error.message);
         // Fall through to n8n
       }
     }
@@ -167,11 +228,22 @@ class UnifiedServiceAccessor {
   async storeMemory(memoryData, options = {}) {
     const useMCP = options.useMCP !== false; // Default to MCP
     
-    if (useMCP && this.mcpServices.memory) {
+    // Try remote MCP first if enabled
+    if (useMCP && this.useRemoteMCP && this.mcpRemote.enabled) {
+      try {
+        return await this.storeRemoteMCPMemory(memoryData);
+      } catch (error) {
+        console.warn('⚠️  Remote MCP memory storage failed, trying local MCP:', error.message);
+        // Fall through to local MCP
+      }
+    }
+    
+    // Try local MCP
+    if (useMCP && !this.useRemoteMCP && this.mcpServices.memory) {
       try {
         return await this.mcpServices.memory.storeMemory(memoryData);
       } catch (error) {
-        console.warn('⚠️  MCP memory storage failed, falling back to n8n:', error.message);
+        console.warn('⚠️  Local MCP memory storage failed, falling back to n8n:', error.message);
         // Fall through to n8n
       }
     }
@@ -205,6 +277,90 @@ class UnifiedServiceAccessor {
     }
     
     throw new Error('No memory service available (MCP or n8n)');
+  }
+
+  /**
+   * Execute remote MCP workflow via HTTP
+   */
+  async executeRemoteMCPWorkflow(workflow) {
+    return new Promise((resolve, reject) => {
+      const url = new URL(`${this.mcpRemote.baseUrl}/api/workflows/execute`);
+      const options = {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-MCP-API-KEY': this.mcpRemote.apiKey,
+        },
+        timeout: 30000,
+      };
+
+      const req = https.request(options, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            const parsed = JSON.parse(body);
+            resolve(parsed.result || parsed);
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${body}`));
+          }
+        });
+      });
+
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Request timeout'));
+      });
+
+      req.write(JSON.stringify(workflow));
+      req.end();
+    });
+  }
+
+  /**
+   * Store memory via remote MCP
+   */
+  async storeRemoteMCPMemory(memoryData) {
+    return new Promise((resolve, reject) => {
+      const url = new URL(`${this.mcpRemote.baseUrl}/api/memory/store`);
+      const options = {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-MCP-API-KEY': this.mcpRemote.apiKey,
+        },
+        timeout: 30000,
+      };
+
+      const req = https.request(options, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            const parsed = JSON.parse(body);
+            resolve(parsed.result || parsed);
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${body}`));
+          }
+        });
+      });
+
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Request timeout'));
+      });
+
+      req.write(JSON.stringify(memoryData));
+      req.end();
+    });
   }
 
   /**
@@ -297,13 +453,20 @@ class UnifiedServiceAccessor {
   getStatus() {
     return {
       initialized: this.initialized,
+      useRemoteMCP: this.useRemoteMCP,
       mcp: {
-        workflow: !!this.mcpServices.workflow,
-        memory: !!this.mcpServices.memory,
-        cache: !!this.mcpServices.cache,
-        optimizer: !!this.mcpServices.optimizer,
-        monitoring: !!this.mcpServices.monitoring,
-        scheduler: !!this.mcpServices.scheduler,
+        local: {
+          workflow: !!this.mcpServices.workflow,
+          memory: !!this.mcpServices.memory,
+          cache: !!this.mcpServices.cache,
+          optimizer: !!this.mcpServices.optimizer,
+          monitoring: !!this.mcpServices.monitoring,
+          scheduler: !!this.mcpServices.scheduler,
+        },
+        remote: {
+          enabled: this.mcpRemote.enabled,
+          baseUrl: this.mcpRemote.baseUrl,
+        },
       },
       n8n: {
         configured: !!(this.n8nConfig.baseUrl && this.n8nConfig.apiKey),
