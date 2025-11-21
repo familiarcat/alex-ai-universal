@@ -1,0 +1,207 @@
+{
+  "updatedAt": "2025-11-20T17:45:20.750Z",
+  "createdAt": "2025-11-20T01:15:39.138Z",
+  "id": "a8NPgojFmLTkchG2",
+  "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Commander William Riker Directive",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-william-riker",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        304
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "4eae1d54-1fed-49ed-b6fa-ab0c1a8b07f0"
+    },
+    {
+      "name": "Commander William Riker Memory Retrieval",
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "POST",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'riker',\n      knowledgeType: 'problem_solution',\n      priority: 'high',\n      title: 'Tactical Execution Plan',\n      summary: summaryLine.trim() || 'Tactical execution guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'riker']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "position": [
+        464,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "4d3ff1b8-7213-464c-aace-2bda7b5d98c7"
+    },
+    {
+      "name": "LLM Selection Agent",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        464,
+        336
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "cb0a1dab-27be-4896-85d8-37e03737b36d"
+    },
+    {
+      "name": "Commander William Riker AI Agent",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        688,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "a23df749-9ed3-4d70-b6fd-fd02ac58211c"
+    },
+    {
+      "name": "Commander William Riker Memory Storage",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "position": [
+        912,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "50e2f550-3b4a-4979-9e27-eae8759b98d7"
+    },
+    {
+      "name": "Observation Lounge Communication",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        912,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "05964f1f-5ead-42df-a382-eb2f0d14fc76"
+    },
+    {
+      "name": "Commander William Riker Response",
+      "parameters": {
+        "respondWith": "json",
+        "options": {},
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_riker',\n  crew_name: 'Commander William Riker',\n  role: 'First Officer',\n  summary: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander William Riker Directive').item.json || null,\n  memory: $('Commander William Riker Memory Storage').item.json || null,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander William Riker AI Agent').item.json?.model || null,\n    usage: $('Commander William Riker AI Agent').item.json?.usage || null\n  }\n} }}"
+      },
+      "position": [
+        1120,
+        304
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "cc2756e3-81f6-4709-91de-2ff0c01666ac"
+    }
+  ],
+  "connections": {
+    "Commander William Riker Directive": {
+      "main": [
+        [
+          {
+            "node": "Commander William Riker Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Commander William Riker AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander William Riker AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Commander William Riker Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander William Riker Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commander William Riker Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Commander William Riker Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "358f7d98-4403-48d9-9ae3-e71b80d7309f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:39.139Z",
+      "createdAt": "2025-11-20T01:15:39.139Z",
+      "role": "workflow:owner",
+      "workflowId": "a8NPgojFmLTkchG2",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

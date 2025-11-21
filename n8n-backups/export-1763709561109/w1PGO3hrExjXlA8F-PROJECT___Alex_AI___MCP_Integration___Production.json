@@ -1,0 +1,73 @@
+{
+  "updatedAt": "2025-11-20T17:46:36.378Z",
+  "createdAt": "2025-11-20T01:15:45.934Z",
+  "id": "w1PGO3hrExjXlA8F",
+  "name": "PROJECT - Alex AI - MCP Integration - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Webhook Trigger",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-mcp-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "819a2907-3c4c-4568-a6ba-2a813e877137"
+    },
+    {
+      "name": "Respond Success",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI MCP Request Handler - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "position": [
+        460,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "fb718fec-c544-4c5f-9b29-d020d415118a"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "e02dc93c-3b4b-4e4a-9a1f-7077ab35b8ae",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:45.936Z",
+      "createdAt": "2025-11-20T01:15:45.936Z",
+      "role": "workflow:owner",
+      "workflowId": "w1PGO3hrExjXlA8F",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

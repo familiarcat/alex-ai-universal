@@ -1,0 +1,181 @@
+{
+  "updatedAt": "2025-11-20T17:46:23.809Z",
+  "createdAt": "2025-11-20T01:15:45.645Z",
+  "id": "r5lPputZcOLgeG5H",
+  "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Enhanced MCP Webhook Trigger",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-mcp-enhanced",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "1b0c76fd-f6de-4db6-8228-ea6f55fd4325"
+    },
+    {
+      "name": "GitHub MCP Repository Scraper",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.github.com/repos/modelcontextprotocol/servers",
+        "options": {}
+      },
+      "position": [
+        464,
+        200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "8714747c-5562-444e-8827-4b102d880dff"
+    },
+    {
+      "name": "MCP Documentation Scraper",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://modelcontextprotocol.io/docs",
+        "options": {}
+      },
+      "position": [
+        464,
+        400
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "5a9346b5-fab7-4edb-becb-d8439ca104aa"
+    },
+    {
+      "name": "Alex AI MCP Knowledge Analyzer",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        688,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "f065a873-13e6-4575-81d9-d24c1cbc1e3c"
+    },
+    {
+      "name": "MCP Knowledge Base Storage",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/mcp_knowledge_base",
+        "options": {}
+      },
+      "position": [
+        912,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "366ec636-81bc-4eeb-a5ce-ce008af628b1"
+    },
+    {
+      "name": "Enhanced MCP Response",
+      "parameters": {
+        "options": {}
+      },
+      "position": [
+        1120,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "a129b8a1-2dbb-41c3-aa88-7a96378a8b8e"
+    }
+  ],
+  "connections": {
+    "Enhanced MCP Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "GitHub MCP Repository Scraper",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MCP Documentation Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub MCP Repository Scraper": {
+      "main": [
+        [
+          {
+            "node": "Alex AI MCP Knowledge Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Documentation Scraper": {
+      "main": [
+        [
+          {
+            "node": "Alex AI MCP Knowledge Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alex AI MCP Knowledge Analyzer": {
+      "main": [
+        [
+          {
+            "node": "MCP Knowledge Base Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Knowledge Base Storage": {
+      "main": [
+        [
+          {
+            "node": "Enhanced MCP Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "56bd7215-1739-4489-a25b-b676cc72f805",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:45.647Z",
+      "createdAt": "2025-11-20T01:15:45.647Z",
+      "role": "workflow:owner",
+      "workflowId": "r5lPputZcOLgeG5H",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}
