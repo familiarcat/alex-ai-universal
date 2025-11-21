@@ -380,19 +380,30 @@ async function main() {
       const scriptPath = path.join(__dirname, 'simple-direct-rag-push.js');
       console.log('🚀 Executing direct RAG push...\n');
       
-      execSync(`node "${scriptPath}" "${milestonePath}"`, {
-        stdio: 'inherit',
+      // Capture both stdout and stderr
+      const directOutput = execSync(`node "${scriptPath}" "${milestonePath}"`, {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'pipe'],
         cwd: path.dirname(__dirname)
       });
+      
+      // Parse session ID from output (look for SESSION_ID: prefix or Session ID: line)
+      let sessionId = `milestone-${milestoneData.date}`;
+      const sessionIdPrefixMatch = directOutput.match(/SESSION_ID:([^\n]+)/);
+      const sessionIdLineMatch = directOutput.match(/Session ID:\s*([^\s\n]+)/);
+      
+      if (sessionIdPrefixMatch) {
+        sessionId = sessionIdPrefixMatch[1].trim();
+      } else if (sessionIdLineMatch) {
+        sessionId = sessionIdLineMatch[1].trim();
+      }
       
       // If we get here, the script executed successfully
       ragSuccess = true;
       
       console.log('\n🎉 SUCCESS: Milestone ingested via direct RAG bypass!');
-      console.log(`   Session ID: ${directResult.sessionId}`);
-      console.log(`   Chunks stored: ${directResult.successCount}/${directResult.totalChunks}\n`);
+      console.log(`   Session ID: ${sessionId}`);
       console.log('✅ RAG integration working - n8n limitations circumvented.\n');
-      ragSuccess = true;
     } catch (directError) {
       console.log(`❌ Direct RAG ingestion also failed: ${directError.message}\n`);
       

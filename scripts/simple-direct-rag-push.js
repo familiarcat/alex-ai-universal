@@ -169,9 +169,10 @@ async function main() {
       console.log('✅ Embedding generated\n');
       
       // Cache the embedding for future use (MCP context sharing)
+      const sessionId = `direct-${Date.now()}`;
       mcpCache.storeContext(chunk, embedding, {
-        sessionId: metadata.session_id || `direct-${Date.now()}`,
-        tags: metadata.tags || ['milestone', 'direct-ingestion']
+        sessionId: sessionId,
+        tags: ['milestone', 'direct-ingestion']
       });
       console.log('💾 Embedding cached for future reuse (MCP efficiency)\n');
     } catch (error) {
@@ -181,6 +182,7 @@ async function main() {
   }
 
   console.log('💾 Storing in Supabase...');
+  const sessionId = `milestone-${Date.now()}`;
   const result = await storeInSupabase(
     title,
     chunk,
@@ -189,12 +191,19 @@ async function main() {
       category: 'milestone',
       tags: ['milestone', 'direct-ingestion'],
       ingestion_method: 'direct-bypass-n8n',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      session_id: sessionId
     }
   );
 
+  const storedData = JSON.parse(result.body);
+  const actualSessionId = storedData.session_id || sessionId;
+  
   console.log('✅ Successfully stored in RAG!\n');
-  console.log(`Session ID: ${JSON.parse(result.body).session_id}\n`);
+  console.log(`Session ID: ${actualSessionId}\n`);
+  
+  // Return session ID for parent process
+  process.stdout.write(`SESSION_ID:${actualSessionId}\n`);
 }
 
 main().catch(error => {
