@@ -8,6 +8,7 @@
 const { getMCPCache } = require('./mcp-context-cache');
 const { getMCPMemoryStorage } = require('./mcp-memory-storage');
 const { getMCPOpenRouterOptimizer } = require('./mcp-openrouter-optimizer');
+const { getMCPMonitoring } = require('./mcp-monitoring');
 const https = require('https');
 
 class MCPWorkflowService {
@@ -15,6 +16,7 @@ class MCPWorkflowService {
     this.mcpCache = getMCPCache();
     this.memoryStorage = null;
     this.openRouterOptimizer = null;
+    this.monitoring = null;
   }
 
   /**
@@ -35,12 +37,20 @@ class MCPWorkflowService {
     } catch (e) {
       // OpenRouter optional for some workflows
     }
+
+    // Initialize monitoring
+    this.monitoring = getMCPMonitoring();
+    try {
+      this.monitoring.initialize();
+    } catch (e) {
+      // Monitoring optional
+    }
     
     return true;
   }
 
   /**
-   * Execute workflow with MCP caching
+   * Execute workflow with MCP caching and monitoring
    */
   async executeWorkflow(workflowName, workflowData, options = {}) {
     const {
@@ -48,6 +58,8 @@ class MCPWorkflowService {
       cacheTTL = 3600000, // 1 hour
       retries = 3
     } = options;
+
+    const startTime = Date.now();
 
     // Check cache first
     if (useCache) {
@@ -59,26 +71,77 @@ class MCPWorkflowService {
       const cached = this.mcpCache.getContext(cacheKey);
       if (cached && this.isValidCache(cached, cacheTTL)) {
         console.log(`   ✅ Using cached workflow result (MCP efficiency)`);
-        return JSON.parse(cached.content);
+        const result = JSON.parse(cached.content);
+        
+        // Log execution (cached)
+        if (this.monitoring) {
+          this.monitoring.logExecution({
+            workflow: workflowName,
+            success: true,
+            duration: Date.now() - startTime,
+            result: result,
+            metadata: { cached: true }
+          });
+        }
+        
+        return result;
       }
     }
 
     // Execute workflow
     let result;
+    let error = null;
     let attempts = 0;
     
     while (attempts < retries) {
       try {
         result = await this.runWorkflow(workflowName, workflowData);
         break;
-      } catch (error) {
+      } catch (err) {
+        error = err;
         attempts++;
         if (attempts >= retries) {
-          throw error;
+          break;
         }
         // Exponential backoff
         await this.sleep(Math.pow(2, attempts) * 1000);
       }
+    }
+
+    const duration = Date.now() - startTime;
+
+    // Log execution
+    if (this.monitoring) {
+      this.monitoring.logExecution({
+        workflow: workflowName,
+        success: !error,
+        duration: duration,
+        result: result,
+        error: error ? error.message : null,
+        metadata: { attempts, retries }
+      });
+
+      // Log performance
+      this.monitoring.logPerformance({
+        workflow: workflowName,
+        metric: 'execution_time',
+        value: duration,
+        unit: 'ms'
+      });
+
+      // Log error if any
+      if (error) {
+        this.monitoring.logError({
+          workflow: workflowName,
+          message: error.message,
+          stack: error.stack,
+          context: { workflowData, attempts, retries }
+        });
+      }
+    }
+
+    if (error) {
+      throw error;
     }
 
     // Cache result

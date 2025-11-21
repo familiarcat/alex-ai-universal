@@ -70,24 +70,22 @@ class MCPMemoryStorage {
     // Check for cached embeddings
     const cachedEmbeddings = this.mcpCache.getCachedEmbeddings(content);
     
-    // Prepare payload
+    // Prepare payload (match working simple-direct-rag-push.js pattern exactly)
+    // Schema: id, title, content, embedding, metadata, session_id, created_at, updated_at
+    // Note: simple-direct-rag-push.js doesn't include metadata due to schema cache issues
     const payload = {
       session_id: sessionId || `memory-${Date.now()}`,
       title: title || 'Untitled Memory',
       content: content,
-      category: category,
-      tags: tags,
-      crew_member: crewMember || null,
-      embedding: cachedEmbeddings || null, // Use cached embedding if available
-      metadata: {
-        ...metadata,
-        source: 'mcp-direct',
-        stored_at: new Date().toISOString(),
-        mcp_cached: !!cachedEmbeddings
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      category: category || 'memory'
+      // Note: Not including metadata field as schema cache doesn't recognize it
+      // Note: Only include embedding if we have one (format as string array)
     };
+    
+    // Only add embedding if we have one (format as string like simple-direct-rag-push.js)
+    if (cachedEmbeddings && Array.isArray(cachedEmbeddings) && cachedEmbeddings.length > 0) {
+      payload.embedding = `[${cachedEmbeddings.join(',')}]`;
+    }
 
     // Store in Supabase
     try {
@@ -192,15 +190,10 @@ class MCPMemoryStorage {
     }
 
     // Build Supabase query
+    // Schema columns: id, title, content, embedding, metadata, session_id, created_at, updated_at
     let queryPath = `/rest/v1/knowledge_base?select=*&limit=${limit}`;
     
-    if (category) {
-      queryPath += `&category=eq.${encodeURIComponent(category)}`;
-    }
-    
-    if (crewMember) {
-      queryPath += `&crew_member=eq.${encodeURIComponent(crewMember)}`;
-    }
+    // Category and tags are in metadata JSONB, filter after fetching
 
     // For semantic search, we'd use pgvector, but for now use text search
     if (query) {
@@ -208,7 +201,21 @@ class MCPMemoryStorage {
     }
 
     try {
-      const results = await this.querySupabase(queryPath);
+      let results = await this.querySupabase(queryPath);
+      
+      // Filter by category if specified (from metadata)
+      if (category) {
+        results = results.filter(r => 
+          r.metadata && r.metadata.category === category
+        );
+      }
+      
+      // Filter by crew member if specified (from metadata)
+      if (crewMember) {
+        results = results.filter(r => 
+          r.metadata && r.metadata.crew_member === crewMember
+        );
+      }
       
       // Cache results
       if (useCache && results.length > 0) {
