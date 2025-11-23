@@ -17,31 +17,17 @@ const path = require('path');
 
 // Load credentials
 function loadCredentials() {
-  // Try environment variables first
-  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return {
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY
-    };
+  const { loadSupabaseCredentials } = require('../../utils/secure-credential-loader');
+  const creds = loadSupabaseCredentials();
+  
+  if (!creds.url || !creds.serviceKey) {
+    throw new Error('Supabase credentials not found. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in ~/.zshrc or environment variables.');
   }
-
-  // Try ~/.zshrc
-  try {
-    const zshrc = fs.readFileSync(path.join(process.env.HOME, '.zshrc'), 'utf8');
-    const urlMatch = zshrc.match(/export\s+SUPABASE_URL=["']?([^"'\s]+)["']?/);
-    const keyMatch = zshrc.match(/export\s+SUPABASE_SERVICE_ROLE_KEY=["']?([^"'\s]+)["']?/);
-    
-    if (urlMatch && keyMatch) {
-      return {
-        supabaseUrl: urlMatch[1],
-        supabaseKey: keyMatch[1]
-      };
-    }
-  } catch (error) {
-    // Ignore
-  }
-
-  throw new Error('Supabase credentials not found. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.');
+  
+  return {
+    supabaseUrl: creds.url,
+    supabaseKey: creds.serviceKey
+  };
 }
 
 // Crew member names mapping

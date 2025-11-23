@@ -32,9 +32,8 @@ export N8N_BASE_URL
 export N8N_API_KEY
 npm run rag:execs || true
 
-echo "[3/3] Requesting crew summary via controller (best-effort)..."
-export N8N_SUMMARY_URL
-node "$ROOT_DIR/scripts/n8n-summarize-milestone.js" --summary "Controller E2E verify" --features "API key synced; executions listed" || true
+echo "[3/3] Requesting crew summary via MCP (best-effort)..."
+node "$ROOT_DIR/scripts/mcp-summarize-milestone.js" --summary "Controller E2E verify" --features "API key synced; executions listed" || true
 
 echo "Done."
 

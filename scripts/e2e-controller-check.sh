@@ -41,9 +41,8 @@ node "$ROOT_DIR/scripts/n8n-post-knowledge.js" \
 step "Verify executions (ingestion workflow)"
 npm run rag:execs || true
 
-step "Summarizer webhook"
-export N8N_SUMMARY_URL
-node "$ROOT_DIR/scripts/n8n-summarize-milestone.js" \
+step "Summarizer via MCP"
+node "$ROOT_DIR/scripts/mcp-summarize-milestone.js" \
   --summary "E2E ready" \
   --features "ingestion ok; executions visible" || true
 
