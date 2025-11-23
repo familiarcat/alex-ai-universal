@@ -18,7 +18,14 @@ function arg(name, def = '') {
 
 function loadCredentials() {
   const { getCredential } = require('./utils/secure-credential-loader');
-  return getCredential('OPENROUTER_API_KEY');
+  const key = getCredential('OPENROUTER_API_KEY');
+  
+  // Validate key format
+  if (key && !key.startsWith('sk-or-v1-') && !key.startsWith('sk-')) {
+    console.error('⚠️  WARNING: OPENROUTER_API_KEY format looks invalid');
+  }
+  
+  return key;
 }
 
 async function callOpenRouter(prompt, systemPrompt) {
@@ -67,7 +74,22 @@ async function callOpenRouter(prompt, systemPrompt) {
             reject(new Error(`Failed to parse response: ${e.message}`));
           }
         } else {
-          reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          // Parse error for better messaging
+          let errorMsg = `HTTP ${res.statusCode}`;
+          try {
+            const errorJson = JSON.parse(data);
+            if (errorJson.error) {
+              errorMsg = `${errorJson.error.message || errorMsg} (${errorJson.error.code || res.statusCode})`;
+              
+              // Specific handling for common errors
+              if (res.statusCode === 401) {
+                errorMsg = `Invalid API key or account not found. Please verify OPENROUTER_API_KEY in ~/.zshrc`;
+              }
+            }
+          } catch (e) {
+            errorMsg = `HTTP ${res.statusCode}: ${data.substring(0, 100)}`;
+          }
+          reject(new Error(errorMsg));
         }
       });
     });
@@ -109,7 +131,16 @@ Provide a 2-3 sentence summary that explains what was accomplished and why it ma
       console.log(result.trim());
     }
   } catch (error) {
-    console.log(`SUMMARY_FAILED ${error.message}`);
+    // Provide helpful error message
+    if (error.message.includes('Invalid API key') || error.message.includes('401')) {
+      console.log('SUMMARY_SKIPPED Invalid OpenRouter API key');
+      console.log('💡 To enable milestone summarization:');
+      console.log('   1. Get API key from https://openrouter.ai/keys');
+      console.log('   2. Add to ~/.zshrc: export OPENROUTER_API_KEY="sk-or-v1-..."');
+      console.log('   3. Reload: source ~/.zshrc');
+    } else {
+      console.log(`SUMMARY_FAILED ${error.message}`);
+    }
     // Don't exit with error - this is non-blocking
     process.exit(0);
   }

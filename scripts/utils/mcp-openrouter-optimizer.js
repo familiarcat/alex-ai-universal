@@ -9,7 +9,7 @@
 
 const { getMCPCache } = require('./mcp-context-cache');
 const https = require('https');
-const { loadCrewCredentials } = require('./load-crew-credentials');
+const { getCredential } = require('./secure-credential-loader');
 
 /**
  * OpenRouter Model Configuration
@@ -38,19 +38,13 @@ const OPENROUTER_MODELS = {
   'anthropic/claude-3-haiku': {
     name: 'Claude 3 Haiku',
     costPer1M: 0.25,
-    specialization: ['quick_analysis', 'simple_tasks'],
-    strengths: ['speed', 'cost_effective', 'simple_reasoning'],
-    bestFor: ['quick_analysis', 'simple_tasks', 'low_complexity'],
-    crewMember: ['obrien']
+    specialization: ['quick_analysis', 'simple_tasks', 'business_analysis'],
+    strengths: ['speed', 'cost_effective', 'simple_reasoning', 'business_logic'],
+    bestFor: ['quick_analysis', 'simple_tasks', 'low_complexity', 'cost_optimization'],
+    crewMember: ['obrien', 'quark']  // Quark uses Haiku for cost-effective business analysis
   },
-  'google/gemini-pro-1.5': {
-    name: 'Gemini Pro 1.5',
-    costPer1M: 2.00,
-    specialization: ['optimization', 'code_analysis'],
-    strengths: ['code_analysis', 'performance', 'efficiency'],
-    bestFor: ['optimization', 'code_review', 'performance_analysis'],
-    crewMember: ['quark', 'geordi']
-  },
+  // Quark uses Claude Haiku for cost-effective business analysis (works well with Riker's Llama)
+  // Note: Gemini models not consistently available on OpenRouter, using proven cost-effective alternative
   'meta-llama/llama-3-70b-instruct': {
     name: 'Llama 3 70B',
     costPer1M: 1.00,
@@ -100,10 +94,22 @@ const TASK_AFFINITIES = {
     'google/gemini-pro-1.5': 0.80
   },
   'optimization': {
-    'google/gemini-pro-1.5': 0.95,
+    'anthropic/claude-3-haiku': 0.95,  // Cost-effective optimization (Quark's choice)
     'meta-llama/llama-3-70b-instruct': 0.85,
     'anthropic/claude-3.5-sonnet': 0.80,
     'openai/gpt-4o': 0.75
+  },
+  'business_analysis': {
+    'anthropic/claude-3-haiku': 0.95,  // Quark's cost-effective business analysis
+    'anthropic/claude-3.5-sonnet': 0.90,
+    'openai/gpt-4o': 0.85,
+    'meta-llama/llama-3-70b-instruct': 0.75
+  },
+  'task_optimization': {
+    'anthropic/claude-3-haiku': 0.98,  // Quark's specialty - cost-effective optimization
+    'meta-llama/llama-3-70b-instruct': 0.92,  // Riker's cost-effective choice
+    'anthropic/claude-3.5-sonnet': 0.88,
+    'openai/gpt-4o': 0.80
   }
 };
 
@@ -120,7 +126,8 @@ const CREW_TASK_TYPES = {
   'troi': 'user_experience',
   'uhura': 'user_experience',
   'quark': 'business_analysis',
-  'obrien': 'operations'
+  'obrien': 'operations',
+  'quark_riker_collaboration': 'task_optimization'  // Special collaboration mode
 };
 
 class MCPOpenRouterOptimizer {
@@ -130,21 +137,13 @@ class MCPOpenRouterOptimizer {
   }
 
   /**
-   * Initialize OpenRouter API key
+   * Initialize OpenRouter API key using secure credential loader
    */
   initialize() {
-    const credentials = loadCrewCredentials();
-    this.apiKey = process.env.OPENROUTER_API_KEY;
+    this.apiKey = getCredential('OPENROUTER_API_KEY');
     
     if (!this.apiKey) {
-      // Try to load from zshrc
-      const zshrc = require('fs').readFileSync(require('os').homedir() + '/.zshrc', 'utf8');
-      const match = zshrc.match(/export\s+OPENROUTER_API_KEY=["']?([^"'\s]+)["']?/);
-      this.apiKey = match ? match[1] : null;
-    }
-    
-    if (!this.apiKey) {
-      throw new Error('OPENROUTER_API_KEY not found. Set in ~/.zshrc');
+      throw new Error('OPENROUTER_API_KEY not found. Set in ~/.zshrc or environment variables. Run: npm run openrouter:get-key');
     }
     
     this.openRouterApiKey = this.apiKey; // Alias for consistency
