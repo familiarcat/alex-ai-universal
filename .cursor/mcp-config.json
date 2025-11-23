@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "alex-ai-crew-memories": {
+      "command": "node",
+      "args": [
+        "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/lib/mcp-crew-memories-server.js"
+      ],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      }
+    }
+  }
+}
+
