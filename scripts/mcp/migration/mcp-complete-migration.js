@@ -6,10 +6,10 @@
  * Execute the complete migration process with all phases.
  */
 
-const { getMCPWorkflowService } = require('./utils/mcp-workflow-service');
-const { getMCPWorkflowOrchestrator } = require('./utils/mcp-workflow-orchestrator');
-const { getMCPScheduler } = require('./utils/mcp-scheduler');
-const { getMCPMonitoring } = require('./utils/mcp-monitoring');
+const { getMCPWorkflowService } = require('../../utils/mcp-workflow-service');
+const { getMCPWorkflowOrchestrator } = require('../../utils/mcp-workflow-orchestrator');
+const { getMCPScheduler } = require('../../utils/mcp-scheduler');
+const { getMCPMonitoring } = require('../../utils/mcp-monitoring');
 
 console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 console.log('🖖 COMPLETE n8n TO MCP MIGRATION');

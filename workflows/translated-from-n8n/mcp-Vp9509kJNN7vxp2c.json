@@ -1,0 +1,235 @@
+{
+  "id": "mcp-Vp9509kJNN7vxp2c",
+  "name": "Project Content Retrieve",
+  "description": "Converted from n8n workflow: Project Content Retrieve",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "7d6d5f6f-b423-4788-bd58-97355d3ef6c6",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "path": "project-content-retrieve",
+        "httpMethod": "GET",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "project-content-retrieve",
+        "method": "GET",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "afd283ea-eccb-44f6-ad0e-41bcd65516a6",
+      "name": "Validate Input",
+      "type": "mcp.logic",
+      "originalType": "n8n-nodes-base.if",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.query.projectId}}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{$json.headers['x-source']}}",
+              "value2": "alex-ai-dashboard"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Validate Input"
+      }
+    },
+    {
+      "id": "ee1c7e1c-bac6-4620-94e8-9f2476848e11",
+      "name": "Supabase Select",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.postgres",
+      "position": [
+        650,
+        200
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM project_content WHERE project_id = $1 AND deleted_at IS NULL;",
+        "parameters": {
+          "values": [
+            {
+              "name": "$1",
+              "value": "={{$json.query.projectId}}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Select"
+      }
+    },
+    {
+      "id": "79aebf89-1b9b-419d-984f-4f4a7f291e1f",
+      "name": "Check Found",
+      "type": "mcp.logic",
+      "originalType": "n8n-nodes-base.if",
+      "position": [
+        850,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.length}}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Check Found"
+      }
+    },
+    {
+      "id": "58fd4f68-9660-4347-9760-d9cc04c8c9de",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1050,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json[0]}}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "8e888012-e21d-43a2-9867-73f11a957e90",
+      "name": "Response Not Found",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1050,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 404,
+        "responseBody": "={{ { \"success\": false, \"error\": \"Project not found\" } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Not Found"
+      }
+    },
+    {
+      "id": "7eca6dd8-6674-4a8e-aaf8-2539ec89e09b",
+      "name": "Response Error",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        650,
+        400
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 400,
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input: missing projectId\" } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Error"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Validate Input",
+      "source": "Webhook Trigger",
+      "target": "Validate Input",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Input-Supabase Select",
+      "source": "Validate Input",
+      "target": "Supabase Select",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Input-Response Error",
+      "source": "Validate Input",
+      "target": "Response Error",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Select-Check Found",
+      "source": "Supabase Select",
+      "target": "Check Found",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Check Found-Response Success",
+      "source": "Check Found",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Check Found-Response Not Found",
+      "source": "Check Found",
+      "target": "Response Not Found",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "7d6d5f6f-b423-4788-bd58-97355d3ef6c6",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "project-content-retrieve",
+      "webhookMethod": "GET",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=project-content-retrieve",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "Vp9509kJNN7vxp2c",
+    "convertedAt": "2025-11-21T14:24:04.675Z",
+    "originalName": "Project Content Retrieve"
+  }
+}

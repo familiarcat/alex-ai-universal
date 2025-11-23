@@ -1,0 +1,78 @@
+{
+  "id": "mcp-T5FqVPDqS5ks3sVx",
+  "name": "PROJECT - Alex AI - Resume Analysis - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - Resume Analysis - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "e3bb0eb7-e4ba-43b5-b9ee-c168a255cc95",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-resume-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-resume-analysis",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "01261c7f-c85d-4c24-83ca-77f2dec9935d",
+      "name": "Respond Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Resume Analysis - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Respond Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Respond Success",
+      "source": "Webhook Trigger",
+      "target": "Respond Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "e3bb0eb7-e4ba-43b5-b9ee-c168a255cc95",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "alex-ai-resume-analysis",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-resume-analysis",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "T5FqVPDqS5ks3sVx",
+    "convertedAt": "2025-11-21T14:24:04.675Z",
+    "originalName": "PROJECT - Alex AI - Resume Analysis - Production"
+  }
+}

@@ -137,12 +137,153 @@ class MCPOpenRouterOptimizer {
     this.apiKey = process.env.OPENROUTER_API_KEY;
     
     if (!this.apiKey) {
-      // Try to load from zshrc via loadCrewCredentials
-      // The credentials loader should handle this
+      // Try to load from zshrc
+      const zshrc = require('fs').readFileSync(require('os').homedir() + '/.zshrc', 'utf8');
+      const match = zshrc.match(/export\s+OPENROUTER_API_KEY=["']?([^"'\s]+)["']?/);
+      this.apiKey = match ? match[1] : null;
+    }
+    
+    if (!this.apiKey) {
       throw new Error('OPENROUTER_API_KEY not found. Set in ~/.zshrc');
     }
     
+    this.openRouterApiKey = this.apiKey; // Alias for consistency
     return true;
+  }
+
+  /**
+   * Generate embedding using OpenRouter
+   */
+  async generateEmbedding(text, options = {}) {
+    if (!this.apiKey) {
+      this.initialize();
+    }
+
+    const {
+      model = 'openai/text-embedding-3-small',
+      crewMember = null
+    } = options;
+
+    // Check cache first
+    const cached = this.mcpCache.getCachedEmbeddings(text);
+    if (cached) {
+      return cached;
+    }
+
+    return new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'openrouter.ai',
+        port: 443,
+        path: '/api/v1/embeddings',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://github.com/pbradygeorgen/alex-ai-universal',
+          'X-Title': 'Alex AI RAG'
+        }
+      }, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          try {
+            const data = JSON.parse(body);
+            if (res.statusCode !== 200) {
+              reject(new Error(`API error ${res.statusCode}: ${JSON.stringify(data).substring(0, 200)}`));
+              return;
+            }
+            if (data.data && data.data[0] && data.data[0].embedding) {
+              const embedding = data.data[0].embedding;
+              // Cache embedding
+              this.mcpCache.storeContext(text, embedding, {
+                sessionId: `embedding-${Date.now()}`,
+                tags: ['embedding', model, crewMember].filter(Boolean)
+              });
+              resolve(embedding);
+            } else {
+              reject(new Error(`No embedding in response: ${JSON.stringify(data).substring(0, 200)}`));
+            }
+          } catch (e) {
+            reject(new Error(`Parse error: ${e.message} - Response: ${body.substring(0, 200)}`));
+          }
+        });
+      });
+
+      req.on('error', reject);
+      req.write(JSON.stringify({
+        model: model,
+        input: text
+      }));
+      req.end();
+    });
+  }
+
+  /**
+   * Generate embedding using OpenRouter
+   */
+  async generateEmbedding(text, options = {}) {
+    if (!this.apiKey) {
+      this.initialize();
+    }
+
+    const {
+      model = 'openai/text-embedding-3-small',
+      crewMember = null,
+      context = null
+    } = options;
+
+    // Check cache first
+    const cached = this.mcpCache.getCachedEmbeddings(text);
+    if (cached) {
+      return cached;
+    }
+
+    return new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'openrouter.ai',
+        port: 443,
+        path: '/api/v1/embeddings',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://github.com/pbradygeorgen/alex-ai-universal',
+          'X-Title': 'Alex AI RAG'
+        }
+      }, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          try {
+            const data = JSON.parse(body);
+            if (res.statusCode !== 200) {
+              reject(new Error(`API error ${res.statusCode}: ${JSON.stringify(data).substring(0, 200)}`));
+              return;
+            }
+            if (data.data && data.data[0] && data.data[0].embedding) {
+              const embedding = data.data[0].embedding;
+              // Cache embedding
+              this.mcpCache.storeContext(text, embedding, {
+                sessionId: `embedding-${Date.now()}`,
+                tags: ['embedding', model, crewMember].filter(Boolean)
+              });
+              resolve(embedding);
+            } else {
+              reject(new Error(`No embedding in response: ${JSON.stringify(data).substring(0, 200)}`));
+            }
+          } catch (e) {
+            reject(new Error(`Parse error: ${e.message} - Response: ${body.substring(0, 200)}`));
+          }
+        });
+      });
+
+      req.on('error', reject);
+      req.write(JSON.stringify({
+        model: model,
+        input: text
+      }));
+      req.end();
+    });
   }
 
   /**
@@ -289,7 +430,7 @@ class MCPOpenRouterOptimizer {
         ...options.apiOptions || {}
       });
 
-      const options = {
+      const httpOptions = {
         hostname: 'openrouter.ai',
         port: 443,
         path: '/api/v1/chat/completions',
@@ -303,7 +444,7 @@ class MCPOpenRouterOptimizer {
         timeout: 30000
       };
 
-      const req = https.request(options, (res) => {
+      const req = https.request(httpOptions, (res) => {
         let body = '';
         res.on('data', chunk => body += chunk);
         res.on('end', () => {
@@ -333,6 +474,40 @@ class MCPOpenRouterOptimizer {
       req.write(data);
       req.end();
     });
+  }
+
+  /**
+   * Optimize and make LLM call (wrapper for callOpenRouter with crew context)
+   */
+  async optimizeAndCall(prompt, options = {}) {
+    const {
+      crewMember = null,
+      specialization = null,
+      preferredModels = null,
+      context = {},
+      budget = 'balanced',
+      complexity = 'medium'
+    } = options;
+
+    // Build context for model selection
+    const selectionContext = {
+      crewMember: crewMember,
+      taskType: CREW_TASK_TYPES[crewMember] || 'general',
+      complexity: complexity,
+      budgetConstraint: budget === 'low' ? 0.001 : budget === 'high' ? null : 0.01,
+      ...context
+    };
+
+    // If preferred models specified, adjust selection
+    if (preferredModels && preferredModels.length > 0) {
+      // Override model selection to use preferred models
+      const preferredModelId = preferredModels[0];
+      if (OPENROUTER_MODELS[preferredModelId]) {
+        selectionContext.preferredModel = preferredModelId;
+      }
+    }
+
+    return await this.callOpenRouter(prompt, selectionContext, options);
   }
 
   /**

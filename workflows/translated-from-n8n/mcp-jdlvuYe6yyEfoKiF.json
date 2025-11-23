@@ -1,0 +1,79 @@
+{
+  "id": "mcp-jdlvuYe6yyEfoKiF",
+  "name": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+  "description": "Converted from n8n workflow: Alex AI Knowledge Base RAG Ingestion (Clean)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "d3d04114-6335-4ad1-8826-1e4526f2e816",
+      "name": "Webhook",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest-knowledge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "ingest-knowledge",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook"
+      }
+    },
+    {
+      "id": "7dcc719f-fb99-4867-a797-99a1e1b24323",
+      "name": "Respond",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        520,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, received: $json, note: 'Clean workflow OK' } }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Respond"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook-Respond",
+      "source": "Webhook",
+      "target": "Respond",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "d3d04114-6335-4ad1-8826-1e4526f2e816",
+      "nodeName": "Webhook",
+      "webhookPath": "ingest-knowledge",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=ingest-knowledge",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "jdlvuYe6yyEfoKiF",
+    "convertedAt": "2025-11-21T14:24:04.681Z",
+    "originalName": "Alex AI Knowledge Base RAG Ingestion (Clean)"
+  }
+}

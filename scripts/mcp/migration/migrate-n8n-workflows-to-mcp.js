@@ -14,8 +14,8 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { loadCrewCredentials } = require('./utils/load-crew-credentials');
-const { getMCPWorkflowService } = require('./utils/mcp-workflow-service');
+const { loadCrewCredentials } = require('../../utils/load-crew-credentials');
+const { getMCPWorkflowService } = require('../../utils/mcp-workflow-service');
 
 console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 console.log('🖖 N8N to MCP Workflow Migration');

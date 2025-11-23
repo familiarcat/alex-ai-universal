@@ -29,25 +29,23 @@ export async function POST(req: NextRequest) {
 
   const repoRoot = path.resolve(process.cwd(), '..');
   const payloadPath = path.join(repoRoot, 'youtube-rag-payload.json');
-  const enrichScript = path.join(repoRoot, 'scripts', 'enrich-youtube-to-rag.js');
-  const cliScript = path.join(repoRoot, 'scripts', 'n8n-cli-tools.js');
+  const enrichScript = path.join(repoRoot, 'scripts', 'youtube', 'enrich-youtube-to-rag.js');
 
-  // 1) Enrich (optionally capture frames)
-  const enrichArgs = [enrichScript, url, payloadPath];
+  // 1) Enrich and store directly via MCP (our new source of truth)
+  const enrichArgs = [enrichScript, url, payloadPath, '--store'];
   if (typeof frames === 'number') enrichArgs.push(`--frames=${frames}`);
   const e1 = await run('node', enrichArgs, repoRoot);
   if (e1.code !== 0) {
     return NextResponse.json({ error: 'enrich_failed', details: e1.stderr || e1.stdout }, { status: 500 });
   }
 
-  // 2) Ingest via n8n CLI tools
-  const e2 = await run('node', [cliScript, 'ingest', payloadPath], repoRoot);
-  if (e2.code !== 0) {
-    return NextResponse.json({ error: 'ingest_failed', details: e2.stderr || e2.stdout }, { status: 502 });
-  }
-
-  // 3) Optional summarizer can be triggered client-side; we return ok
-  return NextResponse.json({ ok: true, payload: path.basename(payloadPath) });
+  // 2) Video is now stored in MCP RAG system - no n8n needed
+  return NextResponse.json({ 
+    ok: true, 
+    payload: path.basename(payloadPath),
+    stored: true,
+    system: 'mcp'
+  });
 }
 
 

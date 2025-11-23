@@ -1,0 +1,190 @@
+{
+  "id": "mcp-lMfN1UuG77BkCfM6",
+  "name": "PROJECT - Alex AI - Crew Integration - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - Crew Integration - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "ec08b01f-f22b-4055-a9c1-2a3dd6a9b621",
+      "name": "Unified Crew Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-unified-crew",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-unified-crew",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Unified Crew Webhook Trigger"
+      }
+    },
+    {
+      "id": "588a56e4-a0b3-4d3e-a34f-c35e4117ddda",
+      "name": "Alex AI Crew Analyzer",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        200
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Alex AI Crew Analyzer"
+      }
+    },
+    {
+      "id": "129c724a-2388-4e30-8ec9-4ee62e154ed2",
+      "name": "Federation Crew Analyzer",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        400
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Federation Crew Analyzer"
+      }
+    },
+    {
+      "id": "b541d11f-92ca-4def-8726-304220a4bc81",
+      "name": "Unified Analysis Aggregator",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        688,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Unified Crew Analysis Aggregator\nconst alexAIResponse = $(\"Alex AI Crew Analyzer\").first().json;\nconst federationResponse = $(\"Federation Crew Analyzer\").first().json;\n\nconst unifiedAnalysis = {\n    timestamp: new Date().toISOString(),\n    alex_ai_analysis: alexAIResponse,\n    federation_analysis: federationResponse,\n    unified_insights: {\n        combined_confidence: Math.round((alexAIResponse.confidence_score + federationResponse.confidence_score) / 2),\n        cross_crew_synergy: \"High\",\n        recommendation_quality: \"Excellent\",\n        unified_recommendations: [\n            \"Leverage both Alex AI and Federation crew expertise\",\n            \"Implement cross-crew collaboration protocols\",\n            \"Maintain unified knowledge base integration\"\n        ]\n    },\n    system_status: \"unified_operational\"\n};\n\nreturn [{ json: unifiedAnalysis }];"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Unified Analysis Aggregator"
+      }
+    },
+    {
+      "id": "5daf41e9-edac-47e0-8cac-4b07095cf68c",
+      "name": "Unified Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        300
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/alex_ai_crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Unified Memory Storage"
+      }
+    },
+    {
+      "id": "0350350b-82df-441b-ad66-ae19644fbc38",
+      "name": "Unified Crew Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Unified Crew Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Unified Crew Webhook Trigger-Alex AI Crew Analyzer",
+      "source": "Unified Crew Webhook Trigger",
+      "target": "Alex AI Crew Analyzer",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Unified Crew Webhook Trigger-Federation Crew Analyzer",
+      "source": "Unified Crew Webhook Trigger",
+      "target": "Federation Crew Analyzer",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Alex AI Crew Analyzer-Unified Analysis Aggregator",
+      "source": "Alex AI Crew Analyzer",
+      "target": "Unified Analysis Aggregator",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Federation Crew Analyzer-Unified Analysis Aggregator",
+      "source": "Federation Crew Analyzer",
+      "target": "Unified Analysis Aggregator",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Unified Analysis Aggregator-Unified Memory Storage",
+      "source": "Unified Analysis Aggregator",
+      "target": "Unified Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Unified Memory Storage-Unified Crew Response",
+      "source": "Unified Memory Storage",
+      "target": "Unified Crew Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "ec08b01f-f22b-4055-a9c1-2a3dd6a9b621",
+      "nodeName": "Unified Crew Webhook Trigger",
+      "webhookPath": "alex-ai-unified-crew",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-unified-crew",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "lMfN1UuG77BkCfM6",
+    "convertedAt": "2025-11-21T14:24:04.681Z",
+    "originalName": "PROJECT - Alex AI - Crew Integration - Production"
+  }
+}

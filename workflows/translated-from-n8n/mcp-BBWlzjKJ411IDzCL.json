@@ -1,0 +1,273 @@
+{
+  "id": "mcp-BBWlzjKJ411IDzCL",
+  "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "3729a59b-cd8e-49dd-b41c-b27a54f87a43",
+      "name": "Dr. Beverly Crusher Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-dr-beverly-crusher",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-dr-beverly-crusher",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Dr. Beverly Crusher Directive"
+      }
+    },
+    {
+      "id": "fa402984-669f-46b5-b89e-a35ac9cd3854",
+      "name": "Dr. Beverly Crusher Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Dr. Beverly Crusher",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Dr. Beverly Crusher Memory Retrieval"
+      }
+    },
+    {
+      "id": "de64bb07-7187-44eb-86f7-8356165e13b8",
+      "name": "LLM Selection Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        352
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "LLM Selection Agent"
+      }
+    },
+    {
+      "id": "8f3c7153-f12f-4813-91c1-5096c018e064",
+      "name": "Dr. Beverly Crusher AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Dr. Beverly Crusher AI Agent"
+      }
+    },
+    {
+      "id": "e995362a-7c84-4620-b08c-f080cf3d48eb",
+      "name": "Dr. Beverly Crusher Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'crusher',\n      knowledgeType: 'medical_assessment',\n      priority: 'high',\n      title: 'Health Diagnostics Advisory',\n      summary: summaryLine.trim() || 'Medical diagnostics guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'crusher']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Dr. Beverly Crusher Memory Storage"
+      }
+    },
+    {
+      "id": "fcdddcbb-6c79-49a0-96de-d6838a49997d",
+      "name": "Observation Lounge Communication",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge Communication"
+      }
+    },
+    {
+      "id": "fa14e926-c1c2-4f9d-b1c6-5702e28bb498",
+      "name": "Dr. Beverly Crusher Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1136,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'dr_crusher',\n  crew_name: 'Dr. Beverly Crusher',\n  role: 'Chief Medical Officer',\n  summary: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Dr. Beverly Crusher Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Dr. Beverly Crusher AI Agent').item.json?.model || null,\n    usage: $('Dr. Beverly Crusher AI Agent').item.json?.usage || null\n  }\n} }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Dr. Beverly Crusher Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-316ec69e-0a14-44fa-9bf9-c980054fede0-b377b87e-ccf9-473e-a2c4-dfc6e4c6182e",
+      "source": "316ec69e-0a14-44fa-9bf9-c980054fede0",
+      "target": "b377b87e-ccf9-473e-a2c4-dfc6e4c6182e",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-316ec69e-0a14-44fa-9bf9-c980054fede0-53a8a638-9953-499c-8c46-1b6a17b24be2",
+      "source": "316ec69e-0a14-44fa-9bf9-c980054fede0",
+      "target": "53a8a638-9953-499c-8c46-1b6a17b24be2",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-b377b87e-ccf9-473e-a2c4-dfc6e4c6182e-da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "source": "b377b87e-ccf9-473e-a2c4-dfc6e4c6182e",
+      "target": "da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-53a8a638-9953-499c-8c46-1b6a17b24be2-da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "source": "53a8a638-9953-499c-8c46-1b6a17b24be2",
+      "target": "da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-da0f4ff1-5366-4b8d-9357-c426f8a8412d-1175a043-190f-4d06-88b3-7d7557084458",
+      "source": "da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "target": "1175a043-190f-4d06-88b3-7d7557084458",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-da0f4ff1-5366-4b8d-9357-c426f8a8412d-36cfd0db-07f1-4984-a07e-8ec4ca31244f",
+      "source": "da0f4ff1-5366-4b8d-9357-c426f8a8412d",
+      "target": "36cfd0db-07f1-4984-a07e-8ec4ca31244f",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-1175a043-190f-4d06-88b3-7d7557084458-9c11db66-6680-49cc-b9b5-611f828c44fa",
+      "source": "1175a043-190f-4d06-88b3-7d7557084458",
+      "target": "9c11db66-6680-49cc-b9b5-611f828c44fa",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-36cfd0db-07f1-4984-a07e-8ec4ca31244f-9c11db66-6680-49cc-b9b5-611f828c44fa",
+      "source": "36cfd0db-07f1-4984-a07e-8ec4ca31244f",
+      "target": "9c11db66-6680-49cc-b9b5-611f828c44fa",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Dr. Beverly Crusher Directive-Dr. Beverly Crusher Memory Retrieval",
+      "source": "Dr. Beverly Crusher Directive",
+      "target": "Dr. Beverly Crusher Memory Retrieval",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Dr. Beverly Crusher Memory Retrieval-LLM Selection Agent",
+      "source": "Dr. Beverly Crusher Memory Retrieval",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-LLM Selection Agent-Dr. Beverly Crusher AI Agent",
+      "source": "LLM Selection Agent",
+      "target": "Dr. Beverly Crusher AI Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Dr. Beverly Crusher AI Agent-Observation Lounge Communication",
+      "source": "Dr. Beverly Crusher AI Agent",
+      "target": "Observation Lounge Communication",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge Communication-Dr. Beverly Crusher Memory Storage",
+      "source": "Observation Lounge Communication",
+      "target": "Dr. Beverly Crusher Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Dr. Beverly Crusher Memory Storage-Dr. Beverly Crusher Response",
+      "source": "Dr. Beverly Crusher Memory Storage",
+      "target": "Dr. Beverly Crusher Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "3729a59b-cd8e-49dd-b41c-b27a54f87a43",
+      "nodeName": "Dr. Beverly Crusher Directive",
+      "webhookPath": "crew-dr-beverly-crusher",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-dr-beverly-crusher",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "BBWlzjKJ411IDzCL",
+    "convertedAt": "2025-11-21T14:24:04.663Z",
+    "originalName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production"
+  }
+}

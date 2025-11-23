@@ -196,8 +196,11 @@ class MCPMemoryStorage {
     // Category and tags are in metadata JSONB, filter after fetching
 
     // For semantic search, we'd use pgvector, but for now use text search
+    // Note: content is JSONB, so we need to cast it or use a different approach
+    // Using or filter with title search instead
     if (query) {
-      queryPath += `&content=ilike.%25${encodeURIComponent(query)}%25`;
+      // Search in title field (text) instead of content (JSONB)
+      queryPath += `&title=ilike.%25${encodeURIComponent(query)}%25`;
     }
 
     try {

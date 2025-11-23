@@ -13,7 +13,7 @@
     "dashboard:setup": "node scripts/automate-dashboard-setup.js",
     "dashboard:watch": "node scripts/start-codebase-watcher.js",
     "admin:setup": "node scripts/automate-admin-setup.js",
-    "cursor:memories": "node scripts/load-crew-memories.js",
+    "cursor:memories": "node scripts/crew/coordination/load-crew-memories.js",
     "cursor:prompt": "node scripts/generate-cursor-prompt.js",
     "cursor:layout:capture": "node scripts/capture-cursor-layout.js",
     "cursor:layout:restore": "node scripts/restore-cursor-layout.js",
@@ -139,6 +139,7 @@
   "author": "Alex AI Team",
   "license": "MIT",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "@octokit/rest": "^21.0.0",
     "@supabase/supabase-js": "^2.81.1",
     "axios": "^1.7.0",

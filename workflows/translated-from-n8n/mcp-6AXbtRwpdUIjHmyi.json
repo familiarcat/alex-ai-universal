@@ -1,0 +1,122 @@
+{
+  "id": "mcp-6AXbtRwpdUIjHmyi",
+  "name": "SYSTEM - Mission Control - OpenRouter - Production",
+  "description": "Converted from n8n workflow: SYSTEM - Mission Control - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "ab827429-8338-443a-b30c-b49642b975cd",
+      "name": "Mission Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Mission Directive"
+      }
+    },
+    {
+      "id": "b7d7394a-0aa0-4462-a23c-6416a14ae6ec",
+      "name": "AlexAI Optimized Crew Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "AlexAI Optimized Crew Memory Storage"
+      }
+    },
+    {
+      "id": "905f2768-088b-4d20-a505-be6ccdaf181e",
+      "name": "AlexAI Optimized Crew Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "AlexAI Optimized Crew Memory Retrieval"
+      }
+    },
+    {
+      "id": "f89643ba-db4e-423b-a182-55d4552312d8",
+      "name": "Mission Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        464,
+        304
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Mission Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Mission Directive-Mission Response",
+      "source": "Mission Directive",
+      "target": "Mission Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-AlexAI Optimized Crew Memory Storage-AlexAI Optimized Crew Response",
+      "source": "AlexAI Optimized Crew Memory Storage",
+      "target": "AlexAI Optimized Crew Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "ab827429-8338-443a-b30c-b49642b975cd",
+      "nodeName": "Mission Directive",
+      "webhookPath": "0283b7ab-c44c-47c2-925a-513054e1105f",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=0283b7ab-c44c-47c2-925a-513054e1105f",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "6AXbtRwpdUIjHmyi",
+    "convertedAt": "2025-11-21T14:24:04.662Z",
+    "originalName": "SYSTEM - Mission Control - OpenRouter - Production"
+  }
+}

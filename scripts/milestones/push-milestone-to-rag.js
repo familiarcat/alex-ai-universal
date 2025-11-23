@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * 🎯 Push Milestone to GitHub and Supabase Vector Database via N8N
+ * 🎯 Push Milestone to GitHub and Supabase Vector Database via MCP
  * 
  * 1. Always pushes milestone file to GitHub first (stage, commit, push)
- * 2. Then attempts to push to Supabase RAG system via n8n knowledge-ingest webhook
+ * 2. Then pushes to Supabase RAG system via MCP memory storage (our new source of truth)
  * 3. Handles failures independently for each step
  * 
+ * MCP is now our primary system - n8n is no longer the source of truth
  * Includes vector embedding generation for semantic search
  */
 
@@ -14,7 +15,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { getMCPCache } = require('./utils/mcp-context-cache');
+const { getMCPCache } = require('../utils/mcp-context-cache');
 
 // Load credentials
 function loadCrewCredentials() {
@@ -198,7 +199,7 @@ function pushToN8N(n8nBaseUrl, payload) {
 
 // Push milestone to GitHub
 function pushToGitHub(milestonePath) {
-  const repoRoot = path.join(__dirname, '..');
+  const repoRoot = path.join(__dirname, '../..');
   
   try {
     // Change to repo root
@@ -341,42 +342,59 @@ async function main() {
     console.log('   Continuing with RAG push attempt...\n');
   }
   
-  // STEP 2: Attempt RAG ingestion (independent of GitHub push result)
+  // STEP 2: Push to RAG via MCP (our new source of truth)
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('STEP 2: Pushing to Supabase RAG via N8N');
+  console.log('STEP 2: Pushing to Supabase RAG via MCP (Primary System)');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   
-  // Load credentials
-  const { n8nBaseUrl } = loadCrewCredentials();
-  console.log(`🔗 N8N Base URL: ${n8nBaseUrl}\n`);
+  console.log('🖖 MCP System: Our new source of truth\n');
   
-  // Create RAG payload
-  console.log('📦 Creating RAG payload...');
-  const payload = createRAGPayload(milestoneData);
-  console.log('   ✅ Payload created\n');
+  // Use MCP memory storage directly
+      const { getMCPMemoryStorage } = require('../utils/mcp-memory-storage');
+  const mcpMemory = getMCPMemoryStorage();
   
-  // Try to push to n8n
-  console.log('🚀 Pushing to N8N webhook...');
   let ragSuccess = false;
+  
   try {
-    const result = await pushToN8N(n8nBaseUrl, payload);
-    console.log(`✅ Success! Status: ${result.status}`);
-    console.log(`📊 Response: ${result.body.substring(0, 200)}...\n`);
-    console.log('🎉 Milestone successfully pushed to Supabase vector database via N8N!');
-    console.log('🖖 The milestone is now searchable in the RAG system.\n');
-    ragSuccess = true;
-  } catch (error) {
-    console.log(`⚠️  RAG push via n8n failed: ${error.message}\n`);
+    // Initialize MCP memory storage
+    mcpMemory.initialize();
+    console.log('✅ MCP memory storage initialized\n');
     
-    // 🚀 CREW WORKAROUND: Use direct RAG ingestion bypass
+    // Create memory data from milestone
+    const payload = createRAGPayload(milestoneData);
+    const memoryData = {
+      session_id: payload.body.sessionId || `milestone-${milestoneData.date}`,
+      category: 'milestone',
+      title: milestoneData.title,
+      content: milestoneData.content,
+      tags: payload.body.tags || ['milestone'],
+      crewMember: payload.body.crewMember || 'data',
+      metadata: payload.body.metadata || {}
+    };
+    
+    console.log('💾 Storing milestone in MCP RAG system...\n');
+    const result = await mcpMemory.storeMemory(memoryData);
+    
+    if (result && result.success) {
+      ragSuccess = true;
+      const sessionId = result.result?.[0]?.session_id || memoryData.session_id;
+      console.log('\n🎉 SUCCESS: Milestone ingested via MCP memory storage!');
+      console.log(`   Session ID: ${sessionId}`);
+      console.log('✅ MCP RAG integration working - n8n no longer needed.\n');
+      console.log('🖖 The milestone is now searchable in the RAG system.\n');
+    } else {
+      throw new Error('MCP memory storage returned invalid result');
+    }
+  } catch (error) {
+    console.log(`⚠️  MCP memory storage failed: ${error.message}\n`);
+    
+    // Fallback to direct RAG push
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🚀 FALLBACK: Direct RAG Ingestion (Bypass n8n)');
+    console.log('🚀 FALLBACK: Direct RAG Ingestion');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-    console.log('👨‍🔧 Chief O\'Brien: "When n8n breaks, we work around it."\n');
     
     try {
       // Use simple direct RAG push (standalone script to avoid memory issues)
-      const { execSync } = require('child_process');
       const scriptPath = path.join(__dirname, 'simple-direct-rag-push.js');
       console.log('🚀 Executing direct RAG push...\n');
       
@@ -387,7 +405,7 @@ async function main() {
         cwd: path.dirname(__dirname)
       });
       
-      // Parse session ID from output (look for SESSION_ID: prefix or Session ID: line)
+      // Parse session ID from output
       let sessionId = `milestone-${milestoneData.date}`;
       const sessionIdPrefixMatch = directOutput.match(/SESSION_ID:([^\n]+)/);
       const sessionIdLineMatch = directOutput.match(/Session ID:\s*([^\s\n]+)/);
@@ -398,26 +416,19 @@ async function main() {
         sessionId = sessionIdLineMatch[1].trim();
       }
       
-      // If we get here, the script executed successfully
       ragSuccess = true;
-      
-      console.log('\n🎉 SUCCESS: Milestone ingested via direct RAG bypass!');
+      console.log('\n🎉 SUCCESS: Milestone ingested via direct RAG fallback!');
       console.log(`   Session ID: ${sessionId}`);
-      console.log('✅ RAG integration working - n8n limitations circumvented.\n');
+      console.log('✅ RAG integration working.\n');
     } catch (directError) {
       console.log(`❌ Direct RAG ingestion also failed: ${directError.message}\n`);
-      
-      if (error.message.includes('404') || error.message.includes('not registered')) {
-        console.log('📋 WORKFLOW NOT ACTIVE');
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log('Both n8n webhook and direct ingestion failed.');
-        console.log('\nTroubleshooting:');
-        console.log('1. Check Supabase credentials in ~/.zshrc');
-        console.log('2. Verify OpenRouter API key for embeddings');
-        console.log('3. Check Supabase connection\n');
-      }
+      console.log('Troubleshooting:');
+      console.log('1. Check Supabase credentials in ~/.zshrc');
+      console.log('2. Verify OpenRouter API key for embeddings');
+      console.log('3. Check Supabase connection\n');
       
       // Store for later push
+      const payload = createRAGPayload(milestoneData);
       const pendingPath = storeForLaterPush(payload, milestonePath);
       console.log(`💾 Milestone payload saved for later push:`);
       console.log(`   ${pendingPath}\n`);

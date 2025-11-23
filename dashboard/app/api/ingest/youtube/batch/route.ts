@@ -39,24 +39,20 @@ export async function POST(req: NextRequest) {
   if (urls.length === 0) return NextResponse.json({ error: 'no_urls' }, { status: 400 });
 
   const repoRoot = path.resolve(process.cwd(), '..');
-  const enrichScript = path.join(repoRoot, 'scripts', 'enrich-youtube-to-rag.js');
-  const cliScript = path.join(repoRoot, 'scripts', 'n8n-cli-tools.js');
+  const enrichScript = path.join(repoRoot, 'scripts', 'youtube', 'enrich-youtube-to-rag.js');
 
   const results: Array<{ url: string; ok: boolean; detail?: string }> = [];
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
     const out = path.join(repoRoot, `youtube-rag-${Date.now()}-${i}.json`);
-    const e1 = await run('node', [enrichScript, url, out, `--frames=${frames}`], repoRoot);
+    // Enrich and store directly via MCP (--store flag)
+    const e1 = await run('node', [enrichScript, url, out, '--store', `--frames=${frames}`], repoRoot);
     if (e1.code !== 0) {
       results.push({ url, ok: false, detail: e1.stderr || e1.stdout });
       continue;
     }
-    const e2 = await run('node', [cliScript, 'ingest', out], repoRoot);
-    if (e2.code !== 0) {
-      results.push({ url, ok: false, detail: e2.stderr || e2.stdout });
-      continue;
-    }
-    results.push({ url, ok: true });
+    // Video is now stored in MCP RAG system - no n8n needed
+    results.push({ url, ok: true, system: 'mcp' });
   }
 
   const okCount = results.filter(r => r.ok).length;

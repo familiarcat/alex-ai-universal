@@ -1,0 +1,168 @@
+{
+  "id": "mcp-fGqL10I7EDA5bzmW",
+  "name": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+  "description": "Converted from n8n workflow: Knowledge Ingest (Crew Memories => Supabase RAG)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "2103b2c3-0f04-4c7f-8f1b-4a44bb35330e",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-ingest",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "knowledge-ingest",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "3edbf751-3936-4edd-83d0-a84e2c911a1a",
+      "name": "Transform Payload",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Transform crew memory payload for RAG storage\nconst body = $input.item.json.body;\n\n// Handle both simple and rich crew memory formats\nconst isRichFormat = body.critical_decisions && body.crew_members_involved;\n\nlet ragData;\n\nif (isRichFormat) {\n  // Rich comprehensive crew memory format\n  ragData = {\n    session_id: body.conversation_id || `crew-memory-${Date.now()}`,\n    category: 'crew_memory_comprehensive',\n    title: body.title,\n    executive_summary: body.executive_summary,\n    session_duration: body.session_duration,\n    crew_members: JSON.stringify(body.crew_members_involved || []),\n    \n    // Decisions and patterns\n    critical_decisions: JSON.stringify(body.critical_decisions || []),\n    bugs_fixed: JSON.stringify(body.bugs_fixed || []),\n    technical_patterns: JSON.stringify(body.technical_patterns_discovered || []),\n    \n    // Knowledge\n    lessons_learned: JSON.stringify(body.lessons_learned || []),\n    user_insights: JSON.stringify(body.user_insights || []),\n    architectural_decisions: JSON.stringify(body.architectural_decisions_for_rag || []),\n    knowledge_base_entries: JSON.stringify(body.knowledge_base_entries || []),\n    \n    // Metadata\n    tags: JSON.stringify([\n      'crew-memory',\n      'comprehensive-session',\n      ...(body.key_topics || []),\n      ...(body.rag_storage_metadata?.tags || [])\n    ]),\n    \n    // Searchable content (full JSON for vector embedding)\n    content: JSON.stringify(body),\n    \n    // Timestamps\n    session_date: body.session_date || new Date().toISOString().split('T')[0],\n    created_at: new Date().toISOString()\n  };\n} else {\n  // Simple format (backward compatibility)\n  ragData = {\n    session_id: body.session_id || `knowledge-${Date.now()}`,\n    category: body.category || 'general_knowledge',\n    title: body.title || 'Untitled',\n    executive_summary: body.summary || body.description || '',\n    content: JSON.stringify(body),\n    tags: JSON.stringify(body.tags || []),\n    session_date: new Date().toISOString().split('T')[0],\n    created_at: new Date().toISOString()\n  };\n}\n\nconsole.log('📚 Ingesting knowledge:', ragData.session_id, '|', ragData.title);\n\nreturn { json: ragData };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Transform Payload"
+      }
+    },
+    {
+      "id": "0c464fc3-61a0-497f-9efe-73bab8dc456d",
+      "name": "Supabase Upsert",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "knowledge_base",
+        "columns": "session_id,category,title,executive_summary,content,tags,session_date,created_at,crew_members,critical_decisions,bugs_fixed,technical_patterns,lessons_learned,user_insights,architectural_decisions,knowledge_base_entries",
+        "options": {
+          "onConflict": "session_id",
+          "skipOnConflict": false,
+          "upsert": true
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Upsert"
+      }
+    },
+    {
+      "id": "5e9c30d7-84a8-4ece-9b69-6bf82ef653cf",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"title\": $json.title, \"message\": \"Knowledge ingested to RAG\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "3aa6e1fe-159f-4cd3-a8a4-05e80e67a2c3",
+      "name": "Response Error",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        450
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to ingest knowledge\" } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Error"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Transform Payload",
+      "source": "Webhook Trigger",
+      "target": "Transform Payload",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Transform Payload-Supabase Upsert",
+      "source": "Transform Payload",
+      "target": "Supabase Upsert",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Upsert-Response Success",
+      "source": "Supabase Upsert",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "2103b2c3-0f04-4c7f-8f1b-4a44bb35330e",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "knowledge-ingest",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=knowledge-ingest",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "fGqL10I7EDA5bzmW",
+    "convertedAt": "2025-11-21T14:24:04.679Z",
+    "originalName": "Knowledge Ingest (Crew Memories => Supabase RAG)"
+  }
+}

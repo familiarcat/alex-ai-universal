@@ -1,0 +1,245 @@
+{
+  "id": "mcp-9mQio9lYn9hgQ06s",
+  "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "ef1dac76-754d-4beb-9ead-426e852ad226",
+      "name": "Chief O'Brien Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-chief-obrien",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-chief-obrien",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Chief O'Brien Directive"
+      }
+    },
+    {
+      "id": "cd8ba75e-dc5e-47fc-b687-136f8fa46361",
+      "name": "O'Brien Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.chief_obrien&order=created_at.desc&limit=10",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_API_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_API_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "O'Brien Memory Retrieval"
+      }
+    },
+    {
+      "id": "9d0793e0-0488-40a7-b707-c20d079353fa",
+      "name": "Pragmatic Analysis",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        688,
+        112
+      ],
+      "parameters": {
+        "jsCode": "// Chief O'Brien's Pragmatic Analysis Engine\n// Analyzes user request and provides field-tested, practical insights\n\nconst userRequest = $input.first().json.userRequest || '';\nconst context = $input.first().json.context || {};\nconst memories = $input.all()[1]?.json || [];\n\n// O'Brien's pragmatic filters\nconst isOverEngineered = /complex|architecture|framework|abstract|theoretical/.test(userRequest.toLowerCase());\nconst needsQuickFix = /quick|fast|now|urgent|asap|broken/.test(userRequest.toLowerCase());\nconst questioningNecessity = /need|necessary|required|must have/.test(userRequest.toLowerCase());\n\n// Extract relevant memories (practical solutions)\nconst relevantMemories = memories\n  .filter(m => m.memory_type === 'solution' || m.memory_type === 'fix')\n  .slice(0, 5)\n  .map(m => `- ${m.content}`);\n\nreturn {\n  userRequest,\n  context,\n  analysis: {\n    isOverEngineered,\n    needsQuickFix,\n    questioningNecessity,\n    pragmaticScore: (needsQuickFix ? 2 : 0) + (isOverEngineered ? 1 : 0),\n    relevantExperience: relevantMemories.join('\\n') || 'Fresh problem - will apply first principles'\n  },\n  chiefMode: needsQuickFix ? 'urgent_fix' : isOverEngineered ? 'simplify' : 'standard'\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Pragmatic Analysis"
+      }
+    },
+    {
+      "id": "d9ff566f-0ae9-45bb-bf92-7e5056005c59",
+      "name": "Chief O'Brien AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.OPENROUTER_API_KEY }}"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://alex-ai-universal.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Alex AI - Chief O'Brien"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "anthropic/claude-3.7-sonnet:beta"
+            },
+            {
+              "name": "messages",
+              "value": "={{ [\n  {\n    role: 'system',\n    content: \"You are Chief Miles O'Brien, Chief of Operations with 25+ years of field engineering experience. You're known for pragmatic, no-nonsense solutions that just work. You value function over form, simplicity over complexity, and action over endless planning. You have little patience for over-engineering and always suggest the most direct path to a working solution. When others propose complex architectures, you ask 'Do we really need all that?' and suggest simpler approaches. Your experience includes making impossible things work on DS9, jury-rigging solutions under pressure, and maintaining systems with practical fixes. Your motto: 'Simple solutions are usually the best solutions.' Be direct, practical, and draw on your field experience.\"\n  },\n  {\n    role: 'user',\n    content: `User Request: ${$json.userRequest}\\n\\nContext: ${JSON.stringify($json.context, null, 2)}\\n\\nRelevant Experience:\\n${$json.analysis.relevantExperience}\\n\\nPragmatic Mode: ${$json.chiefMode}\\n\\nProvide your practical, field-tested advice. Focus on what works, not what's theoretically perfect.`\n  }\n] }}"
+            },
+            {
+              "name": "temperature",
+              "value": "0.6"
+            },
+            {
+              "name": "max_tokens",
+              "value": "2000"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Chief O'Brien AI Agent"
+      }
+    },
+    {
+      "id": "a6ee8f4d-544f-4a92-9894-aec3d9a69184",
+      "name": "O'Brien Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1136,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'chief_obrien',\n      knowledgeType: 'troubleshooting_guide',\n      priority: 'medium',\n      title: 'Chief O\\'Brien Pragmatic Advisory',\n      summary: summaryLine.trim() || 'Pragmatic field-tested guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'chief_obrien']\n    }\n  };\n})() }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "O'Brien Memory Storage"
+      }
+    },
+    {
+      "id": "c261719a-46a6-415e-b128-9cfe7b4332ca",
+      "name": "Send O'Brien's Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1136,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'chief_obrien',\n  crew_name: \"Chief Miles O'Brien\",\n  role: 'Transporter Chief',\n  summary: $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $(\"Chief O'Brien AI Agent\").item.json?.choices?.[0]?.message?.content || null,\n  request: $(\"Chief O'Brien Directive\").item.json || null,\n  memory: $(\"O'Brien Memory Storage\").item.json || null,\n  metadata: {\n    generated_at: $now,\n    model: $(\"Chief O'Brien AI Agent\").item.json?.model || null,\n    usage: $(\"Chief O'Brien AI Agent\").item.json?.usage || null,\n    pragmatic_mode: $(\"Pragmatic Analysis\").item.json?.chiefMode || null\n  }\n} }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Send O'Brien's Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-crew_directive-memory_retrieval",
+      "source": "crew_directive",
+      "target": "memory_retrieval",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-crew_directive-pragmatic_analysis",
+      "source": "crew_directive",
+      "target": "pragmatic_analysis",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-memory_retrieval-pragmatic_analysis",
+      "source": "memory_retrieval",
+      "target": "pragmatic_analysis",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-pragmatic_analysis-crew_ai",
+      "source": "pragmatic_analysis",
+      "target": "crew_ai",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-crew_ai-memory_storage",
+      "source": "crew_ai",
+      "target": "memory_storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-crew_ai-webhook_response",
+      "source": "crew_ai",
+      "target": "webhook_response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "ef1dac76-754d-4beb-9ead-426e852ad226",
+      "nodeName": "Chief O'Brien Directive",
+      "webhookPath": "crew-chief-obrien",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-chief-obrien",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "9mQio9lYn9hgQ06s",
+    "convertedAt": "2025-11-21T14:24:04.662Z",
+    "originalName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production"
+  }
+}

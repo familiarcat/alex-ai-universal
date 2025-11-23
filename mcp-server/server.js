@@ -13,12 +13,34 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 // Import MCP services
-const { getMCPWorkflowService } = require('../scripts/utils/mcp-workflow-service');
-const { getMCPMemoryStorage } = require('../scripts/utils/mcp-memory-storage');
-const { getMCPCache } = require('../scripts/utils/mcp-context-cache');
-const { getMCPOpenRouterOptimizer } = require('../scripts/utils/mcp-openrouter-optimizer');
-const { getMCPMonitoring } = require('../scripts/utils/mcp-monitoring');
-const { getMCPScheduler } = require('../scripts/utils/mcp-scheduler');
+// Handle both local development and Docker deployment paths
+let getMCPWorkflowService, getMCPMemoryStorage, getMCPCache, getMCPOpenRouterOptimizer, getMCPMonitoring, getMCPScheduler;
+
+try {
+  // Try Docker deployment path first (server.js at /app/mcp-server/server.js, scripts at /app/scripts)
+  const workflowService = require('../scripts/utils/mcp-workflow-service');
+  const memoryStorage = require('../scripts/utils/mcp-memory-storage');
+  const cache = require('../scripts/utils/mcp-context-cache');
+  const optimizer = require('../scripts/utils/mcp-openrouter-optimizer');
+  const monitoring = require('../scripts/utils/mcp-monitoring');
+  const scheduler = require('../scripts/utils/mcp-scheduler');
+  
+  getMCPWorkflowService = workflowService.getMCPWorkflowService;
+  getMCPMemoryStorage = memoryStorage.getMCPMemoryStorage;
+  getMCPCache = cache.getMCPCache;
+  getMCPOpenRouterOptimizer = optimizer.getMCPOpenRouterOptimizer;
+  getMCPMonitoring = monitoring.getMCPMonitoring;
+  getMCPScheduler = scheduler.getMCPScheduler;
+} catch (e) {
+  console.error('Failed to load MCP services:', e.message);
+  // Create stub functions to prevent crashes
+  getMCPWorkflowService = () => ({ initialize: () => {}, executeWorkflow: async () => ({ error: 'Service not available' }) });
+  getMCPMemoryStorage = () => ({ initialize: () => {}, storeMemory: async () => ({ error: 'Service not available' }), queryMemories: async () => ({ error: 'Service not available' }) });
+  getMCPCache = () => ({ storeContext: () => {}, getContext: () => null });
+  getMCPOpenRouterOptimizer = () => ({ initialize: () => {}, optimizeAndCall: async () => ({ error: 'Service not available' }) });
+  getMCPMonitoring = () => ({ initialize: () => {}, getStats: () => ({}), getExecutionHistory: () => [] });
+  getMCPScheduler = () => ({ initialize: () => {}, scheduleWorkflow: async () => ({}), getScheduledJobs: () => [] });
+}
 
 const app = express();
 const PORT = process.env.MCP_PORT || 5679;
@@ -236,6 +258,31 @@ app.get('/api/status', authenticateApiKey, (req, res) => {
       scheduler: !!mcpServices.scheduler,
     },
     timestamp: new Date().toISOString(),
+  });
+});
+
+// 404 handler for undefined routes
+app.use((req, res) => {
+  console.warn(`404: Route not found: ${req.method} ${req.path}`);
+  res.status(404).json({ 
+    error: 'Route not found', 
+    method: req.method,
+    path: req.path,
+    availableRoutes: [
+      'GET /healthz',
+      'GET /api/status',
+      'GET /api/workflows',
+      'POST /api/workflows/execute',
+      'POST /api/memory/store',
+      'POST /api/memory/query',
+      'POST /api/context/store',
+      'GET /api/context/:cacheKey',
+      'POST /api/llm/call',
+      'GET /api/monitoring/stats',
+      'GET /api/monitoring/history',
+      'POST /api/scheduler/schedule',
+      'GET /api/scheduler/jobs'
+    ]
   });
 });
 
