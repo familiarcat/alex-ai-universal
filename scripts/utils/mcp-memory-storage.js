@@ -32,7 +32,7 @@ class MCPMemoryStorage {
   }
 
   /**
-   * Store memory with MCP context caching
+   * Store memory with MCP context caching and smart redundancy checking
    */
   async storeMemory(memoryData) {
     if (!this.supabaseUrl || !this.supabaseKey) {
@@ -65,6 +65,44 @@ class MCPMemoryStorage {
         contextId: cached.id,
         message: 'Memory already cached in MCP system'
       };
+    }
+
+    // Smart redundancy check (if smart ingestion available)
+    try {
+      const { SmartRAGIngestion } = require('../rag-smart-ingestion');
+      const smartIngestion = new SmartRAGIngestion();
+      await smartIngestion.initialize();
+      
+      // Quick redundancy check (free)
+      const quickCheck = await smartIngestion.quickRedundancyCheck(title, content);
+      if (quickCheck.redundant && !metadata.force) {
+        console.log(`   ⚠️  Redundant knowledge detected: ${quickCheck.reason}`);
+        console.log(`   📋 Similar to: ${quickCheck.existing.title}`);
+        return {
+          success: false,
+          cached: false,
+          redundant: true,
+          existing: quickCheck.existing,
+          message: `Knowledge is redundant: ${quickCheck.reason}`
+        };
+      }
+      
+      // Semantic redundancy check (free - uses existing data)
+      const semanticCheck = await smartIngestion.semanticRedundancyCheck(title, content);
+      if (semanticCheck.redundant && !metadata.force) {
+        console.log(`   ⚠️  High semantic overlap: ${(semanticCheck.similarity * 100).toFixed(1)}%`);
+        console.log(`   📋 Similar to: ${semanticCheck.existing.title}`);
+        return {
+          success: false,
+          cached: false,
+          redundant: true,
+          existing: semanticCheck.existing,
+          message: `High semantic overlap: ${(semanticCheck.similarity * 100).toFixed(1)}%`
+        };
+      }
+    } catch (error) {
+      // If smart ingestion not available, continue with normal flow
+      console.log('   ℹ️  Smart ingestion check skipped (continuing with normal storage)');
     }
 
     // Check for cached embeddings
