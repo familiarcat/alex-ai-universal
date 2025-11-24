@@ -142,24 +142,32 @@ BEGIN
     RETURN QUERY
     SELECT
         COUNT(*)::BIGINT AS total_patterns,
-        AVG(confidence_score) AS avg_confidence,
-        AVG(hallucination_probability) AS avg_hallucination_probability,
-        SUM(estimated_cost) AS total_cost,
-        jsonb_object_agg(severity, severity_count) AS patterns_by_severity,
-        jsonb_object_agg(pattern_type, type_count) AS patterns_by_type
-    FROM (
-        SELECT
-            severity,
-            COUNT(*) AS severity_count,
-            pattern_type,
-            COUNT(*) AS type_count
-        FROM vector_embeddings
-        WHERE
-            (crew_member_filter IS NULL OR crew_member = crew_member_filter)
-            AND (date_from IS NULL OR created_at >= date_from)
-            AND (date_to IS NULL OR created_at <= date_to)
-        GROUP BY severity, pattern_type
-    ) stats;
+        AVG(ve.confidence_score) AS avg_confidence,
+        AVG(ve.hallucination_probability) AS avg_hallucination_probability,
+        SUM(ve.estimated_cost) AS total_cost,
+        (SELECT jsonb_object_agg(severity, cnt) FROM (
+            SELECT severity, COUNT(*) as cnt
+            FROM vector_embeddings
+            WHERE
+                (crew_member_filter IS NULL OR crew_member = crew_member_filter)
+                AND (date_from IS NULL OR created_at >= date_from)
+                AND (date_to IS NULL OR created_at <= date_to)
+            GROUP BY severity
+        ) severity_stats) AS patterns_by_severity,
+        (SELECT jsonb_object_agg(pattern_type, cnt) FROM (
+            SELECT pattern_type, COUNT(*) as cnt
+            FROM vector_embeddings
+            WHERE
+                (crew_member_filter IS NULL OR crew_member = crew_member_filter)
+                AND (date_from IS NULL OR created_at >= date_from)
+                AND (date_to IS NULL OR created_at <= date_to)
+            GROUP BY pattern_type
+        ) type_stats) AS patterns_by_type
+    FROM vector_embeddings ve
+    WHERE
+        (crew_member_filter IS NULL OR ve.crew_member = crew_member_filter)
+        AND (date_from IS NULL OR ve.created_at >= date_from)
+        AND (date_to IS NULL OR ve.created_at <= date_to);
 END;
 $$;
 
@@ -195,17 +203,15 @@ SELECT
     crew_member,
     COUNT(*) AS pattern_count,
     AVG(confidence_score) AS avg_confidence,
-    jsonb_object_agg(severity, severity_count) AS severity_distribution
-FROM (
-    SELECT
-        workflow_stage,
-        crew_member,
-        severity,
-        COUNT(*) AS severity_count
-    FROM vector_embeddings
-    WHERE workflow_stage IS NOT NULL
-    GROUP BY workflow_stage, crew_member, severity
-) org_stats
+    (SELECT jsonb_object_agg(severity, cnt) FROM (
+        SELECT severity, COUNT(*) as cnt
+        FROM vector_embeddings ve2
+        WHERE ve2.workflow_stage = ve.workflow_stage
+          AND ve2.crew_member = ve.crew_member
+        GROUP BY severity
+    ) severity_sub) AS severity_distribution
+FROM vector_embeddings ve
+WHERE workflow_stage IS NOT NULL
 GROUP BY workflow_stage, crew_member
 ORDER BY pattern_count DESC;
 
