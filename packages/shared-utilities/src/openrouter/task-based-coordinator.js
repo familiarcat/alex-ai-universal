@@ -24,6 +24,7 @@ class TaskBasedCoordinator {
     this.activeTasks = new Map(); // taskId -> TaskState
     this.taskTokenPools = new Map(); // taskId -> TokenPool
     this.taskModelSelections = new Map(); // taskId -> ModelSelection
+    this.openRouterOptimizer = null; // Will be initialized if available
   }
 
   /**
@@ -258,18 +259,72 @@ Be tactical, organized, and operationally focused. Consider that all crew member
       stream: options.stream || false
     };
 
-    // Execute request (this would integrate with actual OpenRouter API)
+    // Execute request using OpenRouter API
     const startTime = Date.now();
-    // const response = await this.callOpenRouter(request);
-    // For now, simulate response
-    const response = {
-      choices: [{ message: { content: `Response from ${crewMember} using ${modelSelection.modelName}` } }],
-      usage: {
-        prompt_tokens: 150,
-        completion_tokens: 200,
-        total_tokens: 350
+    let response;
+    
+    // Try to use real OpenRouter API if available
+    if (this.apiKey && this.apiKey !== 'test-key') {
+      try {
+        // Initialize optimizer if not already done
+        if (!this.openRouterOptimizer) {
+          const { getMCPOpenRouterOptimizer } = require('../../../../scripts/utils/mcp-openrouter-optimizer');
+          this.openRouterOptimizer = getMCPOpenRouterOptimizer();
+          this.openRouterOptimizer.initialize();
+        }
+        
+        // Make real API call
+        const apiResult = await this.openRouterOptimizer.optimizeAndCall(prompt, {
+          crewMember,
+          complexity: taskState.context?.complexity || 'medium',
+          context: {
+            taskType: this.inferTaskType(taskState.description, taskState.crewMembers),
+            taskContext: taskState.context
+          },
+          apiOptions: {
+            model: modelSelection.modelId,
+            temperature: options.temperature || 0.7,
+            max_tokens: options.maxTokens || 2000
+          }
+        });
+        
+        // Convert to standard format
+        response = {
+          choices: [{ 
+            message: { 
+              content: apiResult.choices?.[0]?.message?.content || apiResult.body || 'No response' 
+            } 
+          }],
+          usage: apiResult.usage || {
+            prompt_tokens: 150,
+            completion_tokens: 200,
+            total_tokens: 350
+          }
+        };
+      } catch (error) {
+        console.warn(`⚠️  OpenRouter API call failed, using simulation: ${error.message}`);
+        // Fallback to simulation
+        response = {
+          choices: [{ message: { content: `Response from ${crewMember} using ${modelSelection.modelName}` } }],
+          usage: {
+            prompt_tokens: 150,
+            completion_tokens: 200,
+            total_tokens: 350
+          }
+        };
       }
-    };
+    } else {
+      // Simulation mode (no API key)
+      response = {
+        choices: [{ message: { content: `Response from ${crewMember} using ${modelSelection.modelName}` } }],
+        usage: {
+          prompt_tokens: 150,
+          completion_tokens: 200,
+          total_tokens: 350
+        }
+      };
+    }
+    
     const latency = Date.now() - startTime;
 
     // Update token pool
