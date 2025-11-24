@@ -19,10 +19,33 @@ const VectorBasedDashboard = dynamic(() => import('@/components/VectorBasedDashb
   )
 });
 
+const UIDesignComparison = dynamic(() => import('@/components/UIDesignComparison'), {
+  ssr: false
+});
+
+const ProgressTracker = dynamic(() => import('@/components/ProgressTracker'), {
+  ssr: false
+});
+
 export default function VectorPriorityDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <VectorBasedDashboard autoRefresh={true} refreshInterval={5000} />
+      <div className="space-y-6 p-6">
+        {/* Progress Tracker */}
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-xl font-bold mb-4">Background Task Progress</h2>
+          <ProgressTracker 
+            taskId="crew-recommendations" 
+            autoRefresh={true} 
+            refreshInterval={1000} 
+          />
+        </div>
+
+        <VectorBasedDashboard autoRefresh={true} refreshInterval={5000} />
+        <div className="mt-8">
+          <UIDesignComparison />
+        </div>
+      </div>
     </div>
   );
 }

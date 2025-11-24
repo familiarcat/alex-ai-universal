@@ -10,7 +10,7 @@
  *   node scripts/generate-cursor-prompt.js --context="Working on dashboard"
  */
 
-const { loadCrewMemories, formatMemoriesForCursor } = require('./load-crew-memories');
+const { loadCrewMemories, formatMemoriesForCursor } = require('./crew/coordination/load-crew-memories');
 const fs = require('fs');
 const path = require('path');
 
