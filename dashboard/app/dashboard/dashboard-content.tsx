@@ -24,6 +24,7 @@ import CrewMemoryVisualization from '@/components/CrewMemoryVisualization';
 import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard';
 import LiveRefreshDashboard from '@/components/LiveRefreshDashboard';
 import N8NWorkflowBento from '@/components/N8NWorkflowBento';
+import VectorBasedDashboard from '@/components/VectorBasedDashboard';
 
 export default function DashboardContent() {
   const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();

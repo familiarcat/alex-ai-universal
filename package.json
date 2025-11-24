@@ -67,6 +67,7 @@
     "migrate:n8n:coordinate": "node scripts/migrate-n8n-to-mcp/crew-coordinate-migration.js",
     "migrate:n8n:test": "node scripts/migrate-n8n-to-mcp/e2e-test-migration.js",
     "crew:vector-optimization": "node scripts/crew/observation-lounge-vector-optimization.js",
+    "crew:dashboard-redesign": "node scripts/crew/observation-lounge-dashboard-redesign.js",
     "implement:vector-optimization": "node scripts/implement-vector-optimization.js",
     "deploy:vector-optimization": "node scripts/deploy/crew-deploy-vector-optimization.js",
     "setup:supabase-password": "node scripts/deploy/automate-supabase-password-setup.js",
