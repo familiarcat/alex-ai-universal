@@ -20,6 +20,10 @@ interface CrewMemberStats {
   memories: number;
   lastActive: string;
   icon: string;
+  recentThoughts?: string[];
+  concerns?: string[];
+  concernLevel?: number; // 0-10
+  satisfaction?: number; // 0-10
 }
 
 export default function CrewMemoryVisualization() {
@@ -35,7 +39,11 @@ export default function CrewMemoryVisualization() {
     try {
       setLoading(true);
       
-      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      // Fetch crew thoughts and concerns via MCP
+      const thoughtsResponse = await fetch('/api/crew/thoughts?limit=50');
+      const thoughtsData = await thoughtsResponse.json();
+      
+      // Also get traditional stats
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const data = await service.getCrewStats({ limit: 100 });
@@ -43,49 +51,74 @@ export default function CrewMemoryVisualization() {
       const memories = data.sessions || data.data || [];
       setTotalMemories(memories.length);
       
-      // Aggregate by crew member
-      const crewMap = new Map<string, CrewMemberStats>();
+      // Use thoughts data if available, otherwise fall back to traditional stats
+      const crewThoughts = thoughtsData.crewThoughts || [];
       
-      const crewMembers = [
-        { name: 'Picard', role: 'Strategic Leadership', icon: '🎖️' },
-        { name: 'Data', role: 'Operations & Analytics', icon: '🤖' },
-        { name: 'Riker', role: 'Tactical Operations', icon: '⚡' },
-        { name: 'La Forge', role: 'Engineering', icon: '🔧' },
-        { name: 'Worf', role: 'Security', icon: '⚔️' },
-        { name: 'Troi', role: 'UX & Empathy', icon: '💭' },
-        { name: 'Crusher', role: 'System Health', icon: '💊' },
-        { name: 'Uhura', role: 'Communications', icon: '📻' },
-        { name: 'Quark', role: 'Business Analysis', icon: '💰' }
-      ];
-      
-      crewMembers.forEach(crew => {
-        crewMap.set(crew.name, {
-          ...crew,
-          contributions: 0,
-          memories: 0,
-          lastActive: 'Never'
+      // If we have thoughts data, use it; otherwise aggregate from memories
+      if (crewThoughts.length > 0) {
+        const stats = crewThoughts.map((thought: any) => ({
+          name: thought.name,
+          role: thought.role,
+          icon: thought.icon,
+          contributions: thought.memoryCount,
+          memories: thought.memoryCount,
+          lastActive: thought.lastActive,
+          recentThoughts: thought.recentThoughts || [],
+          concerns: thought.concerns || [],
+          concernLevel: thought.concernLevel || 0,
+          satisfaction: thought.satisfaction || 7
+        }));
+        setCrewStats(stats);
+      } else {
+        // Fallback: Aggregate by crew member from memories
+        const crewMap = new Map<string, CrewMemberStats>();
+        
+        const crewMembers = [
+          { name: 'Picard', role: 'Strategic Leadership', icon: '🎖️' },
+          { name: 'Data', role: 'Operations & Analytics', icon: '🤖' },
+          { name: 'Riker', role: 'Tactical Operations', icon: '⚡' },
+          { name: 'La Forge', role: 'Engineering', icon: '🔧' },
+          { name: 'Worf', role: 'Security', icon: '⚔️' },
+          { name: 'Troi', role: 'UX & Empathy', icon: '💭' },
+          { name: 'Crusher', role: 'System Health', icon: '💊' },
+          { name: 'Uhura', role: 'Communications', icon: '📻' },
+          { name: 'Quark', role: 'Business Analysis', icon: '💰' },
+          { name: 'O\'Brien', role: 'Pragmatic Solutions', icon: '🛠️' }
+        ];
+        
+        crewMembers.forEach(crew => {
+          crewMap.set(crew.name, {
+            ...crew,
+            contributions: 0,
+            memories: 0,
+            lastActive: 'Never',
+            recentThoughts: [],
+            concerns: [],
+            concernLevel: 0,
+            satisfaction: 7
+          });
         });
-      });
-      
-      // Count memories by crew member
-      memories.forEach((memory: any) => {
-        const crewName = memory.crew_member || 'system';
-        const stats = crewMap.get(crewName);
-        if (stats) {
-          stats.memories++;
-          stats.contributions++;
-          const memoryDate = new Date(memory.created_at || memory.timestamp);
-          if (memoryDate > new Date(stats.lastActive)) {
-            stats.lastActive = memoryDate.toLocaleDateString();
+        
+        // Count memories by crew member
+        memories.forEach((memory: any) => {
+          const crewName = memory.crew_member || 'system';
+          const stats = crewMap.get(crewName);
+          if (stats) {
+            stats.memories++;
+            stats.contributions++;
+            const memoryDate = new Date(memory.created_at || memory.timestamp);
+            if (memoryDate > new Date(stats.lastActive) || stats.lastActive === 'Never') {
+              stats.lastActive = memoryDate.toLocaleDateString();
+            }
           }
-        }
-      });
-      
-      // Sort by contributions (descending)
-      const sortedStats = Array.from(crewMap.values())
-        .sort((a, b) => b.contributions - a.contributions);
-      
-      setCrewStats(sortedStats);
+        });
+        
+        // Sort by contributions (descending)
+        const sortedStats = Array.from(crewMap.values())
+          .sort((a, b) => b.contributions - a.contributions);
+        
+        setCrewStats(sortedStats);
+      }
     } catch (err: any) {
       console.error('Failed to load crew stats:', err);
       // Fallback to default stats
@@ -203,7 +236,7 @@ export default function CrewMemoryVisualization() {
                 </div>
               </div>
               
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '8px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>
                   {crew.contributions.toLocaleString()} memories
                 </span>
@@ -211,12 +244,109 @@ export default function CrewMemoryVisualization() {
                   {crew.lastActive}
                 </span>
               </div>
+              
+              {/* Emotional Metrics */}
+              {(crew.concernLevel !== undefined || crew.satisfaction !== undefined) && (
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '8px', 
+                  marginTop: '8px',
+                  paddingTop: '8px',
+                  borderTop: '1px solid var(--border)'
+                }}>
+                  {crew.concernLevel !== undefined && crew.concernLevel > 0 && (
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                        Concern
+                      </div>
+                      <div style={{
+                        height: '4px',
+                        background: 'var(--card-bg)',
+                        borderRadius: '2px',
+                        overflow: 'hidden'
+                      }}>
+                        <div style={{
+                          width: `${(crew.concernLevel / 10) * 100}%`,
+                          height: '100%',
+                          background: crew.concernLevel > 7 ? 'var(--status-error)' : crew.concernLevel > 4 ? 'var(--status-warning)' : 'var(--status-info)',
+                          transition: 'width 0.3s ease'
+                        }} />
+                      </div>
+                    </div>
+                  )}
+                  {crew.satisfaction !== undefined && (
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                        Satisfaction
+                      </div>
+                      <div style={{
+                        height: '4px',
+                        background: 'var(--card-bg)',
+                        borderRadius: '2px',
+                        overflow: 'hidden'
+                      }}>
+                        <div style={{
+                          width: `${(crew.satisfaction / 10) * 100}%`,
+                          height: '100%',
+                          background: crew.satisfaction > 7 ? 'var(--status-success)' : crew.satisfaction > 4 ? 'var(--status-warning)' : 'var(--status-error)',
+                          transition: 'width 0.3s ease'
+                        }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Recent Thoughts */}
+              {crew.recentThoughts && crew.recentThoughts.length > 0 && (
+                <div style={{ 
+                  marginTop: '8px',
+                  paddingTop: '8px',
+                  borderTop: '1px solid var(--border)'
+                }}>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>
+                    Recent Thoughts
+                  </div>
+                  {crew.recentThoughts.slice(0, 1).map((thought: string, idx: number) => (
+                    <div key={idx} style={{
+                      fontSize: '11px',
+                      color: 'var(--card-text-muted)',
+                      lineHeight: '1.4',
+                      marginBottom: '4px'
+                    }}>
+                      "{thought}..."
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Active Concerns */}
+              {crew.concerns && crew.concerns.length > 0 && (
+                <div style={{ 
+                  marginTop: '8px',
+                  paddingTop: '8px',
+                  borderTop: '1px solid var(--border)'
+                }}>
+                  <div style={{ fontSize: '10px', color: 'var(--status-warning)', marginBottom: '4px', fontWeight: 600 }}>
+                    ⚠️ Concerns
+                  </div>
+                  {crew.concerns.slice(0, 1).map((concern: string, idx: number) => (
+                    <div key={idx} style={{
+                      fontSize: '11px',
+                      color: 'var(--status-warning)',
+                      lineHeight: '1.4'
+                    }}>
+                      {concern}...
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* Summary Stats */}
+      {/* Summary Stats - Enhanced with Thoughts & Emotional Metrics */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
@@ -227,27 +357,37 @@ export default function CrewMemoryVisualization() {
         border: '1px solid var(--border)'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
             {totalMemories.toLocaleString()}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
             Total Memories
           </div>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
-            {crewStats.length}
+          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
+            {crewStats.filter(c => (c.recentThoughts?.length || 0) > 0).length}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-            Active Crew
+          <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
+            Active Thoughts
           </div>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
-            {Math.round((totalMemories / crewStats.length) / 100) * 100}
+          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--status-warning)', marginBottom: '4px' }}>
+            {crewStats.filter(c => (c.concerns?.length || 0) > 0).length}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-            Avg per Crew
+          <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
+            Active Concerns
+          </div>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '24px', fontWeight: 600, color: 'var(--status-success)', marginBottom: '4px' }}>
+            {crewStats.length > 0 
+              ? Math.round(crewStats.reduce((sum, c) => sum + (c.satisfaction || 7), 0) / crewStats.length * 10) / 10
+              : 'N/A'}
+          </div>
+          <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
+            Avg Satisfaction
           </div>
         </div>
       </div>
