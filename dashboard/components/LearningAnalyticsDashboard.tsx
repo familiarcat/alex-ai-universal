@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from 'react';
 import { useProgress } from '@/lib/useProgress';
+import { useAsyncErrorHandler } from '@/lib/useAsyncErrorHandler';
 
 interface LearningMetric {
   date: string;
@@ -26,6 +27,7 @@ export default function LearningAnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
   const [totalGrowth, setTotalGrowth] = useState(0);
   const { start, complete, fail } = useProgress();
+  const { handleError, ErrorDisplay } = useAsyncErrorHandler();
 
   useEffect(() => {
     fetchLearningMetrics();
@@ -117,6 +119,10 @@ export default function LearningAnalyticsDashboard() {
       const errorMessage = isTimeout 
         ? '⚠️  Request timed out - using sample data'
         : '⚠️  Using sample data (service unavailable)';
+      
+      // Handle error gracefully (don't break UI)
+      handleError(err, 'Learning Analytics');
+      
       fail(operationId, errorMessage);
     } finally {
       setLoading(false);
@@ -124,37 +130,44 @@ export default function LearningAnalyticsDashboard() {
   }
 
   if (loading) {
-    return (
-      <div className="card" style={{
-        padding: '24px',
-        border: 'var(--border)',
-        borderRadius: 'var(--radius)',
-        marginBottom: '30px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <span style={{ fontSize: '24px' }}>📈</span>
-          <h3 style={{ fontSize: '18px', color: 'var(--accent)', margin: 0 }}>
-            Learning Analytics
-          </h3>
-        </div>
-        <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-          Loading learning metrics...
-        </div>
-      </div>
-    );
-  }
+         return (
+           <div className="card" style={{
+             padding: '24px',
+             border: 'var(--border)',
+             borderRadius: 'var(--radius)',
+             marginBottom: '30px'
+           }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+               <span style={{ fontSize: '24px' }}>📈</span>
+               <h3 style={{ fontSize: '18px', color: 'var(--accent)', margin: 0 }}>
+                 Learning Analytics
+               </h3>
+             </div>
+             <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+               Loading learning metrics...
+             </div>
+           </div>
+         );
+       }
+
+       return (
+         <>
+           {ErrorDisplay}
+           <div className="card" style={{
 
   const maxMemories = Math.max(...metrics.map(m => m.memories), 1);
   const avgConfidence = metrics.reduce((sum, m) => sum + m.confidence, 0) / metrics.length;
 
   return (
-    <div className="card" style={{
-      padding: '24px',
-      border: 'var(--border)',
-      borderRadius: 'var(--radius)',
-      marginBottom: '30px',
-      background: 'var(--card-bg)'
-    }}>
+    <>
+      {ErrorDisplay}
+      <div className="card" style={{
+        padding: '24px',
+        border: 'var(--border)',
+        borderRadius: 'var(--radius)',
+        marginBottom: '30px',
+        background: 'var(--card-bg)'
+      }}>
       {/* Header */}
       <div style={{ 
         display: 'flex', 
@@ -305,6 +318,7 @@ export default function LearningAnalyticsDashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

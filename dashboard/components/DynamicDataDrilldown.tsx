@@ -95,9 +95,11 @@ function generateComponentStructure(data: any): ComponentStructure {
   // If data is an array, render as a list
   if (Array.isArray(data)) {
     return {
+      id: 'array-list',
       type: 'list',
       props: {},
       children: data.map((item, index) => ({
+        id: `array-item-${index}`,
         type: 'card',
         props: {
           onClick: () => {
@@ -107,14 +109,17 @@ function generateComponentStructure(data: any): ComponentStructure {
         },
         children: [
           {
+            id: `array-item-${index}-heading`,
             type: 'heading',
             props: { level: 3, text: item.name || item.title || `Item ${index + 1}` }
           },
           {
+            id: `array-item-${index}-text`,
             type: 'text',
             props: { text: item.description || JSON.stringify(item, null, 2) }
           },
           {
+            id: `array-item-${index}-button`,
             type: 'button',
             props: {
               label: 'View Details',
@@ -132,40 +137,73 @@ function generateComponentStructure(data: any): ComponentStructure {
   }
   
   // If data is an object, render as a grid of key-value pairs
-  if (typeof data === 'object') {
+  if (typeof data === 'object' && data !== null) {
     const keys = Object.keys(data);
     
+    // Handle empty objects
+    if (keys.length === 0) {
+      return {
+        id: 'empty-object',
+        type: 'text',
+        props: { text: 'Empty object' }
+      };
+    }
+    
     return {
+      id: 'object-grid',
       type: 'grid',
       props: {
         columns: 'repeat(auto-fit, minmax(250px, 1fr))'
       },
       children: keys.map(key => {
         const value = data[key];
-        const isNested = typeof value === 'object' && value !== null;
+        const isNestedObject = typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date);
+        const isArray = Array.isArray(value);
+        const isPrimitive = !isNestedObject && !isArray;
+        
+        // Format value for display
+        let displayValue: string;
+        if (isArray) {
+          displayValue = `Array (${value.length} items)`;
+        } else if (isNestedObject) {
+          const nestedKeys = Object.keys(value);
+          displayValue = `Object (${nestedKeys.length} ${nestedKeys.length === 1 ? 'key' : 'keys'})`;
+        } else if (value === null) {
+          displayValue = 'null';
+        } else if (value === undefined) {
+          displayValue = 'undefined';
+        } else if (typeof value === 'boolean') {
+          displayValue = String(value);
+        } else if (typeof value === 'number') {
+          displayValue = String(value);
+        } else {
+          displayValue = String(value);
+        }
         
         return {
+          id: `object-key-${key}`,
           type: 'card',
           props: {
-            onClick: isNested ? () => {
+            onClick: (isNestedObject || isArray) ? () => {
               // Navigate to nested data
               console.log('Navigate to nested:', key, value);
             } : undefined
           },
           children: [
             {
+              id: `object-key-${key}-heading`,
               type: 'heading',
               props: { level: 4, text: key }
             },
             {
+              id: `object-key-${key}-text`,
               type: 'text',
               props: {
-                text: isNested
-                  ? `${Array.isArray(value) ? 'Array' : 'Object'} (${isNested ? Object.keys(value).length : 0} items)`
-                  : String(value)
+                text: displayValue
               }
             },
-            ...(isNested ? [{
+            ...((isNestedObject || isArray) ? [{
+              id: `object-key-${key}-button`,
               type: 'button',
               props: {
                 label: 'Explore',
@@ -185,6 +223,7 @@ function generateComponentStructure(data: any): ComponentStructure {
   
   // Primitive value - just display as text
   return {
+    id: 'primitive-text',
     type: 'text',
     props: { text: String(data) }
   };

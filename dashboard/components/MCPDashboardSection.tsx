@@ -12,6 +12,8 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import MCPStatusModal from '@/components/MCPStatusModal';
 import DynamicDataDrilldown from '@/components/DynamicDataDrilldown';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import DesignSystemErrorDisplay from '@/components/DesignSystemErrorDisplay';
 
 const ExecutionMonitor = dynamic(() => import('@/components/workflows/ExecutionMonitor'), {
   ssr: false
@@ -479,11 +481,21 @@ export default function MCPDashboardSection() {
       </div>
 
       {/* Dynamic Data Drilldown - NEW: Smart component generation based on data */}
-      <DynamicDataDrilldown
-        data={stats}
-        title="🖖 MCP System Data - Dynamic Drilldown"
-        initialPath={[{ label: 'MCP Dashboard', path: '/mcp' }]}
-      />
+      <ErrorBoundary
+        fallback={
+          <DesignSystemErrorDisplay
+            error="Failed to render MCP system data"
+            title="Data Display Error"
+            variant="compact"
+          />
+        }
+      >
+        <DynamicDataDrilldown
+          data={stats}
+          title="🖖 MCP System Data - Dynamic Drilldown"
+          initialPath={[{ label: 'MCP Dashboard', path: '/mcp' }]}
+        />
+      </ErrorBoundary>
 
       {/* Recent Executions & System Status */}
       <div style={{

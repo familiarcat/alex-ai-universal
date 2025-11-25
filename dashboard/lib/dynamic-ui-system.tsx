@@ -36,6 +36,7 @@ export interface DynamicUIConfig {
 }
 
 export interface ComponentStructure {
+  id?: string; // Unique identifier for React keys
   type: string;
   props?: Record<string, any>;
   children?: ComponentStructure[];
@@ -131,7 +132,7 @@ function BreadcrumbNavigation({
       {path.map((item, index) => {
         const isLast = index === path.length - 1;
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={`breadcrumb-${index}-${item.path}`}>
             {index > 0 && (
               <span style={{ color: 'var(--text-muted)' }} aria-hidden="true">
                 /
@@ -219,9 +220,11 @@ function renderComponentStructure(
             ...structure.props?.style
           }}
         >
-          {structure.children?.map((child, index) =>
-            renderComponentStructure(child, componentData, designSystem, onNavigate)
-          )}
+          {structure.children?.map((child, index) => (
+            <React.Fragment key={child.id || `child-${index}`}>
+              {renderComponentStructure(child, componentData, designSystem, onNavigate)}
+            </React.Fragment>
+          ))}
         </div>
       );
 
@@ -236,9 +239,11 @@ function renderComponentStructure(
             ...structure.props?.style
           }}
         >
-          {structure.children?.map((child, index) =>
-            renderComponentStructure(child, componentData, designSystem, onNavigate)
-          )}
+          {structure.children?.map((child, index) => (
+            <React.Fragment key={child.id || `child-${index}`}>
+              {renderComponentStructure(child, componentData, designSystem, onNavigate)}
+            </React.Fragment>
+          ))}
         </div>
       );
 
@@ -254,9 +259,11 @@ function renderComponentStructure(
             ...structure.props?.style
           }}
         >
-          {structure.children?.map((child, index) =>
-            renderComponentStructure(child, componentData, designSystem, onNavigate)
-          )}
+          {structure.children?.map((child, index) => (
+            <React.Fragment key={child.id || `child-${index}`}>
+              {renderComponentStructure(child, componentData, designSystem, onNavigate)}
+            </React.Fragment>
+          ))}
         </div>
       );
 
@@ -276,10 +283,12 @@ function renderComponentStructure(
           }}
         >
           {listData.map((item: any, index: number) => (
-            <li key={index}>
-              {structure.children?.map((child, childIndex) =>
-                renderComponentStructure(child, item, designSystem, onNavigate)
-              )}
+            <li key={item.id || item.key || `list-item-${index}`}>
+              {structure.children?.map((child, childIndex) => (
+                <React.Fragment key={child.id || `list-child-${index}-${childIndex}`}>
+                  {renderComponentStructure(child, item, designSystem, onNavigate)}
+                </React.Fragment>
+              ))}
             </li>
           ))}
         </ul>
