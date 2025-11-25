@@ -11,7 +11,15 @@
  * Generated from Observation Lounge crew analysis
  */
 
-import { getContrastRatio, extractColor, getButtonTextColor } from './contrast-utils';
+import { 
+  getContrastRatio, 
+  extractColor, 
+  getButtonTextColor,
+  calculateCardBackground,
+  getCardTextColor,
+  getDataPointColor,
+  getCardMutedTextColor
+} from './contrast-utils';
 
 export interface ComponentColorPalette {
   // CTA Colors (Call-to-Action hierarchy)
@@ -27,7 +35,13 @@ export interface ComponentColorPalette {
   cardBorder: string;
   cardElevated: string;
   
-  // Text Colors (hierarchy)
+  // Card Text Colors (contrast-aware for cards)
+  cardText: string;
+  cardHeading: string;
+  cardMutedText: string;
+  dataPointNumber: string;
+  
+  // Text Colors (hierarchy for non-card contexts)
   headingPrimary: string;
   headingSecondary: string;
   headingTertiary: string;
@@ -85,23 +99,56 @@ function generateComponentPalette(
   const ctaTertiary = themeDefinition.colorPalette.tertiary || adjustColorBrightness(ctaPrimary, isDark ? 0.4 : -0.4);
   const ctaTertiaryText = getButtonTextColor(ctaTertiary, 4.5);
   
-  // Card colors - Subtle elevation and depth
-  const cardBackground = isDark 
-    ? 'rgba(255, 255, 255, 0.05)' 
-    : 'rgba(255, 255, 255, 0.8)';
-  const cardBorder = isDark 
-    ? 'rgba(255, 255, 255, 0.1)' 
-    : 'rgba(0, 0, 0, 0.1)';
-  const cardElevated = isDark 
-    ? 'rgba(255, 255, 255, 0.08)' 
-    : 'rgba(255, 255, 255, 0.95)';
+  // Card colors - Calculated to ensure contrast while preserving theme identity
+  const cardBackground = calculateCardBackground(baseColors.background, isDark, accentColor);
   
-  // Heading hierarchy - Visual weight and importance
+  // Elevated cards - slightly more contrast but still theme-aware
+  // Parse rgba string directly from cardBackground
+  let cardElevated: string;
+  const rgbaMatch = cardBackground.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+  if (rgbaMatch) {
+    const r = parseInt(rgbaMatch[1]);
+    const g = parseInt(rgbaMatch[2]);
+    const b = parseInt(rgbaMatch[3]);
+    if (isDark) {
+      // Dark theme: lighten a bit more for elevated cards
+      const elevatedR = Math.min(255, r + 15);
+      const elevatedG = Math.min(255, g + 15);
+      const elevatedB = Math.min(255, b + 15);
+      cardElevated = `rgba(${elevatedR}, ${elevatedG}, ${elevatedB}, 0.95)`;
+    } else {
+      // Light theme: darken slightly for elevated cards
+      const elevatedR = Math.max(0, r - 10);
+      const elevatedG = Math.max(0, g - 10);
+      const elevatedB = Math.max(0, b - 10);
+      cardElevated = `rgba(${elevatedR}, ${elevatedG}, ${elevatedB}, 0.98)`;
+    }
+  } else {
+    // Fallback to original approach
+    cardElevated = isDark 
+      ? 'rgba(255, 255, 255, 0.12)' 
+      : 'rgba(255, 255, 255, 0.98)';
+  }
+  
+  // Card border - theme-aware, using base theme colors
+  const cardBorder = isDark 
+    ? 'rgba(255, 255, 255, 0.15)'
+    : 'rgba(0, 0, 0, 0.15)';
+  
+  // Text colors for cards - Calculated to ensure WCAG AA contrast
+  const cardText = getCardTextColor(cardBackground, 4.5);
+  const cardHeading = getCardTextColor(cardBackground, 4.5); // Same as cardText but can be adjusted
+  const cardMutedText = getCardMutedTextColor(cardBackground);
+  
+  // Data point numbers - Ensure contrast on card backgrounds
+  const dataPointNumber = getDataPointColor(cardBackground, accentColor, 4.5);
+  
+  // Heading hierarchy - Visual weight and importance (for non-card contexts)
   const headingPrimary = baseColors.heading;
   const headingSecondary = adjustColorBrightness(headingPrimary, isDark ? 0.15 : -0.15);
   const headingTertiary = adjustColorBrightness(headingPrimary, isDark ? 0.3 : -0.3);
   
-  // Body text
+  // Body text (for non-card contexts)
   const bodyText = baseColors.text;
   const bodyTextMuted = isDark 
     ? 'rgba(255, 255, 255, 0.6)' 
@@ -125,6 +172,10 @@ function generateComponentPalette(
     cardBackground,
     cardBorder,
     cardElevated,
+    cardText,
+    cardHeading,
+    cardMutedText,
+    dataPointNumber,
     headingPrimary,
     headingSecondary,
     headingTertiary,

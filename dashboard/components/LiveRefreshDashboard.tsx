@@ -300,12 +300,12 @@ export default function LiveRefreshDashboard() {
           <div style={{ 
             fontSize: '20px', 
             fontWeight: 600, 
-            color: stats.isConnected ? 'var(--accent)' : 'var(--text-muted)',
+            color: stats.isConnected ? 'var(--data-point-number)' : 'var(--card-text-muted)',
             marginBottom: '4px'
           }}>
             {stats.isConnected ? '🟢' : '🔴'}
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--card-text-muted)' }}>
             {stats.isConnected ? 'Connected' : 'Disconnected'}
           </div>
         </div>
@@ -317,10 +317,10 @@ export default function LiveRefreshDashboard() {
           border: '1px solid var(--border)',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
             {stats.totalChanges}
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--card-text-muted)' }}>
             Changes Detected
           </div>
         </div>
@@ -332,10 +332,10 @@ export default function LiveRefreshDashboard() {
           border: '1px solid var(--border)',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
             {stats.filesChanged.size}
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--card-text-muted)' }}>
             Files Changed
           </div>
         </div>

@@ -214,10 +214,10 @@ export default function LearningAnalyticsDashboard() {
             border: '1px solid var(--border)',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
               {metrics.reduce((sum, m) => sum + m.memories, 0).toLocaleString()}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
               Total Memories (30d)
             </div>
           </div>
@@ -228,10 +228,10 @@ export default function LearningAnalyticsDashboard() {
             border: '1px solid var(--border)',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
               {totalGrowth > 0 ? '+' : ''}{totalGrowth.toFixed(1)}%
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
               Growth Rate
             </div>
           </div>
@@ -242,10 +242,10 @@ export default function LearningAnalyticsDashboard() {
             border: '1px solid var(--border)',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 600, color: 'var(--data-point-number)', marginBottom: '4px' }}>
               {(avgConfidence * 100).toFixed(0)}%
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '12px', color: 'var(--card-text-muted)' }}>
               Avg Confidence
             </div>
           </div>

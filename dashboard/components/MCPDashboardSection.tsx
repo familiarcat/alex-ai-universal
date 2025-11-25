@@ -235,7 +235,7 @@ export default function MCPDashboardSection() {
           <span style={{ fontSize: 'var(--font-xl)' }}>{icon}</span>
           <div style={{
             fontSize: 'var(--font-sm)',
-            color: 'var(--text-muted)',
+            color: 'var(--card-text-muted)',
             fontWeight: 500
           }}>
             {title}
@@ -244,14 +244,14 @@ export default function MCPDashboardSection() {
         <div style={{
           fontSize: 'var(--font-2xl)',
           fontWeight: 'bold',
-          color: color,
+          color: 'var(--data-point-number)',
           marginBottom: 'var(--spacing-xs)'
         }}>
           {value}
         </div>
         <div style={{
           fontSize: 'var(--font-xs)',
-          color: 'var(--text-muted)'
+          color: 'var(--card-text-muted)'
         }}>
           {subtitle}
         </div>

@@ -99,12 +99,18 @@ export default function GlobalThemeStyles() {
       --cta-tertiary: ${componentColors.ctaTertiary};
       --cta-tertiary-text: ${componentColors.ctaTertiaryText};
       
-      /* Card Colors (La Forge's implementation) */
+      /* Card Colors (La Forge's implementation - contrast-aware) */
       --card-bg: ${componentColors.cardBackground};
       --card-border: ${componentColors.cardBorder};
       --card-elevated: ${componentColors.cardElevated};
-      --card: ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.8)'};
-      --card-alt: ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)'};
+      --card: ${componentColors.cardBackground};
+      --card-alt: ${componentColors.cardElevated};
+      
+      /* Card Text Colors (WCAG AA compliant) */
+      --card-text: ${componentColors.cardText};
+      --card-heading: ${componentColors.cardHeading};
+      --card-text-muted: ${componentColors.cardMutedText};
+      --data-point-number: ${componentColors.dataPointNumber};
       
       /* Typography Hierarchy (Data's precision + Troi's UX) */
       --heading-primary: ${componentColors.headingPrimary};
