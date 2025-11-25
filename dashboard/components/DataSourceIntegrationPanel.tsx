@@ -38,7 +38,12 @@ export default function DataSourceIntegrationPanel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
     fetchDataSources();
+    
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   async function fetchDataSources() {
@@ -48,7 +53,16 @@ export default function DataSourceIntegrationPanel() {
       // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
-      const data = await service.getDataSources();
+      
+      // Add timeout to prevent infinite loops
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout after 10 seconds')), 10000)
+      );
+      
+      const data = await Promise.race([
+        service.getDataSources(),
+        timeoutPromise
+      ]) as any;
       
       setSources(data.sources || []);
       setOpportunities(data.opportunities || []);
@@ -61,6 +75,7 @@ export default function DataSourceIntegrationPanel() {
       }
     } catch (err: any) {
       console.error('Failed to load data sources:', err);
+      // Always fallback to sample data on error to prevent infinite loops
       const sampleData = getSampleData();
       setSources(sampleData.sources);
       setOpportunities(sampleData.opportunities);

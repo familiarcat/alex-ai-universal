@@ -208,61 +208,80 @@ export class UnifiedDataService {
   private async callMCPEndpoint(endpoint: string, payload: any): Promise<any> {
     // Use Next.js API route as proxy (keeps API key server-side)
     const url = `/api/mcp/${endpoint}`;
-    const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const operationId = `${endpoint}-${requestId}`;
+    const requestId = payload.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const operationId = payload.operationId || `${endpoint}-${requestId}`;
     
-    // Report initial progress
-    this.reportProgress(operationId, 0, this.config.retries, `📡 Connecting to MCP: ${endpoint}`, 'loading');
-    
-    // Retry logic with exponential backoff (per crew optimization)
-    for (let attempt = 1; attempt <= this.config.retries; attempt++) {
-      try {
-        this.reportProgress(operationId, attempt - 1, this.config.retries, `📡 Attempt ${attempt}/${this.config.retries}: ${endpoint}`, 'loading');
-        
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Request-ID': requestId,
-          },
-          body: JSON.stringify({
-            ...payload,
-            timestamp: new Date().toISOString(),
-            source: 'dashboard',
-            requestId,
-          }),
-          signal: AbortSignal.timeout(this.config.timeout),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text().catch(() => '');
-          throw new Error(`MCP endpoint error: ${response.status} ${response.statusText} - ${errorText}`);
-        }
-
-        const data = await response.json();
-        this.reportProgress(operationId, this.config.retries, this.config.retries, `✅ Retrieved: ${endpoint}`, 'complete');
-        return data;
-      } catch (error: any) {
-        const isLastAttempt = attempt === this.config.retries;
-        const isTimeout = error.name === 'TimeoutError' || error.message.includes('timeout');
-        
-        if (isLastAttempt) {
-          this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  MCP failed, trying fallback: ${endpoint}`, 'loading');
-          console.warn(`⚠️  MCP endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
-          // Fallback to n8n if MCP unavailable after all retries
-          return this.callN8NFallback(endpoint, payload, operationId);
-        }
-        
-        // Exponential backoff: 1s, 2s, 4s
-        const backoffMs = Math.pow(2, attempt - 1) * 1000;
-        this.reportProgress(operationId, attempt, this.config.retries, `⏳ Retrying in ${backoffMs}ms: ${endpoint}`, 'loading');
-        console.warn(`⚠️  MCP endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
-        await new Promise(resolve => setTimeout(resolve, backoffMs));
-      }
+    // Prevent infinite loops: Check if this request is already in progress
+    const activeKey = `${endpoint}-${requestId}`;
+    if (this.activeOperations.has(activeKey)) {
+      console.warn(`⚠️  Preventing infinite loop: ${endpoint} already in progress (requestId: ${requestId})`);
+      throw new Error(`Request already in progress: ${endpoint}`);
     }
     
-    // Should never reach here, but TypeScript needs it
-    return this.callN8NFallback(endpoint, payload, operationId);
+    // Mark as active
+    this.activeOperations.set(activeKey, { current: 0, total: this.config.retries });
+    
+    try {
+      // Report initial progress
+      this.reportProgress(operationId, 0, this.config.retries, `📡 Connecting to MCP: ${endpoint}`, 'loading');
+      
+      // Retry logic with exponential backoff (per crew optimization)
+      for (let attempt = 1; attempt <= this.config.retries; attempt++) {
+        try {
+          this.reportProgress(operationId, attempt - 1, this.config.retries, `📡 Attempt ${attempt}/${this.config.retries}: ${endpoint}`, 'loading');
+          
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Request-ID': requestId,
+            },
+            body: JSON.stringify({
+              ...payload,
+              timestamp: new Date().toISOString(),
+              source: 'dashboard',
+              requestId,
+            }),
+            signal: AbortSignal.timeout(this.config.timeout),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text().catch(() => '');
+            throw new Error(`MCP endpoint error: ${response.status} ${response.statusText} - ${errorText}`);
+          }
+
+          const data = await response.json();
+          this.reportProgress(operationId, this.config.retries, this.config.retries, `✅ Retrieved: ${endpoint}`, 'complete');
+          this.activeOperations.delete(activeKey);
+          return data;
+        } catch (error: any) {
+          const isLastAttempt = attempt === this.config.retries;
+          const isTimeout = error.name === 'TimeoutError' || error.message.includes('timeout');
+          
+          if (isLastAttempt) {
+            this.activeOperations.delete(activeKey);
+            this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  MCP failed, trying fallback: ${endpoint}`, 'loading');
+            console.warn(`⚠️  MCP endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
+            // Fallback to n8n if MCP unavailable after all retries
+            return this.callN8NFallback(endpoint, payload, operationId);
+          }
+          
+          // Exponential backoff: 1s, 2s, 4s
+          const backoffMs = Math.pow(2, attempt - 1) * 1000;
+          this.reportProgress(operationId, attempt, this.config.retries, `⏳ Retrying in ${backoffMs}ms: ${endpoint}`, 'loading');
+          console.warn(`⚠️  MCP endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
+          await new Promise(resolve => setTimeout(resolve, backoffMs));
+        }
+      }
+      
+      // Should never reach here, but TypeScript needs it
+      this.activeOperations.delete(activeKey);
+      return this.callN8NFallback(endpoint, payload, operationId);
+    } catch (error: any) {
+      // Clean up on unexpected error
+      this.activeOperations.delete(activeKey);
+      throw error;
+    }
   }
 
   /**
