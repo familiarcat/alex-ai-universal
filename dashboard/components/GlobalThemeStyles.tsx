@@ -21,6 +21,40 @@ import { getButtonTextColor, extractColor } from '@/lib/contrast-utils';
 import { getComponentColors } from '@/lib/theme-component-colors';
 import { useEffect, useState } from 'react';
 
+/**
+ * Generate theme-aware header background
+ * Creates a dark background with subtle theme accent color influence
+ * Always ensures sufficient contrast for legibility
+ */
+function generateHeaderBackground(accentColor: string | null, isDark: boolean): string {
+  // Base dark background (always dark for contrast)
+  const baseDark = isDark ? 'rgba(10, 10, 15, 0.95)' : 'rgba(15, 15, 20, 0.95)';
+  
+  if (!accentColor) {
+    return baseDark;
+  }
+  
+  // Extract RGB from accent color
+  const hex = accentColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  // Blend accent color subtly into dark background (10% influence)
+  // This creates a theme-aware tint while maintaining darkness
+  const blendedR = Math.round(r * 0.1 + 15 * 0.9);
+  const blendedG = Math.round(g * 0.1 + 15 * 0.9);
+  const blendedB = Math.round(b * 0.1 + 20 * 0.9);
+  
+  // Ensure it stays dark (max brightness check)
+  const brightness = (blendedR * 299 + blendedG * 587 + blendedB * 114) / 1000;
+  const finalR = brightness > 30 ? Math.round(blendedR * 0.7) : blendedR;
+  const finalG = brightness > 30 ? Math.round(blendedG * 0.7) : blendedG;
+  const finalB = brightness > 30 ? Math.round(blendedB * 0.7) : blendedB;
+  
+  return `rgba(${finalR}, ${finalG}, ${finalB}, 0.95)`;
+}
+
 export default function GlobalThemeStyles() {
   const { globalTheme } = useAppState();
   const [mounted, setMounted] = useState(false);
@@ -40,6 +74,12 @@ export default function GlobalThemeStyles() {
   
   // Get comprehensive component color palette (from crew analysis)
   const componentColors = getComponentColors(globalTheme, colors);
+  
+  // Generate theme-aware header background (dark with subtle theme influence)
+  // Always dark enough for contrast, but subtly influenced by theme accent
+  const accentColor = extractColor(colors.accent);
+  const headerBg = generateHeaderBackground(accentColor, isDark);
+  const headerText = getButtonTextColor(headerBg, 4.5); // WCAG AA minimum
   
   // CSS variables scoped to .dashboard-theme-wrapper
   const cssVars = `
@@ -83,6 +123,11 @@ export default function GlobalThemeStyles() {
       --status-warning: ${componentColors.warning};
       --status-error: ${componentColors.error};
       --status-info: ${componentColors.info};
+      
+      /* Header Colors (Theme-aware dark background with subtle accent influence) */
+      --header-bg: ${headerBg};
+      --header-text: ${headerText};
+      --header-border: ${isDark ? `rgba(255, 255, 255, 0.1)` : `rgba(0, 0, 0, 0.2)`};
       
       /* Legacy Support */
       --surface: ${isDark ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.9)'};

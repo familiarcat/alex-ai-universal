@@ -21,20 +21,21 @@ export default function GlobalThemeSwitcher() {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      <span style={{ fontSize: 12, opacity: 0.75 }}>Theme</span>
+      <span style={{ fontSize: 12, color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.9 }}>Theme</span>
       <select
         value={globalTheme}
         onChange={(e) => updateGlobalTheme(e.target.value)}
         style={{
           padding: '6px 8px',
-          background: 'rgba(0,0,0,0.35)',
-          color: '#d0d0d0',
-          border: '1px solid rgba(0,255,170,0.35)',
-          borderRadius: 6
+          background: 'rgba(255, 255, 255, 0.1)',
+          color: 'var(--header-text, rgba(255, 255, 255, 0.9))',
+          border: '1px solid var(--header-border, rgba(255, 255, 255, 0.2))',
+          borderRadius: 6,
+          cursor: 'pointer'
         }}
       >
         {THEMES.map((t) => (
-          <option key={t.id} value={t.id}>{t.label}</option>
+          <option key={t.id} value={t.id} style={{ background: 'var(--header-bg, rgba(15, 15, 20, 0.95))', color: 'var(--header-text, rgba(255, 255, 255, 0.9))' }}>{t.label}</option>
         ))}
       </select>
     </div>

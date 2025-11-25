@@ -28,8 +28,11 @@ export default function StatusRibbon() {
   return (
     <div style={{
       position: 'fixed', left: 0, right: 0, top: 56, zIndex: 9998,
-      borderBottom: `1px solid ${color}33`, background: 'rgba(0,0,0,0.35)',
-      backdropFilter: 'blur(6px)', color: '#d0d0d0', fontSize: 12
+      borderBottom: `1px solid ${color}33`, 
+      background: 'var(--header-bg, rgba(15, 15, 20, 0.95))',
+      backdropFilter: 'blur(6px)', 
+      color: 'var(--header-text, rgba(255, 255, 255, 0.9))', 
+      fontSize: 12
     }}>
       <div style={{ maxWidth: 1600, margin: '0 auto', padding: '6px 16px', display: 'flex', gap: 8, alignItems: 'center' }}>
         <span style={{ width: 8, height: 8, borderRadius: 999, background: color, display: 'inline-block' }} />

@@ -35,11 +35,11 @@ export default function DevNavigation() {
     top: 0,
     left: 0,
     right: 0,
-    background: 'var(--surface)',
+    background: 'var(--header-bg, rgba(15, 15, 20, 0.95))',
     backdropFilter: 'blur(10px)',
     padding: '12px 30px',
     zIndex: 9999,
-    borderBottom: '1px solid var(--border)'
+    borderBottom: '1px solid var(--header-border, rgba(255, 255, 255, 0.1))'
   };
 
   const containerStyle = {
@@ -52,7 +52,7 @@ export default function DevNavigation() {
   };
 
   const linkStyle = (active: boolean) => ({
-    color: active ? 'var(--heading, var(--text))' : 'var(--text)',
+    color: active ? 'var(--header-text, #FFFFFF)' : 'var(--header-text, rgba(255, 255, 255, 0.9))',
     textDecoration: 'none',
     opacity: active ? 1 : 0.9,
     fontWeight: active ? 600 : 400,
@@ -61,13 +61,13 @@ export default function DevNavigation() {
     padding: '8px 12px',
     borderRadius: '6px',
     background: 'transparent',
-    border: active ? '1px solid var(--border)' : '1px solid transparent'
+    border: active ? '1px solid var(--header-border, rgba(255, 255, 255, 0.2))' : '1px solid transparent'
   });
 
   return (
     <nav style={navStyle}>
       <div style={containerStyle}>
-        <span style={{ fontWeight: 700, color: 'var(--heading, var(--text))', fontSize: '15px' }}>
+        <span style={{ fontWeight: 700, color: 'var(--header-text, #FFFFFF)', fontSize: '15px' }}>
           🖖 ALEX AI DEV MODE
         </span>
         
@@ -178,7 +178,7 @@ export default function DevNavigation() {
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
           <IntentThemeSwitcher />
           <GlobalThemeSwitcher />
-          {mounted && !isNarrow && <span style={{ fontSize: '12px', opacity: 0.7 }}>Current: {pathname}</span>}
+          {mounted && !isNarrow && <span style={{ fontSize: '12px', color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.8 }}>Current: {pathname}</span>}
         </div>
       </div>
     </nav>

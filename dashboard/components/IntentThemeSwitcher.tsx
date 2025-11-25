@@ -29,11 +29,18 @@ export default function IntentThemeSwitcher() {
     if (themeId && themeId !== globalTheme) updateGlobalTheme(themeId);
   };
 
-  const pill = { padding: '8px 10px', border: 'var(--border)', borderRadius: 10, background: 'var(--card)', color: 'var(--text)', cursor: 'pointer' } as const;
+  const pill = { 
+    padding: '8px 10px', 
+    border: 'var(--header-border, rgba(255, 255, 255, 0.2))', 
+    borderRadius: 10, 
+    background: 'rgba(255, 255, 255, 0.1)', 
+    color: 'var(--header-text, rgba(255, 255, 255, 0.9))', 
+    cursor: 'pointer' 
+  } as const;
 
   return (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-      <label style={{ fontSize: 12, opacity: 0.8 }}>Intent</label>
+      <label style={{ fontSize: 12, color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.9 }}>Intent</label>
       <select value={intent} onChange={(e)=> setIntent(e.target.value as BusinessIntent)} style={pill as any}>
         <option value="acquire">Acquire attention</option>
         <option value="convert">Convert to action</option>
@@ -41,7 +48,7 @@ export default function IntentThemeSwitcher() {
         <option value="trust">Build trust</option>
         <option value="delight">Delight/brand</option>
       </select>
-      <label style={{ fontSize: 12, opacity: 0.8 }}>Tone</label>
+      <label style={{ fontSize: 12, color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.9 }}>Tone</label>
       <select value={tone} onChange={(e)=> setTone(e.target.value as HumanTone)} style={pill as any}>
         <option value="bold">Bold</option>
         <option value="calm">Calm</option>
@@ -50,7 +57,7 @@ export default function IntentThemeSwitcher() {
         <option value="futuristic">Futuristic</option>
       </select>
       <button onClick={apply} style={{ ...pill, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' } as any}>Apply</button>
-      <span style={{ fontSize: 12, opacity: 0.75 }}>Theme → {themeId}</span>
+      <span style={{ fontSize: 12, color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.85 }}>Theme → {themeId}</span>
     </div>
   );
 }
