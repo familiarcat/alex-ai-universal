@@ -128,10 +128,14 @@ class QuarkCostOptimizer {
   
   /**
    * Select optimal LLM model for each crew member
+   * 
+   * Note: This only selects the model, it doesn't make an API call.
+   * Uses selectOptimalModel directly from the optimizer (synchronous).
    */
-  async selectOptimalModel(crew, changes, memories) {
+  selectOptimalModel(crew, changes, memories) {
     try {
-      const modelSelection = await this.optimizer.optimizeAndCall('', {
+      // Use selectOptimalModel directly (doesn't make API call, just selects model)
+      const modelSelection = this.optimizer.selectOptimalModel({
         crewMember: crew.id || crew.name.toLowerCase().replace(/\s+/g, '_'),
         complexity: crew.complexity || 'medium',
         taskType: crew.taskType || 'general',
@@ -539,8 +543,8 @@ async function reviewMilestone() {
   for (const crew of prioritizedCrew) {
     const reviewFn = CrewReviewFunctions[crew.id] || CrewReviewFunctions.data; // Default to Data if unknown
     
-    // Quark: Select optimal LLM model for this crew member
-    const modelSelection = await quarkOptimizer.selectOptimalModel(
+    // Quark: Select optimal LLM model for this crew member (synchronous, no API call)
+    const modelSelection = quarkOptimizer.selectOptimalModel(
       crew,
       changes,
       crewMemories[crew.id] || []
