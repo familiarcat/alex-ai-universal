@@ -301,7 +301,7 @@ function renderComponentStructure(
           style={{
             padding: `${getSpacing(designSystem?.spacing || 'comfortable', 'sm')} ${getSpacing(designSystem?.spacing || 'comfortable', 'md')}`,
             background: structure.props?.variant === 'primary' ? 'var(--accent)' : 'var(--card)',
-            color: structure.props?.variant === 'primary' ? '#0a0015' : 'var(--text)',
+            color: structure.props?.variant === 'primary' ? 'var(--button-text)' : 'var(--text)',
             border: 'var(--border)',
             borderRadius: 'var(--radius-md)',
             cursor: 'pointer',

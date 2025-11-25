@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import MCPStatusModal from '@/components/MCPStatusModal';
+import DynamicDataDrilldown from '@/components/DynamicDataDrilldown';
 
 const ExecutionMonitor = dynamic(() => import('@/components/workflows/ExecutionMonitor'), {
   ssr: false
@@ -74,17 +75,46 @@ export default function MCPDashboardSection() {
 
   const loadDashboardData = async () => {
     try {
-      // Load workflow stats
-      const workflowsRes = await fetch('/api/mcp/workflows/storage');
-      const workflowsData = await workflowsRes.ok ? await workflowsRes.json() : { workflows: [] };
+      // Add timeout to prevent hanging (10 seconds per request)
+      const timeoutMs = 10000;
+      const timeoutPromise = (url: string) => new Promise((_, reject) => 
+        setTimeout(() => reject(new Error(`Request timeout after ${timeoutMs/1000} seconds: ${url}`)), timeoutMs)
+      );
       
-      // Load execution stats
-      const executionsRes = await fetch('/api/mcp/workflows/executions?limit=100');
-      const executionsData = executionsRes.ok ? await executionsRes.json() : { executions: [] };
+      // Load workflow stats with timeout
+      const workflowsPromise = fetch('/api/mcp/workflows/storage').then(res => 
+        res.ok ? res.json() : { workflows: [] }
+      );
+      const workflowsData = await Promise.race([
+        workflowsPromise,
+        timeoutPromise('/api/mcp/workflows/storage')
+      ]).catch(() => ({ workflows: [] })) as any;
       
-      // Load system status (DDD: Controller Layer → Data Layer)
-      const statusRes = await fetch('/api/mcp/status');
-      const statusData = statusRes.ok ? await statusRes.json() : { 
+      // Load execution stats with timeout
+      const executionsPromise = fetch('/api/mcp/workflows/executions?limit=100').then(res => 
+        res.ok ? res.json() : { executions: [] }
+      );
+      const executionsData = await Promise.race([
+        executionsPromise,
+        timeoutPromise('/api/mcp/workflows/executions')
+      ]).catch(() => ({ executions: [] })) as any;
+      
+      // Load system status with timeout (DDD: Controller Layer → Data Layer)
+      const statusPromise = fetch('/api/mcp/status').then(res => 
+        res.ok ? res.json() : { 
+          status: 'offline',
+          services: {
+            localMCP: false,
+            remoteMCP: false,
+            n8n: false,
+            openRouter: false
+          }
+        }
+      );
+      const statusData = await Promise.race([
+        statusPromise,
+        timeoutPromise('/api/mcp/status')
+      ]).catch(() => ({ 
         status: 'offline',
         services: {
           localMCP: false,
@@ -92,7 +122,7 @@ export default function MCPDashboardSection() {
           n8n: false,
           openRouter: false
         }
-      };
+      })) as any;
 
       const executions = executionsData.executions || [];
       const workflows = workflowsData.workflows || [];
@@ -447,6 +477,13 @@ export default function MCPDashboardSection() {
           />
         </div>
       </div>
+
+      {/* Dynamic Data Drilldown - NEW: Smart component generation based on data */}
+      <DynamicDataDrilldown
+        data={stats}
+        title="🖖 MCP System Data - Dynamic Drilldown"
+        initialPath={[{ label: 'MCP Dashboard', path: '/mcp' }]}
+      />
 
       {/* Recent Executions & System Status */}
       <div style={{

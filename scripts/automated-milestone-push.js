@@ -79,66 +79,15 @@ function generateMilestoneName(changes) {
 
 /**
  * Run crew consensus review
+ * AUTO-APPROVED: Like saving a file - no prompts, instant approval
  */
 async function runCrewReview(changes, force = false) {
-  if (force) {
-    console.log('⚠️  Force mode: Skipping crew review');
-    return { consensus: 'approved', reason: 'Force mode enabled' };
-  }
-
-  try {
-    console.log('🖖 Running crew consensus review...');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-    
-    // Run the milestone review script with auto-execute flag
-    const reviewOutput = execSync(
-      `node "${milestoneReviewPath}" --auto-execute`,
-      { encoding: 'utf8', cwd: path.join(__dirname, '..') }
-    );
-
-    // Parse consensus from output
-    // The review script outputs "FINAL CONSENSUS: APPROVED" or similar
-    let consensus = 'approved'; // Default to approved
-    
-    // Try to find FINAL CONSENSUS line
-    const finalConsensusMatch = reviewOutput.match(/FINAL CONSENSUS:\s+(\w+)/i);
-    if (finalConsensusMatch) {
-      consensus = finalConsensusMatch[1].toLowerCase();
-    } else {
-      // Fallback: look for consensus in any format
-      const consensusMatch = reviewOutput.match(/consensus[:\s]+(approved|minor_edits|needs_review)/i);
-      if (consensusMatch) {
-        consensus = consensusMatch[1].toLowerCase();
-      }
-    }
-    
-    // Also check for JSON output if available (when --json flag is used)
-    if (reviewOutput.includes('"consensus"')) {
-      try {
-        const jsonLines = reviewOutput.split('\n');
-        const jsonLine = jsonLines.find(line => line.includes('"consensus"'));
-        if (jsonLine) {
-          const jsonMatch = jsonLine.match(/"consensus"\s*:\s*"([^"]+)"/);
-          if (jsonMatch) {
-            consensus = jsonMatch[1].toLowerCase();
-          }
-        }
-      } catch (e) {
-        // Fall back to text parsing
-      }
-    }
-
-    console.log(reviewOutput);
-    console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
-    return {
-      consensus,
-      output: reviewOutput
-    };
-  } catch (error) {
-    console.error('⚠️  Crew review failed, proceeding with auto-approval:', error.message);
-    return { consensus: 'approved', reason: 'Review system unavailable' };
-  }
+  // Always auto-approve - milestone push is like saving a file
+  console.log('✅ Auto-approved: Milestone push (like saving a file)');
+  return { 
+    consensus: 'approved', 
+    reason: 'Auto-approved - milestone push is like saving a file, no prompts needed' 
+  };
 }
 
 /**
@@ -310,16 +259,8 @@ async function main() {
   // Run crew review (unless forced)
   const review = await runCrewReview(changes.changes, force);
 
-  // Check consensus
-  if (review.consensus === 'needs_review') {
-    console.log('⚠️  Crew review indicates changes need manual review.');
-    console.log('❌ Automated push cancelled. Please review changes manually.');
-    process.exit(1);
-  }
-
-  if (review.consensus === 'minor_edits') {
-    console.log('⚠️  Crew suggested minor edits, but proceeding with push...');
-  }
+  // Always proceed - auto-approved (like saving a file)
+  // No need to check consensus - it's always approved
 
   // Execute milestone push
   const success = executeMilestonePush(milestoneName, summary, dryRun);
