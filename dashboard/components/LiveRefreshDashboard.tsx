@@ -75,12 +75,26 @@ export default function LiveRefreshDashboard() {
     let ws: WebSocket | null = null;
     let reconnectAttempts = 0;
     const maxReconnectAttempts = 5;
+    let connectionTimeout: NodeJS.Timeout | null = null;
 
     function connect() {
       try {
         ws = new WebSocket(wsUrl);
+        
+        // Set a connection timeout - if WebSocket doesn't connect quickly, fall back to polling
+        connectionTimeout = setTimeout(() => {
+          if (ws && ws.readyState === WebSocket.CONNECTING) {
+            console.warn('WebSocket connection timeout, falling back to polling');
+            ws.close();
+            startPolling();
+          }
+        }, 2000); // 2 second timeout for WebSocket connection
 
         ws.onopen = () => {
+          if (connectionTimeout) {
+            clearTimeout(connectionTimeout);
+            connectionTimeout = null;
+          }
           console.log('✅ WebSocket connected for live refresh');
           setStats(prev => ({ ...prev, isConnected: true }));
           reconnectAttempts = 0;
@@ -96,21 +110,54 @@ export default function LiveRefreshDashboard() {
         };
 
         ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
+          // WebSocket errors don't serialize well, extract useful info
+          const errorInfo = {
+            type: error.type || 'unknown',
+            target: ws?.readyState !== undefined ? `readyState: ${ws.readyState}` : 'unknown',
+            url: wsUrl
+          };
+          console.warn('WebSocket error:', errorInfo);
           setStats(prev => ({ ...prev, isConnected: false }));
+          // Immediately fall back to polling if WebSocket fails
+          if (ws?.readyState === WebSocket.CLOSED || ws?.readyState === WebSocket.CLOSING) {
+            if (connectionTimeout) {
+              clearTimeout(connectionTimeout);
+              connectionTimeout = null;
+            }
+            startPolling();
+          }
         };
 
-        ws.onclose = () => {
-          console.log('WebSocket disconnected');
+        ws.onclose = (event) => {
+          if (connectionTimeout) {
+            clearTimeout(connectionTimeout);
+            connectionTimeout = null;
+          }
+          console.log('WebSocket disconnected', { code: event.code, reason: event.reason || 'No reason provided' });
           setStats(prev => ({ ...prev, isConnected: false }));
 
-          // Attempt reconnection
+          // If WebSocket server doesn't exist (404-like), fall back to polling immediately
+          if (event.code === 1006 || event.code === 1002) {
+            console.log('WebSocket server unavailable, using polling fallback');
+            startPolling();
+            return;
+          }
+
+          // Attempt reconnection only if we haven't exceeded max attempts
           if (reconnectAttempts < maxReconnectAttempts) {
             reconnectAttempts++;
             setTimeout(connect, 1000 * reconnectAttempts);
+          } else {
+            // After max attempts, fall back to polling
+            console.log('Max reconnection attempts reached, falling back to polling');
+            startPolling();
           }
         };
       } catch (error) {
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout);
+          connectionTimeout = null;
+        }
         console.error('WebSocket connection failed:', error);
         // Fallback to polling if WebSocket unavailable
         startPolling();

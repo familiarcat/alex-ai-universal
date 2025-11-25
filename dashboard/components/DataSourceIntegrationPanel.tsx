@@ -54,21 +54,30 @@ export default function DataSourceIntegrationPanel() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       
-      // Add timeout to prevent infinite loops
+      // Add timeout to prevent infinite loops (reduced to 5 seconds for faster fallback)
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timeout after 10 seconds')), 10000)
+        setTimeout(() => reject(new Error('Data source request timed out - using sample data')), 5000)
       );
       
-      const data = await Promise.race([
-        service.getDataSources(),
-        timeoutPromise
-      ]) as any;
-      
-      setSources(data.sources || []);
-      setOpportunities(data.opportunities || []);
-      
-      // Fallback to sample data
-      if (!data.sources || data.sources.length === 0) {
+      try {
+        const data = await Promise.race([
+          service.getDataSources(),
+          timeoutPromise
+        ]) as any;
+        
+        setSources(data.sources || []);
+        setOpportunities(data.opportunities || []);
+        
+        // Fallback to sample data if response is empty
+        if (!data.sources || data.sources.length === 0) {
+          console.warn('No data sources returned, using sample data');
+          const sampleData = getSampleData();
+          setSources(sampleData.sources);
+          setOpportunities(sampleData.opportunities);
+        }
+      } catch (timeoutError: any) {
+        // Timeout or service error - use sample data immediately
+        console.warn('Data source service unavailable:', timeoutError.message);
         const sampleData = getSampleData();
         setSources(sampleData.sources);
         setOpportunities(sampleData.opportunities);
