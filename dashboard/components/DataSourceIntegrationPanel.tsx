@@ -4,14 +4,19 @@
  * Data Source Integration Panel Component
  * 
  * Visual interface for integrating additional data sources
+ * Now with dynamic UI system integration for deeply nested structures
  * 
  * Recommendations from:
  * - Commander Riker: Explore opportunities to integrate additional data sources
+ * - Counselor Troi: Dynamic UI with nested navigation
+ * - Commander Data: Component structure analysis
  * 
- * Reviewed by: Commander Riker (Tactical Operations)
+ * Reviewed by: Commander Riker (Tactical Operations), Counselor Troi (UX)
  */
 
 import { useEffect, useState } from 'react';
+import { useDynamicUI } from '@/lib/useDynamicUI';
+import { DynamicComponentRenderer } from '@/lib/dynamic-ui-system';
 
 interface DataSource {
   id: string;

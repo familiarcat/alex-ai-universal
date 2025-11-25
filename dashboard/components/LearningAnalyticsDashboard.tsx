@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useProgress } from '@/lib/useProgress';
 
 interface LearningMetric {
   date: string;
@@ -24,19 +25,32 @@ export default function LearningAnalyticsDashboard() {
   const [metrics, setMetrics] = useState<LearningMetric[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalGrowth, setTotalGrowth] = useState(0);
+  const { start, complete, fail } = useProgress();
 
   useEffect(() => {
     fetchLearningMetrics();
   }, []);
 
   async function fetchLearningMetrics() {
+    const operationId = 'learning-metrics-fetch';
+    
     try {
       setLoading(true);
+      start(operationId, 1, 'Fetching learning metrics...');
       
       // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout after 15 seconds')), 15000)
+      );
+      
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
-      const data = await service.getLearningMetrics({ limit: 1000 });
+      
+      const data = await Promise.race([
+        service.getLearningMetrics({ limit: 1000 }),
+        timeoutPromise
+      ]) as any;
       
       const memories = data.sessions || data.data || [];
       
@@ -77,8 +91,14 @@ export default function LearningAnalyticsDashboard() {
         const last = sortedMetrics[sortedMetrics.length - 1].memories;
         setTotalGrowth(((last - first) / first) * 100);
       }
+      
+      complete(operationId, '✅ Learning metrics loaded');
     } catch (err: any) {
       console.error('Failed to load metrics:', err);
+      
+      // Check if it's a timeout error
+      const isTimeout = err.message?.includes('timeout') || err.name === 'TimeoutError';
+      
       // Fallback to sample data
       const sampleData: LearningMetric[] = [];
       for (let i = 29; i >= 0; i--) {
@@ -93,14 +113,13 @@ export default function LearningAnalyticsDashboard() {
       }
       setMetrics(sampleData);
       setTotalGrowth(23);
-      if (progressContext && operationId) {
-        progressContext.fail(operationId, '⚠️  Using sample data (service unavailable)');
-      }
+      
+      const errorMessage = isTimeout 
+        ? '⚠️  Request timed out - using sample data'
+        : '⚠️  Using sample data (service unavailable)';
+      fail(operationId, errorMessage);
     } finally {
       setLoading(false);
-      if (progressContext && operationId) {
-        progressContext.complete(operationId, '✅ Learning metrics loaded');
-      }
     }
   }
 
