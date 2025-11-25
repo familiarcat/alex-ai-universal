@@ -36,6 +36,7 @@ import DataSourceIntegrationPanel from '@/components/DataSourceIntegrationPanel'
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
+import MCPDashboardSection from '@/components/MCPDashboardSection';
 
 export default function DashboardContent() {
   const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
@@ -225,6 +226,11 @@ export default function DashboardContent() {
         {/* Live Refresh System - Top Priority */}
         <div style={{ marginBottom: '24px' }}>
           <LiveRefreshDashboard />
+        </div>
+
+        {/* MCP System Dashboard - Integrated */}
+        <div style={{ marginBottom: '40px' }}>
+          <MCPDashboardSection />
         </div>
 
         {/* RAG-Powered Features - Visual Hierarchy (Troi & Data) */}

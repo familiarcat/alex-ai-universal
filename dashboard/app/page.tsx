@@ -13,8 +13,8 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to MCP dashboard
-    router.push('/mcp');
+    // Redirect to unified dashboard (includes MCP functionality)
+    router.push('/dashboard');
   }, [router]);
 
   return (
@@ -31,7 +31,7 @@ export default function HomePage() {
           🖖
         </div>
         <div style={{ fontSize: 'var(--font-xl)' }}>
-          Loading MCP Dashboard...
+          Loading Dashboard...
         </div>
       </div>
     </div>
