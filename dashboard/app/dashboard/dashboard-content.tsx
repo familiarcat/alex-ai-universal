@@ -205,7 +205,7 @@ export default function DashboardContent() {
               style={{
                 padding: '14px 24px',
                 background: 'var(--accent)',
-                color: '#0a0015',
+                color: 'var(--button-text)',
                 borderRadius: 'var(--radius)',
                 textDecoration: 'none',
                 fontWeight: 600,
