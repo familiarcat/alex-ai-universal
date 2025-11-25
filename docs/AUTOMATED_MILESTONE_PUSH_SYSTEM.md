@@ -101,9 +101,10 @@ async handleMilestonePush(message: string) {
 ## Crew Roles
 
 ### 🎖️ Captain Picard
-- **Role:** Final approval authority
+- **Role:** Final approval authority (after O'Brien consultation)
 - **Review:** Strategic alignment, mission continuity
 - **Decision:** Approve/Request strategic review
+- **Process:** Consults with O'Brien for quickest path, then makes pragmatic resolution
 
 ### ⚡ Commander Riker
 - **Role:** Tactical organization review
@@ -131,9 +132,16 @@ async handleMilestonePush(message: string) {
 - **Decision:** Approve/Suggest UX improvements
 
 ### 💰 Quark
-- **Role:** Cost/benefit analysis
+- **Role:** Cost/benefit analysis + LLM model optimization
 - **Review:** Resource usage, cost implications
 - **Decision:** Approve/Optimize costs
+- **Special:** Selects optimal LLM model for each crew member based on their specialization
+
+### 🛠️ Chief O'Brien
+- **Role:** Pragmatic solutions and troubleshooting
+- **Review:** Quickest path to proceed
+- **Decision:** Identify fastest resolution steps
+- **Special:** Consults with Picard before final decision
 
 ## Consensus Levels
 
@@ -168,11 +176,17 @@ async handleMilestonePush(message: string) {
 ## Implementation Status
 
 - [x] Concept documented
-- [ ] Crew review system implementation
+- [x] **Global crew discovery system** (discovers all current + future crew)
+- [x] **Riker's team optimization** (tactical organization)
+- [x] **Quark's cost optimization** (LLM model selection per crew member)
+- [x] **Picard's final decision** (after O'Brien consultation)
+- [x] **O'Brien's quickest path analysis** (pragmatic solutions)
+- [x] **MCP integration** (multimodal AI crew coordination)
+- [x] **Personalized prompts** (each crew member uses their identity)
 - [ ] Automated execution script
 - [ ] CLI integration
 - [ ] Testing framework
-- [ ] Documentation complete
+- [x] Documentation complete
 
 ---
 
