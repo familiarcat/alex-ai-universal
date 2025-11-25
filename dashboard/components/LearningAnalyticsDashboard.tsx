@@ -33,15 +33,12 @@ export default function LearningAnalyticsDashboard() {
     try {
       setLoading(true);
       
-      // Query RAG system for learning metrics
-      const response = await fetch('/api/knowledge/query?limit=1000');
+      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      const { getUnifiedDataService } = await import('@/lib/unified-data-service');
+      const service = getUnifiedDataService();
+      const data = await service.getLearningMetrics({ limit: 1000 });
       
-      if (!response.ok) {
-        throw new Error('Failed to fetch metrics');
-      }
-      
-      const data = await response.json();
-      const memories = data.sessions || [];
+      const memories = data.sessions || data.data || [];
       
       // Group by date
       const dateMap = new Map<string, LearningMetric>();
@@ -96,8 +93,14 @@ export default function LearningAnalyticsDashboard() {
       }
       setMetrics(sampleData);
       setTotalGrowth(23);
+      if (progressContext && operationId) {
+        progressContext.fail(operationId, '⚠️  Using sample data (service unavailable)');
+      }
     } finally {
       setLoading(false);
+      if (progressContext && operationId) {
+        progressContext.complete(operationId, '✅ Learning metrics loaded');
+      }
     }
   }
 

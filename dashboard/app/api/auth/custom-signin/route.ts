@@ -1,58 +1,16 @@
 /**
- * Custom Authentication API
+ * Custom Authentication API (Legacy - Redirects to NextAuth)
  * 
- * Handles custom email/password authentication via Supabase
- * Includes user whitelist check (no new user creation)
+ * This route is kept for backward compatibility but now redirects
+ * to NextAuth's credentials provider which handles Supabase auth.
+ * 
+ * The sign-in page should use NextAuth's signIn() function directly.
  * 
  * Reviewed by: Lieutenant Worf (Security) & Commander Data (Implementation)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
-
-// User whitelist (authorized emails)
-// In production, this should be stored in Supabase and checked via RLS
-const AUTHORIZED_USERS = process.env.AUTHORIZED_USERS?.split(',') || [];
-
-async function checkUserWhitelist(email: string): Promise<boolean> {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.warn('⚠️  Supabase not configured, using environment whitelist');
-    return AUTHORIZED_USERS.includes(email.toLowerCase());
-  }
-
-  try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    
-    // Check if user exists in authorized_users table (if it exists)
-    const { data, error } = await supabase
-      .from('authorized_users')
-      .select('email')
-      .eq('email', email.toLowerCase())
-      .eq('active', true)
-      .single();
-
-    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-      console.error('Error checking whitelist:', error);
-      // Fallback to environment variable whitelist
-      return AUTHORIZED_USERS.includes(email.toLowerCase());
-    }
-
-    // If user found in database, they're authorized
-    if (data) {
-      return true;
-    }
-
-    // Fallback to environment variable whitelist
-    return AUTHORIZED_USERS.includes(email.toLowerCase());
-  } catch (error) {
-    console.error('Whitelist check failed:', error);
-    // Fallback to environment variable whitelist
-    return AUTHORIZED_USERS.includes(email.toLowerCase());
-  }
-}
+import { signIn } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -65,53 +23,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check user whitelist (no new user creation)
-    const isAuthorized = await checkUserWhitelist(email);
-    if (!isAuthorized) {
-      return NextResponse.json(
-        { error: 'Access denied. This account is not authorized.' },
-        { status: 403 }
-      );
-    }
-
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-      return NextResponse.json(
-        { error: 'Authentication service not configured' },
-        { status: 500 }
-      );
-    }
-
-    // Authenticate with Supabase
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.toLowerCase(),
+    // Use NextAuth's signIn with credentials provider
+    // This will handle Supabase auth and session creation
+    const result = await signIn('credentials', {
+      email,
       password,
+      redirect: false,
     });
 
-    if (error) {
-      console.error('Supabase auth error:', error);
+    if (result?.error) {
       return NextResponse.json(
-        { error: 'Invalid email or password' },
+        { error: result.error === 'CredentialsSignin' ? 'Invalid email or password' : result.error },
         { status: 401 }
       );
     }
 
-    if (!data.user) {
-      return NextResponse.json(
-        { error: 'Authentication failed' },
-        { status: 401 }
-      );
-    }
-
-    // Return success (session will be handled by NextAuth or custom session management)
     return NextResponse.json({
       success: true,
-      user: {
-        id: data.user.id,
-        email: data.user.email,
-      },
-      session: data.session,
+      message: 'Authentication successful',
     });
   } catch (error: any) {
     console.error('Custom sign in error:', error);

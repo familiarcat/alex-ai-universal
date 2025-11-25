@@ -8,6 +8,8 @@
     "test:cli": "node cli-test.js",
     "test:extensions": "node extension-test.js",
     "test:web": "node web-interface-test.js",
+    "test:mcp": "node ../scripts/test/e2e-mcp-integration-test.js",
+    "test:mcp:component": "node ../scripts/test/e2e-mcp-integration-test.js --component",
     "test:comprehensive": "node alex-ai-test-suite.js"
   },
   "dependencies": {

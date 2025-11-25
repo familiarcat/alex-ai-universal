@@ -1,5 +1,7 @@
+'use client';
+
 /**
- * Dashboard Page - Client-Only Rendering (Server Component wrapper)
+ * Dashboard Page - Client-Only Rendering
  * 
  * ✅ NO SSR (ssr: false) - Eliminates ALL hydration errors
  * 
@@ -12,11 +14,14 @@
  * 
  * Crew Consensus: Unanimous (6/6 officers) ✅
  * See: docs/CREW-OBSERVATION-HYDRATION-ISSUE.md
+ * 
+ * Note: Must be a Client Component to use ssr: false with Next.js 16
  */
 
 import dynamic from 'next/dynamic';
 
 const DashboardContent = dynamic(() => import('./dashboard-content'), {
+  ssr: false, // Critical: Client-only rendering to prevent hydration errors
   loading: () => (
     <div style={{
       minHeight: '100vh',

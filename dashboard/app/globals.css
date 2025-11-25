@@ -4,6 +4,8 @@
 :root {
   /* Color System - Dashboard Theme */
   --bg: #0b0b10;
+  --background: #0b0b10; /* Added for compatibility - La Forge's recommendation */
+  --card-bg: rgba(255,255,255,0.04); /* Added for component compatibility */
   --text: #e5e7eb;
   --text-muted: #a1a1aa;
   --card: rgba(255,255,255,0.04);
@@ -11,6 +13,7 @@
   --accent: #00ffaa;
   --subtle: rgba(0,255,170,0.18);
   --border: 1px solid rgba(255,255,255,0.12);
+  --border-color: rgba(255,255,255,0.12); /* Added for component compatibility */
   --radius: 12px;
   --shadow: 0 2px 8px rgba(0,0,0,0.18);
   --elevation: 0 6px 18px rgba(0,0,0,0.22);

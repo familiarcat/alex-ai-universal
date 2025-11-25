@@ -9,6 +9,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Turbopack configuration for path aliases (La Forge's recommendation for Next.js 16)
+  turbopack: {
+    resolveAlias: {
+      '@/scripts': path.join(__dirname, '..', 'scripts'),
+    },
+  },
   // API routes configuration
   async rewrites() {
     return [

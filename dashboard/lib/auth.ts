@@ -7,7 +7,9 @@
 
 import NextAuth, { type DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
+import { createClient } from "@supabase/supabase-js";
 
 // Extend session type to include user ID
 declare module "next-auth" {
@@ -67,9 +69,106 @@ if (!process.env.NEXTAUTH_URL) {
 }
 
 // Data's Precise Configuration
-// O'Brien's Pragmatic Update: Only add Google provider if credentials exist
+// O'Brien's Pragmatic Update: Only add providers if credentials exist
 const providers = [];
 
+// Supabase Credentials Provider (for custom email/password auth)
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+  providers.push(
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        try {
+          const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+          
+          // Check user whitelist first
+          const isDevelopment = process.env.NODE_ENV !== "production";
+          const authorizedUsers = process.env.AUTHORIZED_USERS?.split(',') || [];
+          
+          // Check Supabase authorized_users table
+          let isAuthorized = false;
+          try {
+            const { data: authorizedUser } = await supabase
+              .from('authorized_users')
+              .select('email, active, development_only, verified')
+              .eq('email', credentials.email.toLowerCase())
+              .eq('active', true)
+              .single();
+            
+            if (authorizedUser) {
+              // In production, require verified users
+              if (!isDevelopment && !authorizedUser.verified) {
+                logSecurityEvent("UNVERIFIED_ACCESS_ATTEMPT", {
+                  email: credentials.email,
+                });
+                return null;
+              }
+              
+              // In production, reject development-only users
+              if (!isDevelopment && authorizedUser.development_only) {
+                logSecurityEvent("DEV_USER_IN_PRODUCTION", {
+                  email: credentials.email,
+                });
+                return null;
+              }
+              
+              isAuthorized = true;
+            }
+          } catch (error) {
+            // Table might not exist, fallback to env var
+          }
+          
+          // Fallback to environment variable whitelist
+          if (!isAuthorized) {
+            isAuthorized = authorizedUsers.some(
+              (email) => email.toLowerCase() === credentials.email.toLowerCase()
+            );
+          }
+          
+          if (!isAuthorized) {
+            logSecurityEvent("UNAUTHORIZED_ACCESS_ATTEMPT", {
+              email: credentials.email,
+              provider: "credentials",
+            });
+            return null;
+          }
+          
+          // Authenticate with Supabase
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: credentials.email.toLowerCase(),
+            password: credentials.password,
+          });
+          
+          if (error || !data.user) {
+            return null;
+          }
+          
+          return {
+            id: data.user.id,
+            email: data.user.email || credentials.email,
+            name: data.user.user_metadata?.username || data.user.email?.split('@')[0],
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
+        }
+      },
+    })
+  );
+}
+
+// Google OAuth Provider (optional)
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   providers.push(
     GoogleProvider({
@@ -86,7 +185,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   );
 } else if (process.env.NODE_ENV !== "production") {
   console.warn(
-    "⚠️  Google OAuth not configured. Authentication disabled in development mode."
+    "⚠️  Google OAuth not configured. Only Supabase credentials auth available."
   );
 }
 

@@ -59,23 +59,24 @@ export default function SignIn() {
     setAuthMethod("custom");
 
     try {
-      // Call custom auth API
-      const response = await fetch("/api/auth/custom-signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      // Use NextAuth's signIn function with credentials provider
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Authentication failed");
+      if (result?.error) {
+        throw new Error(
+          result.error === "CredentialsSignin"
+            ? "Invalid email or password. Please check your credentials."
+            : result.error
+        );
       }
 
       // If successful, redirect to dashboard
       router.push(callbackUrl);
+      router.refresh(); // Refresh to update session
     } catch (err: any) {
       console.error("Custom sign in error:", err);
       setAuthError(err.message || "Invalid email or password. Please check your credentials.");

@@ -102,8 +102,6 @@ class UnifiedServiceAccessor {
         // Use same base URL as n8n, different port
         config = {
           baseUrl: 'https://mcp.pbradygeorgen.com',
-        config = {
-          baseUrl: baseUrl || 'https://mcp.pbradygeorgen.com',
           apiKey: n8n.apiKey, // Reuse n8n API key for now
         };
       }
@@ -448,12 +446,86 @@ class UnifiedServiceAccessor {
   }
 
   /**
-   * Get service status
+   * Get service status with health checks
    */
-  getStatus() {
+  async getStatus() {
+    // Check remote MCP health
+    let remoteMcpOperational = false;
+    if (this.mcpRemote.enabled && this.mcpRemote.baseUrl) {
+      try {
+        const healthUrl = new URL(`${this.mcpRemote.baseUrl}/health`);
+        const response = await new Promise((resolve, reject) => {
+          const req = https.request({
+            hostname: healthUrl.hostname,
+            port: healthUrl.port || 443,
+            path: healthUrl.pathname,
+            method: 'GET',
+            headers: {
+              'X-MCP-API-KEY': this.mcpRemote.apiKey,
+            },
+            timeout: 5000,
+          }, (res) => {
+            resolve(res.statusCode);
+          });
+          req.on('error', () => resolve(500));
+          req.on('timeout', () => {
+            req.destroy();
+            resolve(500);
+          });
+          req.end();
+        });
+        remoteMcpOperational = response >= 200 && response < 300;
+      } catch (error) {
+        remoteMcpOperational = false;
+      }
+    }
+    
+    // Check local MCP health (if services are initialized)
+    let localMcpOperational = false;
+    if (!this.useRemoteMCP && this.mcpServices.memory) {
+      try {
+        // Quick test query to verify local MCP is working
+        await this.mcpServices.memory.queryMemories('test', { limit: 1 });
+        localMcpOperational = true;
+      } catch (error) {
+        localMcpOperational = false;
+      }
+    }
+    
+    // Check n8n health
+    let n8nOperational = false;
+    if (this.n8nConfig.baseUrl) {
+      try {
+        const n8nUrl = new URL(`${this.n8nConfig.baseUrl}/healthz`);
+        const response = await new Promise((resolve, reject) => {
+          const req = https.request({
+            hostname: n8nUrl.hostname,
+            port: n8nUrl.port || 443,
+            path: n8nUrl.pathname,
+            method: 'GET',
+            timeout: 5000,
+          }, (res) => {
+            resolve(res.statusCode);
+          });
+          req.on('error', () => resolve(500));
+          req.on('timeout', () => {
+            req.destroy();
+            resolve(500);
+          });
+          req.end();
+        });
+        n8nOperational = response >= 200 && response < 300;
+      } catch (error) {
+        n8nOperational = false;
+      }
+    }
+    
     return {
       initialized: this.initialized,
       useRemoteMCP: this.useRemoteMCP,
+      remoteMcpOperational,
+      localMcpOperational,
+      n8nOperational,
       mcp: {
         local: {
           workflow: !!this.mcpServices.workflow,
@@ -471,6 +543,7 @@ class UnifiedServiceAccessor {
       n8n: {
         configured: !!(this.n8nConfig.baseUrl && this.n8nConfig.apiKey),
         baseUrl: this.n8nConfig.baseUrl,
+        operational: n8nOperational,
       },
     };
   }

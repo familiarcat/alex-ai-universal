@@ -1,0 +1,61 @@
+'use client';
+
+/**
+ * 🖖 Progress Overlay Component
+ * 
+ * Displays progress bars for all active async operations
+ * Appears as a floating overlay in the top-right corner
+ */
+
+import React from 'react';
+import UniversalProgressBar from './UniversalProgressBar';
+import { useProgressContext } from '@/lib/ProgressContext';
+
+export default function ProgressOverlay() {
+  const { items } = useProgressContext();
+  
+  if (items.length === 0) {
+    return null;
+  }
+  
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '80px',
+      right: '20px',
+      zIndex: 10000,
+      maxWidth: '400px',
+      maxHeight: '60vh',
+      overflowY: 'auto',
+      background: 'rgba(10, 10, 15, 0.95)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(0, 255, 170, 0.2)',
+      borderRadius: '8px',
+      padding: '12px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+    }}>
+      <div style={{
+        fontSize: '12px',
+        fontWeight: 600,
+        color: '#00ffaa',
+        marginBottom: '8px',
+        paddingBottom: '8px',
+        borderBottom: '1px solid rgba(0, 255, 170, 0.2)'
+      }}>
+        🖖 Active Operations ({items.length})
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {items.map(item => (
+          <UniversalProgressBar
+            key={item.id}
+            current={item.current}
+            total={item.total}
+            description={item.description}
+            status={item.status}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+

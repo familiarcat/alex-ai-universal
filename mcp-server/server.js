@@ -245,6 +245,273 @@ app.get('/api/scheduler/jobs', authenticateApiKey, (req, res) => {
   }
 });
 
+// Dashboard Data Endpoints (DDD Controller Layer)
+// These endpoints provide data for dashboard components via MCP
+
+// Knowledge query endpoint
+app.post('/knowledge/query', authenticateApiKey, async (req, res) => {
+  try {
+    const { action, limit = 100, category, crew_member, query } = req.body;
+    
+    // Use MCP memory storage to query Supabase
+    const result = await mcpServices.memory.queryMemories(query || '', {
+      limit: parseInt(limit),
+      category,
+      crewMember: crew_member,
+    });
+    
+    // Format response to match expected structure
+    // queryMemories returns: { success, cached, results, memories, data }
+    const memories = result.memories || result.results || result.data || [];
+    
+    res.json({
+      sessions: memories,
+      data: memories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Knowledge query error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sessions: [],
+      data: [],
+    });
+  }
+});
+
+// Crew stats endpoint
+app.post('/crew/stats', authenticateApiKey, async (req, res) => {
+  try {
+    const { action, limit = 100, crew_member } = req.body;
+    
+    // Query all memories and aggregate by crew member
+    const result = await mcpServices.memory.queryMemories('', {
+      limit: parseInt(limit),
+      crewMember: crew_member,
+    });
+    
+    const memories = result.memories || result.results || result.data || [];
+    
+    res.json({
+      sessions: memories,
+      data: memories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Crew stats error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sessions: [],
+      data: [],
+    });
+  }
+});
+
+// Learning metrics endpoint
+app.post('/learning/metrics', authenticateApiKey, async (req, res) => {
+  try {
+    const { action, limit = 1000, dateRange } = req.body;
+    
+    const result = await mcpServices.memory.queryMemories('', {
+      limit: parseInt(limit),
+    });
+    
+    const memories = result.memories || result.results || result.data || [];
+    
+    res.json({
+      sessions: memories,
+      data: memories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Learning metrics error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sessions: [],
+      data: [],
+    });
+  }
+});
+
+// Project recommendations endpoint
+app.post('/project/recommendations', authenticateApiKey, async (req, res) => {
+  try {
+    const { action, limit = 5, category } = req.body;
+    
+    const result = await mcpServices.memory.queryMemories('', {
+      limit: parseInt(limit),
+      category: category || 'project-insights',
+    });
+    
+    const memories = result.memories || result.results || result.data || [];
+    
+    res.json({
+      sessions: memories,
+      data: memories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Project recommendations error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sessions: [],
+      data: [],
+    });
+  }
+});
+
+// Security assessment endpoint
+app.post('/security/assessment', authenticateApiKey, async (req, res) => {
+  try {
+    // Return security assessment data structure
+    res.json({
+      metrics: [],
+      auditLogs: [],
+      overallScore: 0,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Security assessment error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      metrics: [],
+      auditLogs: [],
+      overallScore: 0,
+    });
+  }
+});
+
+// Cost optimization endpoint
+app.post('/cost/optimization', authenticateApiKey, async (req, res) => {
+  try {
+    // Return cost optimization data structure
+    res.json({
+      modelBreakdown: [],
+      totalCost: 0,
+      recommendations: [],
+      success: true,
+    });
+  } catch (error) {
+    console.error('Cost optimization error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      modelBreakdown: [],
+      totalCost: 0,
+      recommendations: [],
+    });
+  }
+});
+
+// UX analytics endpoint
+app.post('/ux/analytics', authenticateApiKey, async (req, res) => {
+  try {
+    res.json({
+      metrics: [],
+      journey: [],
+      overallSatisfaction: 0,
+      success: true,
+    });
+  } catch (error) {
+    console.error('UX analytics error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      metrics: [],
+      journey: [],
+      overallSatisfaction: 0,
+    });
+  }
+});
+
+// AI impact assessment endpoint
+app.post('/ai/impact', authenticateApiKey, async (req, res) => {
+  try {
+    res.json({
+      assessments: [],
+      version: '1.0.0',
+      success: true,
+    });
+  } catch (error) {
+    console.error('AI impact assessment error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      assessments: [],
+      version: '1.0.0',
+    });
+  }
+});
+
+// Process documentation endpoint
+app.post('/process/documentation', authenticateApiKey, async (req, res) => {
+  try {
+    res.json({
+      processes: [],
+      success: true,
+    });
+  } catch (error) {
+    console.error('Process documentation error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      processes: [],
+    });
+  }
+});
+
+// Data sources endpoint
+app.post('/data/sources', authenticateApiKey, async (req, res) => {
+  try {
+    res.json({
+      sources: [],
+      opportunities: [],
+      success: true,
+    });
+  } catch (error) {
+    console.error('Data sources error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sources: [],
+      opportunities: [],
+    });
+  }
+});
+
+// Documentation endpoint
+app.post('/documentation', authenticateApiKey, async (req, res) => {
+  try {
+    const { action, category, limit = 500 } = req.body;
+    
+    const result = await mcpServices.memory.queryMemories('', {
+      limit: parseInt(limit),
+      category: category || 'component_documentation',
+    });
+    
+    const memories = result.memories || result.results || result.data || [];
+    
+    res.json({
+      sessions: memories,
+      data: memories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Documentation error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      sessions: [],
+      data: [],
+    });
+  }
+});
+
 // Service status
 app.get('/api/status', authenticateApiKey, (req, res) => {
   res.json({
@@ -281,7 +548,18 @@ app.use((req, res) => {
       'GET /api/monitoring/stats',
       'GET /api/monitoring/history',
       'POST /api/scheduler/schedule',
-      'GET /api/scheduler/jobs'
+      'GET /api/scheduler/jobs',
+      'POST /knowledge/query',
+      'POST /crew/stats',
+      'POST /learning/metrics',
+      'POST /project/recommendations',
+      'POST /security/assessment',
+      'POST /cost/optimization',
+      'POST /ux/analytics',
+      'POST /ai/impact',
+      'POST /process/documentation',
+      'POST /data/sources',
+      'POST /documentation'
     ]
   });
 });

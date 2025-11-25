@@ -51,12 +51,25 @@ export default function MCPDashboard() {
     }
   });
   const [loading, setLoading] = useState(true);
+  const [formattedTime, setFormattedTime] = useState<string>('');
 
   useEffect(() => {
     loadDashboardData();
     const interval = setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
   }, []);
+
+  // Format time only on client to avoid hydration mismatch
+  useEffect(() => {
+    if (stats.system.lastUpdate) {
+      try {
+        const date = new Date(stats.system.lastUpdate);
+        setFormattedTime(date.toLocaleTimeString());
+      } catch (error) {
+        setFormattedTime('--:--:--');
+      }
+    }
+  }, [stats.system.lastUpdate]);
 
   const loadDashboardData = async () => {
     try {
@@ -68,12 +81,28 @@ export default function MCPDashboard() {
       const executionsRes = await fetch('/api/mcp/workflows/executions?limit=100');
       const executionsData = executionsRes.ok ? await executionsRes.json() : { executions: [] };
       
-      // Load system status
+      // Load system status (DDD: Controller Layer → Data Layer)
       const statusRes = await fetch('/api/mcp/status');
-      const statusData = statusRes.ok ? await statusRes.json() : { status: 'offline' };
+      const statusData = statusRes.ok ? await statusRes.json() : { 
+        status: 'offline',
+        services: {
+          localMCP: false,
+          remoteMCP: false,
+          n8n: false,
+          openRouter: false
+        }
+      };
 
       const executions = executionsData.executions || [];
       const workflows = workflowsData.workflows || [];
+
+      // DDD: Map API response (source of truth) to UI state
+      const mcpStatus = statusData.services?.localMCP || statusData.services?.remoteMCP 
+        ? 'online' 
+        : 'offline';
+      const openRouterStatus = statusData.services?.openRouter 
+        ? 'online' 
+        : 'offline';
 
       setStats({
         workflows: {
@@ -95,8 +124,8 @@ export default function MCPDashboard() {
           active: 10
         },
         system: {
-          mcpStatus: statusData.status === 'operational' ? 'online' : 'offline',
-          openRouterStatus: 'online', // TODO: Check OpenRouter status
+          mcpStatus: mcpStatus,
+          openRouterStatus: openRouterStatus,
           lastUpdate: new Date().toISOString()
         }
       });
@@ -512,7 +541,7 @@ export default function MCPDashboard() {
                 color: 'var(--text-muted)',
                 fontSize: 'var(--font-xs)'
               }}>
-                {new Date(stats.system.lastUpdate).toLocaleTimeString()}
+                {formattedTime || '--:--:--'}
               </span>
             </div>
           </div>

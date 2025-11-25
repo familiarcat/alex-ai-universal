@@ -63,6 +63,28 @@ class AlexAIUniversalTestRunner {
       await webTest.runAllTests();
       this.recordTestSuite('Web Interface', webTest.testResults);
 
+      // Run MCP E2E integration tests
+      console.log(chalk.yellow('\n🧪 Running MCP E2E Integration Tests...'));
+      const { spawn } = require('child_process');
+      const mcpTestResult = await new Promise((resolve) => {
+        const testProcess = spawn('node', [
+          path.join(__dirname, '../scripts/test/e2e-mcp-integration-test.js')
+        ], {
+          cwd: path.join(__dirname, '..'),
+          stdio: 'inherit'
+        });
+        
+        testProcess.on('close', (code) => {
+          resolve({ success: code === 0, exitCode: code });
+        });
+      });
+      
+      this.recordTestSuite('MCP E2E', {
+        passed: mcpTestResult.success ? 1 : 0,
+        failed: mcpTestResult.success ? 0 : 1,
+        total: 1
+      });
+
       // Generate comprehensive report
       this.generateComprehensiveReport();
 

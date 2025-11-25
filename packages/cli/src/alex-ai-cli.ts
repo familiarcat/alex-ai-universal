@@ -214,6 +214,30 @@ class NPXCLIHandler {
   }
 
   /**
+   * Check if message is an Observation Lounge request
+   */
+  isObservationLoungeRequest(message: string): boolean {
+    const observationLoungeKeywords = [
+      'observation lounge',
+      'observation-lounge',
+      'organize the crew',
+      'crew meeting',
+      'crew briefing',
+      'crew session',
+      'crew discussion',
+      'crew findings',
+      'crew coordination',
+      'crew status',
+      'crew report',
+      'status report',
+      'crew assessment'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return observationLoungeKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
    * Handle dashboard view requests
    */
   async handleDashboardView(): Promise<void> {
@@ -252,153 +276,57 @@ class NPXCLIHandler {
 
   /**
    * Handle Observation Lounge requests
+   * DEFAULT: Always uses optimized script with cinematic format and saves to .md file
    */
   async handleObservationLounge(message: string): Promise<void> {
     try {
-      const https = require('https');
-      const { URL } = require('url');
+      const { execSync } = require('child_process');
+      const path = require('path');
       
       // Parse the message to extract parameters
       const lowerMessage = message.toLowerCase();
-      const isCinematic = lowerMessage.includes('cinematic') || lowerMessage.includes('cinematic format');
-      const crewMembers = lowerMessage.includes('all') ? 'all' : undefined;
+      const isStandard = lowerMessage.includes('standard') || lowerMessage.includes('no cinematic');
+      const noSave = lowerMessage.includes('no save') || lowerMessage.includes('dont save');
       
-      // Extract topic from message
-      let topic = message;
-      if (lowerMessage.includes('organize the crew')) {
-        // Extract topic after "organize the crew"
-        const match = message.match(/organize the crew[^.]*\.(.*?)(?:and|$)/i);
-        topic = match ? match[1].trim() : 'Crew coordination and findings';
+      // Extract topic from message (remove command words)
+      let topic = message
+        .replace(/observation\s+lounge/gi, '')
+        .replace(/cinematic/gi, '')
+        .replace(/standard/gi, '')
+        .replace(/no\s+save/gi, '')
+        .replace(/dont\s+save/gi, '')
+        .trim();
+      
+      if (!topic || topic.length < 3) {
+        topic = 'Project Status Review and Progress Assessment';
       }
       
-      // Determine discussion type
-      let discussionType = 'collaborative';
-      if (isCinematic) {
-        discussionType = 'cinematic';
-      } else if (lowerMessage.includes('findings')) {
-        discussionType = 'findings_review';
-      } else if (lowerMessage.includes('strategic') || lowerMessage.includes('strategy')) {
-        discussionType = 'strategic';
+      // Build command for optimized script
+      const scriptPath = path.join(__dirname, '../../../../scripts/observation-lounge-optimized.js');
+      const args = [topic];
+      
+      if (isStandard) {
+        args.push('--standard');
       }
       
-      const n8nUrl = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
-      const webhookUrl = new URL('/webhook/observation-lounge', n8nUrl);
+      if (noSave) {
+        args.push('--no-save');
+      }
       
-      const payload = {
-        topic: topic || 'Crew coordination session',
-        context: {
-          source: 'cursor-ai',
-          message: message,
-          format: isCinematic ? 'cinematic' : 'standard'
-        },
-        crew_members: crewMembers || 'all',
-        discussion_type: discussionType,
-        priority: lowerMessage.includes('urgent') || lowerMessage.includes('critical') ? 'high' : 'medium',
-        format: isCinematic ? 'cinematic' : 'standard'
-      };
+      const command = `node "${scriptPath}" ${args.map(a => `"${a}"`).join(' ')}`;
       
-      console.log('🎭 Organizing Crew in Observation Lounge...');
+      console.log('🖖 Observation Lounge - Optimized System');
       console.log('==========================================\n');
-      console.log('📋 Session Parameters:');
-      console.log(`   Topic: ${payload.topic}`);
-      console.log(`   Format: ${payload.format}`);
-      console.log(`   Discussion Type: ${discussionType}`);
-      console.log(`   Crew Members: ${payload.crew_members}`);
-      console.log(`   Priority: ${payload.priority}`);
-      console.log('\n🚀 Triggering DDD Flow:');
-      console.log('   Client (Cursor AI) → n8n.pbradygeorgen.com → Supabase');
-      console.log('   All crew memories will be retrieved and coordinated\n');
+      console.log('📋 Using: Riker\'s Coordination + Quark\'s Cost Optimization');
+      console.log(`   Topic: ${topic}`);
+      console.log(`   Format: ${isStandard ? 'standard' : 'cinematic (default)'}`);
+      console.log(`   Save: ${noSave ? 'No' : 'Yes (default)'}\n`);
+      console.log('🚀 Executing optimized script...\n');
       
-      const postData = JSON.stringify(payload);
-      
-      const options = {
-        hostname: webhookUrl.hostname,
-        port: webhookUrl.port || 443,
-        path: webhookUrl.pathname,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData)
-        }
-      };
-      
-      return new Promise((resolve, reject) => {
-        const req = https.request(options, (res) => {
-          let data = '';
-          res.on('data', (chunk) => { data += chunk; });
-          res.on('end', () => {
-            try {
-              const response = JSON.parse(data);
-              
-              if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-                console.log('✅ Observation Lounge Session Initiated!\n');
-                
-                if (response.session) {
-                  console.log('📊 Session Details:');
-                  console.log(`   Session ID: ${response.session.id}`);
-                  console.log(`   Status: ${response.session.status}`);
-                  console.log(`   Participants: ${response.session.participants || 'All crew'}`);
-                  console.log(`   Total Crew: ${response.session.total_crew || 10}\n`);
-                }
-                
-                if (response.crew_insights) {
-                  console.log('👥 Crew Insights:');
-                  Object.entries(response.crew_insights).forEach(([crew, insight]: [string, any]) => {
-                    if (insight.status === 'success') {
-                      console.log(`   ✅ ${crew}: ${insight.summary || 'Analysis complete'}`);
-                    }
-                  });
-                  console.log('');
-                }
-                
-                if (response.synthesis) {
-                  console.log('🎯 Synthesized Findings:');
-                  if (typeof response.synthesis === 'string') {
-                    console.log(`   ${response.synthesis}\n`);
-                  } else if (response.synthesis.summary) {
-                    console.log(`   ${response.synthesis.summary}\n`);
-                  }
-                }
-                
-                if (response.recommendations && response.recommendations.length > 0) {
-                  console.log('💡 Recommendations:');
-                  response.recommendations.forEach((rec: string, idx: number) => {
-                    console.log(`   ${idx + 1}. ${rec}`);
-                  });
-                  console.log('');
-                }
-                
-                if (isCinematic) {
-                  console.log('🎬 Cinematic Format:');
-                  console.log('   Crew responses will be formatted in cinematic narrative style');
-                  console.log('   Full session details stored in Supabase for future reference\n');
-                }
-                
-                console.log('💾 Memories stored in Supabase via n8n workflow');
-                console.log('🔄 DDD Flow Complete: Client → n8n → Supabase\n');
-                
-                resolve();
-              } else {
-                console.error(`❌ Observation Lounge returned status ${res.statusCode}`);
-                console.error(`   Response: ${data.substring(0, 200)}`);
-                reject(new Error(`HTTP ${res.statusCode}`));
-              }
-            } catch (error: any) {
-              console.error('❌ Failed to parse Observation Lounge response:', error.message);
-              console.log('📄 Raw response:', data.substring(0, 500));
-              reject(error);
-            }
-          });
-        });
-        
-        req.on('error', (error: Error) => {
-          console.error('❌ Failed to connect to Observation Lounge:', error.message);
-          console.error(`   URL: ${webhookUrl.toString()}`);
-          reject(error);
-        });
-        
-        req.write(postData);
-        req.end();
+      // Execute the optimized script
+      execSync(command, {
+        stdio: 'inherit',
+        cwd: path.join(__dirname, '../../../../')
       });
     } catch (error: any) {
       console.error(`❌ Observation Lounge failed: ${error.message}`);

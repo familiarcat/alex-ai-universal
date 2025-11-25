@@ -25,6 +25,17 @@ import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard'
 import LiveRefreshDashboard from '@/components/LiveRefreshDashboard';
 import N8NWorkflowBento from '@/components/N8NWorkflowBento';
 import VectorBasedDashboard from '@/components/VectorBasedDashboard';
+// Crew Recommendations Implementation Components
+import RAGSelfDocumentation from '@/components/RAGSelfDocumentation';
+import SecurityAssessmentDashboard from '@/components/SecurityAssessmentDashboard';
+import CostOptimizationMonitor from '@/components/CostOptimizationMonitor';
+import UserExperienceAnalytics from '@/components/UserExperienceAnalytics';
+import AIImpactAssessment from '@/components/AIImpactAssessment';
+import ProcessDocumentationSystem from '@/components/ProcessDocumentationSystem';
+import DataSourceIntegrationPanel from '@/components/DataSourceIntegrationPanel';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import ProgressOverlay from '@/components/ProgressOverlay';
+import { ProgressProvider } from '@/lib/ProgressContext';
 
 export default function DashboardContent() {
   const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
@@ -129,9 +140,12 @@ export default function DashboardContent() {
   // Themes now managed by shared ThemeSelector component
 
   return (
-    <div className="dashboard-theme-wrapper" style={{ 
-      padding: '40px 20px'
-    }}>
+    <ProgressProvider>
+      <ErrorBoundary>
+        <ProgressOverlay />
+        <div className="dashboard-theme-wrapper" style={{
+          padding: '40px 20px'
+        }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         {/* Header */}
         <div className="card" style={{
@@ -268,6 +282,69 @@ export default function DashboardContent() {
               // Navigate to workflow details or open modal
             }}
           />
+        </div>
+
+        {/* Crew Recommendations Implementation - Component-Based Knowledge System */}
+        <div style={{
+          marginBottom: '40px'
+        }}>
+          <div className="card" style={{
+            padding: 'var(--spacing-lg)',
+            borderRadius: 'var(--radius)',
+            border: 'var(--border)',
+            background: 'var(--card)',
+            marginBottom: 'var(--spacing-lg)'
+          }}>
+            <h2 style={{
+              fontSize: 'var(--font-xl)',
+              color: 'var(--accent)',
+              marginBottom: 'var(--spacing-sm)'
+            }}>
+              🖖 Crew Recommendations Implementation
+            </h2>
+            <p style={{
+              fontSize: 'var(--font-sm)',
+              color: 'var(--text-muted)',
+              marginBottom: 0
+            }}>
+              UI interpretation of features and knowledge organized by component
+            </p>
+          </div>
+
+          {/* RAG Self-Documentation - Data, La Forge, Crusher, Quark, O'Brien */}
+          <div style={{ marginBottom: '30px' }}>
+            <RAGSelfDocumentation />
+          </div>
+
+          {/* Security Assessment - Worf, Uhura */}
+          <div style={{ marginBottom: '30px' }}>
+            <SecurityAssessmentDashboard />
+          </div>
+
+          {/* Cost Optimization - Riker, Quark */}
+          <div style={{ marginBottom: '30px' }}>
+            <CostOptimizationMonitor />
+          </div>
+
+          {/* User Experience Analytics - Troi */}
+          <div style={{ marginBottom: '30px' }}>
+            <UserExperienceAnalytics />
+          </div>
+
+          {/* AI Impact Assessment - Picard */}
+          <div style={{ marginBottom: '30px' }}>
+            <AIImpactAssessment />
+          </div>
+
+          {/* Process Documentation - O'Brien, La Forge */}
+          <div style={{ marginBottom: '30px' }}>
+            <ProcessDocumentationSystem />
+          </div>
+
+          {/* Data Source Integration - Riker */}
+          <div style={{ marginBottom: '30px' }}>
+            <DataSourceIntegrationPanel />
+          </div>
         </div>
 
         {/* Projects */}
@@ -563,7 +640,9 @@ export default function DashboardContent() {
           onCancel={() => setDeleteModal(null)}
         />
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
+    </ProgressProvider>
   );
 }
 

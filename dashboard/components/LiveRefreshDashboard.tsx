@@ -39,6 +39,33 @@ export default function LiveRefreshDashboard() {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(5000); // 5 seconds
 
+  // Handle codebase change - MUST be defined before useEffect (Rules of Hooks)
+  const handleCodebaseChange = useCallback((change: CodebaseChange) => {
+    setStats(prev => {
+      const newFilesChanged = new Set(prev.filesChanged);
+      newFilesChanged.add(change.filePath);
+
+      return {
+        totalChanges: prev.totalChanges + 1,
+        lastChange: change.timestamp,
+        filesChanged: newFilesChanged,
+        isConnected: prev.isConnected
+      };
+    });
+
+    // Auto-refresh if enabled
+    if (autoRefresh && (change.event === 'change' || change.event === 'add')) {
+      // Only refresh if it's a relevant file
+      const relevantExtensions = ['.tsx', '.ts', '.js', '.jsx', '.json', '.css'];
+      const isRelevant = relevantExtensions.some(ext => change.filePath.endsWith(ext));
+      
+      if (isRelevant) {
+        // Trigger a soft refresh (re-fetch data without full page reload)
+        window.dispatchEvent(new CustomEvent('codebase-change', { detail: change }));
+      }
+    }
+  }, [autoRefresh]);
+
   useEffect(() => {
     // WebSocket connection for live updates
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -110,33 +137,6 @@ export default function LiveRefreshDashboard() {
 
       return () => clearInterval(pollInterval);
     }
-
-    // Handle codebase change
-    const handleCodebaseChange = useCallback((change: CodebaseChange) => {
-      setStats(prev => {
-        const newFilesChanged = new Set(prev.filesChanged);
-        newFilesChanged.add(change.filePath);
-
-        return {
-          totalChanges: prev.totalChanges + 1,
-          lastChange: change.timestamp,
-          filesChanged: newFilesChanged,
-          isConnected: prev.isConnected
-        };
-      });
-
-      // Auto-refresh if enabled
-      if (autoRefresh && (change.event === 'change' || change.event === 'add')) {
-        // Only refresh if it's a relevant file
-        const relevantExtensions = ['.tsx', '.ts', '.js', '.jsx', '.json', '.css'];
-        const isRelevant = relevantExtensions.some(ext => change.filePath.endsWith(ext));
-        
-        if (isRelevant) {
-          // Trigger a soft refresh (re-fetch data without full page reload)
-          window.dispatchEvent(new CustomEvent('codebase-change', { detail: change }));
-        }
-      }
-    }, [autoRefresh]);
 
     // Start connection
     connect();

@@ -37,14 +37,13 @@ export default function RAGProjectRecommendations() {
       setLoading(true);
       setError(null);
       
-      // Query RAG system for project recommendations
-      const response = await fetch('/api/knowledge/query?category=project-insights&limit=5');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch recommendations');
-      }
-      
-      const data = await response.json();
+      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      const { getUnifiedDataService } = await import('@/lib/unified-data-service');
+      const service = getUnifiedDataService();
+      const data = await service.getProjectRecommendations({ 
+        category: 'project-insights', 
+        limit: 5 
+      });
       
       // Transform RAG memories into recommendations
       const recs: Recommendation[] = (data.sessions || []).slice(0, 5).map((memory: any, index: number) => ({

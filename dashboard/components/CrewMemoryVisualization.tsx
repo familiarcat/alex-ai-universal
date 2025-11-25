@@ -35,15 +35,12 @@ export default function CrewMemoryVisualization() {
     try {
       setLoading(true);
       
-      // Query RAG system for crew memory statistics
-      const response = await fetch('/api/knowledge/query?limit=100');
+      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      const { getUnifiedDataService } = await import('@/lib/unified-data-service');
+      const service = getUnifiedDataService();
+      const data = await service.getCrewStats({ limit: 100 });
       
-      if (!response.ok) {
-        throw new Error('Failed to fetch crew stats');
-      }
-      
-      const data = await response.json();
-      const memories = data.sessions || [];
+      const memories = data.sessions || data.data || [];
       setTotalMemories(memories.length);
       
       // Aggregate by crew member

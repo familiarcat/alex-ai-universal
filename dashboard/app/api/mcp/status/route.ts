@@ -1,27 +1,138 @@
 import { NextResponse } from 'next/server';
-import { getUnifiedServiceAccessor } from '@/scripts/utils/unified-service-accessor';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * MCP System Status API
  * 
- * Returns overall system health and status
+ * DDD Architecture:
+ * - Data Layer: Supabase (local MCP), Remote MCP Server, OpenRouter API
+ * - Controller Layer: This API route (status aggregation)
+ * - Client Layer: Dashboard UI (consumes this API)
+ * 
+ * Returns overall system health and status from source of truth
  */
+
+const MCP_BASE_URL = process.env.NEXT_PUBLIC_MCP_URL || 'https://mcp.pbradygeorgen.com';
+const MCP_API_KEY = process.env.MCP_API_KEY || process.env.N8N_API_KEY;
 
 export async function GET() {
   try {
-    const services = getUnifiedServiceAccessor();
-    services.initialize();
+    // Check remote MCP health
+    let remoteMcpOperational = false;
+    let localMcpOperational = false;
+    let n8nOperational = false;
+    
+    // Check local MCP first (via Supabase direct connection - this is our primary system)
+    // DDD: Data Layer - Supabase is the source of truth for local MCP
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+    
+    if (supabaseUrl && supabaseKey) {
+      try {
+        // Use Supabase client library for more reliable connection check
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        // Test connection by querying knowledge_base table (MCP's primary table)
+        const { data, error } = await supabase
+          .from('knowledge_base')
+          .select('id')
+          .limit(1);
+        
+        // If we can query (even if empty), Supabase is operational
+        localMcpOperational = !error;
+        
+        if (error) {
+          console.warn('Local MCP (Supabase) query error:', error.message);
+        }
+      } catch (error: any) {
+        // Local MCP (Supabase) not available or not configured
+        localMcpOperational = false;
+        console.warn('Local MCP (Supabase) connection failed:', error.message);
+      }
+    } else {
+      localMcpOperational = false;
+      console.warn('Supabase credentials not configured (NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing)');
+    }
+    
+    // Check remote MCP server (optional - for future remote MCP server)
+    if (MCP_BASE_URL && !localMcpOperational) {
+      try {
+        const healthUrl = `${MCP_BASE_URL}/health`;
+        const response = await fetch(healthUrl, {
+          method: 'GET',
+          headers: MCP_API_KEY ? {
+            'X-MCP-API-KEY': MCP_API_KEY,
+          } : {},
+          signal: AbortSignal.timeout(3000), // 3 second timeout
+        });
+        remoteMcpOperational = response.ok;
+      } catch (error: any) {
+        // If health endpoint doesn't exist, try a simple endpoint
+        try {
+          const testUrl = `${MCP_BASE_URL}/api/status`;
+          const response = await fetch(testUrl, {
+            method: 'GET',
+            headers: MCP_API_KEY ? {
+              'X-MCP-API-KEY': MCP_API_KEY,
+            } : {},
+            signal: AbortSignal.timeout(3000),
+          });
+          remoteMcpOperational = response.ok;
+        } catch (testError: any) {
+          remoteMcpOperational = false;
+          // Remote MCP server not available - this is OK, we use local MCP
+        }
+      }
+    }
+    
+    // Check n8n health
+    const n8nUrl = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
+    if (n8nUrl) {
+      try {
+        const response = await fetch(`${n8nUrl}/healthz`, {
+          method: 'GET',
+          signal: AbortSignal.timeout(5000),
+        });
+        n8nOperational = response.ok;
+      } catch (error: any) {
+        n8nOperational = false;
+      }
+    }
 
-    // Get status from unified service accessor
-    const status = await services.getStatus();
+    // Check OpenRouter health (DDD: Source of Truth)
+    let openRouterOperational = false;
+    const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+    if (openRouterApiKey) {
+      try {
+        const response = await fetch('https://openrouter.ai/api/v1/models', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${openRouterApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          signal: AbortSignal.timeout(5000),
+        });
+        openRouterOperational = response.ok;
+      } catch (error: any) {
+        openRouterOperational = false;
+        console.warn('OpenRouter health check failed:', error.message);
+      }
+    } else {
+      console.warn('OpenRouter API key not configured');
+    }
 
     return NextResponse.json({
       success: true,
-      status: status.remoteMcpOperational || status.localMcpOperational ? 'operational' : 'offline',
+      status: remoteMcpOperational || localMcpOperational ? 'operational' : 'offline',
       services: {
-        remoteMCP: status.remoteMcpOperational,
-        localMCP: status.localMcpOperational,
-        n8n: status.n8nOperational
+        remoteMCP: remoteMcpOperational,
+        localMCP: localMcpOperational,
+        n8n: n8nOperational,
+        openRouter: openRouterOperational
+      },
+      endpoints: {
+        mcp: MCP_BASE_URL,
+        n8n: n8nUrl,
+        openRouter: 'https://openrouter.ai'
       },
       timestamp: new Date().toISOString()
     });
