@@ -76,7 +76,7 @@ export default function QuizInline({ projectId, onApplyTheme }: QuizInlineProps)
         <div style={{ border: 'var(--border)', padding: 16, borderRadius: 12, background: 'var(--card)' }}>
           <div style={{ marginBottom: 12, fontWeight: 500 }}>{QUESTIONS[idx].q}</div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' as const }}>
-            <button onClick={() => answer(true)} style={{ padding: '10px 20px', borderRadius: 8, cursor: 'pointer', background: 'var(--accent)', border: 'none', color: '#0a0015', fontWeight: 600 }}>Yes</button>
+            <button onClick={() => answer(true)} style={{ padding: '10px 20px', borderRadius: 8, cursor: 'pointer', background: 'var(--accent)', border: 'none', color: 'var(--button-text)', fontWeight: 600 }}>Yes</button>
             <button onClick={() => answer(false)} style={{ padding: '10px 20px', borderRadius: 8, cursor: 'pointer', background: 'var(--card-alt)', border: 'var(--border)', color: 'var(--text)' }}>No</button>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, opacity: 0.8 }}>Question {idx + 1} / {QUESTIONS.length}</div>
@@ -85,7 +85,7 @@ export default function QuizInline({ projectId, onApplyTheme }: QuizInlineProps)
         <div style={{ border: 'var(--border)', padding: 16, borderRadius: 12, background: 'var(--card)' }}>
           <div style={{ marginBottom: 8, fontSize: 14, opacity: 0.8 }}>✨ Based on your answers, we recommend:</div>
           <div style={{ marginBottom: 16, fontSize: 20, fontWeight: 700, color: 'var(--accent)' }}>{themeNames[recommended]}</div>
-          <button onClick={() => onApplyTheme?.(recommended)} style={{ display: 'inline-block', padding: '12px 20px', borderRadius: 8, fontWeight: 600, background: 'var(--accent)', color: '#0a0015', border: 'none', cursor: 'pointer' }}>Apply to project {projectId}</button>
+          <button onClick={() => onApplyTheme?.(recommended)} style={{ display: 'inline-block', padding: '12px 20px', borderRadius: 8, fontWeight: 600, background: 'var(--accent)', color: 'var(--button-text)', border: 'none', cursor: 'pointer' }}>Apply to project {projectId}</button>
           <button onClick={() => { setIdx(0); setScores(Object.fromEntries(Object.keys(scores).map(k => [k, 0])) as any); setDone(false); }} style={{ marginLeft: 12, padding: '12px 20px', borderRadius: 8, background: 'var(--card-alt)', color: 'var(--text)', border: 'var(--border)', cursor: 'pointer' }}>Retake Quiz</button>
         </div>
       )}

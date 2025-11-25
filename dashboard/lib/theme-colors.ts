@@ -38,7 +38,7 @@ export const THEME_TEXT_COLORS: Record<string, string> = {
   brutalist: '#000000',
   mutedNeon: '#2A2A2A',
   monochromeBlue: '#0D3B66',
-  gradient: '#f5f5f5', // Light text for gradient background (was #1a202c - too dark)
+  gradient: '#f8f8f8', // Lighter text for gradient background (fixed contrast: was #f5f5f5, then #f7f7f7)
   pastel: '#2d2d2d',
   cyberpunk: '#f0e8ff', // Pink-tinted white
   glassmorphism: '#e8e8e8',
@@ -53,7 +53,7 @@ export const THEME_HEADING_COLORS: Record<string, string> = {
   brutalist: '#000000',
   mutedNeon: '#1A1A1A',
   monochromeBlue: '#0A1929',
-  gradient: '#ffffff', // White headings for gradient background (was #0f1419 - too dark)
+  gradient: '#ffffff', // White headings for gradient background (already optimal)
   pastel: '#1a1a1a',
   cyberpunk: '#ff0099', // Hot pink
   glassmorphism: '#ffffff',
@@ -62,14 +62,14 @@ export const THEME_HEADING_COLORS: Record<string, string> = {
 };
 
 export const THEME_ACCENT_COLORS: Record<string, string> = {
-  mochaEarth: '#7A9B76',    // Sage green
+  mochaEarth: '#556c52',     // Darker sage green (fixed contrast: was #7A9B76)
   verdantNature: '#2E7D32',  // Forest green
   chromeMetallic: '#00D4FF', // Electric cyan
   brutalist: '#000000',      // Pure black
-  mutedNeon: '#00FFF0',      // Neon cyan
+  mutedNeon: '#00b2a8',      // Darker neon cyan (fixed contrast: was #00FFF0)
   monochromeBlue: '#1565C0', // Deep blue
-  gradient: '#f093fb',       // Pink
-  pastel: '#e8a4d4',         // Soft pink
+  gradient: '#f7c9fc',       // Lighter pink (fixed contrast: was #f093fb, then #f4b3fc)
+  pastel: '#a27294',         // Darker soft pink (fixed contrast: was #e8a4d4)
   cyberpunk: '#ff0099',      // Hot pink/magenta
   glassmorphism: '#a78bfa',  // Purple
   midnight: '#00ffff',       // Cyan

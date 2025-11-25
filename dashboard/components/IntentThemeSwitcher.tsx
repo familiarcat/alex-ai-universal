@@ -49,7 +49,7 @@ export default function IntentThemeSwitcher() {
         <option value="serious">Serious</option>
         <option value="futuristic">Futuristic</option>
       </select>
-      <button onClick={apply} style={{ ...pill, background: 'var(--accent)', color: '#0b1020', border: 'none' } as any}>Apply</button>
+      <button onClick={apply} style={{ ...pill, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' } as any}>Apply</button>
       <span style={{ fontSize: 12, opacity: 0.75 }}>Theme → {themeId}</span>
     </div>
   );

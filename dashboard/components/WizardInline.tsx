@@ -27,7 +27,7 @@ export default function WizardInline({ projectId, onApply }: WizardInlineProps) 
           <input placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} style={{ width: '100%', padding: 10, background: 'var(--card-alt)', color: 'var(--text)', border: 'var(--border)', borderRadius: 8, marginBottom: 8 }} />
           <input placeholder="Subheadline" value={subheadline} onChange={(e) => setSubheadline(e.target.value)} style={{ width: '100%', padding: 10, background: 'var(--card-alt)', color: 'var(--text)', border: 'var(--border)', borderRadius: 8 }} />
           <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-            <button onClick={() => setStep(1)} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={() => setStep(1)} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -37,7 +37,7 @@ export default function WizardInline({ projectId, onApply }: WizardInlineProps) 
           <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} style={{ width: '100%', minHeight: 100, padding: 10, background: 'var(--card-alt)', color: 'var(--text)', border: 'var(--border)', borderRadius: 8 }} />
           <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
             <button onClick={() => setStep(0)} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={() => setStep(2)} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={() => setStep(2)} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -51,7 +51,7 @@ export default function WizardInline({ projectId, onApply }: WizardInlineProps) 
           />
           <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
             <button onClick={() => setStep(1)} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={() => onApply({ headline, subheadline, description, theme })} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Apply to {projectId}</button>
+            <button onClick={() => onApply({ headline, subheadline, description, theme })} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Apply to {projectId}</button>
           </div>
         </div>
       )}

@@ -195,7 +195,7 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
             <option value="portfolio">Portfolio</option>
           </select>
           <div style={row as any}>
-            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -208,7 +208,7 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
           <textarea placeholder="Goals (what should this site achieve?)" value={goals} onChange={(e) => setGoals(e.target.value)} style={{ ...input, minHeight: 100, marginTop: 8 } as any} />
           <div style={row as any}>
             <button onClick={back} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -235,7 +235,7 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
           <div style={{ marginTop: 8, fontSize: 12, opacity: 0.8 }}>Suggested theme → <b>{recommendedTheme}</b></div>
           <div style={row as any}>
             <button onClick={back} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -256,7 +256,7 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
           ))}
           <div style={row as any}>
             <button onClick={back} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Next</button>
+            <button onClick={next} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Next</button>
           </div>
         </div>
       )}
@@ -274,7 +274,7 @@ export default function CombinedWizard({ projectId, onCreated }: CombinedWizardP
           </div>
           <div style={row as any}>
             <button onClick={back} style={{ padding: '8px 12px', borderRadius: 8 }}>Back</button>
-            <button onClick={finish} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0a0015', border: 'none' }}>Create components</button>
+            <button onClick={finish} style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none' }}>Create components</button>
           </div>
         </div>
       )}

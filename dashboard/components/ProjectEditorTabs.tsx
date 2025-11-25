@@ -143,7 +143,7 @@ export default function ProjectEditorTabs({ projectId, content, onUpdate, onThem
                 padding: '8px 16px', 
                 borderRadius: 6, 
                 background: 'var(--accent)', 
-                color: '#0a0015', 
+                color: 'var(--button-text)', 
                 border: 'none', 
                 cursor: 'pointer',
                 fontSize: '12px',

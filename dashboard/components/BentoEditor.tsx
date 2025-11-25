@@ -206,7 +206,7 @@ function SortableCard({
             });
           }}
           title="Get professional suggestion"
-          style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: '#0b1020', border: 'none', cursor: 'pointer' }}
+          style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--accent)', color: 'var(--button-text)', border: 'none', cursor: 'pointer' }}
         >
           Get professional suggestion
         </button>

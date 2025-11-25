@@ -10,19 +10,36 @@
  * This component ONLY affects the dashboard, NOT project iframes!
  * 
  * Crew Decision: 7/7 unanimous - maintain theme isolation
+ * 
+ * FIXED: Theme persistence - now properly updates when globalTheme changes
+ * FIXED: Contrast-aware button text colors - ensures WCAG AA compliance
  */
 
 import { useAppState } from '@/lib/state-manager';
 import { getThemeColors, isThemeDark } from '@/lib/theme-colors';
+import { getButtonTextColor, extractColor } from '@/lib/contrast-utils';
+import { useEffect, useState } from 'react';
 
 export default function GlobalThemeStyles() {
   const { globalTheme } = useAppState();
+  const [mounted, setMounted] = useState(false);
   
-  // Don't use useEffect - render inline style tag for dashboard
-  // This ensures theme is applied immediately without flash
+  // Ensure we're mounted before applying theme (prevents hydration mismatch)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Don't render styles until mounted (prevents server/client mismatch)
+  if (!mounted) {
+    return null;
+  }
   
   const colors = getThemeColors(globalTheme);
   const isDark = isThemeDark(globalTheme);
+  
+  // Calculate contrast-aware button text color
+  const accentColor = extractColor(colors.accent);
+  const buttonTextColor = accentColor ? getButtonTextColor(colors.accent, 3.0) : '#000000';
   
   // CSS variables scoped to .dashboard-theme-wrapper
   const cssVars = `
@@ -31,6 +48,7 @@ export default function GlobalThemeStyles() {
       --text: ${colors.text};
       --heading: ${colors.heading};
       --accent: ${colors.accent};
+      --button-text: ${buttonTextColor};
       --text-muted: ${isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'};
       --card: ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.8)'};
       --card-alt: ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)'};
@@ -44,11 +62,17 @@ export default function GlobalThemeStyles() {
       color: ${colors.text};
       min-height: 100vh;
     }
+    
+    /* Contrast-aware button styles */
+    .dashboard-theme-wrapper button[style*="var(--accent)"],
+    .dashboard-theme-wrapper button[style*="background: var(--accent)"],
+    .dashboard-theme-wrapper button[style*="background-color: var(--accent)"] {
+      color: var(--button-text) !important;
+    }
   `;
   
-  // suppressHydrationWarning: Server renders with default theme, client hydrates with localStorage theme
-  // This is intentional - we allow server/client mismatch for theme styles
-  return <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: cssVars }} />;
+  // Key the style tag by globalTheme to force re-render when theme changes
+  return <style key={globalTheme} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: cssVars }} />;
 }
 
 

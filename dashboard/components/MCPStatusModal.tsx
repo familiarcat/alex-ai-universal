@@ -592,7 +592,7 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                 style={{
                   padding: '10px 20px',
                   background: 'var(--accent)',
-                  color: '#0a0015',
+                  color: 'var(--button-text)',
                   border: 'none',
                   borderRadius: '8px',
                   fontSize: '14px',
