@@ -56,10 +56,12 @@ function getGitChanges() {
 
 /**
  * Generate milestone name from changes
+ * Uses timestamp to ensure unique tags (like saving a file - always unique)
  */
 function generateMilestoneName(changes) {
   const date = new Date();
   const dateStr = date.toISOString().split('T')[0];
+  const timeStr = date.toISOString().split('T')[1].split('.')[0].replace(/:/g, '');
   
   // Analyze changes to create descriptive name
   const hasUI = changes.some(f => f.includes('component') || f.includes('page.tsx') || f.includes('dashboard'));
@@ -74,7 +76,8 @@ function generateMilestoneName(changes) {
   else if (hasInfra) type = 'infrastructure';
   else if (hasDocs) type = 'documentation';
   
-  return `milestone-${dateStr}-${type}`;
+  // Use timestamp to ensure unique tag (like saving a file - always creates new version)
+  return `milestone-${dateStr}-${timeStr}-${type}`;
 }
 
 /**
