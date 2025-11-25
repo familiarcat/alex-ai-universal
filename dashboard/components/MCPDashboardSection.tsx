@@ -15,6 +15,33 @@ import DynamicDataDrilldown from '@/components/DynamicDataDrilldown';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import DesignSystemErrorDisplay from '@/components/DesignSystemErrorDisplay';
 
+// Loading Spinner Component
+function LoadingSpinner() {
+  const [rotation, setRotation] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 10) % 360);
+    }, 16); // ~60fps
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div 
+      style={{
+        width: '48px',
+        height: '48px',
+        border: '4px solid var(--border)',
+        borderTop: '4px solid var(--accent)',
+        borderRadius: '50%',
+        marginBottom: '16px',
+        transform: `rotate(${rotation}deg)`,
+        transition: 'transform 0.1s linear'
+      }}
+    />
+  );
+}
+
 const ExecutionMonitor = dynamic(() => import('@/components/workflows/ExecutionMonitor'), {
   ssr: false
 });
@@ -291,13 +318,44 @@ export default function MCPDashboardSection() {
   if (loading) {
     return (
       <div className="card" style={{
-        padding: '24px',
+        padding: '40px 24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
-        marginBottom: '30px'
+        marginBottom: '30px',
+        background: 'var(--card-bg)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '200px'
       }}>
-        <div style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-          Loading MCP system status...
+        {/* Animated Spinner */}
+        <LoadingSpinner />
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '12px', 
+          marginBottom: '8px' 
+        }}>
+          <span style={{ fontSize: '28px' }}>🖖</span>
+          <h3 style={{ fontSize: '20px', color: 'var(--accent)', margin: 0 }}>
+            MCP System Dashboard
+          </h3>
+        </div>
+        <div style={{ 
+          color: 'var(--text-muted)', 
+          fontSize: '14px',
+          textAlign: 'center'
+        }}>
+          Loading system status and metrics...
+        </div>
+        <div style={{
+          marginTop: '16px',
+          fontSize: '12px',
+          color: 'var(--text-muted)',
+          opacity: 0.7
+        }}>
+          Checking MCP, OpenRouter, and workflow status...
         </div>
       </div>
     );
