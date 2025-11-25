@@ -70,15 +70,23 @@ export async function POST(
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
-    console.error(`❌ MCP proxy error for ${params.endpoint.join('/')}:`, error);
+    // Handle timeout errors gracefully (don't log as errors - they're expected)
+    const isTimeout = error.name === 'TimeoutError' || error.name === 'AbortError' || 
+                     error.message?.includes('timeout') || error.message?.includes('signal timed out');
+    
+    if (!isTimeout) {
+      // Only log non-timeout errors
+      console.error(`❌ MCP proxy error for ${params.endpoint.join('/')}:`, error);
+    }
     
     return NextResponse.json(
       { 
         success: false, 
-        error: error.message || 'MCP proxy error',
-        mcpFailed: true 
+        error: isTimeout ? 'Request timeout' : (error.message || 'MCP proxy error'),
+        mcpFailed: true,
+        timeout: isTimeout
       },
-      { status: 500 }
+      { status: isTimeout ? 408 : 500 } // 408 Request Timeout for timeout errors
     );
   }
 }

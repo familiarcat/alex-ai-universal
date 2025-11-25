@@ -80,6 +80,7 @@ export async function GET() {
         } catch (testError: any) {
           remoteMcpOperational = false;
           // Remote MCP server not available - this is OK, we use local MCP
+          // Silently handle timeout errors (expected behavior)
         }
       }
     }
@@ -95,6 +96,7 @@ export async function GET() {
         n8nOperational = response.ok;
       } catch (error: any) {
         n8nOperational = false;
+        // Silently handle timeout errors (expected behavior for health checks)
       }
     }
 
@@ -114,7 +116,12 @@ export async function GET() {
         openRouterOperational = response.ok;
       } catch (error: any) {
         openRouterOperational = false;
-        console.warn('OpenRouter health check failed:', error.message);
+        // Silently handle timeout errors (expected behavior for health checks)
+        const isTimeout = error.name === 'TimeoutError' || error.name === 'AbortError' || 
+                         error.message?.includes('timeout');
+        if (!isTimeout) {
+          console.warn('OpenRouter health check failed:', error.message);
+        }
       }
     } else {
       console.warn('OpenRouter API key not configured');

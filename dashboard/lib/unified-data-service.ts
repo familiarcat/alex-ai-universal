@@ -256,12 +256,19 @@ export class UnifiedDataService {
           return data;
         } catch (error: any) {
           const isLastAttempt = attempt === this.config.retries;
-          const isTimeout = error.name === 'TimeoutError' || error.message.includes('timeout');
+          const isTimeout = error.name === 'TimeoutError' || error.name === 'AbortError' || 
+                           error.message?.includes('timeout') || error.message?.includes('signal timed out');
+          
+          // Silently handle timeout errors (they're expected and handled with fallbacks)
+          // Only log non-timeout errors to avoid console noise
           
           if (isLastAttempt) {
             this.activeOperations.delete(activeKey);
             this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  MCP failed, trying fallback: ${endpoint}`, 'loading');
-            console.warn(`⚠️  MCP endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
+            if (!isTimeout) {
+              // Only log non-timeout errors
+              console.warn(`⚠️  MCP endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
+            }
             // Fallback to n8n if MCP unavailable after all retries
             return this.callN8NFallback(endpoint, payload, operationId);
           }
@@ -269,7 +276,10 @@ export class UnifiedDataService {
           // Exponential backoff: 1s, 2s, 4s
           const backoffMs = Math.pow(2, attempt - 1) * 1000;
           this.reportProgress(operationId, attempt, this.config.retries, `⏳ Retrying in ${backoffMs}ms: ${endpoint}`, 'loading');
-          console.warn(`⚠️  MCP endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
+          if (!isTimeout) {
+            // Only log non-timeout errors
+            console.warn(`⚠️  MCP endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
+          }
           await new Promise(resolve => setTimeout(resolve, backoffMs));
         }
       }
@@ -325,12 +335,19 @@ export class UnifiedDataService {
       this.reportProgress(fallbackOpId, 1, 1, `✅ Retrieved from n8n: ${endpoint}`, 'complete');
       return { ...data, fallback: true }; // Mark as fallback response
     } catch (error: any) {
+      const isTimeout = error.name === 'TimeoutError' || error.name === 'AbortError' || 
+                       error.message?.includes('timeout') || error.message?.includes('signal timed out');
+      
       this.reportProgress(fallbackOpId, 1, 1, `❌ Both MCP and n8n failed: ${endpoint}`, 'failed');
-      console.error(`❌ Both MCP and n8n failed for ${endpoint}:`, error);
+      
+      // Only log non-timeout errors (timeouts are expected and handled gracefully)
+      if (!isTimeout) {
+        console.error(`❌ Both MCP and n8n failed for ${endpoint}:`, error);
+      }
       
       // Return fallback data structure to prevent UI crashes
       return {
-        error: error.message,
+        error: isTimeout ? 'Request timeout' : error.message,
         data: [],
         sessions: [],
         fallback: true,
