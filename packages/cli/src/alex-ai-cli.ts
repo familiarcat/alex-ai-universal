@@ -63,6 +63,13 @@ class NPXCLIHandler {
         await this.handleObservationLounge(message);
         return;
       }
+
+      // Check for milestone push requests
+      if (this.isMilestonePushRequest(message)) {
+        console.log('🤖 Milestone push request detected!');
+        await this.handleMilestonePush(message);
+        return;
+      }
       
       const response = await this.core.processMessage(message);
 
@@ -95,7 +102,7 @@ class NPXCLIHandler {
       console.error(`❌ NPX engagement failed: ${error.message}`);
     } finally {
       // Only exit if not handling dashboard view or Observation Lounge (which keep process alive)
-      if (!this.isDashboardViewRequest(message) && !this.isObservationLoungeRequest(message)) {
+      if (!this.isDashboardViewRequest(message) && !this.isObservationLoungeRequest(message) && !this.isMilestonePushRequest(message)) {
       process.exit(0);
       }
     }
@@ -238,6 +245,24 @@ class NPXCLIHandler {
   }
 
   /**
+   * Check if message is a milestone push request
+   */
+  private isMilestonePushRequest(message: string): boolean {
+    const milestoneKeywords = [
+      'milestone push',
+      'make a milestone push',
+      'create milestone',
+      'push milestone',
+      'milestone commit',
+      'automated milestone',
+      'milestone tag'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return milestoneKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+
+  /**
    * Handle dashboard view requests
    */
   async handleDashboardView(): Promise<void> {
@@ -271,6 +296,54 @@ class NPXCLIHandler {
     } catch (error: any) {
       console.error(`❌ Dashboard view failed: ${error.message}`);
       process.exit(1);
+    }
+  }
+
+  /**
+   * Handle milestone push requests
+   * Fully automated: Runs crew review, then executes push if approved
+   */
+  async handleMilestonePush(message: string): Promise<void> {
+    try {
+      const { execSync } = require('child_process');
+      const path = require('path');
+      
+      // Parse message for options
+      const lowerMessage = message.toLowerCase();
+      const force = lowerMessage.includes('--force') || lowerMessage.includes('force');
+      const dryRun = lowerMessage.includes('--dry-run') || lowerMessage.includes('dry run');
+      
+      const scriptPath = path.join(__dirname, '../../../scripts/automated-milestone-push.js');
+      
+      console.log('🤖 Automated Milestone Push System');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      console.log('🖖 This will:');
+      console.log('   1. Detect repository changes');
+      console.log('   2. Run crew consensus review');
+      console.log('   3. Automatically execute milestone push if approved\n');
+      
+      if (force) {
+        console.log('⚠️  Force mode: Skipping crew review\n');
+      }
+      if (dryRun) {
+        console.log('🔍 Dry run mode: Preview only, no changes will be made\n');
+      }
+      
+      const args = [];
+      if (force) args.push('--force');
+      if (dryRun) args.push('--dry-run');
+      
+      const command = `node "${scriptPath}" ${args.join(' ')}`;
+      execSync(command, { 
+        encoding: 'utf8', 
+        stdio: 'inherit',
+        cwd: path.join(__dirname, '../../..')
+      });
+      
+      console.log('\n✅ Milestone push process completed!');
+    } catch (error: any) {
+      console.error(`❌ Milestone push failed: ${error.message}`);
+      throw error;
     }
   }
 

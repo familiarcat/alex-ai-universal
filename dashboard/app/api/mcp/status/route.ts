@@ -120,6 +120,38 @@ export async function GET() {
       console.warn('OpenRouter API key not configured');
     }
 
+    // Build diagnostics information
+    const diagnostics = {
+      supabaseConfigured: !!(supabaseUrl && supabaseKey),
+      supabaseConnected: localMcpOperational,
+      supabaseError: !supabaseUrl || !supabaseKey 
+        ? 'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
+        : !localMcpOperational
+          ? 'Supabase connection failed - check credentials and network'
+          : undefined,
+      remoteMcpConfigured: !!(MCP_BASE_URL && MCP_API_KEY),
+      remoteMcpReachable: remoteMcpOperational,
+      remoteMcpError: !MCP_BASE_URL || !MCP_API_KEY
+        ? 'Missing NEXT_PUBLIC_MCP_URL or MCP_API_KEY'
+        : !remoteMcpOperational
+          ? 'Remote MCP server unreachable - check URL and API key'
+          : undefined,
+      n8nConfigured: !!n8nUrl,
+      n8nReachable: n8nOperational,
+      n8nError: !n8nUrl
+        ? 'Missing NEXT_PUBLIC_N8N_URL'
+        : !n8nOperational
+          ? 'n8n server unreachable - check URL and network'
+          : undefined,
+      openRouterConfigured: !!openRouterApiKey,
+      openRouterReachable: openRouterOperational,
+      openRouterError: !openRouterApiKey
+        ? 'Missing OPENROUTER_API_KEY'
+        : !openRouterOperational
+          ? 'OpenRouter API unreachable - check API key and network'
+          : undefined
+    };
+
     return NextResponse.json({
       success: true,
       status: remoteMcpOperational || localMcpOperational ? 'operational' : 'offline',
@@ -134,6 +166,7 @@ export async function GET() {
         n8n: n8nUrl,
         openRouter: 'https://openrouter.ai'
       },
+      diagnostics,
       timestamp: new Date().toISOString()
     });
   } catch (error: any) {

@@ -10,6 +10,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import MCPStatusModal from '@/components/MCPStatusModal';
 
 const ExecutionMonitor = dynamic(() => import('@/components/workflows/ExecutionMonitor'), {
   ssr: false
@@ -51,6 +52,7 @@ export default function MCPDashboardSection() {
   });
   const [loading, setLoading] = useState(true);
   const [formattedTime, setFormattedTime] = useState<string>('');
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -309,16 +311,34 @@ export default function MCPDashboardSection() {
             gap: 'var(--spacing-sm)',
             alignItems: 'center'
           }}>
-            <div style={{
-              padding: 'var(--spacing-xs) var(--spacing-sm)',
-              borderRadius: 'var(--radius-sm)',
-              background: stats.system.mcpStatus === 'online' ? '#10b981' : '#ef4444',
-              color: 'white',
-              fontSize: 'var(--font-xs)',
-              fontWeight: 'bold'
-            }}>
+            <button
+              onClick={() => setStatusModalOpen(true)}
+              style={{
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                borderRadius: 'var(--radius-sm)',
+                background: stats.system.mcpStatus === 'online' ? '#10b981' : '#ef4444',
+                color: 'white',
+                fontSize: 'var(--font-xs)',
+                fontWeight: 'bold',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
               MCP: {stats.system.mcpStatus.toUpperCase()}
-            </div>
+              <span style={{ fontSize: '10px', opacity: 0.8 }}>ℹ️</span>
+            </button>
             <div style={{
               padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-sm)',
@@ -572,6 +592,13 @@ export default function MCPDashboardSection() {
           </div>
         </div>
       </div>
+
+      {/* MCP Status Modal */}
+      <MCPStatusModal
+        isOpen={statusModalOpen}
+        onClose={() => setStatusModalOpen(false)}
+        currentStatus={stats.system.mcpStatus}
+      />
     </div>
   );
 }
