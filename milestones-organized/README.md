@@ -2,7 +2,7 @@
 
 **Total Milestones:** 96  
 **Categories:** 8  
-**Organization Date:** 2025-11-26T07:54:14.271Z
+**Organization Date:** 2025-11-26T08:05:38.243Z
 
 ## Categories
 
@@ -19,7 +19,7 @@
 
 Each category is organized by timestamp (YYYY-MM):
 ```
-/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones-organized/
+milestones-organized/
 ├── n8n/
 ├── crew/
 ├── dashboard/
@@ -29,3 +29,8 @@ Each category is organized by timestamp (YYYY-MM):
 ├── architecture/
 ├── features/
 ```
+
+Each category contains:
+- `README.md` - Category overview and milestone links
+- `YYYY-MM/` - Timestamp-based subdirectories
+- `unknown/` - Milestones without clear timestamps

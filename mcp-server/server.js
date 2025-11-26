@@ -129,6 +129,185 @@ app.get('/healthz', (req, res) => {
 
 // API Routes
 
+// Crew Roster Endpoint (NEW - Source of Truth)
+app.get('/api/crew/roster', authenticateApiKey, (req, res) => {
+  try {
+    // Unified crew roster with cost optimization
+    // This is the authoritative source shared by MCP and n8n
+    const crewRoster = {
+      version: '2.0.0',
+      source: 'mcp-server',
+      lastUpdated: new Date().toISOString(),
+      totalCrewMembers: 10,
+      activeCrewMembers: 10,
+      crewMembers: [
+        {
+          id: 'picard',
+          name: 'Captain Jean-Luc Picard',
+          role: 'Strategic Leadership',
+          department: 'Command',
+          specialization: ['Strategic Planning', 'Decision Making', 'Mission Coordination', 'Crew Management'],
+          capabilities: ['strategic_planning', 'leadership', 'mission_coordination', 'decision_making', 'crew_management'],
+          expertise: ['architecture', 'mission_continuity', 'strategic_planning', 'ddd_domain_modeling'],
+          cost: 'high',
+          capacity: 'strategic',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'xz1Op8tLhe6dd3yV',
+          webhookPath: '/webhook/crew-captain-jean-luc-picard',
+          active: true
+        },
+        {
+          id: 'riker',
+          name: 'Commander William Riker',
+          role: 'Tactical Operations',
+          department: 'Command',
+          specialization: ['Tactical Operations', 'Workflow Management', 'Execution', 'Team Leadership'],
+          capabilities: ['tactical_operations', 'workflow_management', 'execution', 'team_leadership', 'resource_coordination'],
+          expertise: ['project_management', 'team_organization', 'workflow_optimization', 'coordination'],
+          cost: 'medium',
+          capacity: 'high',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'BFh2I9TwxN9871uO',
+          webhookPath: '/webhook/crew-commander-william-riker',
+          active: true
+        },
+        {
+          id: 'data',
+          name: 'Commander Data',
+          role: 'Technical Analysis',
+          department: 'Operations',
+          specialization: ['Analytics', 'AI/ML', 'Logic', 'Data Processing', 'MCP Integration'],
+          capabilities: ['data_analysis', 'ai_ml', 'mcp_integration', 'workflow_automation', 'prompt_engineering', 'llm_integration'],
+          expertise: ['code_analysis', 'structure_optimization', 'ddd_patterns', 'technical_architecture'],
+          cost: 'medium',
+          capacity: 'very-high',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/o1-preview', 'google/gemini-pro-1.5'],
+          n8nWorkflowId: 'RxCX3376Du6xW727',
+          webhookPath: '/webhook/crew-commander-data',
+          active: true
+        },
+        {
+          id: 'la_forge',
+          name: 'Lt. Cmdr. Geordi La Forge',
+          role: 'Infrastructure Engineering',
+          department: 'Engineering',
+          specialization: ['Infrastructure', 'System Integration', 'TypeScript', 'Node.js', 'API Design'],
+          capabilities: ['infrastructure', 'system_integration', 'api_design', 'performance_optimization'],
+          expertise: ['build_systems', 'deployment', 'infrastructure', 'ci_cd'],
+          cost: 'medium',
+          capacity: 'high',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o', 'meta-llama/llama-3.3-70b-instruct'],
+          n8nWorkflowId: 'ogsUoPCp5KjNf3Or',
+          webhookPath: '/webhook/crew-lieutenant-commander-geordi-la-forge',
+          active: true
+        },
+        {
+          id: 'worf',
+          name: 'Lieutenant Worf',
+          role: 'Security & Compliance',
+          department: 'Security',
+          specialization: ['Security', 'Compliance', 'Threat Assessment', 'Defense'],
+          capabilities: ['security', 'compliance', 'threat_assessment', 'defensive_strategies'],
+          expertise: ['security', 'compliance', 'auditing', 'ddd_bounded_contexts'],
+          cost: 'medium',
+          capacity: 'medium',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'Jz3TVht94wnjr5Q7',
+          webhookPath: '/webhook/crew-lieutenant-worf',
+          active: true
+        },
+        {
+          id: 'troi',
+          name: 'Counselor Deanna Troi',
+          role: 'User Experience',
+          department: 'Support',
+          specialization: ['User Experience', 'Communication', 'Psychological Assessment', 'Team Dynamics'],
+          capabilities: ['user_experience', 'communication', 'psychological_assessment', 'team_dynamics'],
+          expertise: ['ux_design', 'user_psychology', 'accessibility', 'ddd_user_journeys'],
+          cost: 'low',
+          capacity: 'medium',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'ozPdtlXJ7mkB3jkc',
+          webhookPath: '/webhook/crew-counselor-deanna-troi',
+          active: true
+        },
+        {
+          id: 'crusher',
+          name: 'Dr. Beverly Crusher',
+          role: 'System Health',
+          department: 'Medical',
+          specialization: ['System Health', 'Diagnosis', 'Preventive Maintenance', 'Performance'],
+          capabilities: ['system_health', 'diagnosis', 'preventive_maintenance', 'performance'],
+          expertise: ['health', 'diagnosis', 'medical', 'system'],
+          cost: 'low',
+          capacity: 'medium',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'FZjbB8fmomNvH7et',
+          webhookPath: '/webhook/crew-dr-beverly-crusher',
+          active: true
+        },
+        {
+          id: 'uhura',
+          name: 'Lieutenant Uhura',
+          role: 'Communication Systems',
+          department: 'Communications',
+          specialization: ['Communication Systems', 'Integration Coordination', 'Cross-Platform Sync'],
+          capabilities: ['communication_systems', 'integration_coordination', 'cross_platform_sync'],
+          expertise: ['communication', 'network', 'transmission', 'integration'],
+          cost: 'low',
+          capacity: 'medium',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'ALug4ov1cTS754pV',
+          webhookPath: '/webhook/crew-lieutenant-uhura',
+          active: true
+        },
+        {
+          id: 'quark',
+          name: 'Quark',
+          role: 'Business Operations',
+          department: 'Business',
+          specialization: ['Business Optimization', 'Cost Analysis', 'Resource Allocation', 'ROI'],
+          capabilities: ['business_optimization', 'cost_analysis', 'resource_allocation', 'roi_analysis'],
+          expertise: ['cost_optimization', 'resource_allocation', 'team_efficiency', 'roi_analysis'],
+          cost: 'low',
+          capacity: 'medium',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'neFZ70goRnt6qUNm',
+          webhookPath: '/webhook/crew-quark',
+          active: true
+        },
+        {
+          id: 'obrien',
+          name: 'Chief Miles O\'Brien',
+          role: 'Pragmatic Solutions',
+          department: 'Operations',
+          specialization: ['Pragmatic Solutions', 'Troubleshooting', 'Operations Management', 'Quick Fixes'],
+          capabilities: ['pragmatic_solutions', 'troubleshooting', 'operations_management', 'quick_fixes'],
+          expertise: ['migration_planning', 'practical_implementation', 'testing', 'troubleshooting'],
+          cost: 'low',
+          capacity: 'high',
+          preferredModels: ['anthropic/claude-3.7-sonnet:beta', 'openai/gpt-4o'],
+          n8nWorkflowId: 'MuaWfFowlkSDefSP',
+          webhookPath: '/webhook/crew-chief-miles-obrien',
+          active: true
+        }
+      ]
+    };
+    
+    res.json({
+      success: true,
+      roster: crewRoster,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Crew roster error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 // Workflow endpoints
 app.post('/api/workflows/execute', authenticateApiKey, async (req, res) => {
   try {
@@ -180,7 +359,7 @@ app.post('/api/context/store', authenticateApiKey, async (req, res) => {
     const result = mcpServices.cache.storeContext(content, embeddings, metadata);
     res.json({ success: true, result });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -190,7 +369,7 @@ app.get('/api/context/:cacheKey', authenticateApiKey, (req, res) => {
     const result = mcpServices.cache.getContext(cacheKey);
     res.json({ success: true, result });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -538,6 +717,7 @@ app.use((req, res) => {
     availableRoutes: [
       'GET /healthz',
       'GET /api/status',
+      'GET /api/crew/roster',
       'GET /api/workflows',
       'POST /api/workflows/execute',
       'POST /api/memory/store',
@@ -586,4 +766,3 @@ if (require.main === module) {
 }
 
 module.exports = app;
-

@@ -304,7 +304,14 @@ function generateDirectoryStructure(organized, outputDir) {
 
 ${Object.keys(byTimestamp).sort().reverse().map(timeKey => {
   const milestones = byTimestamp[timeKey];
-  return `### ${timeKey === 'unknown' ? 'Unknown Date' : timeKey}\n\n${milestones.map(m => `- [${m.title}](${m.fileName})`).join('\n')}`;
+  // Use proper relative paths for web browser compatibility
+  const linkPath = timeKey === 'unknown' ? `./unknown/` : `./${timeKey}/`;
+  return `### ${timeKey === 'unknown' ? 'Unknown Date' : timeKey}\n\n${milestones.map(m => {
+    // Properly encode filename for web browser compatibility
+    // encodeURIComponent handles all special characters (colons, spaces, etc.)
+    const safeFileName = encodeURIComponent(m.fileName);
+    return `- [${m.title}](${linkPath}${safeFileName})`;
+  }).join('\n')}`;
 }).join('\n\n')}
 `;
     
@@ -321,15 +328,24 @@ ${Object.keys(byTimestamp).sort().reverse().map(timeKey => {
 
 ## Categories
 
-${organized.map(cat => `- [${cat.displayName}](./${cat.category}/) (${cat.milestones.length} milestones)`).join('\n')}
+${organized.map(cat => {
+  // Use proper relative paths for web browser compatibility
+  const encodedCategory = encodeURIComponent(cat.category);
+  return `- [${cat.displayName}](./${encodedCategory}/) (${cat.milestones.length} milestones)`;
+}).join('\n')}
 
 ## Structure
 
 Each category is organized by timestamp (YYYY-MM):
 \`\`\`
-${structureDir}/
+milestones-organized/
 ├── ${organized.map(cat => `${cat.category}/`).join('\n├── ')}
 \`\`\`
+
+Each category contains:
+- \`README.md\` - Category overview and milestone links
+- \`YYYY-MM/\` - Timestamp-based subdirectories
+- \`unknown/\` - Milestones without clear timestamps
 `;
   
   fs.writeFileSync(mainReadmePath, mainReadmeContent);

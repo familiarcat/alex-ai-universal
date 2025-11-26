@@ -2,14 +2,18 @@
 
 **Category:** architecture  
 **Total Milestones:** 2  
-**Last Updated:** 2025-11-26T07:54:14.271Z
+**Last Updated:** 2025-11-26T08:13:57.831Z
 
-## Milestones by Timestamp
+## 📊 Executive Summary
 
-### 2025-10
+This category contains 2 milestones spanning 0 time periods. ## 📅 Timeline Summary
 
-- [🏆 milestone: ddd architecture migration complete](MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md)
+- **Unknown Date**: 2 milestones
 
-### 2025-01
+## 📋 Milestones by Timestamp
 
-- [🎉 milestone: unified ux + zero-flash crossfade + ddd architecture](MILESTONE_SUMMARY.md)
+### Unknown Date
+
+- [🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture](./unknown/MILESTONE_SUMMARY.md)
+- [🏆 MILESTONE: DDD Architecture Migration Complete](./unknown/MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md)
+

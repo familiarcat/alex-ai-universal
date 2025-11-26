@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-11-26T08:16:31.621Z",
+  "status": {
+    "milestonesExists": true,
+    "milestonesOrganizedExists": true,
+    "milestonesActive": true,
+    "canRetire": false,
+    "recommendations": [
+      "Wait for activity to subside before retiring",
+      "Update references to use milestones-organized"
+    ],
+    "totalFiles": 74,
+    "recentFiles": 74,
+    "coverage": 1.2972972972972974,
+    "referenceCount": 51
+  },
+  "analysis": {
+    "totalFiles": 74,
+    "recentFiles": 74,
+    "organizedFiles": 96,
+    "coverage": 1.2972972972972974,
+    "referenceCount": 51
+  }
+}

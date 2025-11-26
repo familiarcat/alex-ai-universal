@@ -150,7 +150,49 @@ function executeMilestonePush(milestoneName, summary, dryRun = false) {
     console.log('\n✅ Milestone push completed successfully!');
     console.log(`   Commit: ${commitSha}`);
     console.log(`   Tag: ${tagName}`);
-    console.log(`   Summary: ${summary}`);
+    console.log(`   Summary: ${summary}\n`);
+
+    // E2E RAG Integration: Integrate milestone, optimize vectors, update Supabase
+    try {
+      console.log('🖖 E2E RAG Integration: Processing milestone...\n');
+      
+      // Step 1: Integrate milestone into organized structure
+      const integrateScript = path.join(__dirname, 'milestones/integrate-milestone-push.js');
+      if (fs.existsSync(integrateScript)) {
+        const milestonesDir = path.join(process.cwd(), 'milestones');
+        if (fs.existsSync(milestonesDir)) {
+          const milestoneFiles = fs.readdirSync(milestonesDir, { withFileTypes: true })
+            .filter(dirent => dirent.isFile() && dirent.name.endsWith('.md'))
+            .map(dirent => {
+              const filePath = path.join(milestonesDir, dirent.name);
+              const stats = fs.statSync(filePath);
+              return { path: filePath, mtime: stats.mtime };
+            })
+            .sort((a, b) => b.mtime - a.mtime);
+          
+          if (milestoneFiles.length > 0) {
+            const latestMilestone = milestoneFiles[0].path;
+            execSync(`node ${integrateScript} "${latestMilestone}"`, { stdio: 'inherit' });
+          }
+        }
+      }
+      
+      // Step 2: Regenerate category summaries
+      const analyzeScript = path.join(__dirname, 'milestones/analyze-and-summarize-milestones.js');
+      if (fs.existsSync(analyzeScript)) {
+        console.log('\n📄 Updating category summaries...\n');
+        execSync(`node ${analyzeScript}`, { stdio: 'inherit' });
+      }
+      
+      // Step 3: Full E2E RAG integration (crew memories + vector optimization)
+      const ragIntegrationScript = path.join(__dirname, 'milestones/automated-migration-and-rag-integration.js');
+      if (fs.existsSync(ragIntegrationScript)) {
+        console.log('\n🧠 E2E RAG Integration: Optimizing vectors and updating Supabase...\n');
+        execSync(`node ${ragIntegrationScript}`, { stdio: 'inherit' });
+      }
+    } catch (error) {
+      console.warn(`⚠️  Could not complete E2E RAG integration: ${error.message}`);
+    }
 
     return true;
   } catch (error) {
