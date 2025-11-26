@@ -1,0 +1,114 @@
+{
+  "timestamp": "2025-11-26T07:46:05.864Z",
+  "structure": {
+    "aiIntegration": {
+      "location": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal",
+      "components": [
+        "packages/",
+        "scripts/",
+        "mcp-server/",
+        "crew-members/",
+        "crew-memories/",
+        "n8n-workflows/",
+        "supabase/",
+        "lib/",
+        "bin/"
+      ],
+      "purpose": "Core AI integration framework, crew coordination, MCP server, RAG system"
+    },
+    "dashboard": {
+      "location": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard",
+      "components": [
+        "app/",
+        "components/",
+        "lib/",
+        "package.json",
+        "next.config.js"
+      ],
+      "purpose": "Next.js dashboard application for managing projects and viewing analytics"
+    },
+    "projects": {
+      "current": [
+        "examples/",
+        "output/",
+        "managed-projects/",
+        "project-templates/"
+      ],
+      "purpose": "Various project examples and templates"
+    }
+  },
+  "plan": {
+    "currentIssues": [
+      "Dashboard is at root level, mixing AI framework with application",
+      "No clear separation between framework and managed projects",
+      "Dashboard cannot easily manage itself as a project",
+      "Multiple project locations (examples/, output/, managed-projects/)",
+      "No unified project management hierarchy"
+    ],
+    "proposedStructure": {
+      "root": {
+        "alex-ai-universal/": {
+          "description": "Core AI integration framework",
+          "contents": [
+            "packages/",
+            "scripts/",
+            "mcp-server/",
+            "crew-members/",
+            "crew-memories/",
+            "n8n-workflows/",
+            "supabase/",
+            "lib/",
+            "bin/",
+            "package.json (root)"
+          ]
+        },
+        "projects/": {
+          "description": "All Next.js projects managed by the dashboard",
+          "contents": {
+            "dashboard/": {
+              "description": "Main dashboard application (manages itself and other projects)",
+              "type": "nextjs-project",
+              "managed": true,
+              "selfManaging": true
+            },
+            "[project-name-1]/": {
+              "description": "User-created project 1",
+              "type": "nextjs-project",
+              "managed": true
+            },
+            "[project-name-2]/": {
+              "description": "User-created project 2",
+              "type": "nextjs-project",
+              "managed": true
+            }
+          }
+        }
+      }
+    },
+    "benefits": [
+      "Clear separation: AI framework vs managed projects",
+      "Dashboard can manage itself as a project",
+      "Unified project location for all Next.js apps",
+      "Easier project discovery and management",
+      "Better organization for scaling",
+      "Dashboard becomes the project manager"
+    ],
+    "migrationSteps": [
+      "Create projects/ directory",
+      "Move dashboard/ to projects/dashboard/",
+      "Update all import paths and references",
+      "Update build scripts and deployment configs",
+      "Migrate existing projects to projects/",
+      "Update documentation",
+      "Test dashboard self-management"
+    ]
+  },
+  "crewAnalysis": {
+    "picard": "Strategic separation of framework and applications",
+    "riker": "Tactical consolidation of project management",
+    "data": "Technical path updates and API creation",
+    "laForge": "Infrastructure and build system updates",
+    "obrien": "Pragmatic migration planning",
+    "quark": "Resource and cost optimization"
+  }
+}

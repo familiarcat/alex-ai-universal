@@ -1,0 +1,1 @@
+/Users/bradygeorgen/Documents/workspace/alex-ai-universal/examples/alex-ai-nextjs/MILESTONE_EMERGENCY_PROTOCOLS_COMPLETE.md

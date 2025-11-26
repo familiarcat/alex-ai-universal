@@ -81,11 +81,25 @@ export default function CostOptimizationMonitor() {
       
       // Don't use sample data - show empty state if no data
       if (!data || !data.modelBreakdown) {
-        setCostData({ modelBreakdown: [], totalCost: 0, recommendations: [] });
+        setCostData({ 
+          period: timeframe === '24h' ? 'Last 24 hours' : timeframe === '7d' ? 'Last 7 days' : 'Last 30 days',
+          modelBreakdown: [], 
+          totalCost: 0, 
+          savings: 0,
+          optimization: 0,
+          recommendations: [] 
+        });
       }
     } catch (err: any) {
       console.error('Failed to load cost data:', err);
-      setCostData({ modelBreakdown: [], totalCost: 0, recommendations: [] });
+      setCostData({ 
+        period: timeframe === '24h' ? 'Last 24 hours' : timeframe === '7d' ? 'Last 7 days' : 'Last 30 days',
+        modelBreakdown: [], 
+        totalCost: 0, 
+        savings: 0,
+        optimization: 0,
+        recommendations: [] 
+      });
     } finally {
       setLoading(false);
     }
@@ -142,17 +156,25 @@ export default function CostOptimizationMonitor() {
     };
   }
 
-  function formatCurrency(amount: number): string {
+  function formatCurrency(amount: number | undefined | null): string {
+    // Handle undefined/null/NaN values gracefully
+    if (amount == null || isNaN(amount)) {
+      return '$0.00';
+    }
     return `$${amount.toFixed(2)}`;
   }
 
-  function formatNumber(num: number): string {
+  function formatNumber(num: number | undefined | null): string {
+    // Handle undefined/null/NaN values gracefully
+    if (num == null || isNaN(num)) {
+      return '0';
+    }
     return num.toLocaleString();
   }
 
-  const totalRequests = costData?.modelBreakdown.reduce((sum, m) => sum + m.requests, 0) || 0;
-  const totalTokens = costData?.modelBreakdown.reduce((sum, m) => sum + m.tokens, 0) || 0;
-  const avgCostPerRequest = costData ? costData.totalCost / totalRequests : 0;
+  const totalRequests = costData?.modelBreakdown?.reduce((sum, m) => sum + (m.requests || 0), 0) || 0;
+  const totalTokens = costData?.modelBreakdown?.reduce((sum, m) => sum + (m.tokens || 0), 0) || 0;
+  const avgCostPerRequest = costData && totalRequests > 0 ? costData.totalCost / totalRequests : 0;
 
   if (loading) {
     return (
@@ -272,7 +294,7 @@ export default function CostOptimizationMonitor() {
             {costData ? formatCurrency(costData.savings) : '$0.00'}
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-            Savings ({costData?.optimization.toFixed(1)}%)
+            Savings ({costData?.optimization != null ? costData.optimization.toFixed(1) : '0.0'}%)
           </div>
         </div>
         <div style={{
@@ -317,11 +339,14 @@ export default function CostOptimizationMonitor() {
           Model Usage Breakdown
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {costData?.modelBreakdown
-            .sort((a, b) => b.cost - a.cost)
-            .map((model, index) => {
-              const percentage = costData ? (model.cost / costData.totalCost) * 100 : 0;
-              return (
+          {costData?.modelBreakdown && costData.modelBreakdown.length > 0 ? (
+            costData.modelBreakdown
+              .sort((a, b) => (b.cost || 0) - (a.cost || 0))
+              .map((model, index) => {
+                const percentage = costData && costData.totalCost > 0 
+                  ? ((model.cost || 0) / costData.totalCost) * 100 
+                  : 0;
+                return (
                 <div
                   key={index}
                   style={{
@@ -369,7 +394,17 @@ export default function CostOptimizationMonitor() {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div style={{
+              padding: '24px',
+              textAlign: 'center',
+              color: 'var(--text-muted)',
+              fontSize: '14px'
+            }}>
+              No cost data available. Waiting for live connection to MCP/n8n servers.
+            </div>
+          )}
         </div>
       </div>
 
