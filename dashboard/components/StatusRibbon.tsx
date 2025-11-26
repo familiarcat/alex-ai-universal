@@ -9,7 +9,16 @@ export default function StatusRibbon() {
 
   useEffect(() => {
     let mounted = true;
+    // Cost optimization: Only poll when tab is visible (reduces EC2 load)
+    const isVisible = () => !document.hidden;
+    
     async function poll() {
+      if (!mounted || !isVisible()) {
+        // Skip polling if tab is hidden (cost optimization)
+        setTimeout(poll, 30000); // Check again in 30s if hidden
+        return;
+      }
+      
       try {
         const res = await fetch('/api/health');
         if (res.ok) {
@@ -17,7 +26,8 @@ export default function StatusRibbon() {
           if (mounted) setHealth(h);
         }
       } catch {}
-      setTimeout(poll, 10000);
+      // Increased interval from 10s to 30s for cost optimization
+      setTimeout(poll, 30000);
     }
     poll();
     return () => { mounted = false; };

@@ -53,19 +53,17 @@ export default function UserExperienceAnalytics() {
       setJourney(data.journey || []);
       setOverallSatisfaction(data.overallSatisfaction || 0);
       
-      // Fallback to sample data
+      // Don't use sample data - show empty state if no data
       if (!data.metrics || data.metrics.length === 0) {
-        const sampleData = getSampleUXData();
-        setMetrics(sampleData.metrics);
-        setJourney(sampleData.journey);
-        setOverallSatisfaction(82);
+        setMetrics([]);
+        setJourney([]);
+        setOverallSatisfaction(0);
       }
     } catch (err: any) {
       console.error('Failed to load UX data:', err);
-      const sampleData = getSampleUXData();
-      setMetrics(sampleData.metrics);
-      setJourney(sampleData.journey);
-      setOverallSatisfaction(82);
+      setMetrics([]);
+      setJourney([]);
+      setOverallSatisfaction(0);
     } finally {
       setLoading(false);
     }

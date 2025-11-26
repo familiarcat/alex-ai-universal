@@ -86,8 +86,37 @@ export default function MCPDashboardSection() {
 
   useEffect(() => {
     loadDashboardData();
-    const interval = setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
-    return () => clearInterval(interval);
+    // Cost optimization: Only poll when tab is visible, increased interval to 60s
+    let intervalId: NodeJS.Timeout | null = null;
+    
+    const setupPolling = () => {
+      if (intervalId) clearInterval(intervalId);
+      if (!document.hidden) {
+        intervalId = setInterval(loadDashboardData, 60000); // 60 seconds when visible
+      }
+    };
+    
+    // Initial setup
+    setupPolling();
+    
+    // Pause/resume based on visibility (cost optimization)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      } else {
+        setupPolling();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Format time only on client to avoid hydration mismatch

@@ -101,24 +101,13 @@ export default function LearningAnalyticsDashboard() {
       // Check if it's a timeout error
       const isTimeout = err.message?.includes('timeout') || err.name === 'TimeoutError';
       
-      // Fallback to sample data
-      const sampleData: LearningMetric[] = [];
-      for (let i = 29; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        sampleData.push({
-          date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          memories: Math.floor(Math.random() * 50) + 20,
-          sessions: Math.floor(Math.random() * 10) + 5,
-          confidence: 0.85 + Math.random() * 0.1
-        });
-      }
-      setMetrics(sampleData);
-      setTotalGrowth(23);
+      // Don't use sample data - show empty state instead
+      setMetrics([]);
+      setTotalGrowth(0);
       
       const errorMessage = isTimeout 
-        ? '⚠️  Request timed out - using sample data'
-        : '⚠️  Using sample data (service unavailable)';
+        ? '⚠️  Request timed out - waiting for live connection'
+        : '⚠️  Service unavailable - waiting for live connection';
       
       // Handle error gracefully (don't break UI)
       handleError(err, 'Learning Analytics');

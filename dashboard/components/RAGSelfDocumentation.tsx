@@ -96,13 +96,13 @@ export default function RAGSelfDocumentation() {
       
       setCategories(categoryData);
       
-      // Fallback to sample data if empty
+      // Don't use sample data - show empty state if no data
       if (categoryData.length === 0) {
-        setCategories(getSampleDocumentation());
+        setCategories([]);
       }
     } catch (err: any) {
       console.error('Failed to load documentation:', err);
-      setCategories(getSampleDocumentation());
+      setCategories([]);
     } finally {
       setLoading(false);
     }

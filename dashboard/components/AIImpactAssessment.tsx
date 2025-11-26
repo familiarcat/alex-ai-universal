@@ -48,13 +48,13 @@ export default function AIImpactAssessment() {
       const data = await service.getAssessmentData();
       setProtocol(data);
       
-      // Fallback to sample data
+      // Don't use sample data - show empty state if no data
       if (!data || !data.assessments) {
-        setProtocol(getSampleProtocol());
+        setProtocol({ assessments: [], summary: { overall: 0, categories: {} } });
       }
     } catch (err: any) {
       console.error('Failed to load assessment data:', err);
-      setProtocol(getSampleProtocol());
+      setProtocol({ assessments: [], summary: { overall: 0, categories: {} } });
     } finally {
       setLoading(false);
     }

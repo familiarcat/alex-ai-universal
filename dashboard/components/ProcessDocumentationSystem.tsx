@@ -54,13 +54,13 @@ export default function ProcessDocumentationSystem() {
       const data = await service.getProcesses();
       setProcesses(data.processes || []);
       
-      // Fallback to sample data
+      // Don't use sample data - show empty state if no data
       if (!data.processes || data.processes.length === 0) {
-        setProcesses(getSampleProcesses());
+        setProcesses([]);
       }
     } catch (err: any) {
       console.error('Failed to load processes:', err);
-      setProcesses(getSampleProcesses());
+      setProcesses([]);
     } finally {
       setLoading(false);
     }

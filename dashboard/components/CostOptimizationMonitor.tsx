@@ -38,9 +38,35 @@ export default function CostOptimizationMonitor() {
 
   useEffect(() => {
     fetchCostData();
-    // Refresh every 5 minutes
-    const interval = setInterval(fetchCostData, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    // Cost optimization: Only poll when tab is visible, increased interval to 10 minutes
+    let intervalId: NodeJS.Timeout | null = null;
+    
+    const setupPolling = () => {
+      if (intervalId) clearInterval(intervalId);
+      if (!document.hidden) {
+        intervalId = setInterval(fetchCostData, 10 * 60 * 1000); // 10 minutes when visible
+      }
+    };
+    
+    setupPolling();
+    
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      } else {
+        setupPolling();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [timeframe]);
 
   async function fetchCostData() {
@@ -53,13 +79,13 @@ export default function CostOptimizationMonitor() {
       const data = await service.getCostData();
       setCostData(data);
       
-      // Fallback to sample data
+      // Don't use sample data - show empty state if no data
       if (!data || !data.modelBreakdown) {
-        setCostData(getSampleCostData());
+        setCostData({ modelBreakdown: [], totalCost: 0, recommendations: [] });
       }
     } catch (err: any) {
       console.error('Failed to load cost data:', err);
-      setCostData(getSampleCostData());
+      setCostData({ modelBreakdown: [], totalCost: 0, recommendations: [] });
     } finally {
       setLoading(false);
     }

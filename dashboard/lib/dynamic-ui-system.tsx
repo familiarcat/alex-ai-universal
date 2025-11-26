@@ -326,6 +326,10 @@ function renderComponentStructure(
       );
 
     case 'text':
+      // Ensure we only render strings/numbers, not objects
+      const textContent = (typeof componentData === 'string' || typeof componentData === 'number')
+        ? String(componentData)
+        : (structure.props?.text || '');
       return (
         <span
           style={{
@@ -336,13 +340,17 @@ function renderComponentStructure(
             ...structure.props?.style
           }}
         >
-          {componentData || structure.props?.text || ''}
+          {textContent}
         </span>
       );
 
     case 'heading':
       const headingLevel = structure.props?.level || 1;
       const HeadingTag = `h${headingLevel}` as keyof JSX.IntrinsicElements;
+      // Ensure we only render strings/numbers, not objects
+      const headingText = (typeof componentData === 'string' || typeof componentData === 'number')
+        ? String(componentData)
+        : (structure.props?.text || '');
       return (
         <HeadingTag
           style={{
@@ -360,7 +368,7 @@ function renderComponentStructure(
             ...structure.props?.style
           }}
         >
-          {componentData || structure.props?.text || ''}
+          {headingText}
         </HeadingTag>
       );
 

@@ -56,36 +56,28 @@ export default function DataSourceIntegrationPanel() {
       setLoading(true);
       
       // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      // Use service's built-in timeout (30s) and retry logic - no aggressive timeout here
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       
-      // Add timeout to prevent infinite loops (reduced to 5 seconds for faster fallback)
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Data source request timed out - using sample data')), 5000)
-      );
-      
       try {
-        const data = await Promise.race([
-          service.getDataSources(),
-          timeoutPromise
-        ]) as any;
+        const data = await service.getDataSources();
         
         setSources(data.sources || []);
         setOpportunities(data.opportunities || []);
         
-        // Fallback to sample data if response is empty
-        if (!data.sources || data.sources.length === 0) {
-          console.warn('No data sources returned, using sample data');
-          const sampleData = getSampleData();
-          setSources(sampleData.sources);
-          setOpportunities(sampleData.opportunities);
+        // Only fallback to sample data if response is explicitly empty AND not a fallback response
+        if ((!data.sources || data.sources.length === 0) && !data.fallback) {
+          console.warn('No data sources returned from live service');
+          // Don't use sample data - show empty state instead
+          setSources([]);
+          setOpportunities([]);
         }
-      } catch (timeoutError: any) {
-        // Timeout or service error - use sample data immediately
-        console.warn('Data source service unavailable:', timeoutError.message);
-        const sampleData = getSampleData();
-        setSources(sampleData.sources);
-        setOpportunities(sampleData.opportunities);
+      } catch (error: any) {
+        // Log error but don't use sample data - prefer showing empty state
+        console.error('Failed to load data sources:', error);
+        setSources([]);
+        setOpportunities([]);
       }
     } catch (err: any) {
       console.error('Failed to load data sources:', err);

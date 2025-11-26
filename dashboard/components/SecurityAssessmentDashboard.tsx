@@ -40,9 +40,35 @@ export default function SecurityAssessmentDashboard() {
 
   useEffect(() => {
     fetchSecurityData();
-    // Set up polling for continuous monitoring
-    const interval = setInterval(fetchSecurityData, 60000); // Every minute
-    return () => clearInterval(interval);
+    // Cost optimization: Only poll when tab is visible, increased interval to 5 minutes
+    let intervalId: NodeJS.Timeout | null = null;
+    
+    const setupPolling = () => {
+      if (intervalId) clearInterval(intervalId);
+      if (!document.hidden) {
+        intervalId = setInterval(fetchSecurityData, 5 * 60 * 1000); // 5 minutes when visible
+      }
+    };
+    
+    setupPolling();
+    
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      } else {
+        setupPolling();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   async function fetchSecurityData() {
@@ -58,17 +84,17 @@ export default function SecurityAssessmentDashboard() {
       setAuditLogs(data.auditLogs || []);
       setOverallScore(data.overallScore || 0);
       
-      // Fallback to sample data
+      // Don't use sample data - show empty state if no data
       if (!data.metrics || data.metrics.length === 0) {
-        setMetrics(getSampleMetrics());
-        setAuditLogs(getSampleAuditLogs());
-        setOverallScore(87);
+        setMetrics([]);
+        setAuditLogs([]);
+        setOverallScore(0);
       }
     } catch (err: any) {
       console.error('Failed to load security data:', err);
-      setMetrics(getSampleMetrics());
-      setAuditLogs(getSampleAuditLogs());
-      setOverallScore(87);
+      setMetrics([]);
+      setAuditLogs([]);
+      setOverallScore(0);
     } finally {
       setLoading(false);
     }
