@@ -151,11 +151,15 @@ resource "aws_instance" "n8n" {
   
   # User data script for initial setup (includes MCP)
   user_data = templatefile("${path.module}/user-data-with-mcp.sh", {
-    n8n_domain     = var.n8n_domain
-    n8n_version    = var.n8n_version
-    supabase_url   = var.supabase_url
-    aws_region     = var.aws_region
-    project_name   = var.project_name
+    n8n_domain              = var.n8n_domain
+    n8n_version             = var.n8n_version
+    supabase_url            = var.supabase_url
+    aws_region              = var.aws_region
+    project_name            = var.project_name
+    n8n_api_key             = var.n8n_api_key != "" ? var.n8n_api_key : "CHANGE_ME"
+    mcp_api_key             = var.mcp_api_key != "" ? var.mcp_api_key : (var.n8n_api_key != "" ? var.n8n_api_key : "CHANGE_ME")
+    supabase_service_role_key = var.supabase_service_role_key != "" ? var.supabase_service_role_key : "CHANGE_ME"
+    openrouter_api_key      = var.openrouter_api_key != "" ? var.openrouter_api_key : "CHANGE_ME"
   })
   
   # Root volume configuration

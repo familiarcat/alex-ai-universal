@@ -216,15 +216,15 @@ mkdir -p /home/ubuntu/mcp-server
 cat > /opt/mcp/.env << EOF
 # MCP Server Configuration
 MCP_PORT=5679
-MCP_API_KEY=\${N8N_API_KEY}
+MCP_API_KEY=\${mcp_api_key}
 NODE_ENV=production
 
 # Supabase Configuration
-SUPABASE_URL=\${SUPABASE_URL}
-SUPABASE_SERVICE_ROLE_KEY=\${SUPABASE_SERVICE_ROLE_KEY}
+SUPABASE_URL=\${supabase_url}
+SUPABASE_SERVICE_ROLE_KEY=\${supabase_service_role_key}
 
 # OpenRouter Configuration
-OPENROUTER_API_KEY=\${OPENROUTER_API_KEY}
+OPENROUTER_API_KEY=\${openrouter_api_key}
 EOF
 
 chown -R ubuntu:ubuntu /home/ubuntu/.mcp
@@ -248,7 +248,7 @@ version: '3.8'
 
 services:
   n8n:
-    image: n8nio/n8n:${N8N_VERSION:-1.120.4}
+    image: n8nio/n8n:$$${N8N_VERSION:-1.120.4}
     container_name: n8n
     restart: always
     ports:
@@ -256,7 +256,7 @@ services:
     env_file:
       - /opt/n8n/.env
     environment:
-      - WEBHOOK_URL=https://${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+      - WEBHOOK_URL=https://$$${N8N_DOMAIN:-n8n.pbradygeorgen.com}
     volumes:
       - /home/ubuntu/.n8n:/home/node/.n8n
     networks:
@@ -274,11 +274,11 @@ services:
       - /opt/mcp/.env
     environment:
       - MCP_PORT=5679
-      - MCP_API_KEY=${N8N_API_KEY}
+      - MCP_API_KEY=$${mcp_api_key}
       - NODE_ENV=production
-      - SUPABASE_URL=${SUPABASE_URL}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - SUPABASE_URL=$${supabase_url}
+      - SUPABASE_SERVICE_ROLE_KEY=$${supabase_service_role_key}
+      - OPENROUTER_API_KEY=$${openrouter_api_key}
     volumes:
       - /home/ubuntu/.mcp:/app/data
       - /home/ubuntu/mcp-server:/app/mcp-server

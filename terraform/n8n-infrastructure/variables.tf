@@ -64,3 +64,31 @@ variable "n8n_data_backup_retention_days" {
   default     = 30
 }
 
+variable "n8n_api_key" {
+  description = "N8N API key (sensitive)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "mcp_api_key" {
+  description = "MCP API key (sensitive, defaults to n8n_api_key if not set)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "supabase_service_role_key" {
+  description = "Supabase service role key (sensitive)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "openrouter_api_key" {
+  description = "OpenRouter API key (sensitive)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+

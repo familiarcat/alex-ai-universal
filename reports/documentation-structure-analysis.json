@@ -1,0 +1,211 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2025-11-26T08:42:59.078Z",
+  "summary": {
+    "totalFiles": 0,
+    "byCategory": [
+      {
+        "category": "docs/ Folder",
+        "count": 0,
+        "shouldBeGenerated": true
+      },
+      {
+        "category": "README Files",
+        "count": 0,
+        "shouldBeGenerated": false
+      },
+      {
+        "category": "Inline Documentation",
+        "count": 0,
+        "shouldBeGenerated": false
+      },
+      {
+        "category": "Milestone Documentation",
+        "count": 0,
+        "shouldBeGenerated": true
+      },
+      {
+        "category": "Configuration Documentation",
+        "count": 0,
+        "shouldBeGenerated": false
+      },
+      {
+        "category": "API Documentation",
+        "count": 0,
+        "shouldBeGenerated": true
+      },
+      {
+        "category": "Guides",
+        "count": 0,
+        "shouldBeGenerated": false
+      },
+      {
+        "category": "Architecture Documentation",
+        "count": 0,
+        "shouldBeGenerated": false
+      }
+    ]
+  },
+  "guidelines": {
+    "docsFolder": {
+      "purpose": "Centralized reference and generated documentation",
+      "shouldContain": [
+        "Generated API documentation",
+        "System reference guides",
+        "Auto-generated summaries",
+        "Architecture overviews",
+        "Integration documentation"
+      ],
+      "shouldNotContain": [
+        "Project-specific README files",
+        "Package-level documentation (use package README)",
+        "Inline code documentation",
+        "Temporary or draft documentation"
+      ],
+      "generationRules": [
+        "API docs: Generate from code annotations",
+        "Summaries: Generate from milestone/crew analysis",
+        "Reports: Generate from system analysis",
+        "Reference: Generate from code structure"
+      ]
+    },
+    "readmeFiles": {
+      "purpose": "Project/package entry points",
+      "shouldContain": [
+        "Quick start guide",
+        "Overview and purpose",
+        "Basic usage examples",
+        "Links to detailed docs",
+        "Installation instructions"
+      ],
+      "shouldNotContain": [
+        "Detailed API reference (link to docs/)",
+        "Comprehensive guides (link to docs/)",
+        "Generated content",
+        "System internals"
+      ],
+      "maintenance": "Manual - updated with project changes"
+    },
+    "inlineDocs": {
+      "purpose": "Context-specific documentation",
+      "shouldContain": [
+        "Local decisions and rationale",
+        "Implementation details",
+        "Usage examples for specific components",
+        "Troubleshooting for local issues"
+      ],
+      "shouldNotContain": [
+        "Duplicate of docs/ content",
+        "Generated content",
+        "System-wide reference"
+      ],
+      "maintenance": "Manual - updated with code"
+    }
+  },
+  "analysis": {
+    "generated": {
+      "criteria": [],
+      "examples": [],
+      "patterns": []
+    },
+    "manual": {
+      "criteria": [],
+      "examples": [],
+      "patterns": []
+    },
+    "recommendations": [
+      {
+        "type": "docs_folder",
+        "recommendation": "docs/ folder should contain:",
+        "items": [
+          "Generated API documentation",
+          "System reference documentation",
+          "Auto-generated summaries and reports",
+          "Architecture diagrams and system overviews",
+          "Integration guides and reference materials"
+        ]
+      },
+      {
+        "type": "readme_files",
+        "recommendation": "README.md files should:",
+        "items": [
+          "Be manually maintained",
+          "Provide project/package overview",
+          "Include setup and usage instructions",
+          "Link to detailed docs in docs/ folder",
+          "Be concise and user-focused"
+        ]
+      },
+      {
+        "type": "inline_docs",
+        "recommendation": "Inline documentation should:",
+        "items": [
+          "Be manually maintained",
+          "Live alongside code",
+          "Explain local context and decisions",
+          "Reference docs/ for comprehensive guides",
+          "Be updated with code changes"
+        ]
+      },
+      {
+        "type": "generation",
+        "recommendation": "Should be generated:",
+        "items": [
+          "API reference documentation",
+          "System summaries and reports",
+          "Milestone category summaries",
+          "RAG integration reports",
+          "Crew coordination summaries",
+          "Architecture diagrams (from code)"
+        ]
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "type": "docs_folder",
+      "recommendation": "docs/ folder should contain:",
+      "items": [
+        "Generated API documentation",
+        "System reference documentation",
+        "Auto-generated summaries and reports",
+        "Architecture diagrams and system overviews",
+        "Integration guides and reference materials"
+      ]
+    },
+    {
+      "type": "readme_files",
+      "recommendation": "README.md files should:",
+      "items": [
+        "Be manually maintained",
+        "Provide project/package overview",
+        "Include setup and usage instructions",
+        "Link to detailed docs in docs/ folder",
+        "Be concise and user-focused"
+      ]
+    },
+    {
+      "type": "inline_docs",
+      "recommendation": "Inline documentation should:",
+      "items": [
+        "Be manually maintained",
+        "Live alongside code",
+        "Explain local context and decisions",
+        "Reference docs/ for comprehensive guides",
+        "Be updated with code changes"
+      ]
+    },
+    {
+      "type": "generation",
+      "recommendation": "Should be generated:",
+      "items": [
+        "API reference documentation",
+        "System summaries and reports",
+        "Milestone category summaries",
+        "RAG integration reports",
+        "Crew coordination summaries",
+        "Architecture diagrams (from code)"
+      ]
+    }
+  ]
+}

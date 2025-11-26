@@ -8,10 +8,6 @@ resource "aws_route53_record" "mcp" {
   type    = "A"
   ttl     = 300
   records = [aws_eip.n8n.public_ip] # Use same Elastic IP as n8n
-
-  tags = {
-    Name = "${var.project_name}-mcp-dns"
-  }
 }
 
 # Output MCP domain
