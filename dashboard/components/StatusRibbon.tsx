@@ -23,7 +23,12 @@ export default function StatusRibbon() {
     return () => { mounted = false; };
   }, []);
 
-  const color = health.status === 'green' ? '#00ffaa' : health.status === 'amber' ? '#ffd166' : '#ff5e5e';
+  // Use theme-aware status colors
+  const color = health.status === 'green' 
+    ? 'var(--status-success, #00ffaa)' 
+    : health.status === 'amber' 
+    ? 'var(--status-warning, #ffd166)' 
+    : 'var(--status-error, #ff5e5e)';
 
   return (
     <div style={{

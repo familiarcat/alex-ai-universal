@@ -36,12 +36,13 @@ const STATUS_EMOJIS: Record<ProgressStatus, string> = {
   loading: '⏳'
 };
 
+// Theme-aware status colors with fallbacks
 const STATUS_COLORS: Record<ProgressStatus, string> = {
-  recording: '#00ffaa',
-  retrieved: '#00d4ff',
-  failed: '#ff5e5e',
-  complete: '#00ffaa',
-  loading: '#ffd166'
+  recording: 'var(--status-success, var(--accent, #00ffaa))',
+  retrieved: 'var(--status-info, #00d4ff)',
+  failed: 'var(--status-error, #ff5e5e)',
+  complete: 'var(--status-success, var(--accent, #00ffaa))',
+  loading: 'var(--status-warning, #ffd166)'
 };
 
 export default function UniversalProgressBar({

@@ -196,8 +196,8 @@ export default function RAGProjectRecommendations() {
               <span style={{
                 fontSize: '11px',
                 padding: '4px 8px',
-                background: `rgba(0, 255, 170, ${rec.confidence * 0.3})`,
-                color: 'var(--accent)',
+                background: `var(--subtle, rgba(0, 255, 170, ${rec.confidence * 0.3}))`,
+                color: 'var(--accent, #00ffaa)',
                 borderRadius: '12px',
                 fontWeight: 600
               }}>

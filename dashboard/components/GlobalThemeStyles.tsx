@@ -81,8 +81,19 @@ export default function GlobalThemeStyles() {
   const headerBg = generateHeaderBackground(accentColor, isDark);
   const headerText = getButtonTextColor(headerBg, 4.5); // WCAG AA minimum
   
-  // CSS variables scoped to .dashboard-theme-wrapper
+  // CSS variables - set on both :root (global) and .dashboard-theme-wrapper (scoped)
+  // This ensures components outside the wrapper (like CommandPalette) can access theme colors
   const cssVars = `
+    :root {
+      /* Theme-aware global variables (for components outside wrapper) */
+      --accent: ${colors.accent};
+      --button-text: ${componentColors.ctaPrimaryText};
+      --status-success: ${componentColors.success};
+      --status-warning: ${componentColors.warning};
+      --status-error: ${componentColors.error};
+      --status-info: ${componentColors.info};
+    }
+    
     .dashboard-theme-wrapper {
       /* Base Colors */
       --background: ${colors.background};

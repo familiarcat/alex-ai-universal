@@ -68,12 +68,12 @@ export default function CommandPalette() {
         style={{
           width: 'min(720px, 92vw)',
           background: 'rgba(10,0,21,0.98)',
-          border: '1px solid rgba(0,255,170,0.35)',
+          border: '1px solid var(--accent, rgba(0,255,170,0.35))',
           borderRadius: 12,
           boxShadow: '0 10px 40px rgba(0,0,0,0.6)'
         }}
       >
-        <div style={{ padding: 12, borderBottom: '1px solid rgba(0,255,170,0.2)' }}>
+        <div style={{ padding: 12, borderBottom: '1px solid var(--accent, rgba(0,255,170,0.2))' }}>
           <input
             autoFocus
             value={query}
@@ -84,7 +84,7 @@ export default function CommandPalette() {
               padding: '10px 12px',
               background: 'rgba(0,0,0,0.35)',
               color: '#d0d0d0',
-              border: '1px solid rgba(0,255,170,0.35)',
+              border: '1px solid var(--accent, rgba(0,255,170,0.35))',
               borderRadius: 8
             }}
           />
@@ -99,7 +99,7 @@ export default function CommandPalette() {
                 display: 'block',
                 padding: '10px 12px',
                 color: pathname === c.href ? '#0a0015' : '#d0d0d0',
-                background: pathname === c.href ? '#00ffaa' : 'transparent',
+                background: pathname === c.href ? 'var(--accent, #00ffaa)' : 'transparent',
                 borderRadius: 8,
                 textDecoration: 'none',
                 marginBottom: 6
@@ -112,7 +112,7 @@ export default function CommandPalette() {
             <div style={{ padding: 12, opacity: 0.7 }}>No matches.</div>
           )}
         </div>
-        <div style={{ padding: 10, borderTop: '1px solid rgba(0,255,170,0.2)', fontSize: 12, opacity: 0.75 }}>
+        <div style={{ padding: 10, borderTop: '1px solid var(--accent, rgba(0,255,170,0.2))', fontSize: 12, opacity: 0.75 }}>
           Tip: Press ⌘K / Ctrl+K to toggle the palette.
         </div>
       </div>

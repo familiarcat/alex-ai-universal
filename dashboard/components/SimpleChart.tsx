@@ -31,7 +31,7 @@ export function SimpleChart({
   colors = {
     primary: '#0070f3',
     secondary: '#00d4ff',
-    accent: '#00ffaa'
+    accent: '#00ffaa' // Default fallback - should be overridden by theme-aware parent components
   }
 }: SimpleChartProps) {
   if (!data || data.length === 0) {

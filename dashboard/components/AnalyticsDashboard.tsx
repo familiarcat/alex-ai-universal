@@ -127,7 +127,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
     colors: {
       primary: '#0070f3',
       secondary: '#00d4ff',
-      accent: '#00ffaa',
+      accent: '#00ffaa', // Default fallback - should be overridden by theme system
       background: '#ffffff',
       card: '#f5f5f5',
       cardAlt: '#e8e8e8',

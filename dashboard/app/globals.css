@@ -10,8 +10,9 @@
   --text-muted: #a1a1aa;
   --card: rgba(255,255,255,0.04);
   --card-alt: rgba(255,255,255,0.06);
-  --accent: #00ffaa;
-  --subtle: rgba(0,255,170,0.18);
+  /* Theme-aware colors - these are overridden by GlobalThemeStyles.tsx */
+  --accent: #00ffaa; /* Default fallback, overridden by theme system */
+  --subtle: rgba(0,255,170,0.18); /* Default fallback, overridden by theme system */
   --border: 1px solid rgba(255,255,255,0.12);
   --border-color: rgba(255,255,255,0.12); /* Added for component compatibility */
   --radius: 12px;
@@ -86,9 +87,9 @@ body {
   color: var(--text);
 }
 
-/* Focus styles for accessibility */
+/* Focus styles for accessibility - theme-aware */
 *:focus-visible {
-  outline: 3px solid #00ff88;
+  outline: 3px solid var(--accent, #00ff88);
   outline-offset: 2px;
 }
 

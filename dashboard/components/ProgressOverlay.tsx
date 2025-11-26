@@ -29,7 +29,7 @@ export default function ProgressOverlay() {
       overflowY: 'auto',
       background: 'rgba(10, 10, 15, 0.95)',
       backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(0, 255, 170, 0.2)',
+      border: '1px solid var(--accent, rgba(0, 255, 170, 0.2))',
       borderRadius: '8px',
       padding: '12px',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
@@ -37,10 +37,10 @@ export default function ProgressOverlay() {
       <div style={{
         fontSize: '12px',
         fontWeight: 600,
-        color: '#00ffaa',
+        color: 'var(--accent, #00ffaa)',
         marginBottom: '8px',
         paddingBottom: '8px',
-        borderBottom: '1px solid rgba(0, 255, 170, 0.2)'
+        borderBottom: '1px solid var(--accent, rgba(0, 255, 170, 0.2))'
       }}>
         🖖 Active Operations ({items.length})
       </div>
