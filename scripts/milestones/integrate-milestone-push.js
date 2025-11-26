@@ -18,7 +18,7 @@ const { execSync } = require('child_process');
 
 // Import the analysis system
 const { analyzeAndSummarizeCategories } = require('./analyze-and-summarize-milestones');
-const { organizeMilestonesByCategory } = require('../../organize-milestones-by-category');
+// Note: organizeMilestonesByCategory is not needed here - we handle organization inline
 
 const MILESTONE_CATEGORIES = [
   {
