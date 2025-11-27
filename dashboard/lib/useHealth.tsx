@@ -6,8 +6,10 @@ const DISABLED =
   process.env.NEXT_PUBLIC_DISABLE_POLLING === '1' ||
   process.env.NODE_ENV !== 'production';
 
-export function useHealth(pollMs: number = 5000): HealthStatus {
+export function useHealth(pollMs: number = 10000): HealthStatus {
+  // Troi's decision: Slower polling (10s default) to reduce UI loops
   const [status, setStatus] = useState<HealthStatus>('unknown');
+  const [lastCheck, setLastCheck] = useState<number>(0);
 
   useEffect(() => {
     if (DISABLED) {
@@ -19,8 +21,18 @@ export function useHealth(pollMs: number = 5000): HealthStatus {
     let timer: NodeJS.Timeout | undefined;
 
     const fetchHealth = async () => {
+      // Prevent rapid successive calls
+      const now = Date.now();
+      if (now - lastCheck < pollMs) {
+        return; // Too soon, skip this check
+      }
+      setLastCheck(now);
+      
       try {
-        const res = await fetch('/api/health', { cache: 'no-store' });
+        const res = await fetch('/api/health', { 
+          cache: 'no-store',
+          signal: AbortSignal.timeout(3000) // 3 second timeout
+        });
         const json = await res.json().catch(() => ({}));
         if (mounted) setStatus(json?.status === 'ok' ? 'ok' : 'fail');
       } catch {
@@ -29,13 +41,13 @@ export function useHealth(pollMs: number = 5000): HealthStatus {
     };
 
     fetchHealth(); // initial
-    timer = setInterval(fetchHealth, pollMs); // every 5s by default
+    timer = setInterval(fetchHealth, pollMs); // Slower polling
 
     return () => {
       mounted = false;
       if (timer) clearInterval(timer);
     };
-  }, [pollMs]);
+  }, [pollMs, lastCheck]); // Added lastCheck to prevent loops
 
   return status;
 }

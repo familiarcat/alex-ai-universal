@@ -7,60 +7,87 @@ const SyncToggle = ({ environment, onSyncChange }) => {
   const [syncCount, setSyncCount] = useState(0);
   const [syncHistory, setSyncHistory] = useState([]);
 
-  // Simulate real-time sync with the other environment
+  // Troi's decision: Use WebSocket events instead of polling
+  // Only poll if WebSocket is not available (true fallback)
   useEffect(() => {
-    const syncInterval = setInterval(async () => {
-      if (isSyncing) {
-        try {
-          // Simulate API call to check sync status
-          const response = await fetch('/api/sync-status', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              environment,
-              timestamp: new Date().toISOString(),
-              action: 'sync_check'
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setSyncStatus(data.status);
-            setLastSyncTime(new Date().toISOString());
-            setSyncCount(prev => prev + 1);
-            
-            // Add to sync history
-            setSyncHistory(prev => [
-              ...prev.slice(-9), // Keep last 10 entries
-              {
-                timestamp: new Date().toISOString(),
-                status: data.status,
-                environment,
-                action: 'sync_check'
-              }
-            ]);
-
-            // Notify parent component
-            if (onSyncChange) {
-              onSyncChange({
-                environment,
-                status: data.status,
-                timestamp: new Date().toISOString(),
-                count: syncCount + 1
-              });
-            }
-          }
-        } catch (error) {
-          console.error('Sync check failed:', error);
-          setSyncStatus('error');
+    if (!isSyncing) return; // Don't poll if sync is disabled
+    
+    // Check if WebSocket is available (from event-driven sync)
+    const checkWebSocket = () => {
+      // Try to get WebSocket connection status from event-driven sync
+      if (typeof window !== 'undefined' && window.eventDrivenSync) {
+        const status = window.eventDrivenSync.getStatus();
+        if (status.connected && status.connectionType === 'websocket') {
+          // WebSocket is connected - don't poll
+          return false;
         }
       }
-    }, 2000); // Check every 2 seconds
+      return true; // WebSocket not available, use polling as fallback
+    };
+
+    // Only poll if WebSocket is not available
+    if (!checkWebSocket()) {
+      return; // WebSocket is connected, no polling needed
+    }
+
+    // Fallback polling (only if WebSocket unavailable)
+    const syncInterval = setInterval(async () => {
+      if (!isSyncing) return;
+      
+      // Check WebSocket again before polling
+      if (!checkWebSocket()) {
+        clearInterval(syncInterval);
+        return; // WebSocket now available, stop polling
+      }
+      
+      try {
+        const response = await fetch('/api/sync-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            environment,
+            timestamp: new Date().toISOString(),
+            action: 'sync_check'
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSyncStatus(data.status);
+          setLastSyncTime(new Date().toISOString());
+          setSyncCount(prev => prev + 1);
+          
+          // Add to sync history (limit to prevent memory issues)
+          setSyncHistory(prev => [
+            ...prev.slice(-9), // Keep last 10 entries
+            {
+              timestamp: new Date().toISOString(),
+              status: data.status,
+              environment,
+              action: 'sync_check'
+            }
+          ]);
+
+          // Notify parent component
+          if (onSyncChange) {
+            onSyncChange({
+              environment,
+              status: data.status,
+              timestamp: new Date().toISOString(),
+              count: syncCount + 1
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Sync check failed:', error);
+        setSyncStatus('error');
+      }
+    }, 5000); // Poll every 5 seconds (slower when WebSocket unavailable)
 
     return () => clearInterval(syncInterval);
-  }, [isSyncing, environment, syncCount, onSyncChange]);
+  }, [isSyncing, environment]); // Removed syncCount and onSyncChange from deps to prevent loops
 
   const toggleSync = async () => {
     const newSyncState = !isSyncing;

@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
 const nextConfig = {
+  // Use separate build directories for each port to avoid conflicts
+  // Standard Next.js dev respects PORT env var for distDir
+  distDir: process.env.PORT ? `.next-${process.env.PORT}` : '.next',
   // Silence multi-lockfile warning by pointing tracing root to repo root
   outputFileTracingRoot: path.join(__dirname, '..'),
   // Enable static exports for deployment (commented out for dev)

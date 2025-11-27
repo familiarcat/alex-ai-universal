@@ -164,11 +164,28 @@ export default function LiveRefreshDashboard() {
       }
     }
 
-    // Fallback: Polling for codebase changes
+    // Fallback: Polling for codebase changes (only if WebSocket unavailable)
+    // Troi's decision: Polling should be slower and only when WebSocket fails
     function startPolling() {
+      // Check if WebSocket is now available before starting polling
+      if (stats.isConnected) {
+        console.log('✅ WebSocket connected, skipping polling');
+        return () => {}; // No cleanup needed
+      }
+      
+      console.log('⚠️  WebSocket unavailable, using polling fallback');
       const pollInterval = setInterval(async () => {
+        // Check WebSocket status before each poll
+        if (stats.isConnected) {
+          clearInterval(pollInterval);
+          console.log('✅ WebSocket now available, stopping polling');
+          return;
+        }
+        
         try {
-          const response = await fetch('/api/codebase-changes');
+          const response = await fetch('/api/codebase-changes', {
+            signal: AbortSignal.timeout(3000) // 3 second timeout
+          });
           if (response.ok) {
             const data = await response.json();
             if (data.changes && data.changes.length > 0) {
@@ -180,7 +197,7 @@ export default function LiveRefreshDashboard() {
         } catch (error) {
           console.error('Polling error:', error);
         }
-      }, refreshInterval);
+      }, Math.max(refreshInterval, 10000)); // Minimum 10 seconds between polls (slower)
 
       return () => clearInterval(pollInterval);
     }

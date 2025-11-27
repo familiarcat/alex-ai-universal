@@ -10,6 +10,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
+# Install Socket.IO dependencies (required for event-driven sync)
+RUN npm install socket.io socket.io-client --save
+
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -45,5 +48,6 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+# Use custom server with Socket.IO support if available, otherwise use Next.js default
+CMD ["sh", "-c", "if [ -f server.js ]; then node server.js; else node .next/standalone/server.js; fi"]
 

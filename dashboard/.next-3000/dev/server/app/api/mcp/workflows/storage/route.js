@@ -1,0 +1,10 @@
+var R=require("../../../../../chunks/[turbopack]_runtime.js")("server/app/api/mcp/workflows/storage/route.js")
+R.c("server/chunks/[root-of-the-server]__728c0063._.js")
+R.c("server/chunks/9f1d4_next_4de66de9._.js")
+R.c("server/chunks/9f1d4_@opentelemetry_api_build_esm_12bd161d._.js")
+R.c("server/chunks/node_modules_@supabase_storage-js_dist_module_ccb8d6df._.js")
+R.c("server/chunks/node_modules_@supabase_auth-js_dist_module_b36180bc._.js")
+R.c("server/chunks/node_modules_fff8d973._.js")
+R.c("server/chunks/52d24__next-internal_server_app_api_mcp_workflows_storage_route_actions_d4dac677.js")
+R.m("[project]/dashboard/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/dashboard/app/api/mcp/workflows/storage/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/dashboard/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/dashboard/app/api/mcp/workflows/storage/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

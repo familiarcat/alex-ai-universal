@@ -1,0 +1,3 @@
+{
+  "/api/mcp/[...endpoint]/route": "app/api/mcp/[...endpoint]/route.js"
+}

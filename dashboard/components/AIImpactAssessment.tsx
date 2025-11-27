@@ -46,15 +46,35 @@ export default function AIImpactAssessment() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const data = await service.getAssessmentData();
-      setProtocol(data);
       
-      // Don't use sample data - show empty state if no data
-      if (!data || !data.assessments) {
-        setProtocol({ assessments: [], summary: { overall: 0, categories: {} } });
+      // Ensure protocol has all required fields with defaults
+      if (data && data.assessments) {
+        setProtocol({
+          version: data.version || '1.0.0',
+          lastReview: data.lastReview || new Date().toISOString(),
+          nextReview: data.nextReview || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          overallImpact: data.overallImpact || 'neutral', // Ensure overallImpact is always defined
+          assessments: data.assessments || []
+        });
+      } else {
+        // Don't use sample data - show empty state if no data
+        setProtocol({ 
+          version: '1.0.0',
+          lastReview: new Date().toISOString(),
+          nextReview: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          overallImpact: 'neutral', // Default to neutral if no data
+          assessments: []
+        });
       }
     } catch (err: any) {
       console.error('Failed to load assessment data:', err);
-      setProtocol({ assessments: [], summary: { overall: 0, categories: {} } });
+      setProtocol({ 
+        version: '1.0.0',
+        lastReview: new Date().toISOString(),
+        nextReview: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        overallImpact: 'neutral', // Default to neutral on error
+        assessments: []
+      });
     } finally {
       setLoading(false);
     }
@@ -249,12 +269,12 @@ export default function AIImpactAssessment() {
           <div style={{ 
             fontSize: '16px', 
             fontWeight: 600, 
-            color: getImpactColor(protocol.overallImpact),
+            color: getImpactColor(protocol.overallImpact || 'neutral'),
             display: 'flex',
             alignItems: 'center',
             gap: '6px'
           }}>
-            {getImpactIcon(protocol.overallImpact)} {protocol.overallImpact.charAt(0).toUpperCase() + protocol.overallImpact.slice(1)}
+            {getImpactIcon(protocol.overallImpact || 'neutral')} {(protocol.overallImpact && typeof protocol.overallImpact === 'string') ? protocol.overallImpact.charAt(0).toUpperCase() + protocol.overallImpact.slice(1) : 'Neutral'}
           </div>
         </div>
       </div>

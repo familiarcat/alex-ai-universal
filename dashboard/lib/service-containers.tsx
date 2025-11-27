@@ -15,7 +15,7 @@
  * Crew: Data (Architecture) & La Forge (Implementation) & Troi (UX)
  */
 
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 
 export type ServiceStatus = 'pending' | 'initializing' | 'loading' | 'ready' | 'error' | 'offline';
 
@@ -236,51 +236,104 @@ export function useServiceInitialization(
 ) {
   const { registerService, updateServiceStatus, areDependenciesReady, isServiceReady } = useServiceContainers();
   const [initialized, setInitialized] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const initializingRef = useRef(false); // Prevent concurrent initialization
+  const MAX_RETRIES = 3; // Troi's decision: Limit retries to prevent loops
 
-  // Register service on mount
+  // Register service on mount (only once)
   useEffect(() => {
     registerService(serviceConfig);
-  }, [registerService, serviceId]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Initialize service when dependencies are ready
+  // Initialize service when dependencies are ready (with retry limits)
   useEffect(() => {
-    if (initialized || isServiceReady(serviceId)) return;
-
-    // Check if dependencies are ready
-    if (!areDependenciesReady(serviceId)) {
-      updateServiceStatus(serviceId, 'pending', {
-        current: 0,
-        total: 1,
-        message: 'Waiting for dependencies...'
-      });
+    // Guard: Don't retry if already initialized or currently initializing
+    if (initialized || initializingRef.current) return;
+    
+    const service = isServiceReady(serviceId);
+    if (service && service.status === 'ready') {
+      setInitialized(true);
       return;
     }
-
-    // Start initialization
-    updateServiceStatus(serviceId, 'initializing', {
-      current: 0,
-      total: 1,
-      message: `Initializing ${serviceConfig.name}...`
-    });
-
-    initializeFn()
-      .then(() => {
-        updateServiceStatus(serviceId, 'ready', {
-          current: 1,
-          total: 1,
-          message: `${serviceConfig.name} ready`
-        });
-        setInitialized(true);
-      })
-      .catch((error) => {
-        console.error(`Failed to initialize ${serviceConfig.name}:`, error);
+    
+    if (retryCount >= MAX_RETRIES) {
+      if (service?.status !== 'error') {
         updateServiceStatus(serviceId, 'error', {
           current: 0,
           total: 1,
-          message: `Failed to initialize ${serviceConfig.name}`
-        }, error.message);
+          message: `${serviceConfig.name} failed after ${MAX_RETRIES} attempts`
+        }, `Max retries (${MAX_RETRIES}) exceeded`);
+      }
+      return;
+    }
+
+    // Check if dependencies are ready
+    const depsReady = areDependenciesReady(serviceId);
+    if (!depsReady) {
+      // Only update if status is not already pending (prevent infinite updates)
+      if (service?.status !== 'pending') {
+        updateServiceStatus(serviceId, 'pending', {
+          current: 0,
+          total: 1,
+          message: 'Waiting for dependencies...'
+        });
+      }
+      return;
+    }
+
+    // Start initialization with exponential backoff
+    const delay = Math.min(1000 * Math.pow(2, retryCount), 8000); // 1s, 2s, 4s, max 8s
+    
+    initializingRef.current = true;
+    const timeoutId = setTimeout(() => {
+      updateServiceStatus(serviceId, 'initializing', {
+        current: 0,
+        total: 1,
+        message: `Initializing ${serviceConfig.name}... (attempt ${retryCount + 1}/${MAX_RETRIES})`
       });
-  }, [serviceId, initialized, areDependenciesReady, isServiceReady, updateServiceStatus, initializeFn, serviceConfig.name]);
+
+      initializeFn()
+        .then(() => {
+          updateServiceStatus(serviceId, 'ready', {
+            current: 1,
+            total: 1,
+            message: `${serviceConfig.name} ready`
+          });
+          setInitialized(true);
+          setRetryCount(0); // Reset retry count on success
+          initializingRef.current = false;
+        })
+        .catch((error) => {
+          console.error(`Failed to initialize ${serviceConfig.name} (attempt ${retryCount + 1}):`, error);
+          initializingRef.current = false;
+          
+          // Increment retry count
+          const newRetryCount = retryCount + 1;
+          setRetryCount(newRetryCount);
+          
+          if (newRetryCount >= MAX_RETRIES) {
+            // Final failure - set error state
+            updateServiceStatus(serviceId, 'error', {
+              current: 0,
+              total: 1,
+              message: `Failed to initialize ${serviceConfig.name}`
+            }, error.message);
+          } else {
+            // Will retry on next effect run (with backoff)
+            updateServiceStatus(serviceId, 'pending', {
+              current: 0,
+              total: 1,
+              message: `Retrying ${serviceConfig.name} in ${delay}ms...`
+            });
+          }
+        });
+    }, delay);
+
+    return () => {
+      clearTimeout(timeoutId);
+      initializingRef.current = false;
+    };
+  }, [serviceId, initialized, retryCount]); // Minimal deps to prevent infinite loops
 
   return {
     isReady: isServiceReady(serviceId),

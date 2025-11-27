@@ -22,8 +22,8 @@ export async function GET() {
     let localMcpOperational = false;
     let n8nOperational = false;
     
-    // Check local MCP first (via Supabase direct connection - this is our primary system)
-    // DDD: Data Layer - Supabase is the source of truth for local MCP
+    // Check live Supabase first (hosted on pbradygeorgen.com - this is our primary system)
+    // DDD: Data Layer - Live Supabase is the source of truth
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
     

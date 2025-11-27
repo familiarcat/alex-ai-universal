@@ -9,6 +9,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { debouncedContentSync } from './content-sync';
 import { debouncedSettingsSync, retrieveSettings } from './settings-sync';
+import { emitProjectUpdate, emitThemeUpdate, initializeStateSync } from './state-sync-integration';
 
 export type ComponentRole = 'hero' | 'header' | 'footer' | 'feature' | 'testimonial' | 'cta' | 'gallery' | 'content';
 
@@ -135,6 +136,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
   // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
   // Note: Uses intelligent fallback pattern (n8n → Supabase direct → localStorage)
   useEffect(() => {
+    // Initialize event-driven sync integration
+    initializeStateSync();
+    
     // Load globalTheme from Supabase (via n8n or direct fallback)
     retrieveSettings('default').then(settings => {
       if (settings && settings.globalTheme && settings.globalTheme !== state.globalTheme) {
@@ -200,6 +204,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
       // 🎯 PROPER DDD: Sync to Supabase via n8n (single source of truth)
       debouncedContentSync(newState.projects[projectId], 2000);
       
+      // 🖖 Event-Driven Sync: Emit WebSocket event (only on actual change)
+      emitProjectUpdate(projectId, field, value);
+      
       return newState;
     });
   };
@@ -207,6 +214,9 @@ export function StateProvider({ children }: { children: ReactNode }) {
   const updateTheme = async (projectId: string, themeId: string) => {
     // Update local state immediately (triggers debouncedContentSync via updateProject)
     updateProject(projectId, 'theme', themeId);
+    
+    // 🖖 Event-Driven Sync: Emit WebSocket event for theme change
+    emitThemeUpdate(projectId, themeId);
     
     // Note: n8n sync now handles persistence via proper DDD flow
     // Old project-themes.json API call removed (legacy)

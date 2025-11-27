@@ -16,7 +16,14 @@ echo "🧹 Cleaning up existing servers..."
 lsof -ti:3000,3001 2>/dev/null | xargs kill -9 2>/dev/null || true
 sleep 2
 
-# Start server on port 3000 (Data Dashboard)
+# Clear Next.js cache
+echo "🧹 Clearing Next.js cache..."
+cd "$DASHBOARD_DIR"
+rm -rf .next
+rm -rf node_modules/.cache
+echo "   ✅ Next.js cache cleared"
+
+# Start server on port 3000 (Data Dashboard) - Standard Next.js dev
 echo "🚀 Starting Data Dashboard on port 3000..."
 cd "$DASHBOARD_DIR"
 PORT=3000 N8N_URL=https://n8n.pbradygeorgen.com npm run dev > /tmp/dashboard-3000.log 2>&1 &
@@ -24,13 +31,14 @@ DASHBOARD_3000_PID=$!
 echo "   ✅ Started (PID: $DASHBOARD_3000_PID)"
 echo "   📋 Logs: /tmp/dashboard-3000.log"
 
-# Start server on port 3001 (Templating Dashboard)
+# Start server on port 3001 (Templating Dashboard) - Standard Next.js dev  
 echo "🚀 Starting Templating Dashboard on port 3001..."
 cd "$DASHBOARD_DIR"
 PORT=3001 N8N_URL=https://n8n.pbradygeorgen.com npm run dev > /tmp/dashboard-3001.log 2>&1 &
 DASHBOARD_3001_PID=$!
 echo "   ✅ Started (PID: $DASHBOARD_3001_PID)"
 echo "   📋 Logs: /tmp/dashboard-3001.log"
+echo "   🔌 Socket.IO: /api/socket"
 
 echo ""
 echo "⏳ Servers are starting and compiling..."

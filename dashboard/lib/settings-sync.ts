@@ -8,7 +8,11 @@
  */
 
 const N8N_URL = process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rpkkkbufdwxmjaerbhbn.supabase.co';
+// Use live Supabase instance from environment variables (hosted on pbradygeorgen.com infrastructure)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+if (!SUPABASE_URL) {
+  throw new Error('Supabase URL not configured. Please set NEXT_PUBLIC_SUPABASE_URL or SUPABASE_URL environment variable.');
+}
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 let saveTimer: NodeJS.Timeout | null = null;

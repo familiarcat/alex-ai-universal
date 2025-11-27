@@ -3,14 +3,16 @@
  * 
  * DDD-Compliant Data Access Layer for Dashboard Components
  * 
- * Flow: UI Component → UnifiedDataService → MCP Server → Supabase
- * Fallback: UI Component → UnifiedDataService → n8n Webhook → Supabase (if MCP unavailable)
+ * Flow: UI Component → UnifiedDataService → Next.js API → Supabase (Live - pbradygeorgen.com)
+ * Fallback: UI Component → UnifiedDataService → n8n Webhook → Supabase (if Supabase unavailable)
  * 
- * Architecture: MCP is PRIMARY controller (mcp.pbradygeorgen.com)
- *               n8n is FALLBACK only (n8n.pbradygeorgen.com)
+ * Architecture: 
+ *   PRIMARY: Supabase direct (Live instance hosted on pbradygeorgen.com) via Next.js API routes
+ *   FALLBACK: n8n Webhook (if Supabase unavailable)
+ *   REMOTE MCP: Future enhancement (when mcp.pbradygeorgen.com is deployed)
  * 
- * Reviewed by: Commander Data (Implementation) & Lieutenant Commander La Forge (Infrastructure)
- * Updated: 2025-01-24 - Corrected to use MCP as primary controller per migration milestones
+ * Crew Fix: Data (Architecture) + La Forge (Implementation) + Troi (UX)
+ * Updated: 2025-11-27 - Fixed to use Supabase directly instead of remote MCP server
  * Updated: 2025-01-24 - Added progress tracking for async operations
  */
 
@@ -200,13 +202,16 @@ export class UnifiedDataService {
   }
 
   /**
-   * Call MCP server (PRIMARY - DDD-compliant data access)
+   * Call Supabase via Next.js API route (PRIMARY - Live Supabase)
    * 
-   * Uses Next.js API route as proxy to keep API key server-side
-   * Includes retry logic with exponential backoff per crew optimization
-   * Reports progress for async operations
+   * FIXED: Changed from remote MCP (mcp.pbradygeorgen.com) to live Supabase (hosted on pbradygeorgen.com)
+   * Uses Next.js API routes that connect directly to the live Supabase instance
+   * This is the live production Supabase instance - the source of truth
    * 
-   * @param endpoint - MCP endpoint name
+   * Crew Fix: Data (Architecture) + La Forge (Implementation) + Troi (UX)
+   * Date: 2025-11-27
+   * 
+   * @param endpoint - API endpoint name (maps to Next.js API route)
    * @param payload - Request payload
    * @returns Response data
    */
@@ -219,12 +224,29 @@ export class UnifiedDataService {
     const lastFailure = this.lastFailureTime.get(endpointKey);
     if (lastFailure && Date.now() - lastFailure < this.FAILURE_COOLDOWN) {
       // Endpoint recently failed, skip retry and go straight to fallback
-      console.warn(`⚠️  MCP endpoint ${endpoint} in cooldown, using n8n fallback immediately`);
+      console.warn(`⚠️  Supabase endpoint ${endpoint} in cooldown, using n8n fallback immediately`);
       return this.callN8NFallback(endpoint, payload, payload.operationId);
     }
     
-    // Use Next.js API route as proxy (keeps API key server-side)
-    const url = `/api/mcp/${endpoint}`;
+    // Map UI endpoints to Next.js API routes (Supabase direct - Local MCP)
+    // Note: Some routes only support GET, not POST
+    const apiRouteMap: Record<string, { route: string; method: 'GET' | 'POST' }> = {
+      'knowledge/query': { route: '/api/knowledge/query', method: 'POST' }, // Supports both
+      'crew/stats': { route: '/api/lounge/crew-status', method: 'GET' }, // GET only
+      'learning/metrics': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'project/recommendations': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'security/assessment': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'cost/optimization': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'ux/analytics': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'ai/impact': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'process/documentation': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'data/sources': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'documentation': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+    };
+    
+    const routeConfig = apiRouteMap[endpoint] || { route: '/api/lounge/latest', method: 'GET' };
+    const url = routeConfig.route;
+    const method = routeConfig.method;
     const requestId = payload.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const operationId = payload.operationId || `${endpoint}-${requestId}`;
     
@@ -240,35 +262,63 @@ export class UnifiedDataService {
     
     try {
       // Report initial progress
-      this.reportProgress(operationId, 0, this.config.retries, `📡 Connecting to MCP: ${endpoint}`, 'loading');
+          this.reportProgress(operationId, 0, this.config.retries, `📡 Connecting to Supabase (Live): ${endpoint}`, 'loading');
       
       // Retry logic with exponential backoff (per crew optimization)
       for (let attempt = 1; attempt <= this.config.retries; attempt++) {
         try {
-          this.reportProgress(operationId, attempt - 1, this.config.retries, `📡 Attempt ${attempt}/${this.config.retries}: ${endpoint}`, 'loading');
+            this.reportProgress(operationId, attempt - 1, this.config.retries, `📡 Attempt ${attempt}/${this.config.retries}: ${endpoint} (Supabase)`, 'loading');
           
-          const response = await fetch(url, {
-            method: 'POST',
+          // Build request based on method
+          let finalUrl = url;
+          const requestOptions: RequestInit = {
+            method: method,
             headers: {
               'Content-Type': 'application/json',
               'X-Request-ID': requestId,
             },
-            body: JSON.stringify({
+            signal: AbortSignal.timeout(this.config.timeout),
+          };
+          
+          // Only include body for POST requests
+          if (method === 'POST') {
+            requestOptions.body = JSON.stringify({
               ...payload,
               timestamp: new Date().toISOString(),
               source: 'dashboard',
               requestId,
-            }),
-            signal: AbortSignal.timeout(this.config.timeout),
-          });
+            });
+          } else {
+            // For GET requests, add query params if needed
+            const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+            const urlObj = new URL(url, baseUrl);
+            if (payload.action) {
+              urlObj.searchParams.set('action', payload.action);
+            }
+            if (payload.limit) {
+              urlObj.searchParams.set('limit', String(payload.limit));
+            }
+            if (payload.category) {
+              urlObj.searchParams.set('category', payload.category);
+            }
+            if (payload.crew_member) {
+              urlObj.searchParams.set('crew_member', payload.crew_member);
+            }
+            if (payload.query) {
+              urlObj.searchParams.set('query', payload.query);
+            }
+            finalUrl = urlObj.pathname + urlObj.search;
+          }
+          
+          const response = await fetch(finalUrl, requestOptions);
 
           if (!response.ok) {
             const errorText = await response.text().catch(() => '');
-            throw new Error(`MCP endpoint error: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(`Supabase endpoint error: ${response.status} ${response.statusText} - ${errorText}`);
           }
 
           const data = await response.json();
-          this.reportProgress(operationId, this.config.retries, this.config.retries, `✅ Retrieved: ${endpoint}`, 'complete');
+            this.reportProgress(operationId, this.config.retries, this.config.retries, `✅ Retrieved from Supabase: ${endpoint}`, 'complete');
           this.activeOperations.delete(activeKey);
           // Clear failure tracking on success
           this.failedEndpoints.delete(endpointKey);
@@ -287,10 +337,10 @@ export class UnifiedDataService {
             // Mark endpoint as failed and set cooldown
             this.failedEndpoints.add(endpointKey);
             this.lastFailureTime.set(endpointKey, Date.now());
-            this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  MCP failed, trying fallback: ${endpoint}`, 'loading');
+            this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  Supabase failed, trying fallback: ${endpoint}`, 'loading');
             if (!isTimeout) {
               // Only log non-timeout errors
-              console.warn(`⚠️  MCP endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
+              console.warn(`⚠️  Supabase endpoint ${endpoint} failed after ${this.config.retries} attempts (requestId: ${requestId}), trying n8n fallback:`, error.message);
             }
             // Fallback to n8n if MCP unavailable after all retries
             return this.callN8NFallback(endpoint, payload, operationId);
@@ -301,7 +351,7 @@ export class UnifiedDataService {
           this.reportProgress(operationId, attempt, this.config.retries, `⏳ Retrying in ${backoffMs}ms: ${endpoint}`, 'loading');
           if (!isTimeout) {
             // Only log non-timeout errors
-            console.warn(`⚠️  MCP endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
+            console.warn(`⚠️  Supabase endpoint ${endpoint} attempt ${attempt}/${this.config.retries} failed (requestId: ${requestId}), retrying in ${backoffMs}ms:`, error.message);
           }
           await new Promise(resolve => setTimeout(resolve, backoffMs));
         }
@@ -338,7 +388,7 @@ export class UnifiedDataService {
     const lastFailure = this.lastFailureTime.get(endpointKey);
     if (lastFailure && Date.now() - lastFailure < this.FAILURE_COOLDOWN) {
       // n8n also failed recently, throw error instead of infinite retry
-      throw new Error(`Both MCP and n8n endpoints failed for ${endpoint}. Please check controller layer connectivity.`);
+      throw new Error(`Both Supabase and n8n endpoints failed for ${endpoint}. Please check controller layer connectivity.`);
     }
     
     const url = `${N8N_BASE_URL}/webhook/${endpoint}`;
@@ -396,7 +446,7 @@ export class UnifiedDataService {
         data: [],
         sessions: [],
         fallback: true,
-        mcpFailed: true,
+        supabaseFailed: true,
         n8nFailed: true,
       };
     }

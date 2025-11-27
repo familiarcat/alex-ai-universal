@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 import DeleteProjectModal from '@/components/DeleteProjectModal';
 import ThemeSelector from '@/components/ThemeSelector';
+import ProjectGrid from '@/components/ProjectGrid';
 import RAGProjectRecommendations from '@/components/RAGProjectRecommendations';
 import CrewMemoryVisualization from '@/components/CrewMemoryVisualization';
 import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard';
@@ -28,6 +29,7 @@ import VectorBasedDashboard from '@/components/VectorBasedDashboard';
 // Crew Recommendations Implementation Components
 import RAGSelfDocumentation from '@/components/RAGSelfDocumentation';
 import SecurityAssessmentDashboard from '@/components/SecurityAssessmentDashboard';
+import CrossServerSyncPanel from '@/components/CrossServerSyncPanel';
 import CostOptimizationMonitor from '@/components/CostOptimizationMonitor';
 import UserExperienceAnalytics from '@/components/UserExperienceAnalytics';
 import AIImpactAssessment from '@/components/AIImpactAssessment';
@@ -264,6 +266,11 @@ export default function DashboardContent() {
         {/* Service Initializer - Initializes all services in order */}
         <ServiceInitializer />
 
+        {/* Cross-Server Sync Panel - Real-Time Sync Testing */}
+        <div style={{ marginBottom: '24px' }}>
+          <CrossServerSyncPanel />
+        </div>
+
         {/* Live Refresh System - Top Priority */}
         <div style={{ marginBottom: '24px' }}>
           <LiveRefreshDashboard />
@@ -394,286 +401,32 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        {/* Projects */}
-        {Object.entries(projects).map(([projectId, content]) => {
-          const meta = getProjectMeta(projectId, content);
-          
-          return (
-            <div key={projectId} className="card" style={{
-              border: 'var(--border)',
-              borderRadius: 'var(--radius)',
-              overflow: 'hidden',
-              marginBottom: '30px'
+        {/* Master Dashboard: Project Grid */}
+        <div style={{ marginBottom: '40px' }}>
+          <div className="card" style={{
+            padding: 'var(--spacing-lg)',
+            borderRadius: 'var(--radius)',
+            border: 'var(--border)',
+            background: 'var(--card)',
+            marginBottom: 'var(--spacing-lg)'
+          }}>
+            <h2 style={{
+              fontSize: 'var(--font-xl)',
+              color: 'var(--accent)',
+              marginBottom: 'var(--spacing-sm)'
             }}>
-              {/* Project Header */}
-              <div style={{
-                background: 'var(--card-alt)',
-                padding: '20px 30px',
-                borderBottom: 'var(--border)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                    <h2 style={{ fontSize: '24px', color: 'var(--accent)', margin: 0 }}>
-                      {meta.icon} {meta.name}
-                    </h2>
-                    {content.projectType === 'creative' && (
-                      <span style={{
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        textTransform: 'uppercase',
-                        letterSpacing: '1px',
-                        background: 'rgba(138, 43, 226, 0.2)',
-                        color: '#ba55d3',
-                        padding: '4px 10px',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(138, 43, 226, 0.3)'
-                      }}>
-                        Creative
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-muted" style={{ fontSize: '13px', marginTop: '5px' }} suppressHydrationWarning>
-                    {content.projectType === 'creative' ? (
-                      <>External App | Port {meta.port} | Theme: {content.theme}</>
-                    ) : (
-                      <>Port {meta.port} | Budget: ${(meta.budget/1000).toFixed(0)}K | Theme: {content.theme}</>
-                    )}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <Link 
-                    href={
-                      content.projectType === 'creative' 
-                        ? `/creative/${projectId}`
-                        : `/projects/${projectId}/?headline=${encodeURIComponent(content.headline)}&subheadline=${encodeURIComponent(content.subheadline)}&description=${encodeURIComponent(content.description)}&theme=${encodeURIComponent(content.theme)}`
-                    }
-                    target="_blank"
-                    style={{
-                      background: 'var(--accent)',
-                      color: '#0a0015',
-                      padding: '12px 24px',
-                      borderRadius: 'var(--radius)',
-                      textDecoration: 'none',
-                      fontWeight: 600
-                    }}
-                  >
-                    {content.projectType === 'creative' ? '📝 Open Creative Suite' : '🌐 View Live Project'}
-                  </Link>
-                  <button
-                    onClick={() => setDeleteModal({ projectId, projectName: meta.name })}
-                    style={{
-                      padding: '12px 20px',
-                      background: 'transparent',
-                      color: '#ff4444',
-                      border: '2px solid #ff4444',
-                      borderRadius: 'var(--radius)',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      fontSize: '14px',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#ff4444';
-                      e.currentTarget.style.color = '#ffffff';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#ff4444';
-                    }}
-                  >
-                    🗑️ Delete
-                  </button>
-                </div>
-              </div>
-
-              {/* Editor + Preview (only for business projects) */}
-              {content.projectType !== 'creative' && (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '30px',
-                padding: '30px',
-                minHeight: '800px'
-              }}>
-                {/* Left: Editor */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
-                    ✏️ Content Editor (Updates Live!)
-                  </h3>
-                  <ProjectEditorTabs
-                    projectId={projectId}
-                    content={content}
-                    onUpdate={(field, value) => updateProject(projectId, field, value)}
-                    onTheme={(themeId) => updateTheme(projectId, themeId)}
-                  />
-                </div>
-
-                {/* Right: Live Preview (Isolated) */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <h3 style={{ color: 'var(--accent)', marginBottom: '20px' }}>
-                    👁️ Live Preview (Isolated, Real-Time)
-                  </h3>
-                  <div style={{
-                    border: 'var(--border)',
-                    borderRadius: 'var(--radius)',
-                    overflow: 'hidden',
-                    boxShadow: 'var(--shadow)',
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'relative' as const
-                  }}>
-                  {mounted && (
-                    <>
-                      <style>{`
-                        @keyframes crossfadeFadeIn {
-                          from {
-                            opacity: 0;
-                          }
-                          to {
-                            opacity: 1;
-                          }
-                        }
-                        
-                        @keyframes crossfadeFadeOut {
-                          from {
-                            opacity: 1;
-                          }
-                          to {
-                            opacity: 0;
-                          }
-                        }
-                        
-                        .iframe-container {
-                          position: relative;
-                          width: 100%;
-                          height: 100%;
-                          min-height: 600px;
-                          background: #ffffff;
-                        }
-                        
-                        .iframe-layer {
-                          position: absolute;
-                          top: 0;
-                          left: 0;
-                          width: 100%;
-                          height: 100%;
-                          border: 0;
-                          display: block;
-                          background: #fff;
-                        }
-                        
-                        .iframe-current {
-                          z-index: 2;
-                        }
-                        
-                        .iframe-current.loaded {
-                          animation: crossfadeFadeIn 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-                        }
-                        
-                        .iframe-current.loading {
-                          opacity: 0;
-                          pointer-events: none;
-                          visibility: hidden;
-                        }
-                        
-                        .iframe-previous {
-                          z-index: 1;
-                          opacity: 1;
-                          pointer-events: none;
-                        }
-                        
-                        .iframe-previous.fading {
-                          animation: crossfadeFadeOut 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-                          pointer-events: none;
-                        }
-                      `}</style>
-                      <div className="iframe-container">
-                        {/* Current iframe (loading invisibly behind previous, fades in when ready) */}
-                        <iframe
-                          key={iframeStates[projectId]?.current || 'initial'}
-                          src={iframeStates[projectId]?.currentUrl || `/projects/${projectId}/`}
-                          title={`${projectId}-preview-current`}
-                          className={`iframe-layer iframe-current ${iframeStates[projectId]?.isLoaded ? 'loaded' : 'loading'}`}
-                          onLoad={() => {
-                            // Wait for iframe content to fully render AND paint before crossfading
-                            // Increased delay ensures all content is visible before transition
-                            setTimeout(() => {
-                              // Mark as loaded to trigger simultaneous crossfade
-                              setIframeStates(prev => ({
-                                ...prev,
-                                [projectId]: { ...prev[projectId], isLoaded: true }
-                              }));
-                              
-                              // Garbage collect previous iframe after crossfade animation completes
-                              setTimeout(() => {
-                                setIframeStates(prev => ({
-                                  ...prev,
-                                  [projectId]: { ...prev[projectId], previous: null, previousUrl: null }
-                                }));
-                              }, 250); // Match animation duration
-                            }, 100); // Increased: allow full content paint
-                          }}
-                        />
-                        
-                        {/* Previous iframe (shows ACTUAL previous content, stays visible until crossfade) */}
-                        {iframeStates[projectId]?.previous && iframeStates[projectId]?.previousUrl && (
-                          <iframe
-                            key={iframeStates[projectId]?.previous}
-                            src={iframeStates[projectId]?.previousUrl || ''}
-                            title={`${projectId}-preview-previous`}
-                            className={`iframe-layer iframe-previous ${iframeStates[projectId]?.isLoaded ? 'fading' : ''}`}
-                          />
-                        )}
-                      </div>
-                    </>
-                  )}
-                  </div>
-                  <div style={{ marginTop: '10px', fontSize: '12px' }} className="text-muted">
-                    Preview is fully isolated to reflect the project's own theme and tokens.
-                  </div>
-                  <div style={{ marginTop: 6, fontSize: 12 }}>
-                    Theme in sync: <code>{content.theme}</code>
-                  </div>
-                </div>
-              </div>
-              )}
-
-              {/* Creative Project Info */}
-              {content.projectType === 'creative' && (
-                <div style={{ padding: '30px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '64px', marginBottom: '20px' }}>📝</div>
-                  <h3 style={{ fontSize: '24px', color: 'var(--accent)', marginBottom: '15px' }}>
-                    Creative Project
-                  </h3>
-                  <p className="text-muted" style={{ fontSize: '16px', lineHeight: 1.6, marginBottom: '30px' }}>
-                    {content.description}
-                  </p>
-                  <p className="text-muted" style={{ fontSize: '14px', marginBottom: '20px' }}>
-                    This is an externally integrated creative writing system. Use the button above to access the full creative suite with screenplay formatting, novel composition, and visualization tools.
-                  </p>
-                  <div style={{
-                    background: 'rgba(138, 43, 226, 0.1)',
-                    border: '1px solid rgba(138, 43, 226, 0.2)',
-                    borderRadius: '8px',
-                    padding: '20px',
-                    marginTop: '20px'
-                  }}>
-                    <div style={{ fontSize: '14px', color: '#ba55d3', marginBottom: '10px', fontWeight: 600 }}>
-                      🖖 Diplomatic Integration
-                    </div>
-                    <div style={{ fontSize: '13px', opacity: 0.8 }}>
-                      This foreign system is embedded via port {meta.port} while maintaining dashboard consistency.
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+              📋 All Projects
+            </h2>
+            <p style={{
+              fontSize: 'var(--font-sm)',
+              color: 'var(--text-muted)',
+              marginBottom: 0
+            }}>
+              Master control center for all projects. Click "Edit" to open project-specific dashboard.
+            </p>
+          </div>
+          <ProjectGrid />
+        </div>
       </div>
       
       {/* Delete Confirmation Modal */}

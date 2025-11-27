@@ -19,22 +19,52 @@ import { SERVICE_DEFINITIONS } from './define-services';
 async function initializeSupabase() {
   // Check if Supabase is accessible
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
   if (!supabaseUrl) {
     throw new Error('Supabase URL not configured');
   }
   
-  // Simple connectivity check
+  if (!supabaseKey) {
+    throw new Error('Supabase API key not configured');
+  }
+  
+  // Simple connectivity check with timeout
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
     const response = await fetch(`${supabaseUrl}/rest/v1/`, {
       method: 'HEAD',
       headers: {
-        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-      }
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`
+      },
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
+    
+    // 401 is expected if not authenticated, but connection works
+    // 404 means endpoint doesn't exist but connection works
+    // Only fail on network errors or 5xx errors
+    if (response.status >= 500) {
+      throw new Error(`Supabase server error: ${response.status}`);
+    }
+    
+    // 401 is OK - it means we can connect, just not authenticated
+    // This is acceptable for initialization check
+    if (response.status === 401) {
+      return; // Connection works, authentication will be handled later
+    }
+    
     if (!response.ok && response.status !== 404) {
       throw new Error(`Supabase returned ${response.status}`);
     }
   } catch (error: any) {
+    if (error.name === 'AbortError') {
+      throw new Error('Supabase connection timeout');
+    }
     if (error.message?.includes('Failed to fetch')) {
       throw new Error('Cannot connect to Supabase - check network');
     }
