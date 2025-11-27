@@ -29,7 +29,10 @@ export default function RootLayout({
           <ServiceContainerProvider>
             <GlobalThemeStyles />
             <DashboardChrome />
-            <main>
+            <main style={{
+              paddingTop: '0', // DashboardChrome handles its own spacer
+              minHeight: '100vh'
+            }}>
               {children}
             </main>
           </ServiceContainerProvider>

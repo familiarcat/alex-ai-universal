@@ -17,7 +17,6 @@ import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import DeleteProjectModal from '@/components/DeleteProjectModal';
-import ThemeSelector from '@/components/ThemeSelector';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
@@ -56,7 +55,7 @@ export default function DashboardContent() {
     );
   }
   
-  const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = appState;
+  const { projects, updateProject, updateTheme, deleteProject } = appState;
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
@@ -185,16 +184,6 @@ export default function DashboardContent() {
             <p className="text-muted" style={{ marginBottom: 0 }}>
               Edit content here, see updates LIVE on project pages! Open projects in new tabs to test.
             </p>
-          </div>
-          
-          {/* Global Theme Selector */}
-          <div style={{ minWidth: '200px', maxWidth: '250px' }}>
-            <ThemeSelector
-              value={globalTheme}
-              onChange={updateGlobalTheme}
-              mode="dropdown"
-              label="🎨 Global Theme"
-            />
           </div>
           
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>

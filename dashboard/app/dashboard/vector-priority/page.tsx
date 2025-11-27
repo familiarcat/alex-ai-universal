@@ -29,11 +29,28 @@ const ProgressTracker = dynamic(() => import('@/components/ProgressTracker'), {
 
 export default function VectorPriorityDashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="space-y-6 p-6">
+    <div style={{
+      padding: '40px 20px', // FIXED: Consistent top spacing with main dashboard
+      minHeight: '100vh',
+      background: 'var(--background)'
+    }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         {/* Progress Tracker */}
-        <div className="bg-white rounded-lg shadow p-4">
-          <h2 className="text-xl font-bold mb-4">Background Task Progress</h2>
+        <div style={{
+          background: 'var(--card-bg)',
+          borderRadius: 'var(--radius)',
+          border: '1px solid var(--border)',
+          padding: '20px',
+          marginBottom: '24px'
+        }}>
+          <h2 style={{
+            fontSize: 'var(--font-xl)',
+            fontWeight: 700,
+            color: 'var(--accent)',
+            marginBottom: '16px'
+          }}>
+            Background Task Progress
+          </h2>
           <ProgressTracker 
             taskId="crew-recommendations" 
             autoRefresh={true} 
@@ -41,8 +58,10 @@ export default function VectorPriorityDashboardPage() {
           />
         </div>
 
-        <VectorBasedDashboard autoRefresh={true} refreshInterval={5000} />
-        <div className="mt-8">
+        <div style={{ marginTop: '32px' }}>
+          <VectorBasedDashboard autoRefresh={true} refreshInterval={5000} />
+        </div>
+        <div style={{ marginTop: '32px' }}>
           <UIDesignComparison />
         </div>
       </div>

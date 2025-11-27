@@ -9,11 +9,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import GlobalThemeSwitcher from '@/components/GlobalThemeSwitcher';
+import { useAppState } from '@/lib/state-manager';
+import ThemeSelector from '@/components/ThemeSelector';
 import IntentThemeSwitcher from '@/components/IntentThemeSwitcher';
 
 export default function DevNavigation() {
   const pathname = usePathname();
+  const { globalTheme, updateGlobalTheme } = useAppState();
   const [projectsOpen, setProjectsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false);
@@ -177,7 +179,16 @@ export default function DevNavigation() {
 
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
           <IntentThemeSwitcher />
-          <GlobalThemeSwitcher />
+          {/* Global Theme Selector - Moved from dashboard content */}
+          <div style={{ minWidth: '200px', maxWidth: '250px' }}>
+            <ThemeSelector
+              value={globalTheme}
+              onChange={updateGlobalTheme}
+              mode="dropdown"
+              label="🎨"
+              showQuickDropdown={true}
+            />
+          </div>
           {mounted && !isNarrow && <span style={{ fontSize: '12px', color: 'var(--header-text, rgba(255, 255, 255, 0.9))', opacity: 0.8 }}>Current: {pathname}</span>}
         </div>
       </div>

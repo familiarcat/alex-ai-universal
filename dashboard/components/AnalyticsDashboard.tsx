@@ -195,9 +195,9 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
 
   return (
     <div style={{
-      padding: '24px',
+      padding: '0', // Padding handled by page wrapper
       background: defaultTheme.colors.background,
-      minHeight: '100vh'
+      minHeight: 'auto' // Height handled by page wrapper
     }}>
       {/* Header with Navigation */}
       <div style={{

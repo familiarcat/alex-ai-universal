@@ -4,6 +4,9 @@
  * Analytics Dashboard Page
  * 
  * Displays analytics with graphs and router links
+ * 
+ * FIXED: Added consistent top spacing to match dashboard layout
+ * Crew: Counselor Troi (UX) + Chief O'Brien (Pragmatic Fix)
  */
 
 import dynamic from 'next/dynamic';
@@ -15,6 +18,13 @@ const AnalyticsDashboardClient = dynamic(() => Promise.resolve(AnalyticsDashboar
 });
 
 export default function AnalyticsPage() {
-  return <AnalyticsDashboardClient />;
+  return (
+    <div style={{
+      padding: '40px 20px',
+      minHeight: '100vh'
+    }}>
+      <AnalyticsDashboardClient />
+    </div>
+  );
 }
 

@@ -97,6 +97,7 @@ export default function ProjectDashboardContent({ projectId }: ProjectDashboardC
 
   return (
     <div style={{
+      padding: '40px 20px', // FIXED: Consistent top spacing with main dashboard
       minHeight: '100vh',
       background: 'var(--background)',
       padding: '40px 20px'
