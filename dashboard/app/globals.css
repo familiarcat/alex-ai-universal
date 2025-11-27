@@ -66,6 +66,19 @@
   --transition-fast: 0.15s;
   --transition-base: 0.2s;
   --transition-slow: 0.3s;
+  
+  /* Navigation Spacing System - System-wide vertical spacing for fixed navigation */
+  /* DevNavigation height: ~56px (padding 12px top + 12px bottom + content ~32px) */
+  /* StatusRibbon height: ~28px (padding 6px top + 6px bottom + content ~16px) */
+  /* Total navigation height: ~84px, using 100px for safety margin */
+  --nav-height: 100px;
+  --nav-dev-height: 56px;
+  --nav-status-height: 28px;
+  --nav-spacer-height: var(--nav-height);
+  
+  /* Content spacing below navigation */
+  --content-top-padding: var(--spacing-xl); /* 32px default content padding */
+  --content-top-with-nav: calc(var(--nav-spacer-height) + var(--content-top-padding));
 }
 
 * {
@@ -115,4 +128,17 @@ body {
 }
 
 .text-muted { color: var(--text-muted); }
+
+/* Navigation Spacing Utilities - System-wide vertical spacing */
+.nav-spacer {
+  height: var(--nav-spacer-height, 100px);
+}
+
+.content-with-nav {
+  padding-top: var(--content-top-with-nav, calc(100px + 32px));
+}
+
+.content-padding-top {
+  padding-top: var(--content-top-padding, 32px);
+}
 

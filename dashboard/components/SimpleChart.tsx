@@ -7,7 +7,7 @@
  * Supports bar, line, and pie charts
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 export type ChartType = 'line' | 'bar' | 'pie';
 
@@ -34,6 +34,12 @@ export function SimpleChart({
     accent: 'var(--accent, #00ffaa)' // Default fallback - should be overridden by theme-aware parent components
   }
 }: SimpleChartProps) {
+  // Memoize maxValue to ensure it recalculates when data changes
+  const maxValue = useMemo(() => {
+    if (!data || data.length === 0) return 100;
+    return Math.max(...data.map(d => d.value || 0));
+  }, [data]);
+
   if (!data || data.length === 0) {
     return (
       <div style={{
@@ -49,8 +55,6 @@ export function SimpleChart({
     );
   }
 
-  const maxValue = Math.max(...data.map(d => d.value));
-
   const renderBarChart = () => (
     <div style={{
       height: `${height}px`,
@@ -63,7 +67,7 @@ export function SimpleChart({
         const barHeight = (item.value / maxValue) * 100;
         return (
           <div
-            key={index}
+            key={`${item.label}-${item.value}-${index}`}
             style={{
               flex: 1,
               height: `${barHeight}%`,
@@ -124,7 +128,7 @@ export function SimpleChart({
           const y = 100 - ((item.value / maxValue) * 100);
           return (
             <circle
-              key={index}
+              key={`point-${item.label}-${item.value}-${index}`}
               cx={x}
               cy={y}
               r="2"
@@ -168,7 +172,7 @@ export function SimpleChart({
 
             return (
               <path
-                key={index}
+                key={`slice-${item.label}-${item.value}-${index}`}
                 d={`M 50 50 L ${x1} ${y1} A 50 50 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
                 fill={chartColors[index % chartColors.length]}
                 stroke="var(--card)"
@@ -224,7 +228,7 @@ export function SimpleChart({
         color: '#666666'
       }}>
         {data.map((item, index) => (
-          <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div key={`legend-${item.label}-${item.value}-${index}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <div style={{
               width: '12px',
               height: '12px',

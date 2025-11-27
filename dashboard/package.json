@@ -15,7 +15,9 @@
     "test:watch": "vitest watch",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "seed:projects": "node scripts/seed-projects-to-supabase.js"
+    "seed:projects": "node scripts/seed-projects-to-supabase.js",
+    "diagnose:mcp": "bash scripts/diagnose-mcp-systems.sh",
+    "fix:mcp": "bash scripts/fix-mcp-systems.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

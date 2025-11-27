@@ -21,8 +21,8 @@ export default function DashboardChrome() {
       <DevNavigation />
       <StatusRibbon />
       <CommandPalette />
-      {/* spacer for fixed nav height */}
-      <div style={{ height: 80 }} />
+      {/* System-wide navigation spacer - uses CSS variable for consistency */}
+      <div style={{ height: 'var(--nav-spacer-height, 100px)' }} />
     </>
   );
 }

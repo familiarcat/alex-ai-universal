@@ -22,6 +22,7 @@ import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
 import { ServiceInitializer } from '@/lib/services/initialize-services';
 import DomainDrivenBentoLayout from '@/components/DomainDrivenBentoLayout';
+import { useNavigationSpacing } from '@/lib/hooks/useNavigationSpacing';
 
 export default function DashboardContent() {
   // Add error boundary for useAppState
@@ -156,12 +157,18 @@ export default function DashboardContent() {
 
   // Themes now managed by shared ThemeSelector component
 
+  // Use navigation spacing system
+  const { style: navStyle } = useNavigationSpacing();
+  
   return (
     <ProgressProvider>
       <ErrorBoundary>
         <ProgressOverlay />
         <div className="dashboard-theme-wrapper" style={{
-          padding: '40px 20px'
+          ...navStyle,
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          paddingBottom: '40px'
         }}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         {/* Header */}

@@ -5,12 +5,13 @@
  * 
  * Displays analytics with graphs and router links
  * 
- * FIXED: Added consistent top spacing to match dashboard layout
+ * Uses system-wide navigation spacing system
  * Crew: Counselor Troi (UX) + Chief O'Brien (Pragmatic Fix)
  */
 
 import dynamic from 'next/dynamic';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import { useNavigationSpacing } from '@/lib/hooks/useNavigationSpacing';
 
 // Dynamic import to avoid SSR issues
 const AnalyticsDashboardClient = dynamic(() => Promise.resolve(AnalyticsDashboard), {
@@ -18,12 +19,19 @@ const AnalyticsDashboardClient = dynamic(() => Promise.resolve(AnalyticsDashboar
 });
 
 export default function AnalyticsPage() {
+  const { style: navStyle } = useNavigationSpacing();
+  
   return (
-    <div style={{
-      padding: '40px 20px',
+    <div className="dashboard-theme-wrapper" style={{
+      ...navStyle,
+      paddingLeft: '20px',
+      paddingRight: '20px',
+      paddingBottom: '40px',
       minHeight: '100vh'
     }}>
-      <AnalyticsDashboardClient />
+      <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        <AnalyticsDashboardClient />
+      </div>
     </div>
   );
 }

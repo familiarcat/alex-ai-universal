@@ -18,6 +18,7 @@
 const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { validateWithCrew, reviewWithCrew, alertCrew } = require('./crew-milestone-validation');
 
 // Configuration
 const VERBOSE = process.argv.includes('--verbose');
@@ -354,6 +355,31 @@ async function executeMilestonePush() {
   
   log(`📋 Milestone: ${milestoneName}`);
   
+  // Step 5.5: Crew Pre-Commit Validation
+  log('🖖 Crew: Validating milestone before commit...');
+  const crewValidation = validateWithCrew(files, commitMessage);
+  
+  if (VERBOSE) {
+    log('📊 Crew Assessments:');
+    Object.entries(crewValidation.crewAssessments).forEach(([crew, assessment]) => {
+      log(`   ${crew}: ${JSON.stringify(assessment, null, 2)}`);
+    });
+  }
+  
+  if (!crewValidation.approved) {
+    error(`❌ Crew validation failed: ${crewValidation.reason}`);
+    if (crewValidation.issues.length > 0) {
+      error(`   Issues: ${crewValidation.issues.join('; ')}`);
+    }
+    return { success: false, error: crewValidation.reason, crewValidation };
+  }
+  
+  if (crewValidation.issues.length > 0 && VERBOSE) {
+    log(`⚠️  Crew warnings (non-blocking): ${crewValidation.issues.join('; ')}`);
+  }
+  
+  log('✅ Crew validation passed');
+  
   // Step 6: Create commit
   // Use -F flag with temp file to handle multi-line messages safely
   const tempFile = path.join(process.cwd(), '.git-commit-message.tmp');
@@ -373,7 +399,14 @@ async function executeMilestonePush() {
     }
     
     if (!commitResult.success) {
+      // Crew alert on commit failure
+      alertCrew('milestone-commit-failed', {
+        error: commitResult.error,
+        milestoneName,
+        stage: 'commit'
+      });
       error(`❌ Failed to create commit: ${commitResult.error}`);
+      error(`🚨 Crew alerted of commit failure`);
       return { success: false, error: commitResult.error };
     }
   } catch (err) {
@@ -426,9 +459,17 @@ async function executeMilestonePush() {
   );
   
   if (!pushBranchResult.success) {
+    // Crew alert on push failure
+    alertCrew('milestone-push-failed', {
+      error: pushBranchResult.error,
+      commitSha,
+      milestoneName,
+      stage: 'branch-push'
+    });
     error(`❌ Failed to push branch: ${pushBranchResult.error}`);
     error(`   Commit ${commitSha} created locally but not pushed`);
     error(`   Run 'git push' manually to complete`);
+    error(`🚨 Crew alerted of push failure`);
     return { success: false, error: pushBranchResult.error, commitSha };
   }
   
@@ -442,35 +483,78 @@ async function executeMilestonePush() {
     log(`⚠️  Tag push failed (non-critical): ${pushTagResult.error}`);
   }
   
-  // Success!
-  // Non-blocking RAG integration (MCP primary, n8n fallback)
-  // Silent by default - only logs if verbose
+  // Step 9: Post-Push Crew Review
+  log('🖖 Crew: Reviewing milestone after push...');
+  const crewReview = reviewWithCrew(commitSha, milestoneName, files);
+  
+  if (VERBOSE) {
+    log('📊 Crew Reviews:');
+    Object.entries(crewReview.crewReviews).forEach(([crew, review]) => {
+      log(`   ${crew}: ${JSON.stringify(review, null, 2)}`);
+    });
+  }
+  
+  if (crewReview.issues.length > 0) {
+    log(`⚠️  Crew review issues: ${crewReview.issues.join('; ')}`);
+  } else {
+    log('✅ Crew review passed');
+  }
+  
+  // Step 10: Crew-Aware RAG Integration
+  log('🖖 Crew: Storing milestone in RAG system...');
   setTimeout(async () => {
     try {
       // Use MCP-first milestone storage (follows DDD architecture)
       const mcpScript = path.join(__dirname, 'mcp-store-milestone.js');
       if (fs.existsSync(mcpScript)) {
         const features = commitMessage.split('\n').slice(1).filter(line => line.trim() && !line.startsWith('Total')).join(';');
+        
+        // Include crew validation metadata in RAG storage
+        const crewMetadata = {
+          validatedBy: Object.keys(crewValidation.crewAssessments),
+          reviewedBy: Object.keys(crewReview.crewReviews),
+          assessments: crewValidation.crewAssessments,
+          reviews: crewReview.crewReviews
+        };
+        
         execSync(
-          `node ${mcpScript} --summary "${commitMessage.split('\n')[0]}" --features "${features}" --tags "milestone,git"`,
+          `node ${mcpScript} --summary "${commitMessage.split('\n')[0]}" --features "${features}" --tags "milestone,git,crew-validated"`,
           { stdio: VERBOSE ? 'inherit' : 'ignore', timeout: 30000 }
         );
-        log('✅ RAG integration completed (MCP/n8n)');
+        log('✅ Crew: Milestone stored in RAG system (MCP/n8n)');
+        
+        // Store crew metadata separately (non-blocking)
+        try {
+          const metadataFile = path.join(process.cwd(), '.milestone-crew-metadata.json');
+          fs.writeFileSync(metadataFile, JSON.stringify({
+            commitSha,
+            milestoneName,
+            crewMetadata,
+            timestamp: new Date().toISOString()
+          }, null, 2));
+        } catch (err) {
+          // Ignore metadata file errors
+        }
       } else {
         // Fallback to n8n if MCP script doesn't exist
         const ragScript = path.join(__dirname, 'n8n-post-knowledge.js');
         if (fs.existsSync(ragScript)) {
-          log('⚠️  MCP script not found, using n8n fallback');
+          log('⚠️  Crew: MCP script not found, using n8n fallback');
           execSync(
-            `node ${ragScript} --summary "${commitMessage.split('\n')[0]}" --tags "milestone,git"`,
+            `node ${ragScript} --summary "${commitMessage.split('\n')[0]}" --tags "milestone,git,crew-validated"`,
             { stdio: VERBOSE ? 'inherit' : 'ignore', timeout: 30000 }
           );
-          log('✅ RAG integration completed (n8n fallback)');
+          log('✅ Crew: Milestone stored in RAG system (n8n fallback)');
         }
       }
     } catch (error) {
-      // Silent failure - RAG integration is non-blocking
-      log(`⚠️  RAG integration failed (non-blocking): ${error.message}`);
+      // Crew alert on RAG failure (not silent anymore)
+      alertCrew('rag-storage-failed', {
+        error: error.message,
+        commitSha,
+        milestoneName
+      });
+      log(`⚠️  Crew: RAG storage failed - crew alerted: ${error.message}`);
     }
   }, 100);
 

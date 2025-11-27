@@ -7,7 +7,7 @@
  * Uses dashboard-core DataChart component for visualization
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useAppState } from '@/lib/state-manager';
 import { SimpleChart } from './SimpleChart';
@@ -61,7 +61,25 @@ interface AnalyticsDashboardProps {
 export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
   const { projects } = useAppState();
 
+  // Debug: Log when projects change
+  useEffect(() => {
+    const projectCount = Object.keys(projects).length;
+    const totalComponents = Object.values(projects).reduce((sum, p) => sum + (p.components?.length || 0), 0);
+    console.log('📊 Analytics Dashboard: Projects updated', {
+      projectCount,
+      totalComponents,
+      projectIds: Object.keys(projects)
+    });
+  }, [projects]);
+
   // Generate analytics data from projects
+  // Use a serialized version of project keys + updatedAt timestamps to ensure reactivity
+  const projectsDependency = useMemo(() => {
+    return Object.keys(projects).map(key => 
+      `${key}:${projects[key]?.updatedAt || 0}:${projects[key]?.components?.length || 0}`
+    ).join('|');
+  }, [projects]);
+
   const analyticsData = useMemo(() => {
     const projectCount = Object.keys(projects).length;
     const projectsByTheme: Record<string, number> = {};
@@ -98,28 +116,40 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
       componentCounts,
       recentActivity: recentActivity.slice(-7).reverse() // Last 7 days
     };
-  }, [projects]);
+  }, [projects, projectsDependency]);
 
-  // Prepare chart data
-  const themeChartData = Object.entries(analyticsData.projectsByTheme).map(([label, value]) => ({
-    label,
-    value
-  }));
+  // Prepare chart data - memoize to prevent unnecessary re-renders
+  const themeChartData = useMemo(() => 
+    Object.entries(analyticsData.projectsByTheme).map(([label, value]) => ({
+      label,
+      value
+    })),
+    [analyticsData.projectsByTheme]
+  );
 
-  const typeChartData = Object.entries(analyticsData.projectsByType).map(([label, value]) => ({
-    label,
-    value
-  }));
+  const typeChartData = useMemo(() =>
+    Object.entries(analyticsData.projectsByType).map(([label, value]) => ({
+      label,
+      value
+    })),
+    [analyticsData.projectsByType]
+  );
 
-  const activityChartData = analyticsData.recentActivity.map(item => ({
-    label: item.date,
-    value: item.count
-  }));
+  const activityChartData = useMemo(() =>
+    analyticsData.recentActivity.map(item => ({
+      label: item.date,
+      value: item.count
+    })),
+    [analyticsData.recentActivity]
+  );
 
-  const componentChartData = analyticsData.componentCounts.map((count, index) => ({
-    label: `Project ${index + 1}`,
-    value: count
-  }));
+  const componentChartData = useMemo(() =>
+    analyticsData.componentCounts.map((count, index) => ({
+      label: `Project ${index + 1}`,
+      value: count
+    })),
+    [analyticsData.componentCounts]
+  );
 
   // Handle both string and object themes
   const defaultTheme: DashboardTheme = (theme && typeof theme === 'object' && theme.colors) ? theme : {
@@ -150,7 +180,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
     }
   };
 
-  const chartComponents: DashboardComponent[] = [
+  // Memoize chart components to ensure reactivity when data changes
+  const chartComponents: DashboardComponent[] = useMemo(() => [
     {
       id: 'projects-by-theme',
       type: 'chart',
@@ -191,13 +222,11 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
       data: componentChartData,
       config: { chartType: 'bar' }
     }
-  ];
+  ], [themeChartData, typeChartData, activityChartData, componentChartData]);
 
   return (
     <div style={{
-      padding: '0', // Padding handled by page wrapper
-      background: defaultTheme.colors.background,
-      minHeight: 'auto' // Height handled by page wrapper
+      background: defaultTheme.colors.background
     }}>
       {/* Header with Navigation */}
       <div style={{
@@ -408,6 +437,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
               {component.body}
             </p>
             <SimpleChart
+              key={`${component.id}-${component.data?.length || 0}-${component.data?.reduce((sum, d) => sum + (d.value || 0), 0) || 0}`}
               data={component.data || []}
               chartType={component.config?.chartType as any || 'bar'}
               height={200}
