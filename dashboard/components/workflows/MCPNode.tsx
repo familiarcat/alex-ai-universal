@@ -29,10 +29,10 @@ export default function MCPNode({ data, selected }: NodeProps<MCPNodeData>) {
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case 'running': return '#3b82f6'; // blue
-      case 'success': return '#10b981'; // green
-      case 'error': return '#ef4444'; // red
-      case 'pending': return '#f59e0b'; // yellow
+      case 'running': return 'var(--status-info)'; // blue
+      case 'success': return 'var(--status-success)'; // green
+      case 'error': return 'var(--status-error)'; // red
+      case 'pending': return 'var(--status-warning)'; // yellow
       default: return 'transparent';
     }
   };

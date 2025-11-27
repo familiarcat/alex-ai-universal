@@ -197,9 +197,9 @@ export default function UserExperienceAnalytics() {
   }
 
   function getScoreColor(score: number): string {
-    if (score >= 85) return '#00CC66';
-    if (score >= 70) return '#FFD700';
-    return '#CC0000';
+    if (score >= 85) return 'var(--status-success)';
+    if (score >= 70) return 'var(--status-warning)';
+    return 'var(--status-error)';
   }
 
   if (loading) {
@@ -408,7 +408,7 @@ export default function UserExperienceAnalytics() {
                 <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
                   <span>{step.completionRate}% complete</span>
                   <span>{step.avgTime}s avg</span>
-                  <span style={{ color: step.dropoffRate > 10 ? '#CC0000' : 'var(--text-muted)' }}>
+                  <span style={{ color: step.dropoffRate > 10 ? 'var(--status-error)' : 'var(--text-muted)' }}>
                     {step.dropoffRate}% dropoff
                   </span>
                 </div>

@@ -290,7 +290,7 @@ export default function CostOptimizationMonitor() {
           border: '1px solid var(--border)',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '32px', fontWeight: 700, color: '#00CC66', marginBottom: '8px' }}>
+          <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--status-success)', marginBottom: '8px' }}>
             {costData ? formatCurrency(costData.savings) : '$0.00'}
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>

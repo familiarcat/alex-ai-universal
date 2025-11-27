@@ -41,11 +41,18 @@ export default function RAGSelfDocumentation() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<ComponentDocumentation | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // FIXED: Add error check to prevent infinite retry loops
+  // Crew: Data (Analysis) & La Forge (Implementation)
   useEffect(() => {
-    fetchDocumentation();
-  }, []);
+    // Only fetch if not already in error state (prevents infinite retries)
+    if (!error) {
+      fetchDocumentation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   async function fetchDocumentation() {
     try {
@@ -95,14 +102,19 @@ export default function RAGSelfDocumentation() {
       }));
       
       setCategories(categoryData);
+      setError(null); // Clear error on success
       
       // Don't use sample data - show empty state if no data
       if (categoryData.length === 0) {
         setCategories([]);
       }
     } catch (err: any) {
+      // FIXED: Prevent infinite retry loops
+      // Crew: Worf (Security) & O'Brien (Pragmatic Fix)
       console.error('Failed to load documentation:', err);
+      setError(err.message || 'Failed to load documentation');
       setCategories([]);
+      // Don't retry automatically - user can manually retry if needed
     } finally {
       setLoading(false);
     }

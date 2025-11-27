@@ -29,9 +29,9 @@ export function SimpleChart({
   title,
   height = 200,
   colors = {
-    primary: '#0070f3',
-    secondary: '#00d4ff',
-    accent: '#00ffaa' // Default fallback - should be overridden by theme-aware parent components
+    primary: 'var(--status-info, #0070f3)',
+    secondary: 'var(--accent, #00d4ff)',
+    accent: 'var(--accent, #00ffaa)' // Default fallback - should be overridden by theme-aware parent components
   }
 }: SimpleChartProps) {
   if (!data || data.length === 0) {
@@ -41,7 +41,7 @@ export function SimpleChart({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#666666',
+        color: 'var(--text-muted)',
         fontSize: '14px'
       }}>
         No data available
@@ -87,7 +87,7 @@ export function SimpleChart({
               left: '50%',
               transform: 'translateX(-50%)',
               fontSize: '11px',
-              color: '#666666',
+              color: 'var(--text-muted)',
               whiteSpace: 'nowrap'
             }}>
               {item.value}
@@ -109,7 +109,7 @@ export function SimpleChart({
       <svg
         width="100%"
         height={height}
-        style={{ border: '1px solid #e0e0e0', borderRadius: '4px' }}
+        style={{ border: 'var(--border)', borderRadius: 'var(--radius-sm)' }}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
@@ -171,7 +171,7 @@ export function SimpleChart({
                 key={index}
                 d={`M 50 50 L ${x1} ${y1} A 50 50 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
                 fill={chartColors[index % chartColors.length]}
-                stroke="#ffffff"
+                stroke="var(--card)"
                 strokeWidth="1"
               />
             );
@@ -184,7 +184,7 @@ export function SimpleChart({
           transform: 'translate(-50%, -50%)',
           fontSize: '14px',
           fontWeight: 600,
-          color: '#333333'
+          color: 'var(--text)'
         }}>
           {total}
         </div>
@@ -199,15 +199,15 @@ export function SimpleChart({
           marginBottom: '12px',
           fontSize: '16px',
           fontWeight: 600,
-          color: '#333333'
+          color: 'var(--text)'
         }}>
           {title}
         </div>
       )}
       <div style={{
-        background: '#ffffff',
-        borderRadius: '8px',
-        border: '1px solid #e0e0e0',
+        background: 'var(--card)',
+        borderRadius: 'var(--radius)',
+        border: 'var(--border)',
         padding: '8px'
       }}>
         {chartType === 'bar' && renderBarChart()}

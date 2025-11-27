@@ -233,7 +233,7 @@ export default function WorkflowManagement() {
                       border: 'none',
                       cursor: 'pointer',
                       fontSize: 'var(--font-sm)',
-                      color: '#ef4444'
+                      color: 'var(--status-error)'
                     }}
                     title="Delete"
                   >

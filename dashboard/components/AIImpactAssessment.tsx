@@ -129,9 +129,9 @@ export default function AIImpactAssessment() {
 
   function getImpactColor(impact: string): string {
     switch (impact) {
-      case 'positive': return '#00CC66';
-      case 'neutral': return '#FFD700';
-      case 'negative': return '#CC0000';
+      case 'positive': return 'var(--status-success)';
+      case 'neutral': return 'var(--status-warning)';
+      case 'negative': return 'var(--status-error)';
       default: return 'var(--text-muted)';
     }
   }

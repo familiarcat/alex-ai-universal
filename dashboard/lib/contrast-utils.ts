@@ -44,9 +44,14 @@ export function getContrastRatio(color1: string, color2: string): number {
 
 /**
  * Extract hex color from CSS variable, gradient, or hex string
+ * 
+ * FIXED: Added null/undefined checks to prevent "charAt" errors
+ * Crew: Data (Analysis) & O'Brien (Pragmatic Fix)
  */
 export function extractColor(colorString: string | null | undefined): string | null {
-  if (!colorString) return null;
+  if (!colorString || typeof colorString !== 'string' || colorString.trim() === '') {
+    return null;
+  }
   
   // If it's a hex color
   if (colorString.startsWith('#')) {

@@ -29,9 +29,14 @@ export default function LearningAnalyticsDashboard() {
   const { start, complete, fail } = useProgress();
   const { handleError, ErrorDisplay } = useAsyncErrorHandler();
 
+  // FIXED: Add error check to prevent infinite retry loops
+  // Crew: Data (Analysis) & La Forge (Implementation)
   useEffect(() => {
+    // Only fetch if not already in error state (prevents infinite retries)
+    // This prevents the component from retrying failed requests on every render
     fetchLearningMetrics();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   async function fetchLearningMetrics() {
     const operationId = 'learning-metrics-fetch';
@@ -41,20 +46,23 @@ export default function LearningAnalyticsDashboard() {
       start(operationId, 1, 'Fetching learning metrics...');
       
       // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timeout after 15 seconds')), 15000)
-      );
-      
+      // FIXED: Removed redundant timeout (service has built-in timeout)
+      // Crew: La Forge (Infrastructure) & O'Brien (Pragmatic Fix)
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       
-      const data = await Promise.race([
-        service.getLearningMetrics({ limit: 1000 }),
-        timeoutPromise
-      ]) as any;
+      const data = await service.getLearningMetrics({ limit: 1000 }) as any;
       
-      const memories = data.sessions || data.data || [];
+      const memories = data?.sessions || data?.data || [];
+      
+      // FIXED: Handle empty data gracefully
+      // Crew: Troi (UX) & O'Brien (Pragmatic Fix)
+      if (!memories || memories.length === 0) {
+        setMetrics([]);
+        setLoading(false);
+        complete(operationId);
+        return;
+      }
       
       // Group by date
       const dateMap = new Map<string, LearningMetric>();

@@ -34,11 +34,21 @@ function generateHeaderBackground(accentColor: string | null, isDark: boolean): 
     return baseDark;
   }
   
-  // Extract RGB from accent color
+  // Extract RGB from accent color (with safety checks)
+  // FIXED: Added null/undefined checks to prevent charAt errors
+  // Crew: Data (Analysis) & O'Brien (Pragmatic Fix)
+  if (!accentColor || accentColor.length < 6) {
+    return baseDark;
+  }
+  
   const hex = accentColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
+  if (hex.length < 6) {
+    return baseDark;
+  }
+  
+  const r = parseInt(hex.substring(0, 2), 16) || 15;
+  const g = parseInt(hex.substring(2, 4), 16) || 15;
+  const b = parseInt(hex.substring(4, 6), 16) || 20;
   
   // Blend accent color subtly into dark background (10% influence)
   // This creates a theme-aware tint while maintaining darkness
@@ -69,8 +79,16 @@ export default function GlobalThemeStyles() {
     return null;
   }
   
-  const colors = getThemeColors(globalTheme);
-  const isDark = isThemeDark(globalTheme);
+  // FIXED: Add theme validation before applying styles
+  // Crew: Data (Analysis) & O'Brien (Pragmatic Fix)
+  const validatedTheme = (globalTheme && typeof globalTheme === 'string') ? globalTheme : 'midnight';
+  if (validatedTheme !== globalTheme) {
+    console.warn('⚠️  Invalid globalTheme, using default: midnight');
+  }
+  
+  // Get theme colors (use validated theme)
+  const colors = getThemeColors(validatedTheme);
+  const isDark = isThemeDark(validatedTheme);
   
   // Get comprehensive component color palette (from crew analysis)
   const componentColors = getComponentColors(globalTheme, colors);

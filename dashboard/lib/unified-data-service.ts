@@ -29,10 +29,15 @@ export class UnifiedDataService {
   private config: Required<Omit<DataServiceConfig, 'onProgress'>> & { onProgress?: ProgressCallback };
   private activeOperations: Map<string, { current: number; total: number }> = new Map();
 
+  // Track failed endpoints to prevent infinite retry loops
+  private failedEndpoints: Set<string> = new Set();
+  private lastFailureTime: Map<string, number> = new Map();
+  private readonly FAILURE_COOLDOWN = 60000; // 1 minute cooldown after failure
+
   constructor(config: DataServiceConfig = {}) {
     this.config = {
-      timeout: config.timeout || 30000, // Increased from 10s to 30s per crew optimization
-      retries: config.retries || 3, // Increased from 1 to 3 with exponential backoff
+      timeout: config.timeout || 15000, // Reduced to 15s to fail faster and prevent hanging
+      retries: config.retries || 1, // Reduced to 1 retry to prevent infinite loops
       onProgress: config.onProgress,
     };
   }
@@ -206,6 +211,18 @@ export class UnifiedDataService {
    * @returns Response data
    */
   private async callMCPEndpoint(endpoint: string, payload: any): Promise<any> {
+    // FIXED: Added failure tracking to prevent infinite retry loops
+    // Crew: Data (Analysis) & La Forge (Implementation)
+    const endpointKey = `mcp:${endpoint}`;
+    
+    // Check if endpoint is in cooldown (recently failed)
+    const lastFailure = this.lastFailureTime.get(endpointKey);
+    if (lastFailure && Date.now() - lastFailure < this.FAILURE_COOLDOWN) {
+      // Endpoint recently failed, skip retry and go straight to fallback
+      console.warn(`⚠️  MCP endpoint ${endpoint} in cooldown, using n8n fallback immediately`);
+      return this.callN8NFallback(endpoint, payload, payload.operationId);
+    }
+    
     // Use Next.js API route as proxy (keeps API key server-side)
     const url = `/api/mcp/${endpoint}`;
     const requestId = payload.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -253,6 +270,9 @@ export class UnifiedDataService {
           const data = await response.json();
           this.reportProgress(operationId, this.config.retries, this.config.retries, `✅ Retrieved: ${endpoint}`, 'complete');
           this.activeOperations.delete(activeKey);
+          // Clear failure tracking on success
+          this.failedEndpoints.delete(endpointKey);
+          this.lastFailureTime.delete(endpointKey);
           return data;
         } catch (error: any) {
           const isLastAttempt = attempt === this.config.retries;
@@ -264,6 +284,9 @@ export class UnifiedDataService {
           
           if (isLastAttempt) {
             this.activeOperations.delete(activeKey);
+            // Mark endpoint as failed and set cooldown
+            this.failedEndpoints.add(endpointKey);
+            this.lastFailureTime.set(endpointKey, Date.now());
             this.reportProgress(operationId, this.config.retries, this.config.retries, `⚠️  MCP failed, trying fallback: ${endpoint}`, 'loading');
             if (!isTimeout) {
               // Only log non-timeout errors
@@ -286,10 +309,16 @@ export class UnifiedDataService {
       
       // Should never reach here, but TypeScript needs it
       this.activeOperations.delete(activeKey);
+      // Mark endpoint as failed and set cooldown
+      this.failedEndpoints.add(endpointKey);
+      this.lastFailureTime.set(endpointKey, Date.now());
       return this.callN8NFallback(endpoint, payload, operationId);
     } catch (error: any) {
       // Clean up on unexpected error
       this.activeOperations.delete(activeKey);
+      // Mark endpoint as failed and set cooldown
+      this.failedEndpoints.add(endpointKey);
+      this.lastFailureTime.set(endpointKey, Date.now());
       throw error;
     }
   }
@@ -303,6 +332,15 @@ export class UnifiedDataService {
    * @returns Response data
    */
   private async callN8NFallback(endpoint: string, payload: any, operationId?: string): Promise<any> {
+    const endpointKey = `n8n:${endpoint}`;
+    
+    // Check if n8n endpoint is in cooldown (recently failed)
+    const lastFailure = this.lastFailureTime.get(endpointKey);
+    if (lastFailure && Date.now() - lastFailure < this.FAILURE_COOLDOWN) {
+      // n8n also failed recently, throw error instead of infinite retry
+      throw new Error(`Both MCP and n8n endpoints failed for ${endpoint}. Please check controller layer connectivity.`);
+    }
+    
     const url = `${N8N_BASE_URL}/webhook/${endpoint}`;
     const requestId = payload.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fallbackOpId = operationId || `n8n-${endpoint}-${requestId}`;
@@ -333,8 +371,15 @@ export class UnifiedDataService {
 
       const data = await response.json();
       this.reportProgress(fallbackOpId, 1, 1, `✅ Retrieved from n8n: ${endpoint}`, 'complete');
+      // Clear failure tracking on success
+      this.failedEndpoints.delete(endpointKey);
+      this.lastFailureTime.delete(endpointKey);
       return { ...data, fallback: true }; // Mark as fallback response
     } catch (error: any) {
+      // Mark n8n endpoint as failed
+      this.failedEndpoints.add(endpointKey);
+      this.lastFailureTime.set(endpointKey, Date.now());
+      
       const isTimeout = error.name === 'TimeoutError' || error.name === 'AbortError' || 
                        error.message?.includes('timeout') || error.message?.includes('signal timed out');
       

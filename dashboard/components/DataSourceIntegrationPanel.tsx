@@ -193,10 +193,10 @@ export default function DataSourceIntegrationPanel() {
 
   function getStatusColor(status: string): string {
     switch (status) {
-      case 'connected': return '#00CC66';
-      case 'disconnected': return '#FFD700';
-      case 'error': return '#CC0000';
-      case 'pending': return '#0066CC';
+      case 'connected': return 'var(--status-success)';
+      case 'disconnected': return 'var(--status-warning)';
+      case 'error': return 'var(--status-error)';
+      case 'pending': return 'var(--status-info)';
       default: return 'var(--text-muted)';
     }
   }

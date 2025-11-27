@@ -220,7 +220,7 @@ export default function SystemSettings() {
             padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-sm)',
             border: 'var(--border)',
-            background: testResults.mcp ? '#10b981' : 'var(--accent)',
+            background: testResults.mcp ? 'var(--status-success)' : 'var(--accent)',
             color: 'white',
             cursor: 'pointer',
             fontSize: 'var(--font-sm)'
@@ -314,7 +314,7 @@ export default function SystemSettings() {
             padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-sm)',
             border: 'var(--border)',
-            background: testResults.openRouter ? '#10b981' : 'var(--accent)',
+            background: testResults.openRouter ? 'var(--status-success)' : 'var(--accent)',
             color: 'white',
             cursor: 'pointer',
             fontSize: 'var(--font-sm)'

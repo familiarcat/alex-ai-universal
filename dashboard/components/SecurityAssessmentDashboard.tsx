@@ -36,10 +36,16 @@ export default function SecurityAssessmentDashboard() {
   const [metrics, setMetrics] = useState<SecurityMetric[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [overallScore, setOverallScore] = useState(0);
 
+  // FIXED: Add error check to prevent infinite retry loops
+  // Crew: Data (Analysis) & La Forge (Implementation)
   useEffect(() => {
-    fetchSecurityData();
+    // Only fetch if not already in error state (prevents infinite retries)
+    if (!error) {
+      fetchSecurityData();
+    }
     // Cost optimization: Only poll when tab is visible, increased interval to 5 minutes
     let intervalId: NodeJS.Timeout | null = null;
     
@@ -91,10 +97,14 @@ export default function SecurityAssessmentDashboard() {
         setOverallScore(0);
       }
     } catch (err: any) {
+      // FIXED: Prevent infinite retry loops
+      // Crew: Worf (Security) & O'Brien (Pragmatic Fix)
       console.error('Failed to load security data:', err);
+      setError(err.message || 'Failed to load security data');
       setMetrics([]);
       setAuditLogs([]);
       setOverallScore(0);
+      // Don't retry automatically - user can manually retry if needed
     } finally {
       setLoading(false);
     }
@@ -176,9 +186,9 @@ export default function SecurityAssessmentDashboard() {
 
   function getStatusColor(status: string): string {
     switch (status) {
-      case 'secure': return '#00CC66';
-      case 'warning': return '#FFD700';
-      case 'critical': return '#CC0000';
+      case 'secure': return 'var(--status-success)';
+      case 'warning': return 'var(--status-warning)';
+      case 'critical': return 'var(--status-error)';
       default: return 'var(--text-muted)';
     }
   }
@@ -291,7 +301,7 @@ export default function SecurityAssessmentDashboard() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: '#00CC66' }}>✅</span>
+            <span style={{ color: 'var(--status-success)' }}>✅</span>
             <span style={{ fontSize: '13px', color: 'var(--text)' }}>{secureCount} Secure</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

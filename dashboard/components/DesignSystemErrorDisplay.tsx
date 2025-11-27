@@ -45,10 +45,11 @@ export default function DesignSystemErrorDisplay({
     return (
       <div style={{
         padding: '8px 12px',
-        background: 'rgba(239, 68, 68, 0.1)',
-        border: '1px solid rgba(239, 68, 68, 0.3)',
+        background: 'var(--status-error)',
+        opacity: 0.1,
+        border: '1px solid var(--status-error)',
         borderRadius: 'var(--radius)',
-        color: '#ef4444',
+        color: 'var(--status-error)',
         fontSize: 'var(--font-sm)',
         display: 'flex',
         alignItems: 'center',
@@ -82,7 +83,7 @@ export default function DesignSystemErrorDisplay({
       <div style={{
         padding: '12px 16px',
         background: 'var(--card)',
-        border: '1px solid rgba(239, 68, 68, 0.3)',
+        border: '1px solid var(--status-error)',
         borderRadius: 'var(--radius)',
         marginBottom: '16px'
       }}>
@@ -95,7 +96,7 @@ export default function DesignSystemErrorDisplay({
           <span style={{ fontSize: '20px' }}>⚠️</span>
           <h4 style={{
             fontSize: 'var(--font-md)',
-            color: '#ef4444',
+            color: 'var(--status-error)',
             margin: 0,
             fontWeight: 600
           }}>
@@ -156,7 +157,7 @@ export default function DesignSystemErrorDisplay({
     <div style={{
       padding: '24px',
       background: 'var(--card)',
-      border: '2px solid rgba(239, 68, 68, 0.3)',
+      border: '2px solid var(--status-error)',
       borderRadius: 'var(--radius-lg)',
       marginBottom: '24px',
       boxShadow: 'var(--shadow)'
@@ -177,7 +178,7 @@ export default function DesignSystemErrorDisplay({
           <div>
             <h3 style={{
               fontSize: 'var(--font-xl)',
-              color: '#ef4444',
+              color: 'var(--status-error)',
               margin: 0,
               marginBottom: '4px',
               fontWeight: 700
@@ -220,8 +221,9 @@ export default function DesignSystemErrorDisplay({
       {/* Error Message */}
       <div style={{
         padding: '16px',
-        background: 'rgba(239, 68, 68, 0.05)',
-        border: '1px solid rgba(239, 68, 68, 0.2)',
+        background: 'var(--status-error)',
+        border: '1px solid var(--status-error)',
+        opacity: 0.05,
         borderRadius: 'var(--radius)',
         marginBottom: '16px'
       }}>

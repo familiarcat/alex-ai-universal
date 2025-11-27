@@ -113,10 +113,10 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'operational':
-      case 'online': return '#10b981';
-      case 'offline': return '#ef4444';
-      case 'error': return '#f59e0b';
-      default: return '#6b7280';
+      case 'online': return 'var(--status-success)';
+      case 'offline': return 'var(--status-error)';
+      case 'error': return 'var(--status-warning)';
+      default: return 'var(--text-secondary, #6b7280)';
     }
   };
 
@@ -269,8 +269,8 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                   padding: '12px',
                   borderRadius: '8px',
                   background: 'rgba(239, 68, 68, 0.1)',
-                  border: '1px solid #ef4444',
-                  color: '#ef4444',
+                  border: '1px solid var(--status-error)',
+                  color: 'var(--status-error)',
                   fontSize: '13px',
                   marginTop: '12px'
                 }}>
@@ -291,7 +291,7 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                 padding: '16px',
                 borderRadius: '12px',
                 background: 'var(--card-alt)',
-                border: `1px solid ${statusDetails.services.localMCP ? '#10b981' : '#ef4444'}`
+                border: `1px solid ${statusDetails.services.localMCP ? 'var(--status-success)' : 'var(--status-error)'}`
               }}>
                 <div style={{
                   display: 'flex',
@@ -326,7 +326,8 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                       <div style={{
                         padding: '8px',
                         borderRadius: '6px',
-                        background: 'rgba(239, 68, 68, 0.1)',
+                        background: 'var(--status-error)',
+                        opacity: 0.1,
                         fontSize: '11px',
                         color: '#ef4444',
                         marginTop: '8px'
@@ -343,7 +344,7 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                 padding: '16px',
                 borderRadius: '12px',
                 background: 'var(--card-alt)',
-                border: `1px solid ${statusDetails.services.remoteMCP ? '#10b981' : '#ef4444'}`
+                border: `1px solid ${statusDetails.services.remoteMCP ? 'var(--status-success)' : 'var(--status-error)'}`
               }}>
                 <div style={{
                   display: 'flex',
@@ -378,7 +379,8 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                       <div style={{
                         padding: '8px',
                         borderRadius: '6px',
-                        background: 'rgba(239, 68, 68, 0.1)',
+                        background: 'var(--status-error)',
+                        opacity: 0.1,
                         fontSize: '11px',
                         color: '#ef4444',
                         marginTop: '8px'
@@ -395,7 +397,7 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                 padding: '16px',
                 borderRadius: '12px',
                 background: 'var(--card-alt)',
-                border: `1px solid ${statusDetails.services.n8n ? '#10b981' : '#ef4444'}`
+                border: `1px solid ${statusDetails.services.n8n ? 'var(--status-success)' : 'var(--status-error)'}`
               }}>
                 <div style={{
                   display: 'flex',
@@ -430,7 +432,8 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                       <div style={{
                         padding: '8px',
                         borderRadius: '6px',
-                        background: 'rgba(239, 68, 68, 0.1)',
+                        background: 'var(--status-error)',
+                        opacity: 0.1,
                         fontSize: '11px',
                         color: '#ef4444',
                         marginTop: '8px'
@@ -447,7 +450,7 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                 padding: '16px',
                 borderRadius: '12px',
                 background: 'var(--card-alt)',
-                border: `1px solid ${statusDetails.services.openRouter ? '#10b981' : '#ef4444'}`
+                border: `1px solid ${statusDetails.services.openRouter ? 'var(--status-success)' : 'var(--status-error)'}`
               }}>
                 <div style={{
                   display: 'flex',
@@ -482,7 +485,8 @@ export default function MCPStatusModal({ isOpen, onClose, currentStatus }: MCPSt
                       <div style={{
                         padding: '8px',
                         borderRadius: '6px',
-                        background: 'rgba(239, 68, 68, 0.1)',
+                        background: 'var(--status-error)',
+                        opacity: 0.1,
                         fontSize: '11px',
                         color: '#ef4444',
                         marginTop: '8px'

@@ -135,36 +135,39 @@ When Alex AI is active:
 
 ## 🚀 CURSOR AI STARTUP INTEGRATION
 
-Alex AI crew memories are automatically loaded when you open this workspace in Cursor AI.
+Alex AI crew memories should be loaded when you open this workspace in Cursor AI.
 
-### ✅ Automatic Startup (Confirmed):
-- **Tasks run on folder open** (configured in `.vscode/tasks.json`)
-- **State recovery** runs automatically
-- **Layout restoration** runs automatically
-- **Crew memories load** from Supabase RAG system
-- **Startup prompt generated** automatically
-- **Alex AI activated** in chat automatically (via `.cursorrules`)
-- **Saved to**: `.cursor/alex-ai/cursor-startup-prompt.md`
+### ⚠️ Important: Manual Activation Required After Restart
+
+**Cursor AI does not reliably execute VS Code tasks automatically on folder open.** After restarting your computer, you must manually activate Alex AI startup.
 
 ### 🎯 After Computer Restart:
 1. Open Cursor AI
 2. Open workspace
-3. **Everything happens automatically:**
-   - UI layout restores
-   - State recovers
-   - Memories load
-   - Prompt generates
-   - **Alex AI available in chat immediately**
+3. **Run startup manually:**
+   ```bash
+   npm run cursor:startup
+   ```
+   Or use Command Palette: "🖖 Alex AI Full Startup"
+4. **Then in chat:**
+   - Copy prompt from `.cursor/alex-ai/cursor-startup-prompt.md`
+   - Paste into chat to activate Alex AI with full crew context
 
 ### Manual Commands:
+- **Quick Startup (Recommended)**:
+  ```bash
+  npm run cursor:startup
+  ```
 - **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`):
   - "🖖 Load Alex AI Crew Memories"
   - "🖖 Generate Alex AI Cursor Prompt"
   - "🖖 Alex AI Full Startup"
 - **Terminal**:
-  - `npm run cursor:memories` - Load memories
-  - `npm run cursor:prompt` - Generate prompt
-  - `bash scripts/cursor-startup.sh` - Full startup
+  - `npm run cursor:startup` - Full startup (memories + prompt)
+  - `npm run cursor:memories` - Load memories only
+  - `npm run cursor:prompt` - Generate prompt only
+  - `npm run cursor:diagnose` - Diagnose startup issues
+  - `bash scripts/cursor-startup.sh` - Alternative full startup
 
 ### Usage:
 1. Open Cursor AI workspace (memories auto-load)

@@ -37,9 +37,42 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
 import MCPDashboardSection from '@/components/MCPDashboardSection';
+import ServiceStatusDisplay from '@/components/ServiceStatusDisplay';
+import { ServiceInitializer } from '@/lib/services/initialize-services';
 
 export default function DashboardContent() {
-  const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = useAppState();
+  // Add error boundary for useAppState
+  let appState;
+  try {
+    appState = useAppState();
+  } catch (error) {
+    console.error('❌ useAppState error:', error);
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        background: '#0a0a0f',
+        color: '#ffffff',
+        padding: '40px',
+        textAlign: 'center'
+      }}>
+        <h1 style={{ fontSize: '32px', marginBottom: '20px', color: '#ff4444' }}>
+          ⚠️ State Provider Error
+        </h1>
+        <p style={{ fontSize: '16px', marginBottom: '20px' }}>
+          Dashboard content must be wrapped in StateProvider.
+        </p>
+        <p style={{ fontSize: '14px', opacity: 0.7 }}>
+          Error: {error instanceof Error ? error.message : String(error)}
+        </p>
+      </div>
+    );
+  }
+  
+  const { projects, globalTheme, updateProject, updateTheme, updateGlobalTheme, deleteProject } = appState;
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ projectId: string; projectName: string } | null>(null);
@@ -222,6 +255,14 @@ export default function DashboardContent() {
             </Link>
           </div>
         </div>
+
+        {/* Service Status Display - Shows all service containers */}
+        <div style={{ marginBottom: '24px' }}>
+          <ServiceStatusDisplay />
+        </div>
+
+        {/* Service Initializer - Initializes all services in order */}
+        <ServiceInitializer />
 
         {/* Live Refresh System - Top Priority */}
         <div style={{ marginBottom: '24px' }}>

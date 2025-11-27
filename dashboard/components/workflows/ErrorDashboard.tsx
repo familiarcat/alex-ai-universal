@@ -83,10 +83,10 @@ export default function ErrorDashboard() {
 
   const getStatusColor = (status: Error['status']) => {
     switch (status) {
-      case 'open': return '#ef4444';
-      case 'resolved': return '#10b981';
-      case 'ignored': return '#6b7280';
-      default: return '#6b7280';
+      case 'open': return 'var(--status-error)';
+      case 'resolved': return 'var(--status-success)';
+      case 'ignored': return 'var(--text-muted)';
+      default: return 'var(--text-muted)';
     }
   };
 
@@ -312,7 +312,7 @@ export default function ErrorDashboard() {
                       padding: 'var(--spacing-sm)',
                       borderRadius: 'var(--radius-sm)',
                       border: 'none',
-                      background: '#10b981',
+                      background: 'var(--status-success)',
                       color: 'white',
                       cursor: 'pointer'
                     }}

@@ -3,7 +3,10 @@
 /**
  * Root Dashboard Page
  * 
- * Redirects to MCP Dashboard or shows landing page
+ * DDD: Entry Point Bounded Context
+ * Redirects to unified dashboard (includes MCP functionality)
+ * 
+ * Reviewed by: Captain Picard (Strategic), Commander Riker (Execution)
  */
 
 import { useEffect } from 'react';
@@ -14,7 +17,8 @@ export default function HomePage() {
 
   useEffect(() => {
     // Redirect to unified dashboard (includes MCP functionality)
-    router.push('/dashboard');
+    // Use replace to avoid adding to history
+    router.replace('/dashboard');
   }, [router]);
 
   return (
@@ -23,15 +27,22 @@ export default function HomePage() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--background)',
-      color: 'var(--text)'
+      background: 'var(--background, #0a0a0f)',
+      color: 'var(--text, #ffffff)'
     }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '48px', marginBottom: 'var(--spacing-md)' }}>
+        <div style={{ fontSize: '48px', marginBottom: 'var(--spacing-md, 16px)' }}>
           🖖
         </div>
-        <div style={{ fontSize: 'var(--font-xl)' }}>
+        <div style={{ fontSize: 'var(--font-xl, 24px)' }}>
           Loading Dashboard...
+        </div>
+        <div style={{ 
+          fontSize: 'var(--font-sm, 14px)', 
+          opacity: 0.6,
+          marginTop: 'var(--spacing-sm, 8px)'
+        }}>
+          Redirecting to unified dashboard...
         </div>
       </div>
     </div>

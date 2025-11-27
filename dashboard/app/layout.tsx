@@ -6,6 +6,7 @@
 
 import type { Metadata } from 'next';
 import { StateProvider } from '@/lib/state-manager';
+import { ServiceContainerProvider } from '@/lib/service-containers';
 import DashboardChrome from '@/components/DashboardChrome';
 import './globals.css';
 import '../styles/universal.css';
@@ -25,11 +26,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <StateProvider>
-          <GlobalThemeStyles />
-          <DashboardChrome />
-          <main>
-            {children}
-          </main>
+          <ServiceContainerProvider>
+            <GlobalThemeStyles />
+            <DashboardChrome />
+            <main>
+              {children}
+            </main>
+          </ServiceContainerProvider>
         </StateProvider>
       </body>
     </html>

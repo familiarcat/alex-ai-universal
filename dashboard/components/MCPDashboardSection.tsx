@@ -435,7 +435,7 @@ export default function MCPDashboardSection() {
               style={{
                 padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-sm)',
-                background: stats.system.mcpStatus === 'online' ? '#10b981' : '#ef4444',
+                background: stats.system.mcpStatus === 'online' ? 'var(--status-success)' : 'var(--status-error)',
                 color: 'white',
                 fontSize: 'var(--font-xs)',
                 fontWeight: 'bold',
@@ -461,7 +461,7 @@ export default function MCPDashboardSection() {
             <div style={{
               padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-sm)',
-              background: stats.system.openRouterStatus === 'online' ? '#10b981' : '#ef4444',
+              background: stats.system.openRouterStatus === 'online' ? 'var(--status-success)' : 'var(--status-error)',
               color: 'white',
               fontSize: 'var(--font-xs)',
               fontWeight: 'bold'
@@ -492,7 +492,7 @@ export default function MCPDashboardSection() {
           value={stats.executions.total}
           subtitle={`${stats.executions.running} running`}
           icon="⚙️"
-          color="#3b82f6"
+          color="var(--status-info)"
           link="/workflows"
         />
         <StatCard
@@ -500,7 +500,7 @@ export default function MCPDashboardSection() {
           value={stats.crew.total}
           subtitle={`${stats.crew.active} active`}
           icon="👥"
-          color="#10b981"
+          color="var(--status-success)"
         />
         <StatCard
           title="Success Rate"
@@ -509,7 +509,7 @@ export default function MCPDashboardSection() {
             : 'N/A'}
           subtitle={`${stats.executions.errors} errors`}
           icon="✅"
-          color={stats.executions.total > 0 && (stats.executions.success / stats.executions.total) > 0.9 ? '#10b981' : '#f59e0b'}
+          color={stats.executions.total > 0 && (stats.executions.success / stats.executions.total) > 0.9 ? 'var(--status-success)' : 'var(--status-warning)'}
         />
       </div>
 
@@ -548,14 +548,14 @@ export default function MCPDashboardSection() {
             description="Configure MCP and services"
             icon="⚙️"
             link="/settings"
-            color="#8b5cf6"
+            color="var(--accent)"
           />
           <QuickAction
             title="Error Dashboard"
             description="View and resolve errors"
             icon="🚨"
             link="/errors"
-            color="#ef4444"
+            color="var(--status-error)"
           />
           <QuickAction
             title="Crew Coordination"
@@ -657,7 +657,7 @@ export default function MCPDashboardSection() {
             }}>
               <span style={{ color: 'var(--text)' }}>MCP Server</span>
               <span style={{
-                color: stats.system.mcpStatus === 'online' ? '#10b981' : '#ef4444',
+                color: stats.system.mcpStatus === 'online' ? 'var(--status-success)' : 'var(--status-error)',
                 fontWeight: 'bold'
               }}>
                 {stats.system.mcpStatus === 'online' ? '✅ Online' : '❌ Offline'}
@@ -674,7 +674,7 @@ export default function MCPDashboardSection() {
             }}>
               <span style={{ color: 'var(--text)' }}>OpenRouter</span>
               <span style={{
-                color: stats.system.openRouterStatus === 'online' ? '#10b981' : '#ef4444',
+                color: stats.system.openRouterStatus === 'online' ? 'var(--status-success)' : 'var(--status-error)',
                 fontWeight: 'bold'
               }}>
                 {stats.system.openRouterStatus === 'online' ? '✅ Online' : '❌ Offline'}
@@ -691,7 +691,7 @@ export default function MCPDashboardSection() {
             }}>
               <span style={{ color: 'var(--text)' }}>Crew System</span>
               <span style={{
-                color: '#10b981',
+                color: 'var(--status-success)',
                 fontWeight: 'bold'
               }}>
                 ✅ {stats.crew.active} Active

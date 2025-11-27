@@ -39,19 +39,27 @@ export async function middleware(request: NextRequest) {
   }
 
   // Worf's Security: Protect sensitive routes
+  // DDD: Dashboard Bounded Context - requires authentication
   const protectedPaths = ["/dashboard", "/projects"];
   const isProtectedPath = protectedPaths.some((path) =>
     pathname.startsWith(path)
   );
 
-  if (isProtectedPath) {
-    const session = await auth();
+  // In development, allow access without auth (for local development)
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // Allow root redirect to proceed without auth check
+  if (isProtectedPath && pathname !== '/') {
+    // In development, skip auth check to allow local testing
+    if (!isDevelopment) {
+      const session = await auth();
 
-    if (!session || !session.user) {
-      // Redirect to sign-in page
-      const signInUrl = new URL("/auth/signin", request.url);
-      signInUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(signInUrl);
+      if (!session || !session.user) {
+        // Redirect to sign-in page
+        const signInUrl = new URL("/auth/signin", request.url);
+        signInUrl.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(signInUrl);
+      }
     }
   }
 

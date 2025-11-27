@@ -137,7 +137,15 @@ async function sendToSupabase(payload) {
 
 async function updateNextJSEndpoints(summary, integrationReport) {
   const rootDir = process.cwd();
-  const dashboardDir = path.join(rootDir, 'projects/dashboard');
+  // Check both possible dashboard locations
+  let dashboardDir = path.join(rootDir, 'projects/dashboard');
+  if (!fs.existsSync(dashboardDir)) {
+    dashboardDir = path.join(rootDir, 'dashboard');
+  }
+  if (!fs.existsSync(dashboardDir)) {
+    console.warn('⚠️  Dashboard directory not found, skipping Next.js endpoint updates\n');
+    return;
+  }
   const apiDir = path.join(dashboardDir, 'app/api/rag');
   
   // Create API directory if it doesn't exist

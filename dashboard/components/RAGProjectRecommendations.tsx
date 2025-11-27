@@ -28,9 +28,15 @@ export default function RAGProjectRecommendations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // FIXED: Add error check to prevent infinite retry loops
+  // Crew: Data (Analysis) & La Forge (Implementation)
   useEffect(() => {
-    fetchRecommendations();
-  }, []);
+    // Only fetch if not already in error state (prevents infinite retries)
+    if (!error) {
+      fetchRecommendations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   async function fetchRecommendations() {
     try {
@@ -57,9 +63,11 @@ export default function RAGProjectRecommendations() {
       
       setRecommendations(recs);
     } catch (err: any) {
+      // FIXED: Prevent infinite retry loops
+      // Crew: Worf (Security) & O'Brien (Pragmatic Fix)
       console.error('Failed to load recommendations:', err);
       setError(err.message);
-      // Fallback to default recommendations
+      // Fallback to default recommendations (don't retry automatically)
       setRecommendations([
         {
           id: 'rec-1',

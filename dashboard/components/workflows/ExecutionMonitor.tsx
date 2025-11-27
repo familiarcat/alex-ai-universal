@@ -60,11 +60,11 @@ export default function ExecutionMonitor({
 
   const getStatusColor = (status: Execution['status']) => {
     switch (status) {
-      case 'running': return '#3b82f6'; // blue
-      case 'success': return '#10b981'; // green
-      case 'error': return '#ef4444'; // red
-      case 'pending': return '#f59e0b'; // yellow
-      default: return '#6b7280'; // gray
+      case 'running': return 'var(--status-info)'; // blue
+      case 'success': return 'var(--status-success)'; // green
+      case 'error': return 'var(--status-error)'; // red
+      case 'pending': return 'var(--status-warning)'; // yellow
+      default: return 'var(--text-muted)'; // gray
     }
   };
 
@@ -256,7 +256,7 @@ export default function ExecutionMonitor({
 
           {selectedExecution.errors && selectedExecution.errors.length > 0 && (
             <div>
-              <strong style={{ color: '#ef4444' }}>Errors:</strong>
+              <strong style={{ color: 'var(--status-error)' }}>Errors:</strong>
               <div style={{
                 marginTop: 'var(--spacing-xs)',
                 padding: 'var(--spacing-xs)',

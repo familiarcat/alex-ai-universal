@@ -45,12 +45,13 @@ export default function DeleteProjectModal({
     }}>
       <div style={{
         background: 'var(--card)',
-        border: '2px solid #ff4444',
+        border: '2px solid var(--status-error)',
         borderRadius: 16,
         maxWidth: 600,
         width: '100%',
         padding: 40,
-        boxShadow: '0 20px 60px rgba(255, 68, 68, 0.3)'
+        boxShadow: '0 20px 60px var(--status-error)',
+        filter: 'opacity(0.3)',
       }}>
         {/* Warning Icon */}
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
@@ -58,7 +59,7 @@ export default function DeleteProjectModal({
           <h2 style={{ 
             fontSize: 28, 
             fontWeight: 700, 
-            color: '#ff4444',
+            color: 'var(--status-error)',
             marginBottom: 8
           }}>
             Delete Project?
@@ -70,8 +71,9 @@ export default function DeleteProjectModal({
 
         {/* Ramifications Warning */}
         <div style={{
-          background: 'rgba(255, 68, 68, 0.1)',
-          border: '1px solid rgba(255, 68, 68, 0.3)',
+          background: 'var(--status-error)',
+          opacity: 0.1,
+          border: '1px solid var(--status-error)',
           borderRadius: 12,
           padding: 20,
           marginBottom: 24
@@ -79,7 +81,7 @@ export default function DeleteProjectModal({
           <div style={{ 
             fontSize: 14, 
             fontWeight: 600, 
-            color: '#ff4444',
+            color: 'var(--status-error)',
             marginBottom: 12,
             textTransform: 'uppercase',
             letterSpacing: '0.5px'
@@ -104,11 +106,12 @@ export default function DeleteProjectModal({
           <div style={{
             marginTop: 16,
             padding: 12,
-            background: 'rgba(255, 68, 68, 0.15)',
+              background: 'var(--status-error)',
+            opacity: 0.15,
             borderRadius: 8,
             fontSize: 13,
             fontWeight: 600,
-            color: '#ff6666'
+            color: 'var(--status-error)'
           }}>
             🔥 This cannot be undone. All data will be lost permanently.
           </div>
@@ -124,10 +127,11 @@ export default function DeleteProjectModal({
             color: 'var(--text)'
           }}>
             Type <code style={{ 
-              background: 'rgba(255, 68, 68, 0.2)', 
+              background: 'var(--status-error)',
+              opacity: 0.2, 
               padding: '2px 8px', 
               borderRadius: 4,
-              color: '#ff4444'
+              color: 'var(--status-error)'
             }}>DELETE</code> to confirm:
           </label>
           <input
@@ -141,7 +145,7 @@ export default function DeleteProjectModal({
               padding: '12px 16px',
               background: 'var(--card-alt)',
               color: 'var(--text)',
-              border: `2px solid ${isConfirmed ? '#ff4444' : 'var(--border)'}`,
+              border: `2px solid ${isConfirmed ? 'var(--status-error)' : 'var(--border)'}`,
               borderRadius: 8,
               fontSize: 16,
               fontFamily: 'monospace'
@@ -173,7 +177,7 @@ export default function DeleteProjectModal({
             style={{
               flex: 1,
               padding: '14px 24px',
-              background: isConfirmed ? '#ff4444' : '#666',
+              background: isConfirmed ? 'var(--status-error)' : 'var(--text-secondary, #666)',
               color: '#ffffff',
               border: 'none',
               borderRadius: 8,
