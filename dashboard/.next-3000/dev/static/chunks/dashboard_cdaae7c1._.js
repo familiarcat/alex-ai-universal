@@ -4099,7 +4099,6 @@ __turbopack_context__.s([
     "default",
     ()=>LiveRefreshDashboard
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/dashboard/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/dashboard/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 /**
  * Live Refresh Dashboard Component
@@ -4168,171 +4167,47 @@ function LiveRefreshDashboard() {
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "LiveRefreshDashboard.useEffect": ()=>{
-            // WebSocket connection for live updates
-            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsHost = __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_WS_URL || window.location.host;
-            const wsUrl = `${wsProtocol}//${wsHost}/api/ws/codebase-changes`;
-            let ws = null;
-            let reconnectAttempts = 0;
-            const maxReconnectAttempts = 5;
-            let connectionTimeout = null;
-            function connect() {
-                try {
-                    ws = new WebSocket(wsUrl);
-                    // Set a connection timeout - if WebSocket doesn't connect quickly, fall back to polling
-                    connectionTimeout = setTimeout({
-                        "LiveRefreshDashboard.useEffect.connect": ()=>{
-                            if (ws && ws.readyState === WebSocket.CONNECTING) {
-                                console.warn('WebSocket connection timeout, falling back to polling');
-                                ws.close();
-                                startPolling();
-                            }
-                        }
-                    }["LiveRefreshDashboard.useEffect.connect"], 2000); // 2 second timeout for WebSocket connection
-                    ws.onopen = ({
-                        "LiveRefreshDashboard.useEffect.connect": ()=>{
-                            if (connectionTimeout) {
-                                clearTimeout(connectionTimeout);
-                                connectionTimeout = null;
-                            }
-                            console.log('✅ WebSocket connected for live refresh');
-                            setStats({
-                                "LiveRefreshDashboard.useEffect.connect": (prev)=>({
-                                        ...prev,
-                                        isConnected: true
-                                    })
-                            }["LiveRefreshDashboard.useEffect.connect"]);
-                            reconnectAttempts = 0;
-                        }
-                    })["LiveRefreshDashboard.useEffect.connect"];
-                    ws.onmessage = ({
-                        "LiveRefreshDashboard.useEffect.connect": (event)=>{
-                            try {
-                                const change = JSON.parse(event.data);
-                                handleCodebaseChange(change);
-                            } catch (error) {
-                                console.error('Failed to parse WebSocket message:', error);
-                            }
-                        }
-                    })["LiveRefreshDashboard.useEffect.connect"];
-                    ws.onerror = ({
-                        "LiveRefreshDashboard.useEffect.connect": (error)=>{
-                            // WebSocket errors don't serialize well, extract useful info
-                            const errorInfo = {
-                                type: error.type || 'unknown',
-                                target: ws?.readyState !== undefined ? `readyState: ${ws.readyState}` : 'unknown',
-                                url: wsUrl
-                            };
-                            console.warn('WebSocket error:', errorInfo);
-                            setStats({
-                                "LiveRefreshDashboard.useEffect.connect": (prev)=>({
-                                        ...prev,
-                                        isConnected: false
-                                    })
-                            }["LiveRefreshDashboard.useEffect.connect"]);
-                            // Immediately fall back to polling if WebSocket fails
-                            if (ws?.readyState === WebSocket.CLOSED || ws?.readyState === WebSocket.CLOSING) {
-                                if (connectionTimeout) {
-                                    clearTimeout(connectionTimeout);
-                                    connectionTimeout = null;
-                                }
-                                startPolling();
-                            }
-                        }
-                    })["LiveRefreshDashboard.useEffect.connect"];
-                    ws.onclose = ({
-                        "LiveRefreshDashboard.useEffect.connect": (event)=>{
-                            if (connectionTimeout) {
-                                clearTimeout(connectionTimeout);
-                                connectionTimeout = null;
-                            }
-                            console.log('WebSocket disconnected', {
-                                code: event.code,
-                                reason: event.reason || 'No reason provided'
-                            });
-                            setStats({
-                                "LiveRefreshDashboard.useEffect.connect": (prev)=>({
-                                        ...prev,
-                                        isConnected: false
-                                    })
-                            }["LiveRefreshDashboard.useEffect.connect"]);
-                            // If WebSocket server doesn't exist (404-like), fall back to polling immediately
-                            if (event.code === 1006 || event.code === 1002) {
-                                console.log('WebSocket server unavailable, using polling fallback');
-                                startPolling();
-                                return;
-                            }
-                            // Attempt reconnection only if we haven't exceeded max attempts
-                            if (reconnectAttempts < maxReconnectAttempts) {
-                                reconnectAttempts++;
-                                setTimeout(connect, 1000 * reconnectAttempts);
-                            } else {
-                                // After max attempts, fall back to polling
-                                console.log('Max reconnection attempts reached, falling back to polling');
-                                startPolling();
-                            }
-                        }
-                    })["LiveRefreshDashboard.useEffect.connect"];
-                } catch (error) {
-                    if (connectionTimeout) {
-                        clearTimeout(connectionTimeout);
-                        connectionTimeout = null;
-                    }
-                    console.error('WebSocket connection failed:', error);
-                    // Fallback to polling if WebSocket unavailable
-                    startPolling();
-                }
+            // FIXED: Use polling only for codebase changes (WebSocket not needed for file watching)
+            // The Socket.IO server at /api/socket is for project sync, not codebase file watching
+            // Codebase changes are better handled via polling or file system watchers on the server
+            // Skip if auto-refresh is disabled
+            if (!autoRefresh) {
+                return;
             }
-            // Fallback: Polling for codebase changes (only if WebSocket unavailable)
-            // Troi's decision: Polling should be slower and only when WebSocket fails
-            function startPolling() {
-                // Check if WebSocket is now available before starting polling
-                if (stats.isConnected) {
-                    console.log('✅ WebSocket connected, skipping polling');
-                    return ({
-                        "LiveRefreshDashboard.useEffect.startPolling": ()=>{}
-                    })["LiveRefreshDashboard.useEffect.startPolling"]; // No cleanup needed
-                }
-                console.log('⚠️  WebSocket unavailable, using polling fallback');
-                const pollInterval = setInterval({
-                    "LiveRefreshDashboard.useEffect.startPolling.pollInterval": async ()=>{
-                        // Check WebSocket status before each poll
-                        if (stats.isConnected) {
-                            clearInterval(pollInterval);
-                            console.log('✅ WebSocket now available, stopping polling');
-                            return;
-                        }
-                        try {
-                            const response = await fetch('/api/codebase-changes', {
-                                signal: AbortSignal.timeout(3000) // 3 second timeout
-                            });
-                            if (response.ok) {
-                                const data = await response.json();
-                                if (data.changes && data.changes.length > 0) {
-                                    data.changes.forEach({
-                                        "LiveRefreshDashboard.useEffect.startPolling.pollInterval": (change)=>{
-                                            handleCodebaseChange(change);
-                                        }
-                                    }["LiveRefreshDashboard.useEffect.startPolling.pollInterval"]);
-                                }
+            // Use polling for codebase changes (simpler and more reliable)
+            console.log('🔄 Starting codebase change polling');
+            setStats({
+                "LiveRefreshDashboard.useEffect": (prev)=>({
+                        ...prev,
+                        isConnected: false
+                    })
+            }["LiveRefreshDashboard.useEffect"]); // Mark as using polling, not WebSocket
+            const pollInterval = setInterval({
+                "LiveRefreshDashboard.useEffect.pollInterval": async ()=>{
+                    try {
+                        const response = await fetch('/api/codebase-changes', {
+                            signal: AbortSignal.timeout(3000) // 3 second timeout
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.changes && data.changes.length > 0) {
+                                data.changes.forEach({
+                                    "LiveRefreshDashboard.useEffect.pollInterval": (change)=>{
+                                        handleCodebaseChange(change);
+                                    }
+                                }["LiveRefreshDashboard.useEffect.pollInterval"]);
                             }
-                        } catch (error) {
-                            console.error('Polling error:', error);
                         }
+                    } catch (error) {
+                        // Silent error - polling will continue
+                        console.debug('Polling check:', error);
                     }
-                }["LiveRefreshDashboard.useEffect.startPolling.pollInterval"], Math.max(refreshInterval, 10000)); // Minimum 10 seconds between polls (slower)
-                return ({
-                    "LiveRefreshDashboard.useEffect.startPolling": ()=>clearInterval(pollInterval)
-                })["LiveRefreshDashboard.useEffect.startPolling"];
-            }
-            // Start connection
-            connect();
+                }
+            }["LiveRefreshDashboard.useEffect.pollInterval"], Math.max(refreshInterval, 10000)); // Minimum 10 seconds between polls
             // Cleanup
             return ({
                 "LiveRefreshDashboard.useEffect": ()=>{
-                    if (ws) {
-                        ws.close();
-                    }
+                    clearInterval(pollInterval);
                 }
             })["LiveRefreshDashboard.useEffect"];
         }
@@ -4400,7 +4275,7 @@ function LiveRefreshDashboard() {
                                 children: "🔄"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 258,
+                                lineNumber: 150,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4415,7 +4290,7 @@ function LiveRefreshDashboard() {
                                         children: "Live Refresh System"
                                     }, void 0, false, {
                                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 152,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4427,19 +4302,19 @@ function LiveRefreshDashboard() {
                                         children: "Real-time codebase monitoring"
                                     }, void 0, false, {
                                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 155,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 259,
+                                lineNumber: 151,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 257,
+                        lineNumber: 149,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4468,14 +4343,14 @@ function LiveRefreshDashboard() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                        lineNumber: 278,
+                                        lineNumber: 170,
                                         columnNumber: 13
                                     }, this),
                                     "Auto-refresh"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 270,
+                                lineNumber: 162,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4492,19 +4367,19 @@ function LiveRefreshDashboard() {
                                 children: "🔄 Refresh Now"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 286,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 269,
+                        lineNumber: 161,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                lineNumber: 249,
+                lineNumber: 141,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4534,7 +4409,7 @@ function LiveRefreshDashboard() {
                                 children: stats.isConnected ? '🟢' : '🔴'
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 317,
+                                lineNumber: 209,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4545,13 +4420,13 @@ function LiveRefreshDashboard() {
                                 children: stats.isConnected ? 'Connected' : 'Disconnected'
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 325,
+                                lineNumber: 217,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 310,
+                        lineNumber: 202,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4573,7 +4448,7 @@ function LiveRefreshDashboard() {
                                 children: stats.totalChanges
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 337,
+                                lineNumber: 229,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4584,13 +4459,13 @@ function LiveRefreshDashboard() {
                                 children: "Changes Detected"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 340,
+                                lineNumber: 232,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 330,
+                        lineNumber: 222,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4612,7 +4487,7 @@ function LiveRefreshDashboard() {
                                 children: stats.filesChanged.size
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 352,
+                                lineNumber: 244,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4623,19 +4498,19 @@ function LiveRefreshDashboard() {
                                 children: "Files Changed"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 355,
+                                lineNumber: 247,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 345,
+                        lineNumber: 237,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                lineNumber: 304,
+                lineNumber: 196,
                 columnNumber: 7
             }, this),
             stats.filesChanged.size > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4663,7 +4538,7 @@ function LiveRefreshDashboard() {
                                 children: "Recent Changes"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 380,
+                                lineNumber: 272,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4679,13 +4554,13 @@ function LiveRefreshDashboard() {
                                 children: "Clear"
                             }, void 0, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 381,
+                                lineNumber: 273,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 371,
+                        lineNumber: 263,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4710,18 +4585,18 @@ function LiveRefreshDashboard() {
                                 children: file
                             }, index, false, {
                                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                                lineNumber: 397,
+                                lineNumber: 289,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                        lineNumber: 395,
+                        lineNumber: 287,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                lineNumber: 363,
+                lineNumber: 255,
                 columnNumber: 9
             }, this),
             stats.lastChange && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4737,13 +4612,13 @@ function LiveRefreshDashboard() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-                lineNumber: 420,
+                lineNumber: 312,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/dashboard/components/LiveRefreshDashboard.tsx",
-        lineNumber: 241,
+        lineNumber: 133,
         columnNumber: 5
     }, this);
 }

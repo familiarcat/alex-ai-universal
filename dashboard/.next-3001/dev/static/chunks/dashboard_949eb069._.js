@@ -114,63 +114,37 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 "use strict";
 
 /**
- * User Settings Sync - DDD Architecture with Intelligent Fallback
+ * User Settings Sync - DDD Architecture with Proper Controller Layer
  * 
- * Preferred: Client => n8n => Supabase (when n8n webhooks available)
- * Fallback: Client => Supabase direct API (when n8n webhooks unavailable)
+ * FIXED: Now uses Next.js API routes (proper DDD architecture)
  * 
- * Pattern: Same intelligent fallback as RAG system (O'Brien's pragmatism)
+ * Flow: Client => Next.js API => Supabase (Live) => Supabase
+ * Fallback: Client => Next.js API => n8n Webhook => Supabase
+ * 
+ * Architecture: 
+ *   PRIMARY: Supabase direct (Live instance) via Next.js API route
+ *   FALLBACK: n8n Webhook (if Supabase unavailable)
+ * 
+ * Crew: Data (Architecture) + La Forge (Implementation) + O'Brien (Pragmatic)
+ * Updated: 2025-11-27 - Fixed to use Next.js API routes instead of direct n8n calls
  */ __turbopack_context__.s([
     "debouncedSettingsSync",
     ()=>debouncedSettingsSync,
     "retrieveSettings",
     ()=>retrieveSettings
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/dashboard/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
-const N8N_URL = ("TURBOPACK compile-time value", "https://n8n.pbradygeorgen.com") || 'https://n8n.pbradygeorgen.com';
-// Use live Supabase instance from environment variables (hosted on pbradygeorgen.com infrastructure)
-const SUPABASE_URL = ("TURBOPACK compile-time value", "https://rpkkkbufdwxmjaerbhbn.supabase.co") || __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.SUPABASE_URL;
-if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-;
-const SUPABASE_ANON_KEY = ("TURBOPACK compile-time value", "sb_secret_TCaP5QXq4PHTtsjxcU1l1Q_XB5nRLJg");
 let saveTimer = null;
-/**
- * Sync settings directly to Supabase (fallback)
- */ async function syncSettingsFallback(settings, userId = 'default') {
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/user_settings`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'resolution=merge-duplicates'
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                global_theme: settings.globalTheme,
-                preferences: settings.preferences || {}
-            })
-        });
-        return response.ok;
-    } catch (error) {
-        return false;
-    }
-}
 function debouncedSettingsSync(settings, delayMs = 1000) {
     if (saveTimer) {
         clearTimeout(saveTimer);
     }
     saveTimer = setTimeout(async ()=>{
-        // Try n8n first (preferred DDD architecture)
+        // Use Next.js API route (proper DDD architecture)
         try {
-            const response = await fetch(`${N8N_URL}/webhook/settings-store`, {
+            const response = await fetch('/api/settings/store', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-Source': 'alex-ai-dashboard'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     userId: 'default',
@@ -179,74 +153,46 @@ function debouncedSettingsSync(settings, delayMs = 1000) {
                 })
             });
             if (!response.ok) {
-                throw new Error(`n8n returned ${response.status}`);
+                throw new Error(`Settings API returned ${response.status}`);
             }
-            // Success via n8n - no console log to reduce noise
+            // Success - no console log to reduce noise
             return;
         } catch (error) {
-            // Fallback to direct Supabase API (silent)
-            await syncSettingsFallback(settings);
         // Non-blocking: localStorage still works regardless
+        // Error is handled silently to prevent console spam
         }
     }, delayMs);
 }
-/**
- * Retrieve settings directly from Supabase (fallback)
- * Silent mode - no console errors (table might not exist yet)
- */ async function retrieveSettingsFallback(userId = 'default') {
-    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-    ;
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/user_settings?user_id=eq.${userId}&select=global_theme,preferences`, {
-            method: 'GET',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            return null; // Silent - table might not exist or RLS blocking
-        }
-        const data = await response.json();
-        if (!data || data.length === 0) {
-            return null; // Silent - no settings found
-        }
-        return {
-            globalTheme: data[0].global_theme || 'midnight',
-            preferences: data[0].preferences || {}
-        };
-    } catch (error) {
-        return null; // Silent - network error or table doesn't exist
-    }
-}
 async function retrieveSettings(userId = 'default') {
-    // Try n8n first (preferred DDD architecture)
     try {
-        const response = await fetch(`${N8N_URL}/webhook/settings-retrieve?userId=${userId}`, {
+        const response = await fetch(`/api/settings/retrieve?userId=${userId}`, {
             method: 'GET',
             headers: {
-                'X-Source': 'alex-ai-dashboard-ssr',
                 'Cache-Control': 'no-cache'
             },
             cache: 'no-store'
         });
         if (!response.ok) {
-            throw new Error(`n8n returned ${response.status}`);
+            throw new Error(`Settings API returned ${response.status}`);
         }
-        const text = await response.text();
-        if (!text || text.trim() === '') {
-            throw new Error('Empty response');
+        const data = await response.json();
+        if (data.success) {
+            // Only return theme if it's explicitly set (not null/default)
+            // This allows localStorage to be the source of truth if Supabase has no saved theme
+            if (data.globalTheme !== null && data.globalTheme !== undefined) {
+                return {
+                    globalTheme: data.globalTheme,
+                    preferences: data.preferences || {},
+                    source: data.source // Include source to distinguish saved vs default
+                };
+            }
+            // If globalTheme is null, return null to indicate no saved settings
+            return null;
         }
-        const data = JSON.parse(text);
-        console.log('✅ Settings retrieved via n8n:', data.globalTheme);
-        return {
-            globalTheme: data.globalTheme || 'midnight',
-            preferences: data.preferences || {}
-        };
+        return null;
     } catch (error) {
-        // Fallback to direct Supabase API (silent - no console spam)
-        return await retrieveSettingsFallback(userId);
+        // Silent fallback - return null if API unavailable
+        return null;
     }
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -833,29 +779,52 @@ function StateProvider({ children }) {
     // Lazy initialization: getInitialState() runs ONCE before first render
     const [state, setState] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(getInitialState);
     // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
-    // Note: Uses intelligent fallback pattern (n8n → Supabase direct → localStorage)
+    // Note: Uses intelligent fallback pattern (localStorage → Supabase → default)
+    // FIXED: Prioritize localStorage theme, only override if Supabase has a different saved value
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "StateProvider.useEffect": ()=>{
             // Initialize event-driven sync integration
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$state$2d$sync$2d$integration$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["initializeStateSync"])();
+            // Get current theme from localStorage (already loaded in getInitialState)
+            const currentTheme = state.globalTheme;
             // Load globalTheme from Supabase (via n8n or direct fallback)
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$settings$2d$sync$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["retrieveSettings"])('default').then({
                 "StateProvider.useEffect": (settings)=>{
-                    if (settings && settings.globalTheme && settings.globalTheme !== state.globalTheme) {
-                        console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
-                        setState({
-                            "StateProvider.useEffect": (prev)=>{
-                                const newState = {
-                                    ...prev,
-                                    globalTheme: settings.globalTheme
-                                };
-                                // Update localStorage cache
-                                localStorage.setItem('alex-ai-state', JSON.stringify(newState));
-                                return newState;
-                            }
-                        }["StateProvider.useEffect"]);
+                    // Only update if Supabase has a saved theme AND it's different from current
+                    // Don't override localStorage with 'midnight' default if Supabase returns null
+                    if (settings && settings.globalTheme && settings.globalTheme !== 'midnight') {
+                        // Supabase has a saved theme (not the default)
+                        if (settings.globalTheme !== currentTheme) {
+                            console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
+                            setState({
+                                "StateProvider.useEffect": (prev)=>{
+                                    const newState = {
+                                        ...prev,
+                                        globalTheme: settings.globalTheme
+                                    };
+                                    // Update localStorage cache
+                                    localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+                                    return newState;
+                                }
+                            }["StateProvider.useEffect"]);
+                        }
+                    } else if (settings && settings.globalTheme === 'midnight' && settings.source === 'supabase') {
+                        // Supabase explicitly has 'midnight' saved (not default fallback)
+                        if (settings.globalTheme !== currentTheme) {
+                            console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
+                            setState({
+                                "StateProvider.useEffect": (prev)=>{
+                                    const newState = {
+                                        ...prev,
+                                        globalTheme: settings.globalTheme
+                                    };
+                                    localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+                                    return newState;
+                                }
+                            }["StateProvider.useEffect"]);
+                        }
                     }
-                // If settings is null: n8n and Supabase both unavailable, use localStorage (already loaded)
+                // If settings is null or has default 'midnight' from fallback: keep localStorage theme
                 }
             }["StateProvider.useEffect"]).catch({
                 "StateProvider.useEffect": ()=>{
@@ -1065,7 +1034,7 @@ function StateProvider({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/dashboard/lib/state-manager.tsx",
-        lineNumber: 334,
+        lineNumber: 353,
         columnNumber: 5
     }, this);
 }

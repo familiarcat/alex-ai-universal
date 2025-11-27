@@ -15,7 +15,6 @@ import { getUnifiedDataService } from '@/lib/unified-data-service';
 
 export async function GET(request: NextRequest) {
   try {
-    const service = getUnifiedDataService();
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '50');
     const crewMember = searchParams.get('crew_member') || undefined;
@@ -25,25 +24,39 @@ export async function GET(request: NextRequest) {
     let memories: any[] = [];
     
     try {
-      const knowledgeData = await service.queryKnowledge({
-        limit,
-        crew_member: crewMember,
-        query: crewMember ? `crew member ${crewMember}` : undefined
-      });
+      const service = getUnifiedDataService();
       
-      // Handle different response formats
-      memories = knowledgeData?.data || knowledgeData?.memories || knowledgeData?.results || knowledgeData || [];
-      
-      // If we got crew stats instead, try to get memories from there
-      if (Array.isArray(memories) && memories.length === 0) {
-        const statsData = await service.getCrewStats({ limit, crew_member: crewMember });
-        memories = statsData?.sessions || statsData?.data || statsData || [];
+      try {
+        const knowledgeData = await service.queryKnowledge({
+          limit,
+          crew_member: crewMember,
+          query: crewMember ? `crew member ${crewMember}` : undefined
+        });
+        
+        // Handle different response formats
+        memories = knowledgeData?.data || knowledgeData?.memories || knowledgeData?.results || knowledgeData || [];
+        
+        // If we got crew stats instead, try to get memories from there
+        if (Array.isArray(memories) && memories.length === 0) {
+          const statsData = await service.getCrewStats({ limit, crew_member: crewMember });
+          memories = statsData?.sessions || statsData?.data || statsData || [];
+        }
+      } catch (queryError: any) {
+        console.warn('Knowledge query failed, trying crew stats:', queryError?.message || queryError);
+        // Fallback to crew stats
+        try {
+          const statsData = await service.getCrewStats({ limit, crew_member: crewMember });
+          memories = statsData?.sessions || statsData?.data || statsData || [];
+        } catch (statsError: any) {
+          console.warn('Crew stats also failed:', statsError?.message || statsError);
+          // Return empty array if both fail
+          memories = [];
+        }
       }
-    } catch (queryError) {
-      console.warn('Knowledge query failed, trying crew stats:', queryError);
-      // Fallback to crew stats
-      const statsData = await service.getCrewStats({ limit, crew_member: crewMember });
-      memories = statsData?.sessions || statsData?.data || statsData || [];
+    } catch (serviceError: any) {
+      console.error('Failed to initialize UnifiedDataService:', serviceError?.message || serviceError);
+      // Return empty array if service initialization fails
+      memories = [];
     }
 
     // Process memories to extract thoughts and concerns

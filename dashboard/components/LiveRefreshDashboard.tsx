@@ -67,149 +67,41 @@ export default function LiveRefreshDashboard() {
   }, [autoRefresh]);
 
   useEffect(() => {
-    // WebSocket connection for live updates
-    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsHost = process.env.NEXT_PUBLIC_WS_URL || window.location.host;
-    const wsUrl = `${wsProtocol}//${wsHost}/api/ws/codebase-changes`;
+    // FIXED: Use polling only for codebase changes (WebSocket not needed for file watching)
+    // The Socket.IO server at /api/socket is for project sync, not codebase file watching
+    // Codebase changes are better handled via polling or file system watchers on the server
+    
+    // Skip if auto-refresh is disabled
+    if (!autoRefresh) {
+      return;
+    }
 
-    let ws: WebSocket | null = null;
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
-    let connectionTimeout: NodeJS.Timeout | null = null;
-
-    function connect() {
+    // Use polling for codebase changes (simpler and more reliable)
+    console.log('🔄 Starting codebase change polling');
+    setStats(prev => ({ ...prev, isConnected: false })); // Mark as using polling, not WebSocket
+    
+    const pollInterval = setInterval(async () => {
       try {
-        ws = new WebSocket(wsUrl);
-        
-        // Set a connection timeout - if WebSocket doesn't connect quickly, fall back to polling
-        connectionTimeout = setTimeout(() => {
-          if (ws && ws.readyState === WebSocket.CONNECTING) {
-            console.warn('WebSocket connection timeout, falling back to polling');
-            ws.close();
-            startPolling();
+        const response = await fetch('/api/codebase-changes', {
+          signal: AbortSignal.timeout(3000) // 3 second timeout
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.changes && data.changes.length > 0) {
+            data.changes.forEach((change: CodebaseChange) => {
+              handleCodebaseChange(change);
+            });
           }
-        }, 2000); // 2 second timeout for WebSocket connection
-
-        ws.onopen = () => {
-          if (connectionTimeout) {
-            clearTimeout(connectionTimeout);
-            connectionTimeout = null;
-          }
-          console.log('✅ WebSocket connected for live refresh');
-          setStats(prev => ({ ...prev, isConnected: true }));
-          reconnectAttempts = 0;
-        };
-
-        ws.onmessage = (event) => {
-          try {
-            const change: CodebaseChange = JSON.parse(event.data);
-            handleCodebaseChange(change);
-          } catch (error) {
-            console.error('Failed to parse WebSocket message:', error);
-          }
-        };
-
-        ws.onerror = (error) => {
-          // WebSocket errors don't serialize well, extract useful info
-          const errorInfo = {
-            type: error.type || 'unknown',
-            target: ws?.readyState !== undefined ? `readyState: ${ws.readyState}` : 'unknown',
-            url: wsUrl
-          };
-          console.warn('WebSocket error:', errorInfo);
-          setStats(prev => ({ ...prev, isConnected: false }));
-          // Immediately fall back to polling if WebSocket fails
-          if (ws?.readyState === WebSocket.CLOSED || ws?.readyState === WebSocket.CLOSING) {
-            if (connectionTimeout) {
-              clearTimeout(connectionTimeout);
-              connectionTimeout = null;
-            }
-            startPolling();
-          }
-        };
-
-        ws.onclose = (event) => {
-          if (connectionTimeout) {
-            clearTimeout(connectionTimeout);
-            connectionTimeout = null;
-          }
-          console.log('WebSocket disconnected', { code: event.code, reason: event.reason || 'No reason provided' });
-          setStats(prev => ({ ...prev, isConnected: false }));
-
-          // If WebSocket server doesn't exist (404-like), fall back to polling immediately
-          if (event.code === 1006 || event.code === 1002) {
-            console.log('WebSocket server unavailable, using polling fallback');
-            startPolling();
-            return;
-          }
-
-          // Attempt reconnection only if we haven't exceeded max attempts
-          if (reconnectAttempts < maxReconnectAttempts) {
-            reconnectAttempts++;
-            setTimeout(connect, 1000 * reconnectAttempts);
-          } else {
-            // After max attempts, fall back to polling
-            console.log('Max reconnection attempts reached, falling back to polling');
-            startPolling();
-          }
-        };
+        }
       } catch (error) {
-        if (connectionTimeout) {
-          clearTimeout(connectionTimeout);
-          connectionTimeout = null;
-        }
-        console.error('WebSocket connection failed:', error);
-        // Fallback to polling if WebSocket unavailable
-        startPolling();
+        // Silent error - polling will continue
+        console.debug('Polling check:', error);
       }
-    }
-
-    // Fallback: Polling for codebase changes (only if WebSocket unavailable)
-    // Troi's decision: Polling should be slower and only when WebSocket fails
-    function startPolling() {
-      // Check if WebSocket is now available before starting polling
-      if (stats.isConnected) {
-        console.log('✅ WebSocket connected, skipping polling');
-        return () => {}; // No cleanup needed
-      }
-      
-      console.log('⚠️  WebSocket unavailable, using polling fallback');
-      const pollInterval = setInterval(async () => {
-        // Check WebSocket status before each poll
-        if (stats.isConnected) {
-          clearInterval(pollInterval);
-          console.log('✅ WebSocket now available, stopping polling');
-          return;
-        }
-        
-        try {
-          const response = await fetch('/api/codebase-changes', {
-            signal: AbortSignal.timeout(3000) // 3 second timeout
-          });
-          if (response.ok) {
-            const data = await response.json();
-            if (data.changes && data.changes.length > 0) {
-              data.changes.forEach((change: CodebaseChange) => {
-                handleCodebaseChange(change);
-              });
-            }
-          }
-        } catch (error) {
-          console.error('Polling error:', error);
-        }
-      }, Math.max(refreshInterval, 10000)); // Minimum 10 seconds between polls (slower)
-
-      return () => clearInterval(pollInterval);
-    }
-
-    // Start connection
-    connect();
+    }, Math.max(refreshInterval, 10000)); // Minimum 10 seconds between polls
 
     // Cleanup
     return () => {
-      if (ws) {
-        ws.close();
-      }
+      clearInterval(pollInterval);
     };
   }, [autoRefresh, refreshInterval]);
 

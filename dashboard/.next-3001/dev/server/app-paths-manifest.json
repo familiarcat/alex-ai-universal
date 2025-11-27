@@ -8,5 +8,6 @@
   "/api/mcp/status/route": "app/api/mcp/status/route.js",
   "/api/mcp/workflows/executions/route": "app/api/mcp/workflows/executions/route.js",
   "/api/mcp/workflows/storage/route": "app/api/mcp/workflows/storage/route.js",
+  "/api/settings/retrieve/route": "app/api/settings/retrieve/route.js",
   "/dashboard/page": "app/dashboard/page.js"
 }

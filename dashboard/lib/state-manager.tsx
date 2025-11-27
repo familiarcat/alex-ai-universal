@@ -134,23 +134,42 @@ export function StateProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState(getInitialState);
   
   // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
-  // Note: Uses intelligent fallback pattern (n8n → Supabase direct → localStorage)
+  // Note: Uses intelligent fallback pattern (localStorage → Supabase → default)
+  // FIXED: Prioritize localStorage theme, only override if Supabase has a different saved value
   useEffect(() => {
     // Initialize event-driven sync integration
     initializeStateSync();
     
+    // Get current theme from localStorage (already loaded in getInitialState)
+    const currentTheme = state.globalTheme;
+    
     // Load globalTheme from Supabase (via n8n or direct fallback)
     retrieveSettings('default').then(settings => {
-      if (settings && settings.globalTheme && settings.globalTheme !== state.globalTheme) {
-        console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
-        setState(prev => {
-          const newState = { ...prev, globalTheme: settings.globalTheme };
-          // Update localStorage cache
-          localStorage.setItem('alex-ai-state', JSON.stringify(newState));
-          return newState;
-        });
+      // Only update if Supabase has a saved theme AND it's different from current
+      // Don't override localStorage with 'midnight' default if Supabase returns null
+      if (settings && settings.globalTheme && settings.globalTheme !== 'midnight') {
+        // Supabase has a saved theme (not the default)
+        if (settings.globalTheme !== currentTheme) {
+          console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
+          setState(prev => {
+            const newState = { ...prev, globalTheme: settings.globalTheme };
+            // Update localStorage cache
+            localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+            return newState;
+          });
+        }
+      } else if (settings && settings.globalTheme === 'midnight' && settings.source === 'supabase') {
+        // Supabase explicitly has 'midnight' saved (not default fallback)
+        if (settings.globalTheme !== currentTheme) {
+          console.log('🔄 Loading globalTheme from Supabase:', settings.globalTheme);
+          setState(prev => {
+            const newState = { ...prev, globalTheme: settings.globalTheme };
+            localStorage.setItem('alex-ai-state', JSON.stringify(newState));
+            return newState;
+          });
+        }
       }
-      // If settings is null: n8n and Supabase both unavailable, use localStorage (already loaded)
+      // If settings is null or has default 'midnight' from fallback: keep localStorage theme
     }).catch(() => {
       // Silent catch - fallback pattern already tried n8n and Supabase
       // localStorage is still our source of truth
