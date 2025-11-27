@@ -443,6 +443,37 @@ async function executeMilestonePush() {
   }
   
   // Success!
+  // Non-blocking RAG integration (MCP primary, n8n fallback)
+  // Silent by default - only logs if verbose
+  setTimeout(async () => {
+    try {
+      // Use MCP-first milestone storage (follows DDD architecture)
+      const mcpScript = path.join(__dirname, 'mcp-store-milestone.js');
+      if (fs.existsSync(mcpScript)) {
+        const features = commitMessage.split('\n').slice(1).filter(line => line.trim() && !line.startsWith('Total')).join(';');
+        execSync(
+          `node ${mcpScript} --summary "${commitMessage.split('\n')[0]}" --features "${features}" --tags "milestone,git"`,
+          { stdio: VERBOSE ? 'inherit' : 'ignore', timeout: 30000 }
+        );
+        log('✅ RAG integration completed (MCP/n8n)');
+      } else {
+        // Fallback to n8n if MCP script doesn't exist
+        const ragScript = path.join(__dirname, 'n8n-post-knowledge.js');
+        if (fs.existsSync(ragScript)) {
+          log('⚠️  MCP script not found, using n8n fallback');
+          execSync(
+            `node ${ragScript} --summary "${commitMessage.split('\n')[0]}" --tags "milestone,git"`,
+            { stdio: VERBOSE ? 'inherit' : 'ignore', timeout: 30000 }
+          );
+          log('✅ RAG integration completed (n8n fallback)');
+        }
+      }
+    } catch (error) {
+      // Silent failure - RAG integration is non-blocking
+      log(`⚠️  RAG integration failed (non-blocking): ${error.message}`);
+    }
+  }, 100);
+
   return {
     success: true,
     commitSha,
