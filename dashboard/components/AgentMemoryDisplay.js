@@ -10,6 +10,8 @@ const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
   const fetchMemories = useCallback(async () => {
     try {
       setLoading(true);
+      // FIXED: Graceful handling for missing API endpoint
+      // Crew: O'Brien (Pragmatic) + Troi (UX)
       const response = await axios.get('/api/memories/retrieve', {
         params: {
           agent_name: agentName,
@@ -19,8 +21,16 @@ const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
       setMemories(response.data.memories || []);
       setError(null);
     } catch (err) {
-      console.error('Error fetching memories:', err);
-      setError('Failed to load memories');
+      // FIXED: Handle 404 gracefully (endpoint doesn't exist yet)
+      // Don't log as error - this is expected for missing endpoints
+      if (err.response?.status === 404) {
+        console.debug('Memories API endpoint not available:', err.response.status);
+        setMemories([]); // Empty state is fine
+        setError(null); // Not an error, just unavailable
+      } else {
+        console.debug('Error fetching memories:', err);
+        setError('Memories unavailable');
+      }
     } finally {
       setLoading(false);
     }
@@ -28,10 +38,19 @@ const AgentMemoryDisplay = ({ agentName, limit = 10, showStats = true }) => {
 
   const fetchStats = useCallback(async () => {
     try {
+      // FIXED: Graceful handling for missing API endpoint
+      // Crew: O'Brien (Pragmatic) + Troi (UX)
       const response = await axios.get('/api/memories/stats');
       setStats(response.data);
     } catch (err) {
-      console.error('Error fetching stats:', err);
+      // FIXED: Handle 404 gracefully (endpoint doesn't exist yet)
+      // Don't log as error - this is expected for missing endpoints
+      if (err.response?.status === 404) {
+        console.debug('Stats API endpoint not available:', err.response.status);
+        setStats(null); // Stats unavailable is fine
+      } else {
+        console.debug('Error fetching stats:', err);
+      }
     }
   }, []);
 

@@ -58,12 +58,16 @@ export class ErrorBoundary extends React.Component<
   };
 
   render() {
-    if (this.state.hasError && this.state.error) {
+    if (this.state.hasError) {
       // Use custom fallback if provided
       if (this.props.fallback) {
         return this.props.fallback;
       }
 
+      // FIXED: Ensure error is always defined before passing to DesignSystemErrorDisplay
+      // Crew: Worf (Error Handling) + O'Brien (Pragmatic)
+      const error = this.state.error || new Error('Unknown error occurred');
+      
       // Use design system error display (fits seamlessly into dashboard)
       return (
         <div style={{
@@ -72,7 +76,7 @@ export class ErrorBoundary extends React.Component<
           background: 'var(--background)'
         }}>
           <DesignSystemErrorDisplay
-            error={this.state.error}
+            error={error}
             errorInfo={this.state.errorInfo || undefined}
             title="Component Error"
             onRetry={this.handleReset}

@@ -224,19 +224,29 @@ async function POST(request) {
             console.error('❌ SUPABASE_SERVICE_KEY not configured - all storage layers will fail');
         // This is a critical configuration error - we should still try to provide helpful error
         }
-        // All layers failed
-        console.error('❌ All storage layers failed (MCP → n8n → Supabase):', {
+        // All layers failed - provide helpful error message
+        const errorDetails = {
             userId,
             globalTheme,
             hasMcpKey: !!MCP_API_KEY,
             hasSupabaseKey: !!SUPABASE_SERVICE_KEY,
             mcpUrl: MCP_BASE_URL,
             n8nUrl: N8N_URL,
-            supabaseUrl: SUPABASE_URL
-        });
+            supabaseUrl: ("TURBOPACK compile-time truthy", 1) ? 'configured' : "TURBOPACK unreachable"
+        };
+        console.error('❌ All storage layers failed (MCP → n8n → Supabase):', errorDetails);
+        // Provide helpful error message based on configuration
+        let errorMessage = 'Failed to store settings';
+        if (!SUPABASE_SERVICE_KEY && !MCP_API_KEY) {
+            errorMessage = 'Configuration error: SUPABASE_SERVICE_KEY or MCP_API_KEY required';
+        } else if (!SUPABASE_SERVICE_KEY) {
+            errorMessage = 'Configuration error: SUPABASE_SERVICE_KEY required for fallback';
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: false,
-            error: 'Failed to store settings'
+            error: errorMessage,
+            // Include diagnostic endpoint for debugging (server-side only)
+            diagnostic: '/api/settings/diagnose'
         }, {
             status: 500
         });

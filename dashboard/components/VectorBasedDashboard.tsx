@@ -43,13 +43,23 @@ export default function VectorBasedDashboard({
           url.searchParams.set('projectId', projectId);
         }
 
+        // FIXED: Graceful error handling for optional feature
+        // Crew: Riker (Tactical) + Quark (Optimization) + O'Brien (Pragmatic)
         const response = await fetch(url.toString(), {
           headers: { 'Cache-Control': 'no-cache' },
-          cache: 'no-store'
+          cache: 'no-store',
+          signal: AbortSignal.timeout(5000)
         });
 
         if (response.ok) {
           const result = await response.json();
+          // Check for error responses
+          if (result.error) {
+            console.debug('Vector dashboard query returned error');
+            setVectors([]);
+            setLoading(false);
+            return;
+          }
           if (result.success && result.data) {
             const transformed: VectorPriority[] = (result.data || []).map((item: any) => ({
               id: item.id,

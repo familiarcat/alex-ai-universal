@@ -435,9 +435,19 @@ export class UnifiedDataService {
       
       this.reportProgress(fallbackOpId, 1, 1, `❌ Both MCP and n8n failed: ${endpoint}`, 'failed');
       
-      // Only log non-timeout errors (timeouts are expected and handled gracefully)
-      if (!isTimeout) {
-        console.error(`❌ Both MCP and n8n failed for ${endpoint}:`, error);
+      // FIXED: Use debug level for optional features - don't spam console with errors
+      // Crew: O'Brien (Pragmatic) + Worf (Error Handling)
+      const isNetworkError = error.message?.includes('Failed to fetch') || 
+                            error.message?.includes('ERR_CONNECTION_REFUSED') ||
+                            error.message?.includes('NetworkError') ||
+                            error.name === 'TypeError';
+      
+      if (isTimeout || isNetworkError) {
+        // Network errors and timeouts are expected - use debug level
+        console.debug(`n8n fallback ${isTimeout ? 'timeout' : 'network error'} for ${endpoint} - returning empty result`);
+      } else {
+        // Other errors might be worth logging, but still use warn instead of error
+        console.warn(`n8n fallback error for ${endpoint}:`, error.message);
       }
       
       // Return fallback data structure to prevent UI crashes

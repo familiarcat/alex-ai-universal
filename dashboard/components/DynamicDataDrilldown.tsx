@@ -34,9 +34,54 @@ export default function DynamicDataDrilldown({
 }: DynamicDataDrilldownProps) {
   const { globalTheme } = useAppState();
   
+  // FIXED: Handle empty data gracefully
+  // Crew: Troi (UX) + Data (Analysis)
+  if (!data || (typeof data === 'object' && Object.keys(data).length === 0)) {
+    return (
+      <div style={{
+        background: 'var(--card)',
+        border: 'var(--border)',
+        borderRadius: 'var(--radius)',
+        padding: '24px',
+        marginBottom: '24px'
+      }}>
+        {title && (
+          <h3 style={{
+            fontSize: '20px',
+            color: 'var(--accent)',
+            marginBottom: '16px',
+            fontWeight: 600
+          }}>
+            {title}
+          </h3>
+        )}
+        <div style={{
+          padding: 'var(--spacing-lg)',
+          textAlign: 'center',
+          color: 'var(--text-muted)',
+          fontSize: 'var(--font-sm)'
+        }}>
+          <p style={{ margin: 0 }}>Empty object</p>
+          <p style={{ margin: '8px 0 0 0', fontSize: 'var(--font-xs)', opacity: 0.7 }}>
+            Provide data prop to analyze
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
   // Generate component structure from data
   const componentStructure = useMemo(() => {
-    return generateComponentStructure(data);
+    try {
+      return generateComponentStructure(data);
+    } catch (err: any) {
+      console.error('Error generating component structure:', err);
+      return {
+        id: 'error-structure',
+        type: 'text',
+        props: { text: 'Error generating structure' }
+      };
+    }
   }, [data]);
   
   // Design system config based on global theme
@@ -57,27 +102,73 @@ export default function DynamicDataDrilldown({
     designSystem
   };
   
-  return (
-    <div style={{
-      background: 'var(--card)',
-      border: 'var(--border)',
-      borderRadius: 'var(--radius)',
-      padding: '24px',
-      marginBottom: '24px'
-    }}>
-      {title && (
-        <h3 style={{
-          fontSize: '20px',
-          color: 'var(--accent)',
-          marginBottom: '16px',
-          fontWeight: 600
+  try {
+    return (
+      <div style={{
+        background: 'var(--card)',
+        border: 'var(--border)',
+        borderRadius: 'var(--radius)',
+        padding: '24px',
+        marginBottom: '24px'
+      }}>
+        {title && (
+          <h3 style={{
+            fontSize: '20px',
+            color: 'var(--accent)',
+            marginBottom: '16px',
+            fontWeight: 600
+          }}>
+            {title}
+          </h3>
+        )}
+        <DynamicComponentRenderer config={config} />
+      </div>
+    );
+  } catch (err: any) {
+    // FIXED: Graceful fallback if DynamicComponentRenderer fails
+    // Crew: O'Brien (Pragmatic) + Worf (Error Handling)
+    console.error('DynamicComponentRenderer error:', err);
+    return (
+      <div style={{
+        background: 'var(--card)',
+        border: 'var(--border)',
+        borderRadius: 'var(--radius)',
+        padding: '24px',
+        marginBottom: '24px'
+      }}>
+        {title && (
+          <h3 style={{
+            fontSize: '20px',
+            color: 'var(--accent)',
+            marginBottom: '16px',
+            fontWeight: 600
+          }}>
+            {title}
+          </h3>
+        )}
+        <div style={{
+          padding: 'var(--spacing-lg)',
+          textAlign: 'center',
+          color: 'var(--text-muted)',
+          fontSize: 'var(--font-sm)'
         }}>
-          {title}
-        </h3>
-      )}
-      <DynamicComponentRenderer config={config} />
-    </div>
-  );
+          <p style={{ margin: 0 }}>Component renderer unavailable</p>
+          <pre style={{
+            margin: '12px 0 0 0',
+            padding: '12px',
+            background: 'var(--card-bg)',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: 'var(--font-xs)',
+            overflow: 'auto',
+            textAlign: 'left',
+            maxHeight: '200px'
+          }}>
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        </div>
+      </div>
+    );
+  }
 }
 
 /**

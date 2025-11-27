@@ -53,6 +53,16 @@ export default function LearningAnalyticsDashboard() {
       
       const data = await service.getLearningMetrics({ limit: 1000 }) as any;
       
+      // FIXED: Check for error responses before processing
+      // Crew: Data (Analysis) + O'Brien (Pragmatic)
+      if (data?.error) {
+        console.debug('Learning metrics returned error, using empty data');
+        setMetrics([]);
+        setLoading(false);
+        complete(operationId);
+        return;
+      }
+      
       const memories = data?.sessions || data?.data || [];
       
       // FIXED: Handle empty data gracefully

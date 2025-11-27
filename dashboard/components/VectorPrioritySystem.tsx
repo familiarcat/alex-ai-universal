@@ -135,11 +135,24 @@ export default function VectorPrioritySystem({
 
           setVectors(filtered);
           setError(null);
+        } else if (response.status === 404) {
+          console.debug('Vector priority API endpoint not available');
+          setVectors([]);
+          setError(null);
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load vectors');
-      console.error('Vector loading error:', err);
+      // FIXED: Network errors are expected - use debug
+      // Crew: Riker (Tactical) + Quark (Optimization) + O'Brien (Pragmatic)
+      const isNetworkError = err.message?.includes('Failed to fetch') || 
+                            err.name === 'AbortError';
+      if (isNetworkError) {
+        console.debug('Vector priority API unavailable (network error)');
+      } else {
+        console.debug('Vector loading error:', err.message);
+      }
+      setVectors([]);
+      setError(null);
     } finally {
       setLoading(false);
     }

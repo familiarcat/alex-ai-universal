@@ -55,7 +55,7 @@ interface DashboardTheme {
 }
 
 interface AnalyticsDashboardProps {
-  theme?: DashboardTheme;
+  theme?: DashboardTheme | string; // Accept both object and string
 }
 
 export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
@@ -121,7 +121,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
     value: count
   }));
 
-  const defaultTheme: DashboardTheme = theme || {
+  // Handle both string and object themes
+  const defaultTheme: DashboardTheme = (theme && typeof theme === 'object' && theme.colors) ? theme : {
     id: 'default',
     name: 'Default',
     colors: {

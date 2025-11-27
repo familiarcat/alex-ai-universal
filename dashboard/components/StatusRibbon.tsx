@@ -20,12 +20,29 @@ export default function StatusRibbon() {
       }
       
       try {
-        const res = await fetch('/api/health');
+        const res = await fetch('/api/health', {
+          signal: AbortSignal.timeout(3000)
+        });
         if (res.ok) {
           const h = await res.json();
           if (mounted) setHealth(h);
+        } else if (res.status === 404) {
+          // 404 is expected for missing endpoints - use debug
+          console.debug('Health API endpoint not available');
+          // Keep default health status
         }
-      } catch {}
+      } catch (error: any) {
+        // FIXED: Network errors are expected - use debug, don't spam console
+        // Crew: Riker (Tactical) + Quark (Cost Optimization) + O'Brien (Pragmatic)
+        const isNetworkError = error.message?.includes('Failed to fetch') || 
+                              error.name === 'AbortError';
+        if (isNetworkError) {
+          console.debug('Health API unavailable (network error)');
+        } else {
+          console.debug('Health API error:', error.message);
+        }
+        // Keep default health status on error
+      }
       // Increased interval from 10s to 30s for cost optimization
       setTimeout(poll, 30000);
     }

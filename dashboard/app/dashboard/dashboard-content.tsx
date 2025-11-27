@@ -16,32 +16,13 @@
 import { useAppState } from '@/lib/state-manager';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import ProjectEditorTabs from '@/components/ProjectEditorTabs';
 import DeleteProjectModal from '@/components/DeleteProjectModal';
 import ThemeSelector from '@/components/ThemeSelector';
-import ProjectGrid from '@/components/ProjectGrid';
-import RAGProjectRecommendations from '@/components/RAGProjectRecommendations';
-import CrewMemoryVisualization from '@/components/CrewMemoryVisualization';
-import LearningAnalyticsDashboard from '@/components/LearningAnalyticsDashboard';
-import LiveRefreshDashboard from '@/components/LiveRefreshDashboard';
-import N8NWorkflowBento from '@/components/N8NWorkflowBento';
-import VectorBasedDashboard from '@/components/VectorBasedDashboard';
-// Crew Recommendations Implementation Components
-import RAGSelfDocumentation from '@/components/RAGSelfDocumentation';
-import SecurityAssessmentDashboard from '@/components/SecurityAssessmentDashboard';
-import CrossServerSyncPanel from '@/components/CrossServerSyncPanel';
-import CostOptimizationMonitor from '@/components/CostOptimizationMonitor';
-import UserExperienceAnalytics from '@/components/UserExperienceAnalytics';
-import AIImpactAssessment from '@/components/AIImpactAssessment';
-import ProcessDocumentationSystem from '@/components/ProcessDocumentationSystem';
-import DataSourceIntegrationPanel from '@/components/DataSourceIntegrationPanel';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
-import MCPDashboardSection from '@/components/MCPDashboardSection';
-import ServiceStatusDisplay from '@/components/ServiceStatusDisplay';
 import { ServiceInitializer } from '@/lib/services/initialize-services';
-import ThemeTestingHarness from '@/components/ThemeTestingHarness';
+import DashboardBentoLayout from '@/components/DashboardBentoLayout';
 
 export default function DashboardContent() {
   // Add error boundary for useAppState
@@ -259,180 +240,11 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        {/* Service Status Display - Shows all service containers */}
-        <div style={{ marginBottom: '24px' }}>
-          <ServiceStatusDisplay />
-        </div>
-
         {/* Service Initializer - Initializes all services in order */}
         <ServiceInitializer />
 
-        {/* Cross-Server Sync Panel - Real-Time Sync Testing */}
-        <div style={{ marginBottom: '24px' }}>
-          <CrossServerSyncPanel />
-        </div>
-
-        {/* Live Refresh System - Top Priority */}
-        <div style={{ marginBottom: '24px' }}>
-          <LiveRefreshDashboard />
-        </div>
-
-        {/* MCP System Dashboard - Integrated */}
-        <div style={{ marginBottom: '40px' }}>
-          <MCPDashboardSection />
-        </div>
-
-        {/* RAG-Powered Features - Visual Hierarchy (Troi & Data) */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '24px',
-          marginBottom: '40px'
-        }}>
-          {/* Learning Analytics - Top Priority */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <LearningAnalyticsDashboard />
-          </div>
-          
-          {/* Crew Memory Visualization - Secondary */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <CrewMemoryVisualization />
-          </div>
-          
-          {/* RAG Recommendations - Tertiary */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <RAGProjectRecommendations />
-          </div>
-        </div>
-
-        {/* N8N Workflow Visualization - Bento Grid (Uhura & Data) */}
-        <div style={{
-          marginBottom: '40px'
-        }}>
-          <div className="card" style={{
-            padding: 'var(--spacing-lg)',
-            borderRadius: 'var(--radius)',
-            border: 'var(--border)',
-            background: 'var(--card)',
-            marginBottom: 'var(--spacing-lg)'
-          }}>
-            <h2 style={{
-              fontSize: 'var(--font-xl)',
-              color: 'var(--accent)',
-              marginBottom: 'var(--spacing-sm)'
-            }}>
-              ⚙️ n8n Workflow Visualization
-            </h2>
-            <p style={{
-              fontSize: 'var(--font-sm)',
-              color: 'var(--text-muted)',
-              marginBottom: 0
-            }}>
-              Visualize and manage your n8n workflows with interactive Mermaid diagrams
-            </p>
-          </div>
-          <N8NWorkflowBento 
-            onWorkflowSelect={(id) => {
-              console.log('Selected workflow:', id);
-              // Navigate to workflow details or open modal
-            }}
-          />
-        </div>
-
-        {/* Crew Recommendations Implementation - Component-Based Knowledge System */}
-        <div style={{
-          marginBottom: '40px'
-        }}>
-          <div className="card" style={{
-            padding: 'var(--spacing-lg)',
-            borderRadius: 'var(--radius)',
-            border: 'var(--border)',
-            background: 'var(--card)',
-            marginBottom: 'var(--spacing-lg)'
-          }}>
-            <h2 style={{
-              fontSize: 'var(--font-xl)',
-              color: 'var(--accent)',
-              marginBottom: 'var(--spacing-sm)'
-            }}>
-              🖖 Crew Recommendations Implementation
-            </h2>
-            <p style={{
-              fontSize: 'var(--font-sm)',
-              color: 'var(--text-muted)',
-              marginBottom: 0
-            }}>
-              UI interpretation of features and knowledge organized by component
-            </p>
-          </div>
-
-          {/* RAG Self-Documentation - Data, La Forge, Crusher, Quark, O'Brien */}
-          <div style={{ marginBottom: '30px' }}>
-            <RAGSelfDocumentation />
-          </div>
-
-          {/* Security Assessment - Worf, Uhura */}
-          <div style={{ marginBottom: '30px' }}>
-            <SecurityAssessmentDashboard />
-          </div>
-
-          {/* Cost Optimization - Riker, Quark */}
-          <div style={{ marginBottom: '30px' }}>
-            <CostOptimizationMonitor />
-          </div>
-
-          {/* User Experience Analytics - Troi */}
-          <div style={{ marginBottom: '30px' }}>
-            <UserExperienceAnalytics />
-          </div>
-
-          {/* AI Impact Assessment - Picard */}
-          <div style={{ marginBottom: '30px' }}>
-            <AIImpactAssessment />
-          </div>
-
-          {/* Process Documentation - O'Brien, La Forge */}
-          <div style={{ marginBottom: '30px' }}>
-            <ProcessDocumentationSystem />
-          </div>
-
-          {/* Data Source Integration - Riker */}
-          <div style={{ marginBottom: '30px' }}>
-            <DataSourceIntegrationPanel />
-          </div>
-        </div>
-
-        {/* Master Dashboard: Project Grid */}
-        <div style={{ marginBottom: '40px' }}>
-          <div className="card" style={{
-            padding: 'var(--spacing-lg)',
-            borderRadius: 'var(--radius)',
-            border: 'var(--border)',
-            background: 'var(--card)',
-            marginBottom: 'var(--spacing-lg)'
-          }}>
-            <h2 style={{
-              fontSize: 'var(--font-xl)',
-              color: 'var(--accent)',
-              marginBottom: 'var(--spacing-sm)'
-            }}>
-              📋 All Projects
-            </h2>
-            <p style={{
-              fontSize: 'var(--font-sm)',
-              color: 'var(--text-muted)',
-              marginBottom: 0
-            }}>
-              Master control center for all projects. Click "Edit" to open project-specific dashboard.
-            </p>
-          </div>
-          <ProjectGrid />
-        </div>
-
-        {/* Theme Testing Harness */}
-        <div style={{ marginBottom: '40px' }}>
-          <ThemeTestingHarness />
-        </div>
+        {/* Comprehensive Bento Layout - All Components Organized */}
+        <DashboardBentoLayout />
       </div>
       
       {/* Delete Confirmation Modal */}

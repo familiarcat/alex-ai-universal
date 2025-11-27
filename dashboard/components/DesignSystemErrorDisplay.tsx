@@ -16,8 +16,8 @@ import React from 'react';
 import { useAppState } from '@/lib/state-manager';
 
 interface DesignSystemErrorDisplayProps {
-  error: Error | string;
-  errorInfo?: React.ErrorInfo | string;
+  error?: Error | string | null; // FIXED: Made optional and nullable
+  errorInfo?: React.ErrorInfo | string | null;
   title?: string;
   onRetry?: () => void;
   onDismiss?: () => void;
@@ -34,9 +34,27 @@ export default function DesignSystemErrorDisplay({
 }: DesignSystemErrorDisplayProps) {
   const { globalTheme } = useAppState();
   
-  const errorMessage = typeof error === 'string' ? error : error.message;
-  const errorStack = typeof error === 'string' ? null : error.stack;
-  const infoString = typeof errorInfo === 'string' ? errorInfo : errorInfo?.componentStack;
+  // FIXED: Handle undefined/null error gracefully
+  // Crew: Worf (Error Handling) + O'Brien (Pragmatic)
+  if (!error) {
+    return (
+      <div style={{
+        padding: '12px',
+        background: 'var(--card)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius)',
+        color: 'var(--text-muted)',
+        fontSize: 'var(--font-sm)',
+        textAlign: 'center'
+      }}>
+        No error information available
+      </div>
+    );
+  }
+  
+  const errorMessage = typeof error === 'string' ? error : (error?.message || 'Unknown error');
+  const errorStack = typeof error === 'string' ? null : (error?.stack || null);
+  const infoString = typeof errorInfo === 'string' ? errorInfo : (errorInfo?.componentStack || null);
   
   const isCompact = variant === 'compact';
   const isInline = variant === 'inline';

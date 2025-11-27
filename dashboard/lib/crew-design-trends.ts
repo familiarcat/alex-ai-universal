@@ -52,6 +52,17 @@ export async function getDesignTrends(): Promise<DesignTrend[]> {
       limit: 20
     });
 
+    // FIXED: Handle empty or error responses gracefully
+    // Crew: O'Brien (Pragmatic) + Data (Analysis)
+    const troiData = troiMemories?.data || troiMemories?.memories || troiMemories?.sessions || troiMemories || [];
+    const dataData = dataMemories?.data || dataMemories?.memories || dataMemories?.sessions || dataMemories || [];
+    
+    // If we got an error response, return empty array
+    if (troiMemories?.error || dataMemories?.error) {
+      console.debug('Design trends query returned error, using defaults');
+      return [];
+    }
+    
     // Extract design trends from memories
     const trends: DesignTrend[] = [];
 

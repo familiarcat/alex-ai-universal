@@ -39,20 +39,50 @@ export default function CrewMemoryVisualization() {
     try {
       setLoading(true);
       
-      // Fetch crew thoughts and concerns via MCP
-      const thoughtsResponse = await fetch('/api/crew/thoughts?limit=50');
-      const thoughtsData = await thoughtsResponse.json();
+      // FIXED: Graceful error handling for API calls
+      // Crew: Riker (Tactical) + Quark (Optimization) + O'Brien (Pragmatic)
+      let thoughtsData: any = { crewThoughts: [] };
+      try {
+        const thoughtsResponse = await fetch('/api/crew/thoughts?limit=50', {
+          signal: AbortSignal.timeout(5000)
+        });
+        if (thoughtsResponse.ok) {
+          thoughtsData = await thoughtsResponse.json();
+        } else if (thoughtsResponse.status === 404) {
+          // 404 is expected for missing endpoints - use debug
+          console.debug('Crew thoughts API endpoint not available');
+        }
+      } catch (fetchError: any) {
+        // Network errors are expected - use debug
+        const isNetworkError = fetchError.message?.includes('Failed to fetch') || 
+                              fetchError.name === 'AbortError';
+        if (isNetworkError) {
+          console.debug('Crew thoughts API unavailable (network error)');
+        } else {
+          console.debug('Crew thoughts API error:', fetchError.message);
+        }
+      }
       
       // Also get traditional stats
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const data = await service.getCrewStats({ limit: 100 });
       
-      const memories = data.sessions || data.data || [];
+      // FIXED: Check for error responses before processing
+      // Crew: Data (Analysis) + O'Brien (Pragmatic)
+      if (data?.error) {
+        console.debug('Crew stats returned error, using empty data');
+        setCrewStats([]);
+        setTotalMemories(0);
+        setLoading(false);
+        return;
+      }
+      
+      const memories = data?.sessions || data?.data || [];
       setTotalMemories(memories.length);
       
       // Use thoughts data if available, otherwise fall back to traditional stats
-      const crewThoughts = thoughtsData.crewThoughts || [];
+      const crewThoughts = thoughtsData?.crewThoughts || [];
       
       // If we have thoughts data, use it; otherwise aggregate from memories
       if (crewThoughts.length > 0) {

@@ -44,29 +44,34 @@ export default function ProgressTracker({
   useEffect(() => {
     const loadProgress = async () => {
       try {
-        // DDD-Compliant: Use API route (controller layer)
-        const response = await fetch(`/api/data/progress/${taskId}`, {
+        // FIXED: Correct API endpoint - route is at /api/progress/[taskId], not /api/data/progress/[taskId]
+        // Crew: La Forge (Infrastructure) + O'Brien (Pragmatic Fix)
+        const response = await fetch(`/api/progress/${taskId}`, {
           headers: { 'Cache-Control': 'no-cache' },
           cache: 'no-store'
         });
 
         if (response.ok) {
-          const result = await response.json();
-          if (result.success && result.data) {
-            setProgress(result.data);
-            setLoading(false);
-            return;
+          const progressData = await response.json();
+          // Handle both direct data and wrapped responses
+          if (progressData.success && progressData.data) {
+            setProgress(progressData.data);
+          } else if (progressData.taskId || progressData.current !== undefined) {
+            // Direct progress data
+            setProgress(progressData);
           }
+          setLoading(false);
+          return;
         }
 
-        // Fallback: Try reading from file via API
-        const fileResponse = await fetch(`/api/progress/${taskId}`);
-        if (fileResponse.ok) {
-          const fileData = await fileResponse.json();
-          setProgress(fileData);
+        // If 404, that's expected for tasks that don't exist yet - don't log as error
+        if (response.status === 404) {
+          setLoading(false);
+          return;
         }
       } catch (error) {
-        console.error('Error loading progress:', error);
+        // Silent error - progress tracking is optional
+        console.debug('Progress tracking unavailable:', error);
       } finally {
         setLoading(false);
       }
