@@ -357,9 +357,10 @@ async function executeMilestonePush() {
   // Step 6: Create commit
   // Use -F flag with temp file to handle multi-line messages safely
   const tempFile = path.join(process.cwd(), '.git-commit-message.tmp');
+  let commitResult;
   try {
     fs.writeFileSync(tempFile, commitMessage, 'utf8');
-    const commitResult = execGitWithRetry(
+    commitResult = execGitWithRetry(
       `git commit -F "${tempFile}"`,
       'Creating commit'
     );
@@ -378,11 +379,6 @@ async function executeMilestonePush() {
   } catch (err) {
     error(`❌ Failed to write commit message: ${err.message}`);
     return { success: false, error: err.message };
-  }
-  
-  if (!commitResult.success) {
-    error(`❌ Failed to create commit: ${commitResult.error}`);
-    return { success: false, error: commitResult.error };
   }
   
   // Get commit SHA
