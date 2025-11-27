@@ -355,10 +355,30 @@ async function executeMilestonePush() {
   log(`📋 Milestone: ${milestoneName}`);
   
   // Step 6: Create commit
-  const commitResult = execGitWithRetry(
-    `git commit -m ${JSON.stringify(commitMessage)}`,
-    'Creating commit'
-  );
+  // Use -F flag with temp file to handle multi-line messages safely
+  const tempFile = path.join(process.cwd(), '.git-commit-message.tmp');
+  try {
+    fs.writeFileSync(tempFile, commitMessage, 'utf8');
+    const commitResult = execGitWithRetry(
+      `git commit -F "${tempFile}"`,
+      'Creating commit'
+    );
+    
+    // Clean up temp file
+    try {
+      fs.unlinkSync(tempFile);
+    } catch (err) {
+      // Ignore cleanup errors
+    }
+    
+    if (!commitResult.success) {
+      error(`❌ Failed to create commit: ${commitResult.error}`);
+      return { success: false, error: commitResult.error };
+    }
+  } catch (err) {
+    error(`❌ Failed to write commit message: ${err.message}`);
+    return { success: false, error: err.message };
+  }
   
   if (!commitResult.success) {
     error(`❌ Failed to create commit: ${commitResult.error}`);
@@ -387,8 +407,10 @@ async function executeMilestonePush() {
     // Tag doesn't exist, that's fine
   }
   
+  // Create tag with first line of commit message
+  const tagMessage = commitMessage.split('\n')[0];
   const tagResult = execGitWithRetry(
-    `git tag -a "${milestoneName}" -m ${JSON.stringify(commitMessage.split('\n')[0])}`,
+    `git tag -a "${milestoneName}" -m "${tagMessage.replace(/"/g, '\\"')}"`,
     'Creating tag'
   );
   
