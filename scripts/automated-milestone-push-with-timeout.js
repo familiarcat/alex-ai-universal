@@ -319,18 +319,32 @@ async function executeMilestonePush(milestoneName, summary, fileCount = 0, dryRu
     console.log(`   Tag: ${milestoneName}`);
     console.log(`   Summary: ${summary.split('\n')[0]}\n`);
 
-    // Non-blocking RAG integration (with timeout)
-    console.log('🧠 Posting milestone to RAG (non-blocking)...');
+    // Non-blocking RAG integration (MCP primary, n8n fallback)
+    console.log('🧠 Posting milestone to RAG (MCP primary, n8n fallback)...');
     setTimeout(async () => {
       try {
-        const ragScript = path.join(__dirname, 'n8n-post-knowledge.js');
-        if (fs.existsSync(ragScript)) {
+        // Use MCP-first milestone storage (follows DDD architecture)
+        const mcpScript = path.join(__dirname, 'mcp-store-milestone.js');
+        if (fs.existsSync(mcpScript)) {
+          const features = summary.split('\n').slice(1).filter(line => line.trim() && !line.startsWith('Total')).join(';');
           await execWithTimeout(
-            `node ${ragScript} --summary "${summary.split('\n')[0]}" --tags "milestone,git"`,
+            `node ${mcpScript} --summary "${summary.split('\n')[0]}" --features "${features}" --tags "milestone,git"`,
             {},
             TIMEOUTS.ragIntegration
           );
-          console.log('✅ RAG integration completed');
+          console.log('✅ RAG integration completed (MCP/n8n)');
+        } else {
+          // Fallback to n8n if MCP script doesn't exist
+          const ragScript = path.join(__dirname, 'n8n-post-knowledge.js');
+          if (fs.existsSync(ragScript)) {
+            console.warn('⚠️  MCP script not found, using n8n fallback');
+            await execWithTimeout(
+              `node ${ragScript} --summary "${summary.split('\n')[0]}" --tags "milestone,git"`,
+              {},
+              TIMEOUTS.ragIntegration
+            );
+            console.log('✅ RAG integration completed (n8n fallback)');
+          }
         }
       } catch (error) {
         console.warn(`⚠️  RAG integration failed (non-blocking): ${error.message}`);
