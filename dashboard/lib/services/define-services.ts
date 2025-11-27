@@ -43,51 +43,53 @@ export const SERVICE_DEFINITIONS: Omit<ServiceContainer, 'status' | 'progress' |
     name: 'Unified Data Service',
     role: 'Data Access Layer',
     description: 'Client-side data access with MCP/n8n fallback',
-    dependencies: ['mcp', 'n8n']
+    dependencies: [] // FIXED: No dependencies - can initialize independently, uses fallbacks
   },
   
   // Feature services (depend on data layer)
+  // FIXED: Removed dependencies - these services can initialize independently
+  // They use UnifiedDataService internally but don't need to wait for it
   {
     id: 'crew-memory-service',
     name: 'Crew Memory Service',
     role: 'Memory Retrieval',
     description: 'Retrieves and displays crew member memories',
-    dependencies: ['unified-data-service', 'supabase']
+    dependencies: [] // Can initialize independently, uses UnifiedDataService when needed
   },
   {
     id: 'learning-analytics-service',
     name: 'Learning Analytics',
     role: 'Analytics',
     description: 'Tracks RAG memory growth and learning metrics',
-    dependencies: ['unified-data-service']
+    dependencies: [] // Can initialize independently
   },
   {
     id: 'rag-recommendations-service',
     name: 'RAG Recommendations',
     role: 'Recommendations',
     description: 'Provides intelligent project recommendations',
-    dependencies: ['unified-data-service']
+    dependencies: [] // Can initialize independently
   },
   {
     id: 'security-assessment-service',
     name: 'Security Assessment',
     role: 'Security',
     description: 'Continuous security monitoring and audits',
-    dependencies: ['unified-data-service']
+    dependencies: [] // Can initialize independently
   },
   {
     id: 'cost-optimization-service',
     name: 'Cost Optimization',
     role: 'Cost Management',
     description: 'Monitors and optimizes API costs',
-    dependencies: ['unified-data-service']
+    dependencies: [] // Can initialize independently
   },
   {
     id: 'documentation-service',
     name: 'Documentation Service',
     role: 'Documentation',
     description: 'Component-level documentation browser',
-    dependencies: ['unified-data-service']
+    dependencies: [] // Can initialize independently
   },
   
   // UI services (depend on feature services)
@@ -96,14 +98,14 @@ export const SERVICE_DEFINITIONS: Omit<ServiceContainer, 'status' | 'progress' |
     name: 'Live Refresh',
     role: 'Real-time Updates',
     description: 'WebSocket-based live codebase change detection',
-    dependencies: []
+    dependencies: [] // WebSocket can initialize independently
   },
   {
     id: 'theme-service',
     name: 'Theme Service',
     role: 'UI Theming',
     description: 'Global theme management and persistence',
-    dependencies: ['supabase']
+    dependencies: [] // FIXED: Can use localStorage fallback, doesn't need to wait for Supabase
   }
 ];
 

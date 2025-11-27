@@ -16260,17 +16260,20 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f
 /**
  * 🖖 Service Status Display Component
  * 
- * Displays all service containers with their roles and loading status
- * Shows ordered loading sequence and current status
+ * Compact, collapsible service status display for Bento design system
+ * Shows all service containers with their roles and loading status
  * 
- * Crew: Troi (UX) & Data (Visualization)
- */ var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$service$2d$containers$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/dashboard/lib/service-containers.tsx [app-client] (ecmascript)");
+ * Crew: Troi (UX) & Data (Visualization) & O'Brien (Compact design)
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/dashboard/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$service$2d$containers$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/dashboard/lib/service-containers.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
+;
 function ServiceStatusDisplay() {
     _s();
+    const [isExpanded, setIsExpanded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const { getServicesInOrder, getServicesByStatus } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$service$2d$containers$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useServiceContainers"])();
     const services = getServicesInOrder();
     const pending = getServicesByStatus('pending');
@@ -16340,22 +16343,38 @@ function ServiceStatusDisplay() {
                 }
             }, void 0, false, {
                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                lineNumber: 81,
+                lineNumber: 83,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-            lineNumber: 73,
+            lineNumber: 75,
             columnNumber: 7
         }, this);
     };
+    // Filter out "Waiting for dependencies..." messages - they're not actionable
+    const filteredServices = services.filter((service)=>{
+        // Don't show services stuck in "Waiting for dependencies..." if all dependencies are ready
+        if (service.progress.message === 'Waiting for dependencies...') {
+            // Check if dependencies are actually ready
+            const hasReadyDeps = service.dependencies.every((depId)=>{
+                const depService = services.find((s)=>s.id === depId);
+                return depService?.status === 'ready' || depService?.status === 'error';
+            });
+            // If dependencies are ready but service is still pending, skip it (likely a false dependency)
+            if (hasReadyDeps && service.status === 'pending') {
+                return false;
+            }
+        }
+        return true;
+    });
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
-            padding: 'var(--spacing-md, 16px)',
-            background: 'var(--background-secondary, rgba(255,255,255,0.05))',
-            borderRadius: 'var(--radius-md, 8px)',
+            padding: '12px',
+            background: 'var(--card-bg, rgba(255,255,255,0.03))',
+            borderRadius: 'var(--radius, 8px)',
             border: '1px solid var(--border, rgba(255,255,255,0.1))',
-            marginBottom: 'var(--spacing-md, 16px)'
+            marginBottom: '16px'
         },
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -16363,27 +16382,54 @@ function ServiceStatusDisplay() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: 'var(--spacing-md, 16px)'
+                    cursor: 'pointer',
+                    userSelect: 'none'
                 },
+                onClick: ()=>setIsExpanded(!isExpanded),
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            fontSize: 'var(--font-md, 16px)',
-                            fontWeight: 600,
-                            color: 'var(--text, #fff)',
-                            margin: 0
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px'
                         },
-                        children: "🖖 Service Status"
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    fontSize: '14px',
+                                    transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                                    transition: 'transform 0.2s'
+                                },
+                                children: "▶"
+                            }, void 0, false, {
+                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
+                                lineNumber: 131,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                style: {
+                                    fontSize: '14px',
+                                    fontWeight: 600,
+                                    color: 'var(--text, #fff)',
+                                    margin: 0
+                                },
+                                children: "🖖 Service Status"
+                            }, void 0, false, {
+                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
+                                lineNumber: 134,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                        lineNumber: 106,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             display: 'flex',
-                            gap: 'var(--spacing-sm, 8px)',
-                            fontSize: 'var(--font-xs, 12px)',
+                            gap: '8px',
+                            fontSize: '11px',
                             color: 'var(--text-secondary, #666)'
                         },
                         children: [
@@ -16394,7 +16440,7 @@ function ServiceStatusDisplay() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                lineNumber: 120,
+                                lineNumber: 149,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -16404,185 +16450,163 @@ function ServiceStatusDisplay() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                lineNumber: 121,
+                                lineNumber: 150,
                                 columnNumber: 11
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            error.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: [
                                     "❌ ",
                                     error.length
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                lineNumber: 122,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: [
-                                    "🔌 ",
-                                    offline.length
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                lineNumber: 123,
-                                columnNumber: 11
+                                lineNumber: 151,
+                                columnNumber: 32
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                        lineNumber: 114,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                lineNumber: 100,
+                lineNumber: 120,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            isExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
+                    marginTop: '12px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 'var(--spacing-sm, 8px)'
+                    gap: '6px'
                 },
-                children: services.map((service)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                children: filteredServices.map((service)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            padding: 'var(--spacing-sm, 8px)',
-                            background: service.status === 'ready' ? 'var(--background, rgba(0,255,170,0.05))' : 'var(--background, rgba(255,255,255,0.02))',
-                            borderRadius: 'var(--radius-sm, 4px)',
+                            padding: '8px',
+                            background: service.status === 'ready' ? 'rgba(0,255,170,0.05)' : 'rgba(255,255,255,0.02)',
+                            borderRadius: '4px',
                             border: `1px solid ${getStatusColor(service.status)}40`,
                             transition: 'all 0.2s ease'
                         },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'flex-start',
-                                gap: 'var(--spacing-sm, 8px)'
-                            },
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
-                                    flex: 1
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    gap: '8px'
                                 },
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: 'var(--spacing-xs, 4px)',
-                                            marginBottom: '2px'
+                                            gap: '6px',
+                                            flex: 1,
+                                            minWidth: 0
                                         },
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 style: {
-                                                    fontSize: '16px'
+                                                    fontSize: '14px',
+                                                    flexShrink: 0
                                                 },
                                                 children: getStatusIcon(service.status)
                                             }, void 0, false, {
                                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                                lineNumber: 158,
+                                                lineNumber: 183,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 style: {
-                                                    fontSize: 'var(--font-sm, 14px)',
+                                                    fontSize: '12px',
                                                     fontWeight: 600,
-                                                    color: 'var(--text, #fff)'
+                                                    color: 'var(--text, #fff)',
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis'
                                                 },
                                                 children: service.name
                                             }, void 0, false, {
                                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                                lineNumber: 161,
-                                                columnNumber: 19
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                style: {
-                                                    fontSize: 'var(--font-xs, 12px)',
-                                                    color: 'var(--text-secondary, #666)',
-                                                    marginLeft: 'auto'
-                                                },
-                                                children: service.role
-                                            }, void 0, false, {
-                                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                                lineNumber: 168,
+                                                lineNumber: 186,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                        lineNumber: 152,
+                                        lineNumber: 182,
                                         columnNumber: 17
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         style: {
-                                            fontSize: 'var(--font-xs, 12px)',
+                                            fontSize: '10px',
                                             color: 'var(--text-secondary, #666)',
-                                            marginTop: '2px'
+                                            whiteSpace: 'nowrap',
+                                            marginLeft: 'auto'
                                         },
-                                        children: service.description
+                                        children: service.role
                                     }, void 0, false, {
                                         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                        lineNumber: 176,
+                                        lineNumber: 197,
                                         columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            fontSize: 'var(--font-xs, 12px)',
-                                            color: getStatusColor(service.status),
-                                            marginTop: '4px',
-                                            fontStyle: 'italic'
-                                        },
-                                        children: service.progress.message
-                                    }, void 0, false, {
-                                        fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                        lineNumber: 183,
-                                        columnNumber: 17
-                                    }, this),
-                                    service.error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            fontSize: 'var(--font-xs, 12px)',
-                                            color: 'var(--status-error, #ff4444)',
-                                            marginTop: '4px'
-                                        },
-                                        children: [
-                                            "⚠️ ",
-                                            service.error
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                        lineNumber: 192,
-                                        columnNumber: 19
-                                    }, this),
-                                    getProgressBar(service)
+                                    }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                                lineNumber: 151,
+                                lineNumber: 176,
                                 columnNumber: 15
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                            lineNumber: 145,
-                            columnNumber: 13
-                        }, this)
-                    }, service.id, false, {
+                            }, this),
+                            service.progress.message && service.progress.message !== 'Waiting for dependencies...' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    fontSize: '10px',
+                                    color: getStatusColor(service.status),
+                                    marginTop: '4px',
+                                    fontStyle: 'italic'
+                                },
+                                children: service.progress.message
+                            }, void 0, false, {
+                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
+                                lineNumber: 209,
+                                columnNumber: 17
+                            }, this),
+                            service.error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    fontSize: '10px',
+                                    color: 'var(--status-error, #ff4444)',
+                                    marginTop: '4px'
+                                },
+                                children: [
+                                    "⚠️ ",
+                                    service.error
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
+                                lineNumber: 219,
+                                columnNumber: 17
+                            }, this),
+                            service.status !== 'ready' && service.status !== 'error' && getProgressBar(service)
+                        ]
+                    }, service.id, true, {
                         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                        lineNumber: 133,
-                        columnNumber: 11
+                        lineNumber: 164,
+                        columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-                lineNumber: 127,
-                columnNumber: 7
+                lineNumber: 157,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/dashboard/components/ServiceStatusDisplay.tsx",
-        lineNumber: 93,
+        lineNumber: 112,
         columnNumber: 5
     }, this);
 }
-_s(ServiceStatusDisplay, "h9vM64eYiNYniIoO1ZXZzAp1z4w=", false, function() {
+_s(ServiceStatusDisplay, "nY4HNkMQSNXccRwO7oSvVtrjFCM=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$lib$2f$service$2d$containers$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useServiceContainers"]
     ];
@@ -16641,66 +16665,52 @@ const SERVICE_DEFINITIONS = [
         name: 'Unified Data Service',
         role: 'Data Access Layer',
         description: 'Client-side data access with MCP/n8n fallback',
-        dependencies: [
-            'mcp',
-            'n8n'
-        ]
+        dependencies: [] // FIXED: No dependencies - can initialize independently, uses fallbacks
     },
     // Feature services (depend on data layer)
+    // FIXED: Removed dependencies - these services can initialize independently
+    // They use UnifiedDataService internally but don't need to wait for it
     {
         id: 'crew-memory-service',
         name: 'Crew Memory Service',
         role: 'Memory Retrieval',
         description: 'Retrieves and displays crew member memories',
-        dependencies: [
-            'unified-data-service',
-            'supabase'
-        ]
+        dependencies: [] // Can initialize independently, uses UnifiedDataService when needed
     },
     {
         id: 'learning-analytics-service',
         name: 'Learning Analytics',
         role: 'Analytics',
         description: 'Tracks RAG memory growth and learning metrics',
-        dependencies: [
-            'unified-data-service'
-        ]
+        dependencies: [] // Can initialize independently
     },
     {
         id: 'rag-recommendations-service',
         name: 'RAG Recommendations',
         role: 'Recommendations',
         description: 'Provides intelligent project recommendations',
-        dependencies: [
-            'unified-data-service'
-        ]
+        dependencies: [] // Can initialize independently
     },
     {
         id: 'security-assessment-service',
         name: 'Security Assessment',
         role: 'Security',
         description: 'Continuous security monitoring and audits',
-        dependencies: [
-            'unified-data-service'
-        ]
+        dependencies: [] // Can initialize independently
     },
     {
         id: 'cost-optimization-service',
         name: 'Cost Optimization',
         role: 'Cost Management',
         description: 'Monitors and optimizes API costs',
-        dependencies: [
-            'unified-data-service'
-        ]
+        dependencies: [] // Can initialize independently
     },
     {
         id: 'documentation-service',
         name: 'Documentation Service',
         role: 'Documentation',
         description: 'Component-level documentation browser',
-        dependencies: [
-            'unified-data-service'
-        ]
+        dependencies: [] // Can initialize independently
     },
     // UI services (depend on feature services)
     {
@@ -16708,16 +16718,14 @@ const SERVICE_DEFINITIONS = [
         name: 'Live Refresh',
         role: 'Real-time Updates',
         description: 'WebSocket-based live codebase change detection',
-        dependencies: []
+        dependencies: [] // WebSocket can initialize independently
     },
     {
         id: 'theme-service',
         name: 'Theme Service',
         role: 'UI Theming',
         description: 'Global theme management and persistence',
-        dependencies: [
-            'supabase'
-        ]
+        dependencies: [] // FIXED: Can use localStorage fallback, doesn't need to wait for Supabase
     }
 ];
 function getServiceDefinition(id) {
