@@ -13,6 +13,11 @@
 import { useState } from 'react';
 import { useAppState } from '@/lib/state-manager';
 
+// New nested component system
+import DomainSubSection from './DomainSubSection';
+import NestedComponentGroup from './NestedComponentGroup';
+import ThemeAwareCTA from './ThemeAwareCTA';
+
 // Domain 1: System Health & Monitoring
 import ServiceStatusDisplay from './ServiceStatusDisplay';
 import StatusRibbon from './StatusRibbon';
@@ -51,7 +56,7 @@ import VectorPrioritySystem from './VectorPrioritySystem';
 import PriorityMatrix from './PriorityMatrix';
 import DynamicDataRenderer from './DynamicDataRenderer';
 import DynamicDataDrilldown from './DynamicDataDrilldown';
-import DynamicComponentRegistry, { ComponentGrid } from './DynamicComponentRegistry';
+import { ComponentGrid } from './DynamicComponentRegistry';
 
 // Domain 8: Knowledge & Documentation
 import RAGSelfDocumentation from './RAGSelfDocumentation';
@@ -253,7 +258,7 @@ export default function DomainDrivenBentoLayout() {
         </BentoCard>
       </DomainSection>
 
-      {/* Domain 2: Intelligence & Learning */}
+      {/* Domain 2: Intelligence & Learning - NESTED ARCHITECTURE */}
       <DomainSection
         domainId="intelligence"
         title="Intelligence & Learning"
@@ -262,21 +267,71 @@ export default function DomainDrivenBentoLayout() {
         isExpanded={expandedDomains.has('intelligence')}
         onToggle={() => toggleDomain('intelligence')}
       >
-        <BentoCard title="Learning Analytics" icon="📈" span={12} height="tall">
-          <LearningAnalyticsDashboard />
-        </BentoCard>
-        <BentoCard title="Crew Memory Visualization" icon="🧠" span={12} height="tall">
-          <CrewMemoryVisualization />
-        </BentoCard>
-        <BentoCard title="Analytics Dashboard" icon="📊" span={12} height="tall">
-          <AnalyticsDashboard />
-        </BentoCard>
-        <BentoCard title="RAG Recommendations" icon="💡" span={6} height="medium">
-          <RAGProjectRecommendations />
-        </BentoCard>
-        <BentoCard title="Agent Memory Display" icon="🤖" span={6} height="medium">
-          <AgentMemoryDisplay agentName="Data" limit={10} showStats={true} />
-        </BentoCard>
+        {/* Sub-Section: Analytics (Visual Goal: Data Visualization) */}
+        <DomainSubSection
+          visualGoal="analytics"
+          dataVector="analytics"
+          title="Analytics & Insights"
+          description="Data visualization and learning metrics"
+          icon="📊"
+          ctaConfig={{
+            label: "View Full Analytics",
+            href: "/dashboard/analytics",
+            level: "primary"
+          }}
+        >
+          <NestedComponentGroup span={12}>
+            <BentoCard title="Learning Analytics" icon="📈" span={12} height="tall">
+              <LearningAnalyticsDashboard />
+            </BentoCard>
+            <BentoCard title="Analytics Dashboard" icon="📊" span={12} height="tall">
+              <AnalyticsDashboard />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
+
+        {/* Sub-Section: Memory (Visual Goal: Memory Visualization, Data Vector: knowledge_base) */}
+        <DomainSubSection
+          visualGoal="memory"
+          dataVector="knowledge_base"
+          title="Crew Memory & Intelligence"
+          description="Crew member memories and agent intelligence"
+          icon="🧠"
+          ctaConfig={{
+            label: "Explore Memories",
+            href: "/dashboard/memories",
+            level: "secondary"
+          }}
+        >
+          <NestedComponentGroup span={12}>
+            <BentoCard title="Crew Memory Visualization" icon="🧠" span={12} height="tall">
+              <CrewMemoryVisualization />
+            </BentoCard>
+            <BentoCard title="Agent Memory Display" icon="🤖" span={12} height="medium">
+              <AgentMemoryDisplay agentName="Data" limit={10} showStats={true} />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
+
+        {/* Sub-Section: Recommendations (Visual Goal: Suggestions, Data Vector: knowledge_base) */}
+        <DomainSubSection
+          visualGoal="recommendations"
+          dataVector="knowledge_base"
+          title="RAG Recommendations"
+          description="Intelligent project and feature recommendations"
+          icon="💡"
+          ctaConfig={{
+            label: "View All Recommendations",
+            href: "/dashboard/recommendations",
+            level: "secondary"
+          }}
+        >
+          <NestedComponentGroup span={12}>
+            <BentoCard title="RAG Project Recommendations" icon="💡" span={12} height="medium">
+              <RAGProjectRecommendations />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
       </DomainSection>
 
       {/* Domain 3: Design & Theming */}
@@ -310,7 +365,7 @@ export default function DomainDrivenBentoLayout() {
         </BentoCard>
       </DomainSection>
 
-      {/* Domain 5: Workflow & Automation */}
+      {/* Domain 5: Workflow & Automation - NESTED ARCHITECTURE */}
       <DomainSection
         domainId="workflows"
         title="Workflow & Automation"
@@ -319,18 +374,48 @@ export default function DomainDrivenBentoLayout() {
         isExpanded={expandedDomains.has('workflows')}
         onToggle={() => toggleDomain('workflows')}
       >
-        <BentoCard title="n8n Workflows" icon="⚙️" span={12} height="tall">
-          <N8NWorkflowBento />
-        </BentoCard>
-        <BentoCard title="Process Documentation" icon="📝" span={6} height="medium">
-          <ProcessDocumentationSystem />
-        </BentoCard>
-        <BentoCard title="Data Source Integration" icon="🔗" span={6} height="medium">
-          <DataSourceIntegrationPanel />
-        </BentoCard>
+        {/* Sub-Section: Workflows (Visual Goal: Workflow Management, Data Vector: n8n_workflows) */}
+        <DomainSubSection
+          visualGoal="workflow-management"
+          dataVector="n8n_workflows"
+          title="Workflow Management"
+          description="n8n workflows and automation"
+          icon="⚙️"
+          ctaConfig={{
+            label: "Manage Workflows",
+            href: "/dashboard/workflows",
+            level: "primary"
+          }}
+        >
+          <NestedComponentGroup span={12}>
+            <BentoCard title="n8n Workflows" icon="⚙️" span={12} height="tall">
+              <N8NWorkflowBento />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
+
+        {/* Sub-Section: Documentation & Integration (Visual Goal: Process Documentation) */}
+        <DomainSubSection
+          visualGoal="documentation"
+          dataVector="documentation_knowledge"
+          title="Process Documentation & Integration"
+          description="System documentation and data source integration"
+          icon="📝"
+        >
+          <NestedComponentGroup span={6}>
+            <BentoCard title="Process Documentation" icon="📝" span={12} height="medium">
+              <ProcessDocumentationSystem />
+            </BentoCard>
+          </NestedComponentGroup>
+          <NestedComponentGroup span={6}>
+            <BentoCard title="Data Source Integration" icon="🔗" span={12} height="medium">
+              <DataSourceIntegrationPanel />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
       </DomainSection>
 
-      {/* Domain 6: Security & Compliance */}
+      {/* Domain 6: Security & Compliance - NESTED ARCHITECTURE */}
       <DomainSection
         domainId="security"
         title="Security & Compliance"
@@ -339,15 +424,35 @@ export default function DomainDrivenBentoLayout() {
         isExpanded={expandedDomains.has('security')}
         onToggle={() => toggleDomain('security')}
       >
-        <BentoCard title="Security Assessment" icon="⚔️" span={6} height="tall">
-          <SecurityAssessmentDashboard />
-        </BentoCard>
-        <BentoCard title="Cost Optimization" icon="💰" span={6} height="tall">
-          <CostOptimizationMonitor />
-        </BentoCard>
-        <BentoCard title="AI Impact Assessment" icon="🎖️" span={12} height="medium">
-          <AIImpactAssessment />
-        </BentoCard>
+        {/* Sub-Section: Security Assessment (Visual Goal: Security Monitoring, Data Vector: security_assessments) */}
+        <DomainSubSection
+          visualGoal="security-monitoring"
+          dataVector="security_assessments"
+          title="Security & Cost Monitoring"
+          description="Security assessments and cost optimization"
+          icon="⚔️"
+          ctaConfig={{
+            label: "Security Audit",
+            href: "/dashboard/security",
+            level: "primary"
+          }}
+        >
+          <NestedComponentGroup span={6}>
+            <BentoCard title="Security Assessment" icon="⚔️" span={12} height="tall">
+              <SecurityAssessmentDashboard />
+            </BentoCard>
+          </NestedComponentGroup>
+          <NestedComponentGroup span={6}>
+            <BentoCard title="Cost Optimization" icon="💰" span={12} height="tall">
+              <CostOptimizationMonitor />
+            </BentoCard>
+          </NestedComponentGroup>
+          <NestedComponentGroup span={12}>
+            <BentoCard title="AI Impact Assessment" icon="🎖️" span={12} height="medium">
+              <AIImpactAssessment />
+            </BentoCard>
+          </NestedComponentGroup>
+        </DomainSubSection>
       </DomainSection>
 
       {/* Domain 7: Data & Analytics */}
