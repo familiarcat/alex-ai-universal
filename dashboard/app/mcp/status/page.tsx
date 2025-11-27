@@ -53,30 +53,91 @@ export default function MCPStatusPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const fetchStatus = async () => {
+  const fetchStatus = async (retryCount = 0) => {
+    const maxRetries = 3;
+    const retryDelay = Math.min(1000 * Math.pow(2, retryCount), 5000); // Exponential backoff, max 5s
+    
     try {
-      const response = await fetch('/api/mcp/status', {
+      // TEAM BETA: Improved fetch with explicit JSON request
+      // Crew: Troi (UX) + La Forge (Infrastructure) + Crusher (Health)
+      const response = await fetch('/api/mcp/status/', {
         cache: 'no-store',
         headers: {
+          'Accept': 'application/json', // Explicitly request JSON (Team Alpha fix ensures this works)
           'Cache-Control': 'no-cache'
-        }
-      });
-      const data = await response.json();
-      setStatusData(data);
-    } catch (error: any) {
-      console.error('Failed to fetch MCP status:', error);
-      setStatusData({
-        success: false,
-        status: 'error',
-        services: {
-          remoteMCP: false,
-          localMCP: false,
-          n8n: false,
-          openRouter: false
         },
-        timestamp: new Date().toISOString(),
-        error: error.message || 'Failed to fetch status'
+        signal: AbortSignal.timeout(10000) // 10 second timeout
       });
+      
+      // Check for HTTP errors (4xx, 5xx)
+      if (!response.ok) {
+        // For rate limiting (429), try to parse the response anyway
+        if (response.status === 429) {
+          try {
+            const data = await response.json();
+            setStatusData(data);
+            return;
+          } catch {
+            // If parsing fails, fall through to error handling
+          }
+        }
+        
+        // Retry on server errors (5xx) with exponential backoff
+        if (response.status >= 500 && retryCount < maxRetries) {
+          console.warn(`Server error ${response.status}, retrying in ${retryDelay}ms... (attempt ${retryCount + 1}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          return fetchStatus(retryCount + 1);
+        }
+        
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      // Parse JSON response
+      const data = await response.json();
+      
+      // Validate response structure
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid response format');
+      }
+      
+      // Success - update status data
+      setStatusData(data);
+      
+    } catch (error: any) {
+      // TEAM BETA: Improved error handling with graceful degradation
+      console.error('Failed to fetch MCP status:', error);
+      
+      // Retry on network errors with exponential backoff
+      if (
+        (error.name === 'TimeoutError' || 
+         error.name === 'TypeError' || 
+         error.message?.includes('fetch')) &&
+        retryCount < maxRetries
+      ) {
+        console.warn(`Network error, retrying in ${retryDelay}ms... (attempt ${retryCount + 1}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        return fetchStatus(retryCount + 1);
+      }
+      
+      // Only set error state if we don't have any cached data
+      // This prevents clearing valid data on temporary network issues
+      if (!statusData) {
+        setStatusData({
+          success: false,
+          status: 'error',
+          services: {
+            remoteMCP: false,
+            localMCP: false,
+            n8n: false,
+            openRouter: false
+          },
+          timestamp: new Date().toISOString(),
+          error: error.message || 'Failed to fetch status'
+        });
+      } else {
+        // If we have cached data, just log the error but keep showing the last known status
+        console.warn('Status fetch failed, keeping last known status:', error.message);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

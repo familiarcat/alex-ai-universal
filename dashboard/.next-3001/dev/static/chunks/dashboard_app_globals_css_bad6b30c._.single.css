@@ -50,6 +50,12 @@
   --transition-fast: .15s;
   --transition-base: .2s;
   --transition-slow: .3s;
+  --nav-height: 100px;
+  --nav-dev-height: 56px;
+  --nav-status-height: 28px;
+  --nav-spacer-height: var(--nav-height);
+  --content-top-padding: var(--spacing-xl);
+  --content-top-with-nav: calc(var(--nav-spacer-height)  + var(--content-top-padding));
 }
 
 * {
@@ -97,6 +103,18 @@ body {
 
 .text-muted {
   color: var(--text-muted);
+}
+
+.nav-spacer {
+  height: var(--nav-spacer-height, 100px);
+}
+
+.content-with-nav {
+  padding-top: var(--content-top-with-nav, calc(100px + 32px));
+}
+
+.content-padding-top {
+  padding-top: var(--content-top-padding, 32px);
 }
 
 /*# sourceMappingURL=dashboard_app_globals_css_bad6b30c._.single.css.map*/

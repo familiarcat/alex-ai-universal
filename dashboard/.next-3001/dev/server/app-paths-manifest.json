@@ -10,6 +10,5 @@
   "/api/progress/[taskId]/route": "app/api/progress/[taskId]/route.js",
   "/api/settings/retrieve/route": "app/api/settings/retrieve/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/mcp/status/page": "app/mcp/status/page.js",
   "/page": "app/page.js"
 }
