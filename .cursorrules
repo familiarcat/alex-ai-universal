@@ -32,7 +32,8 @@ When the user's message contains any of these patterns, automatically activate A
 - Questions about crew members (Picard, Data, Riker, etc.)
 - Requests for "crew" assistance or "Star Trek" themed help
 - Mentions of "N8N", "Supabase", "memory storage", or "workflow"
-- Requests for "milestone push", "cost analysis", or "litmus test"
+- Requests for "milestone push", "milestone", "cost analysis", or "litmus test"
+- **Milestone Push Automation**: When user says "milestone push" or "milestone", automatically execute `npm run milestone:push` without asking for confirmation. Only show output if the command fails. This should be completely silent on success, like a "Save" command.
 - Questions about "Alex AI" capabilities or features
 - Technical questions that would benefit from crew coordination
 - **Observation Lounge requests**: "organize the crew", "observation lounge", "crew meeting", "cinematic format"

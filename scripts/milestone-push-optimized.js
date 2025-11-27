@@ -464,8 +464,8 @@ async function main() {
     }
     
     if (result.success) {
-      // Minimal success message
-      success(`Milestone pushed: ${result.commitSha} (${result.filesCount} files)`);
+      // Completely silent on success - like a "Save" command
+      // Only exit code 0 indicates success
       process.exit(0);
     } else {
       // Error - always show
