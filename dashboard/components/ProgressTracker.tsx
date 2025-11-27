@@ -5,9 +5,14 @@
  * 
  * Displays real-time progress of background tasks
  * Reads from Supabase task_progress table
+ * 
+ * FIXED: Now uses useRetryableFetch to prevent infinite retry loops
+ * Crew: La Forge (Infrastructure) + O'Brien (Pragmatic) + Troi (UX)
  */
 
 import { useState, useEffect } from 'react';
+import { useRetryableFetch } from '@/lib/hooks/useRetryableFetch';
+import StuckOperationWarning from './StuckOperationWarning';
 // REMOVED: Direct Supabase import - now using API routes (DDD-compliant)
 
 interface ProgressData {
@@ -38,52 +43,74 @@ export default function ProgressTracker({
   autoRefresh = true,
   refreshInterval = 1000
 }: ProgressTrackerProps) {
-  const [progress, setProgress] = useState<ProgressData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProgress = async () => {
-      try {
-        // FIXED: Correct API endpoint - route is at /api/progress/[taskId], not /api/data/progress/[taskId]
-        // Crew: La Forge (Infrastructure) + O'Brien (Pragmatic Fix)
-        const response = await fetch(`/api/progress/${taskId}`, {
-          headers: { 'Cache-Control': 'no-cache' },
-          cache: 'no-store'
-        });
-
-        if (response.ok) {
-          const progressData = await response.json();
-          // Handle both direct data and wrapped responses
-          if (progressData.success && progressData.data) {
-            setProgress(progressData.data);
-          } else if (progressData.taskId || progressData.current !== undefined) {
-            // Direct progress data
-            setProgress(progressData);
-          }
-          setLoading(false);
-          return;
-        }
-
-        // If 404, that's expected for tasks that don't exist yet - don't log as error
-        if (response.status === 404) {
-          setLoading(false);
-          return;
-        }
-      } catch (error) {
-        // Silent error - progress tracking is optional
-        console.debug('Progress tracking unavailable:', error);
-      } finally {
-        setLoading(false);
+  // FIXED: Use retryable fetch with limits and cancellation
+  // Crew: La Forge (Infrastructure) + O'Brien (Pragmatic) + Troi (UX)
+  const {
+    data: progressData,
+    loading,
+    error,
+    retryCount,
+    isStuck,
+    cancel,
+    retry
+  } = useRetryableFetch<ProgressData>(
+    autoRefresh ? `/api/progress/${taskId}` : null,
+    {
+      headers: { 'Cache-Control': 'no-cache' },
+      cache: 'no-store'
+    },
+    {
+      maxRetries: 5,
+      initialDelay: 1000,
+      showWarningAfter: 3,
+      onWarning: (attempt) => {
+        console.warn(`⚠️ Progress tracking stuck after ${attempt} attempts for task: ${taskId}`);
+      },
+      onMaxRetries: (err) => {
+        console.debug(`Progress tracking failed after max retries for task: ${taskId}`, err);
       }
-    };
-
-    loadProgress();
-
-    if (autoRefresh) {
-      const interval = setInterval(loadProgress, refreshInterval);
-      return () => clearInterval(interval);
     }
-  }, [taskId, autoRefresh, refreshInterval]);
+  );
+
+  // Handle polling with refreshInterval
+  useEffect(() => {
+    if (!autoRefresh || !taskId) return;
+
+    const interval = setInterval(() => {
+      retry(); // Retry the fetch
+    }, refreshInterval);
+
+    return () => clearInterval(interval);
+  }, [autoRefresh, refreshInterval, taskId, retry]);
+
+  // Process progress data (handle both wrapped and direct responses)
+  const progress: ProgressData | null = progressData ? (
+    (progressData as any).success && (progressData as any).data ? (progressData as any).data :
+    (progressData as any).taskId || (progressData as any).current !== undefined ? progressData as ProgressData :
+    null
+  ) : null;
+
+  // Show stuck warning if operation is stuck
+  if (isStuck) {
+    return (
+      <div className="p-4 border rounded-lg">
+        <StuckOperationWarning
+          operationName={`Progress Tracking (${taskId})`}
+          retryCount={retryCount}
+          maxRetries={5}
+          onCancel={cancel}
+          onRetry={retry}
+          error={error}
+        />
+        {loading && (
+          <div className="mt-4 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-2 bg-gray-200 rounded"></div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -100,6 +127,11 @@ export default function ProgressTracker({
     return (
       <div className="p-4 border rounded-lg bg-gray-50">
         <p className="text-sm text-gray-600">No progress data found for task: {taskId}</p>
+        {error && (
+          <p className="text-xs text-gray-500 mt-2">
+            Error: {error.message}
+          </p>
+        )}
       </div>
     );
   }

@@ -16,10 +16,12 @@ const MCP_API_KEY = process.env.MCP_API_KEY || process.env.N8N_API_KEY; // Reuse
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { endpoint: string[] } }
+  { params }: { params: Promise<{ endpoint: string[] }> }
 ) {
   try {
-    const endpoint = params.endpoint.join('/');
+    // FIXED: Next.js 16 requires awaiting params
+    const { endpoint: endpointArray } = await params;
+    const endpoint = endpointArray.join('/');
     const body = await request.json();
 
     if (!MCP_API_KEY) {
@@ -76,7 +78,8 @@ export async function POST(
     
     if (!isTimeout) {
       // Only log non-timeout errors
-      console.error(`❌ MCP proxy error for ${params.endpoint.join('/')}:`, error);
+      const endpointPath = endpointArray.join('/');
+      console.error(`❌ MCP proxy error for ${endpointPath}:`, error);
     }
     
     return NextResponse.json(

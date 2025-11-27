@@ -16,8 +16,9 @@ function loadThemeDefinitions(): any {
 
 const THEME_DEFINITIONS: any = loadThemeDefinitions();
 
-export async function GET(_req: Request, { params }: { params: { theme: string } }) {
-  const themeId = params?.theme || 'gradient';
+export async function GET(_req: Request, { params }: { params: Promise<{ theme: string }> }) {
+  // FIXED: Next.js 16 requires awaiting params
+  const { theme: themeId = 'gradient' } = await params;
   const base = (THEME_DEFINITIONS as any)[themeId]?.css || {};
 
   // Load override if present

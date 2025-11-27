@@ -2297,12 +2297,28 @@ function StatusRibbon() {
                 return;
             }
             try {
-                const res = await fetch('/api/health');
+                const res = await fetch('/api/health', {
+                    signal: AbortSignal.timeout(3000)
+                });
                 if (res.ok) {
                     const h = await res.json();
                     if (mounted) setHealth(h);
+                } else if (res.status === 404) {
+                    // 404 is expected for missing endpoints - use debug
+                    console.debug('Health API endpoint not available');
+                // Keep default health status
                 }
-            } catch  {}
+            } catch (error) {
+                // FIXED: Network errors are expected - use debug, don't spam console
+                // Crew: Riker (Tactical) + Quark (Cost Optimization) + O'Brien (Pragmatic)
+                const isNetworkError = error.message?.includes('Failed to fetch') || error.name === 'AbortError';
+                if (isNetworkError) {
+                    console.debug('Health API unavailable (network error)');
+                } else {
+                    console.debug('Health API error:', error.message);
+                }
+            // Keep default health status on error
+            }
             // Increased interval from 10s to 30s for cost optimization
             setTimeout(poll, 30000);
         }
@@ -2346,25 +2362,25 @@ function StatusRibbon() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/dashboard/components/StatusRibbon.tsx",
-                    lineNumber: 53,
+                    lineNumber: 70,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                     children: health.message
                 }, void 0, false, {
                     fileName: "[project]/dashboard/components/StatusRibbon.tsx",
-                    lineNumber: 54,
+                    lineNumber: 71,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/dashboard/components/StatusRibbon.tsx",
-            lineNumber: 52,
+            lineNumber: 69,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/dashboard/components/StatusRibbon.tsx",
-        lineNumber: 44,
+        lineNumber: 61,
         columnNumber: 5
     }, this);
 }

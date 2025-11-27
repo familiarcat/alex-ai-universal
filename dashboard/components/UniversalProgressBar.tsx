@@ -22,7 +22,8 @@ export type ProgressStatus = 'recording' | 'retrieved' | 'failed' | 'complete' |
 interface UniversalProgressBarProps {
   current: number;
   total: number;
-  description: string;
+  description?: string; // Made optional with default
+  label?: string; // Support both 'description' and 'label' for backward compatibility
   status?: ProgressStatus;
   showPercentage?: boolean;
   animated?: boolean;
@@ -49,10 +50,14 @@ export default function UniversalProgressBar({
   current,
   total,
   description,
+  label, // Support both 'description' and 'label'
   status = 'loading',
   showPercentage = true,
   animated = true
 }: UniversalProgressBarProps) {
+  // FIXED: Handle undefined/null description and support 'label' prop
+  const desc = description || label || 'Progress';
+  
   const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
   const filled = total > 0 ? Math.round((current / total) * 20) : 0;
   const empty = 20 - filled;
@@ -61,10 +66,10 @@ export default function UniversalProgressBar({
   const emoji = STATUS_EMOJIS[status];
   const color = STATUS_COLORS[status];
   
-  // Truncate description if too long
-  const displayDescription = description.length > 60 
-    ? description.substring(0, 57) + '...'
-    : description;
+  // Truncate description if too long (with null check)
+  const displayDescription = desc && desc.length > 60 
+    ? desc.substring(0, 57) + '...'
+    : desc;
   
   return (
     <div style={{

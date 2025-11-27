@@ -4,9 +4,10 @@ import path from 'path';
 
 const PROJECT_THEMES_PATH = path.join(process.cwd(), '..', 'universal-theme-system', 'project-themes.json');
 
-export async function GET(req: NextRequest, { params }: { params: { project: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ project: string }> }) {
   try {
-    const projectId = params.project;
+    // FIXED: Next.js 16 requires awaiting params
+    const { project: projectId } = await params;
     const themesJson = JSON.parse(fs.readFileSync(PROJECT_THEMES_PATH, 'utf8'));
     const themeId = themesJson[projectId] || 'gradient';
     
@@ -16,9 +17,10 @@ export async function GET(req: NextRequest, { params }: { params: { project: str
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { project: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ project: string }> }) {
   try {
-    const projectId = params.project;
+    // FIXED: Next.js 16 requires awaiting params
+    const { project: projectId } = await params;
     const body = await req.json();
     const { themeId } = body;
     

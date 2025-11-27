@@ -146,6 +146,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/mcp/status/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/mcp/status">> = Specific
+  const handler = {} as typeof import("../../../app/mcp/status/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/observation-lounge/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/observation-lounge">> = Specific
@@ -573,6 +582,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/mcp/settings/test">> = Specific
   const handler = {} as typeof import("../../../app/api/mcp/settings/test/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/mcp/status/admin/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/mcp/status/admin">> = Specific
+  const handler = {} as typeof import("../../../app/api/mcp/status/admin/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

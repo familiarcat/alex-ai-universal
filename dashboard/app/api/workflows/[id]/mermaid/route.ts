@@ -174,10 +174,11 @@ class N8NToMermaidConverter {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const workflowId = params.id;
+    // FIXED: Next.js 16 requires awaiting params
+    const { id: workflowId } = await params;
 
     // Try to load workflow from n8n-workflows directory
     const workflowsDir = path.resolve(process.cwd(), '..', 'n8n-workflows');

@@ -127,6 +127,7 @@
     "engage:auto": "bash ./scripts/auto-engage-and-milestone.sh",
     "crew:provision": "bash ./scripts/provision-crew-access.sh",
     "rag:ingest": "node scripts/n8n-post-knowledge.js",
+    "rag:ingest:retry-pattern": "node scripts/store-retry-pattern-in-rag.js",
     "rag:verify": "node scripts/n8n-verify-knowledge.js",
     "rag:execs": "node scripts/n8n-verify-execution.js",
     "rag:setup-summary": "node scripts/setup-summary-webhook.js",
@@ -149,6 +150,8 @@
     "dashboard:dev:clean": "bash ./scripts/kill-ports.sh && cd dashboard && npm run dev:n8n",
     "dev:servers:monitor": "node scripts/monitor-dev-servers.js",
     "dev:servers:start": "bash scripts/start-dev-servers.sh",
+    "dev:servers:start:browser": "bash scripts/start-dev-with-browser.sh",
+    "dev:servers:restart": "bash scripts/restart-dev-complete.sh",
     "dev:servers:start:monitor": "bash scripts/start-dev-servers.sh && node scripts/monitor-dev-servers.js"
   },
   "devDependencies": {
