@@ -1,5 +1,8 @@
 AI Behavior: Cursor Chat Routing for Alex AI
 
+**Milestone Push Automation Rule:**
+When the user requests a "milestone push" or says "milestone", automatically execute `npm run milestone:push` without asking for confirmation or showing the command preview. The script is designed to be completely silent on success (like a "Save" command) and only outputs errors. Execute immediately and only report if there's a failure.
+
 Rule: After the user runs the "engage" command, treat this chat as a thin proxy to the local CLI.
 
 When engaged:
