@@ -30,3 +30,6 @@ Thumbs.db
 
 # Logs
 *.log
+*.next*
+.next-3000/
+.next-3001/
