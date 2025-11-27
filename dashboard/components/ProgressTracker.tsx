@@ -73,15 +73,22 @@ export default function ProgressTracker({
   );
 
   // Handle polling with refreshInterval
+  // FIXED: Stop polling on 404 errors (expected for missing progress files)
+  // Crew: La Forge (Infrastructure) + O'Brien (Pragmatic) + Troi (UX)
   useEffect(() => {
     if (!autoRefresh || !taskId) return;
+    
+    // Don't poll if we have a 404 error (file doesn't exist, expected)
+    if (error && error.message?.includes('404') || error?.message?.includes('not found')) {
+      return; // Stop polling for missing resources
+    }
 
     const interval = setInterval(() => {
       retry(); // Retry the fetch
     }, refreshInterval);
 
     return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, taskId, retry]);
+  }, [autoRefresh, refreshInterval, taskId, retry, error]);
 
   // Process progress data (handle both wrapped and direct responses)
   const progress: ProgressData | null = progressData ? (

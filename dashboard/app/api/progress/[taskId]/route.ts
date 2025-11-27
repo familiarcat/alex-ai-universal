@@ -23,9 +23,22 @@ export async function GET(
     );
 
     if (!fs.existsSync(progressFile)) {
+      // Return graceful response for missing progress files
+      // This is expected when a task hasn't started yet
       return NextResponse.json(
-        { error: 'Progress file not found' },
-        { status: 404 }
+        { 
+          taskId,
+          current: 0,
+          total: 1,
+          percentage: 0,
+          currentStep: null,
+          steps: [],
+          elapsed: '0',
+          timestamp: new Date().toISOString(),
+          status: 'pending',
+          message: 'Progress tracking not yet started'
+        },
+        { status: 200 } // Return 200 with pending state instead of 404
       );
     }
 

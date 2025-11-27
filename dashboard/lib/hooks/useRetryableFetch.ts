@@ -97,15 +97,16 @@ export function useRetryableFetch<T = any>(
       }
 
       // Handle 404 gracefully (expected for missing resources)
+      // FIXED: Don't set error state for 404s - treat as valid "not found" response
+      // Crew: La Forge (Infrastructure) + O'Brien (Pragmatic) + Troi (UX)
       if (response.status === 404) {
-        setError(new Error(`Resource not found: ${url}`));
+        // Set data to null (not found) but don't treat as error
+        setData(null);
+        setError(null); // Don't set error for expected 404s
         setLoading(false);
-        setRetryCount(attempt + 1);
-        
+        setRetryCount(0); // Reset retry count
+        setIsStuck(false);
         // Don't retry on 404 - it's expected
-        if (onMaxRetries) {
-          onMaxRetries(new Error('404 Not Found'));
-        }
         return;
       }
 
