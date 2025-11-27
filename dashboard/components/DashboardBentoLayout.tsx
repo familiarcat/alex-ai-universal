@@ -540,7 +540,7 @@ export default function DashboardBentoLayout() {
               <DesignSystemErrorDisplay />
             </BentoCard>
             <BentoCard title="Universal Progress Bar" icon="📊" span={6} height="short">
-              <UniversalProgressBar current={75} total={100} label="System Health" />
+              <UniversalProgressBar current={75} total={100} description="System Health" />
             </BentoCard>
           </div>
         )}

@@ -1,21 +1,54 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { withSecurity, isAdmin, sanitizeError } from '@/lib/security/api-security';
 
 /**
  * MCP System Status API
+ * 
+ * SECURITY: This endpoint exposes system information
+ * - Public endpoint: Minimal status only (operational/offline)
+ * - Admin endpoint: Full diagnostics (requires authentication)
+ * 
+ * UX ENHANCEMENT: Detects browser requests and redirects to UI page
+ * - Browser requests (Accept: text/html) → Redirect to /mcp/status UI
+ * - API requests (Accept: application/json) → Return JSON
  * 
  * DDD Architecture:
  * - Data Layer: Supabase (local MCP), Remote MCP Server, OpenRouter API
  * - Controller Layer: This API route (status aggregation)
  * - Client Layer: Dashboard UI (consumes this API)
  * 
- * Returns overall system health and status from source of truth
+ * Crew: Counselor Troi (UX) + Commander Data (Architecture) + Lieutenant Worf (Security)
  */
 
 const MCP_BASE_URL = process.env.NEXT_PUBLIC_MCP_URL || 'https://mcp.pbradygeorgen.com';
 const MCP_API_KEY = process.env.MCP_API_KEY || process.env.N8N_API_KEY;
 
-export async function GET() {
+async function getStatusHandler(request: NextRequest) {
+  // UX ENHANCEMENT: Detect browser requests and redirect to UI page
+  // Crew: Troi (UX) + Data (Architecture) + O'Brien (Pragmatic)
+  // This must happen FIRST before any status checking to avoid unnecessary work
+  const acceptHeader = request.headers.get('accept') || '';
+  const userAgent = request.headers.get('user-agent') || '';
+  
+  // Check if this is a browser request (not an API client)
+  // Browsers send "text/html" in Accept header, API clients send "application/json" or nothing
+  const isBrowserRequest = 
+    acceptHeader.includes('text/html') || 
+    (acceptHeader.includes('*/*') && userAgent && 
+     !userAgent.includes('curl') && 
+     !userAgent.includes('Postman') && 
+     !userAgent.includes('insomnia') &&
+     !userAgent.includes('httpie') &&
+     !userAgent.includes('wget'));
+  
+  // If browser request, redirect to UI page immediately (no status checking needed)
+  if (isBrowserRequest) {
+    const baseUrl = request.nextUrl.origin;
+    return NextResponse.redirect(new URL('/mcp/status', baseUrl), 302);
+  }
+  
+  // Continue with JSON response for API requests (programmatic access)
   try {
     // Check remote MCP health
     let remoteMcpOperational = false;
@@ -127,63 +160,86 @@ export async function GET() {
       console.warn('OpenRouter API key not configured');
     }
 
-    // Build diagnostics information
-    const diagnostics = {
-      supabaseConfigured: !!(supabaseUrl && supabaseKey),
-      supabaseConnected: localMcpOperational,
-      supabaseError: !supabaseUrl || !supabaseKey 
-        ? 'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
-        : !localMcpOperational
-          ? 'Supabase connection failed - check credentials and network'
-          : undefined,
-      remoteMcpConfigured: !!(MCP_BASE_URL && MCP_API_KEY),
-      remoteMcpReachable: remoteMcpOperational,
-      remoteMcpError: !MCP_BASE_URL || !MCP_API_KEY
-        ? 'Missing NEXT_PUBLIC_MCP_URL or MCP_API_KEY'
-        : !remoteMcpOperational
-          ? 'Remote MCP server unreachable - check URL and API key'
-          : undefined,
-      n8nConfigured: !!n8nUrl,
-      n8nReachable: n8nOperational,
-      n8nError: !n8nUrl
-        ? 'Missing NEXT_PUBLIC_N8N_URL'
-        : !n8nOperational
-          ? 'n8n server unreachable - check URL and network'
-          : undefined,
-      openRouterConfigured: !!openRouterApiKey,
-      openRouterReachable: openRouterOperational,
-      openRouterError: !openRouterApiKey
-        ? 'Missing OPENROUTER_API_KEY'
-        : !openRouterOperational
-          ? 'OpenRouter API unreachable - check API key and network'
-          : undefined
-    };
+  // SECURITY: Check if request is from admin
+  const isAdminRequest = isAdmin(request);
+  
+  // Build minimal public response (no sensitive information)
+  const publicResponse = {
+    success: true,
+    status: remoteMcpOperational || localMcpOperational ? 'operational' : 'offline',
+    timestamp: new Date().toISOString()
+  };
+  
+  // If not admin, return minimal response only
+  if (!isAdminRequest) {
+    return NextResponse.json(publicResponse);
+  }
+  
+  // Admin-only: Full diagnostics (sanitized)
+  const diagnostics = {
+    supabaseConfigured: !!(supabaseUrl && supabaseKey),
+    supabaseConnected: localMcpOperational,
+    supabaseError: !supabaseUrl || !supabaseKey 
+      ? 'Configuration missing'
+      : !localMcpOperational
+        ? 'Connection failed'
+        : undefined,
+    remoteMcpConfigured: !!(MCP_BASE_URL && MCP_API_KEY),
+    remoteMcpReachable: remoteMcpOperational,
+    remoteMcpError: !MCP_BASE_URL || !MCP_API_KEY
+      ? 'Configuration missing'
+      : !remoteMcpOperational
+        ? 'Service unreachable'
+        : undefined,
+    n8nConfigured: !!n8nUrl,
+    n8nReachable: n8nOperational,
+    n8nError: !n8nUrl
+      ? 'Configuration missing'
+      : !n8nOperational
+        ? 'Service unreachable'
+        : undefined,
+    openRouterConfigured: !!openRouterApiKey,
+    openRouterReachable: openRouterOperational,
+    openRouterError: !openRouterApiKey
+      ? 'Configuration missing'
+      : !openRouterOperational
+        ? 'Service unreachable'
+        : undefined
+  };
 
-    return NextResponse.json({
-      success: true,
-      status: remoteMcpOperational || localMcpOperational ? 'operational' : 'offline',
-      services: {
-        remoteMCP: remoteMcpOperational,
-        localMCP: localMcpOperational,
-        n8n: n8nOperational,
-        openRouter: openRouterOperational
-      },
-      endpoints: {
-        mcp: MCP_BASE_URL,
-        n8n: n8nUrl,
-        openRouter: 'https://openrouter.ai'
-      },
-      diagnostics,
-      timestamp: new Date().toISOString()
-    });
+  // Admin response with sanitized information (no endpoint URLs, generic errors)
+  return NextResponse.json({
+    success: true,
+    status: remoteMcpOperational || localMcpOperational ? 'operational' : 'offline',
+    services: {
+      remoteMCP: remoteMcpOperational,
+      localMCP: localMcpOperational,
+      n8n: n8nOperational,
+      openRouter: openRouterOperational
+    },
+    // SECURITY: Don't expose endpoint URLs in response
+    diagnostics,
+    timestamp: new Date().toISOString()
+  });
   } catch (error: any) {
     console.error('Error getting MCP status:', error);
+    const isAdminRequest = isAdmin(request);
     return NextResponse.json({
       success: false,
       status: 'error',
-      error: error.message || 'Failed to get system status',
+      error: sanitizeError(error, isAdminRequest),
       timestamp: new Date().toISOString()
     }, { status: 500 });
   }
 }
+
+// SECURITY: Apply rate limiting and authentication
+export const GET = withSecurity(getStatusHandler, {
+  rateLimit: {
+    maxRequests: 10, // 10 requests per minute
+    windowMs: 60000  // 1 minute window
+  },
+  requireAuth: false, // Public endpoint (minimal info)
+  sanitizeErrors: true
+});
 

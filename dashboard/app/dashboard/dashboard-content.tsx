@@ -22,7 +22,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import ProgressOverlay from '@/components/ProgressOverlay';
 import { ProgressProvider } from '@/lib/ProgressContext';
 import { ServiceInitializer } from '@/lib/services/initialize-services';
-import DashboardBentoLayout from '@/components/DashboardBentoLayout';
+import DomainDrivenBentoLayout from '@/components/DomainDrivenBentoLayout';
 
 export default function DashboardContent() {
   // Add error boundary for useAppState
@@ -243,8 +243,8 @@ export default function DashboardContent() {
         {/* Service Initializer - Initializes all services in order */}
         <ServiceInitializer />
 
-        {/* Comprehensive Bento Layout - All Components Organized */}
-        <DashboardBentoLayout />
+                {/* Domain-Driven Bento Layout - Organized by User Intent */}
+                <DomainDrivenBentoLayout />
       </div>
       
       {/* Delete Confirmation Modal */}

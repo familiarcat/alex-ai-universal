@@ -10,10 +10,11 @@ import path from 'path';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { taskId: string } }
+  { params }: { params: Promise<{ taskId: string }> }
 ) {
   try {
-    const { taskId } = params;
+    // FIXED: Next.js 16 requires awaiting params
+    const { taskId } = await params;
     const progressFile = path.join(
       process.cwd(),
       'reports',
