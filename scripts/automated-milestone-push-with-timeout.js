@@ -19,13 +19,14 @@ const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Configuration
+// Configuration - Adaptive timeouts based on operation type
+// These are generous to avoid blocking automation, especially with many files
 const TIMEOUTS = {
-  gitAdd: 30000,       // 30 seconds (can be slow with many files)
-  gitCommit: 20000,    // 20 seconds
-  gitTag: 10000,       // 10 seconds
-  gitPush: 60000,      // 60 seconds (network operation)
-  ragIntegration: 15000, // 15 seconds (non-blocking)
+  gitAdd: 120000,      // 2 minutes (can be slow with many files)
+  gitCommit: 60000,    // 1 minute (large commits can take time)
+  gitTag: 30000,       // 30 seconds
+  gitPush: 300000,     // 5 minutes (network operation, can be slow)
+  ragIntegration: 30000, // 30 seconds (non-blocking)
 };
 
 /**
@@ -209,9 +210,18 @@ function generateCommitSummary(changes) {
 }
 
 /**
+ * Calculate adaptive timeout based on file count
+ */
+function getAdaptiveTimeout(baseTimeout, fileCount) {
+  // Add 1 second per 10 files, with minimum of base timeout
+  const additionalTime = Math.floor(fileCount / 10) * 1000;
+  return Math.max(baseTimeout, baseTimeout + additionalTime);
+}
+
+/**
  * Execute milestone push with timeouts and status updates
  */
-async function executeMilestonePush(milestoneName, summary, dryRun = false) {
+async function executeMilestonePush(milestoneName, summary, fileCount = 0, dryRun = false) {
   if (dryRun) {
     console.log('\n🔍 DRY RUN MODE - Preview only\n');
     console.log('Would execute:');
@@ -225,10 +235,24 @@ async function executeMilestonePush(milestoneName, summary, dryRun = false) {
 
   try {
     console.log('\n🚀 Starting milestone push...\n');
+    
+    // Calculate adaptive timeouts based on file count
+    const adaptiveTimeouts = {
+      gitAdd: getAdaptiveTimeout(TIMEOUTS.gitAdd, fileCount),
+      gitCommit: getAdaptiveTimeout(TIMEOUTS.gitCommit, fileCount),
+      gitTag: TIMEOUTS.gitTag,
+      gitPush: TIMEOUTS.gitPush,
+      ragIntegration: TIMEOUTS.ragIntegration
+    };
+    
+    if (fileCount > 100) {
+      console.log(`ℹ️  Large change set detected (${fileCount} files)`);
+      console.log(`   Using adaptive timeouts for optimal performance\n`);
+    }
 
     // Step 1: Stage changes
     console.log('📦 Step 1/5: Staging all changes...');
-    await execWithTimeout('git add -A', {}, TIMEOUTS.gitAdd);
+    await execWithTimeout('git add -A', {}, adaptiveTimeouts.gitAdd);
     console.log('✅ All changes staged\n');
 
     // Step 2: Check for staged changes
@@ -251,7 +275,7 @@ async function executeMilestonePush(milestoneName, summary, dryRun = false) {
     await execWithTimeout(
       `git commit -m "${commitMessage}"`,
       {},
-      TIMEOUTS.gitCommit
+      adaptiveTimeouts.gitCommit
     );
     const commitSha = execSync('git rev-parse --short HEAD', { 
       encoding: 'utf8',
@@ -270,7 +294,7 @@ async function executeMilestonePush(milestoneName, summary, dryRun = false) {
     await execWithTimeout(
       `git tag -a "${milestoneName}" -m "${summary.split('\n')[0]}"`,
       {},
-      TIMEOUTS.gitTag
+      adaptiveTimeouts.gitTag
     );
     console.log(`✅ Tag created: ${milestoneName}\n`);
 
@@ -280,13 +304,13 @@ async function executeMilestonePush(milestoneName, summary, dryRun = false) {
     await execWithTimeout(
       'git push origin HEAD',
       {},
-      TIMEOUTS.gitPush
+      adaptiveTimeouts.gitPush
     );
     console.log('   Pushing tag...');
     await execWithTimeout(
       `git push origin "${milestoneName}"`,
       {},
-      TIMEOUTS.gitPush
+      adaptiveTimeouts.gitPush
     );
     console.log('✅ Push completed\n');
 
@@ -348,14 +372,15 @@ async function main() {
   // Generate milestone info
   const milestoneName = generateMilestoneName(changes.changes);
   const summary = generateCommitSummary(changes.changes);
+  const fileCount = changes.changes.length;
 
   console.log(`\n📋 Milestone Details:`);
   console.log(`   Name: ${milestoneName}`);
-  console.log(`   Files: ${changes.changes.length}`);
+  console.log(`   Files: ${fileCount}`);
   console.log(`   Summary: ${summary.split('\n')[0]}\n`);
 
-  // Execute push
-  const success = await executeMilestonePush(milestoneName, summary, dryRun);
+  // Execute push (pass file count for adaptive timeouts)
+  const success = await executeMilestonePush(milestoneName, summary, fileCount, dryRun);
 
   if (success) {
     console.log('🎉 Milestone push completed successfully!\n');

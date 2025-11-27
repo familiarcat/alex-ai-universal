@@ -28,12 +28,13 @@ The `npm run milestone:push` command was hanging indefinitely, with no:
 - ✅ Non-blocking RAG integration
 - ✅ Clear error messages with troubleshooting tips
 
-**Timeouts**:
-- `git add`: 5 seconds
-- `git commit`: 10 seconds
-- `git tag`: 5 seconds
-- `git push`: 30 seconds (network operation)
-- RAG integration: 15 seconds (non-blocking)
+**Timeouts** (Adaptive - increases with file count):
+- `git add`: 2 minutes base (adds 1s per 10 files)
+- `git commit`: 1 minute base (adds 1s per 10 files)
+- `git tag`: 30 seconds
+- `git push`: 5 minutes (network operation)
+- RAG integration: 30 seconds (non-blocking)
+- **Overall wrapper**: 10 minutes (600 seconds, configurable)
 
 ### 2. Created Bash Wrapper
 **File**: `scripts/milestone-push-timeout-wrapper.sh`
@@ -175,13 +176,17 @@ Edit `scripts/automated-milestone-push-with-timeout.js`:
 
 ```javascript
 const TIMEOUTS = {
-  gitAdd: 5000,        // 5 seconds
-  gitCommit: 10000,    // 10 seconds
-  gitTag: 5000,        // 5 seconds
-  gitPush: 30000,      // 30 seconds
-  ragIntegration: 15000, // 15 seconds
+  gitAdd: 120000,      // 2 minutes (adaptive: +1s per 10 files)
+  gitCommit: 60000,   // 1 minute (adaptive: +1s per 10 files)
+  gitTag: 30000,      // 30 seconds
+  gitPush: 300000,     // 5 minutes (network operation)
+  ragIntegration: 30000, // 30 seconds (non-blocking)
 };
 ```
+
+**Adaptive Timeouts**: For large change sets (100+ files), timeouts automatically increase:
+- Base timeout + (file_count / 10) seconds
+- Example: 500 files = base + 50 seconds additional time
 
 ---
 

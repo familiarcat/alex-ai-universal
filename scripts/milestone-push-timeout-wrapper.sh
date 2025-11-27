@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-TIMEOUT=${MILESTONE_TIMEOUT:-60}  # Default 60 seconds
+TIMEOUT=${MILESTONE_TIMEOUT:-600}  # Default 10 minutes (600 seconds)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "🖖 Milestone Push with Timeout Protection"
@@ -26,7 +26,7 @@ timeout "${TIMEOUT}" node "${SCRIPT_DIR}/automated-milestone-push-with-timeout.j
     echo "💡 Try:"
     echo "   - Check your internet connection"
     echo "   - Verify git credentials"
-    echo "   - Increase timeout: MILESTONE_TIMEOUT=120 npm run milestone:push"
+    echo "   - Increase timeout: MILESTONE_TIMEOUT=1200 npm run milestone:push"
     exit 1
   else
     exit $EXIT_CODE
