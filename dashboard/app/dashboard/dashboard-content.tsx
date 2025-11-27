@@ -41,6 +41,7 @@ import { ProgressProvider } from '@/lib/ProgressContext';
 import MCPDashboardSection from '@/components/MCPDashboardSection';
 import ServiceStatusDisplay from '@/components/ServiceStatusDisplay';
 import { ServiceInitializer } from '@/lib/services/initialize-services';
+import ThemeTestingHarness from '@/components/ThemeTestingHarness';
 
 export default function DashboardContent() {
   // Add error boundary for useAppState
@@ -426,6 +427,11 @@ export default function DashboardContent() {
             </p>
           </div>
           <ProjectGrid />
+        </div>
+
+        {/* Theme Testing Harness */}
+        <div style={{ marginBottom: '40px' }}>
+          <ThemeTestingHarness />
         </div>
       </div>
       

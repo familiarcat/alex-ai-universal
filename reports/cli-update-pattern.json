@@ -1,0 +1,12 @@
+{
+  "content": "CLI Update Pattern: Supabase CLI Management\n\nUpdate Strategy:\n- SYSTEMIC FAILURE: Auto-update immediately if script fails due to missing CLI features\n  Example: supabase db push fails because CLI version too old (v2.33.9 missing db query feature)\n  Action: brew upgrade supabase/tap/supabase automatically\n  \n- VERSION WARNING: Warn if CLI is outdated but still functional\n  Example: \"New version available: v2.62.10 (currently v2.33.9)\"\n  Action: Display warning but continue execution\n  \n- RAG MEMORY: Store all CLI update decisions for pattern recognition\n  Pattern: Test required features before use, auto-update if missing, warn if outdated\n\nImplementation:\n- scripts/cli-version-checker.js: Centralized CLI management\n- All automation scripts check CLI before use\n- Auto-update on systemic failure, warn on version mismatch\n- Store patterns in RAG via n8n webhook\n\nCLI Update History:\n- 2025-11-27: Supabase CLI attempted update from v2.33.9 → v2.62.10\n  Blocked by: Outdated Command Line Tools (Xcode 26.0 required)\n  Workaround: Migration executed via supabase db push (works with v2.33.9)\n  Pattern: CLI version may be outdated but features still work - test before updating\n\nBest Practices:\n1. Always test required features, not just version numbers\n2. Auto-update only on systemic failure (missing features)\n3. Warn on version mismatch but continue if features work\n4. Store all decisions in RAG for pattern recognition\n5. Document CLI update patterns for crew learning",
+  "metadata": {
+    "category": "automation",
+    "type": "cli-management",
+    "crew_member": "La Forge",
+    "pattern_type": "systemic_failure_auto_update",
+    "cli_name": "supabase",
+    "version_range": "2.33.9 → 2.62.10"
+  },
+  "summary": "CLI update pattern: auto-update on missing features, warn on version mismatch, store in RAG"
+}

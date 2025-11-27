@@ -1,93 +1,73 @@
 
+/**
+ * Supabase Client Wrapper - DDD-Compliant
+ * 
+ * ⚠️  DEPRECATED: This file should not be used in client-side code
+ * 
+ * All Supabase operations must go through Next.js API routes:
+ * - /api/data/learning-metrics
+ * - /api/data/crew-contributions
+ * - /api/data/recent-memories
+ * - /api/data/learning-categories
+ * - /api/data/vectors
+ * - /api/data/progress/[taskId]
+ * 
+ * Client → Next.js API (Controller) → MCP → n8n → Supabase
+ * 
+ * Crew: Data (Architecture) + La Forge (Implementation)
+ * Updated: 2025-11-27 - Removed direct Supabase access, use API routes instead
+ */
 
- lib/supabase.js
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Helper functions for Alex AI learning data
+/**
+ * @deprecated Use /api/data/learning-metrics instead
+ */
 export const getLearningMetrics = async () => {
   try {
-    const { data, error } = await supabase
-      .from('alex_ai_learning_metrics')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (error) throw error;
-    return data;
+    const response = await fetch('/api/data/learning-metrics');
+    const result = await response.json();
+    return result.success ? result.data : null;
   } catch (error) {
     console.error('Error fetching learning metrics:', error);
     return null;
   }
 };
 
+/**
+ * @deprecated Use /api/data/crew-contributions instead
+ */
 export const getCrewContributions = async () => {
   try {
-    const { data, error } = await supabase
-      .from('alex_ai_memories')
-      .select('crew_member, created_at')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    // Count contributions by crew member
-    const contributions = data.reduce((acc, memory) => {
-      const member = memory.crew_member;
-      acc[member] = (acc[member] || 0) + 1;
-      return acc;
-    }, {});
-
-    return contributions;
+    const response = await fetch('/api/data/crew-contributions');
+    const result = await response.json();
+    return result.success ? result.data : {};
   } catch (error) {
     console.error('Error fetching crew contributions:', error);
     return {};
   }
 };
 
+/**
+ * @deprecated Use /api/data/recent-memories instead
+ */
 export const getRecentMemories = async (limit = 10) => {
   try {
-    const { data, error } = await supabase
-      .from('alex_ai_memories')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    if (error) throw error;
-    return data;
+    const response = await fetch(`/api/data/recent-memories?limit=${limit}`);
+    const result = await response.json();
+    return result.success ? result.data : [];
   } catch (error) {
     console.error('Error fetching recent memories:', error);
     return [];
   }
 };
 
+/**
+ * @deprecated Use /api/data/learning-categories instead
+ */
 export const getLearningCategories = async () => {
   try {
-    const { data, error } = await supabase
-      .from('alex_ai_memories')
-      .select('metadata, content')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    // Categorize memories
-    const categories = {};
-    data.forEach(memory => {
-      const category = memory.metadata?.category || 'general';
-      if (!categories[category]) {
-        categories[category] = { count: 0, recent: [] };
-      }
-      categories[category].count++;
-      if (categories[category].recent.length < 3) {
-        categories[category].recent.push(memory.content.substring(0, 60) + '...');
-      }
-    });
-
-    return categories;
+    const response = await fetch('/api/data/learning-categories');
+    const result = await response.json();
+    return result.success ? result.data : {};
   } catch (error) {
     console.error('Error fetching learning categories:', error);
     return {};

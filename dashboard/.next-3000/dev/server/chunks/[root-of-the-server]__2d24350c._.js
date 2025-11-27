@@ -204,18 +204,25 @@ async function POST(request) {
                         code: error.code,
                         message: error.message,
                         details: error.details,
-                        hint: error.hint
+                        hint: error.hint,
+                        userId,
+                        globalTheme
                     });
+                // Continue to final error - don't return here
                 }
             } catch (supabaseError) {
                 // Supabase client creation or network error
                 console.error('❌ Supabase client error:', {
                     message: supabaseError.message,
-                    stack: supabaseError.stack
+                    stack: supabaseError.stack,
+                    userId,
+                    globalTheme
                 });
+            // Continue to final error - don't return here
             }
         } else {
-            console.warn('⚠️  SUPABASE_SERVICE_KEY not configured, cannot use Supabase direct fallback');
+            console.error('❌ SUPABASE_SERVICE_KEY not configured - all storage layers will fail');
+        // This is a critical configuration error - we should still try to provide helpful error
         }
         // All layers failed
         console.error('❌ All storage layers failed (MCP → n8n → Supabase):', {
@@ -234,10 +241,17 @@ async function POST(request) {
             status: 500
         });
     } catch (error) {
-        console.error('Settings store error:', error);
+        // Top-level error handler - catches JSON parsing errors, etc.
+        console.error('❌ Settings store top-level error:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        // Return helpful error message
         return __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: false,
-            error: 'Failed to store settings'
+            error: 'Failed to store settings',
+            details: error.message || 'Unknown error occurred'
         }, {
             status: 500
         });

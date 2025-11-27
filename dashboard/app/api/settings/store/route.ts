@@ -150,43 +150,72 @@ export async function POST(request: NextRequest) {
             code: error.code,
             message: error.message,
             details: error.details,
-            hint: error.hint
+            hint: error.hint,
+            userId,
+            globalTheme
           });
+          // Continue to final error - don't return here
         }
       } catch (supabaseError: any) {
         // Supabase client creation or network error
         console.error('❌ Supabase client error:', {
           message: supabaseError.message,
-          stack: supabaseError.stack
+          stack: supabaseError.stack,
+          userId,
+          globalTheme
         });
+        // Continue to final error - don't return here
       }
     } else {
-      console.warn('⚠️  SUPABASE_SERVICE_KEY not configured, cannot use Supabase direct fallback');
+      console.error('❌ SUPABASE_SERVICE_KEY not configured - all storage layers will fail');
+      // This is a critical configuration error - we should still try to provide helpful error
     }
 
-    // All layers failed
-    console.error('❌ All storage layers failed (MCP → n8n → Supabase):', {
+    // All layers failed - provide helpful error message
+    const errorDetails = {
       userId,
       globalTheme,
       hasMcpKey: !!MCP_API_KEY,
       hasSupabaseKey: !!SUPABASE_SERVICE_KEY,
       mcpUrl: MCP_BASE_URL,
       n8nUrl: N8N_URL,
-      supabaseUrl: SUPABASE_URL
-    });
+      supabaseUrl: SUPABASE_URL ? 'configured' : 'missing'
+    };
+    
+    console.error('❌ All storage layers failed (MCP → n8n → Supabase):', errorDetails);
+    
+    // Provide helpful error message based on configuration
+    let errorMessage = 'Failed to store settings';
+    if (!SUPABASE_SERVICE_KEY && !MCP_API_KEY) {
+      errorMessage = 'Configuration error: SUPABASE_SERVICE_KEY or MCP_API_KEY required';
+    } else if (!SUPABASE_SERVICE_KEY) {
+      errorMessage = 'Configuration error: SUPABASE_SERVICE_KEY required for fallback';
+    }
 
     return NextResponse.json(
       { 
         success: false, 
-        error: 'Failed to store settings'
-        // Client doesn't need to know which layers failed - that's controller concern
+        error: errorMessage,
+        // Include diagnostic endpoint for debugging (server-side only)
+        diagnostic: '/api/settings/diagnose'
       },
       { status: 500 }
     );
   } catch (error: any) {
-    console.error('Settings store error:', error);
+    // Top-level error handler - catches JSON parsing errors, etc.
+    console.error('❌ Settings store top-level error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // Return helpful error message
     return NextResponse.json(
-      { success: false, error: 'Failed to store settings' },
+      { 
+        success: false, 
+        error: 'Failed to store settings',
+        details: error.message || 'Unknown error occurred'
+      },
       { status: 500 }
     );
   }

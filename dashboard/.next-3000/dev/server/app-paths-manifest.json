@@ -1,4 +1,5 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/codebase-changes/route": "app/api/codebase-changes/route.js",
   "/api/crew/thoughts/route": "app/api/crew/thoughts/route.js",
   "/api/health/route": "app/api/health/route.js",
@@ -8,7 +9,10 @@
   "/api/mcp/status/route": "app/api/mcp/status/route.js",
   "/api/mcp/workflows/executions/route": "app/api/mcp/workflows/executions/route.js",
   "/api/mcp/workflows/storage/route": "app/api/mcp/workflows/storage/route.js",
+  "/api/settings/diagnose/route": "app/api/settings/diagnose/route.js",
   "/api/settings/retrieve/route": "app/api/settings/retrieve/route.js",
   "/api/settings/store/route": "app/api/settings/store/route.js",
+  "/api/settings/test-supabase/route": "app/api/settings/test-supabase/route.js",
+  "/api/theme/test/route": "app/api/theme/test/route.js",
   "/dashboard/page": "app/dashboard/page.js"
 }

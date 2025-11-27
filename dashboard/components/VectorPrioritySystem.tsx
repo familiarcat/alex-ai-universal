@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+// REMOVED: Direct Supabase import - now using API routes (DDD-compliant)
 
 export interface VectorPriority {
   id: string;
@@ -89,62 +89,54 @@ export default function VectorPrioritySystem({
   const [vectors, setVectors] = useState<VectorPriority[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [supabase, setSupabase] = useState<any>(null);
-
-  useEffect(() => {
-    // Initialize Supabase client
-    const client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
-    setSupabase(client);
-  }, []);
 
   /**
    * Load vectors from Supabase
    */
   const loadVectors = async () => {
-    if (!supabase) return;
-
     try {
       setLoading(true);
       
-      // Query vector embeddings table
-      let query = supabase
-        .from('vector_embeddings')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
+      // DDD-Compliant: Use API route (controller layer)
+      const url = new URL('/api/data/vectors', window.location.origin);
+      url.searchParams.set('limit', '50');
       if (projectId) {
-        query = query.eq('metadata->>projectId', projectId);
+        url.searchParams.set('projectId', projectId);
       }
+      // Note: crewMember filtering would need to be added to API route if needed
 
-      if (crewMember) {
-        query = query.eq('crew_member', crewMember);
+      const response = await fetch(url.toString(), {
+        headers: { 'Cache-Control': 'no-cache' },
+        cache: 'no-store'
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          // Transform to VectorPriority format
+          const transformedVectors: VectorPriority[] = (result.data || []).map((item: any) => ({
+            id: item.id,
+            coordinates: item.embedding || [],
+            magnitude: VectorPriorityCalculator.calculateMagnitude(item.embedding || []),
+            timestamp: new Date(item.created_at).getTime(),
+            domain: item.pattern_type || 'general',
+            projectId: item.metadata?.projectId,
+            crewMember: item.crew_member,
+            metadata: item.metadata
+          }));
+
+          // Filter by crewMember if specified (client-side filter for now)
+          const filtered = crewMember 
+            ? transformedVectors.filter(v => v.crewMember === crewMember)
+            : transformedVectors;
+
+          // Sort by priority (magnitude)
+          filtered.sort((a, b) => b.magnitude - a.magnitude);
+
+          setVectors(filtered);
+          setError(null);
+        }
       }
-
-      const { data, error: queryError } = await query;
-
-      if (queryError) throw queryError;
-
-      // Transform to VectorPriority format
-      const transformedVectors: VectorPriority[] = (data || []).map((item: any) => ({
-        id: item.id,
-        coordinates: item.embedding || [],
-        magnitude: VectorPriorityCalculator.calculateMagnitude(item.embedding || []),
-        timestamp: new Date(item.created_at).getTime(),
-        domain: item.pattern_type || 'general',
-        projectId: item.metadata?.projectId,
-        crewMember: item.crew_member,
-        metadata: item.metadata
-      }));
-
-      // Sort by priority (magnitude)
-      transformedVectors.sort((a, b) => b.magnitude - a.magnitude);
-
-      setVectors(transformedVectors);
-      setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to load vectors');
       console.error('Vector loading error:', err);
@@ -154,20 +146,18 @@ export default function VectorPrioritySystem({
   };
 
   useEffect(() => {
-    if (supabase) {
-      loadVectors();
-    }
-  }, [supabase, projectId, crewMember]);
+    loadVectors();
+  }, [projectId, crewMember]);
 
   useEffect(() => {
-    if (!autoRefresh || !supabase) return;
+    if (!autoRefresh) return;
 
     const interval = setInterval(() => {
       loadVectors();
     }, refreshInterval);
 
     return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, supabase]);
+  }, [autoRefresh, refreshInterval]);
 
   if (loading) {
     return (

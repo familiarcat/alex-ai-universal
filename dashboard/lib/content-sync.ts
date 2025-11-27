@@ -1,20 +1,23 @@
 /**
  * Content Sync: Proper DDD Flow for User Content
- * Client => n8n Controller => Supabase Database
+ * Client => Next.js API (Controller) => MCP => n8n => Supabase Database
  * 
  * ⚠️  SEPARATION OF CONCERNS:
  * - Client NEVER accesses Supabase directly
- * - ALL database operations flow through n8n
- * - n8n is the single controller for data access
+ * - Client NEVER accesses n8n directly
+ * - ALL database operations flow through Next.js API routes (controller layer)
+ * - Controller layer handles MCP → n8n → Supabase fallback chain
  * 
  * Memory: Stored in n8n => Supabase RAG
+ * 
+ * Crew: Data (Architecture) + La Forge (Implementation)
+ * Updated: 2025-11-27 - Fixed to use API routes instead of direct n8n calls
  */
 
-const N8N_URL = process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
-
 /**
- * ✅ Proper DDD: Client => n8n => Supabase
+ * ✅ Proper DDD: Client => Next.js API => MCP => n8n => Supabase
  * ❌ Never: Client => Supabase (violates separation of concerns)
+ * ❌ Never: Client => n8n (violates separation of concerns)
  */
 
 export interface ProjectContent {
@@ -30,16 +33,15 @@ export interface ProjectContent {
 }
 
 /**
- * Store user content to Supabase via n8n
- * Proper DDD: Client => n8n => Supabase
+ * Store user content via Next.js API (DDD-compliant)
+ * Proper DDD: Client => Next.js API => MCP => n8n => Supabase
  */
 export async function storeProjectContent(content: ProjectContent): Promise<boolean> {
   try {
-    const response = await fetch(`${N8N_URL}/webhook/project-content-store`, {
+    const response = await fetch('/api/content/store', {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json',
-        'X-Source': 'alex-ai-dashboard'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         ...content,
@@ -53,7 +55,7 @@ export async function storeProjectContent(content: ProjectContent): Promise<bool
       return false;
     }
     
-    console.log(`✅ Content synced to Supabase via n8n: ${content.projectId}`);
+    console.log(`✅ Content synced: ${content.projectId}`);
     return true;
   } catch (error) {
     console.warn('Content sync error (non-blocking):', error);
@@ -62,16 +64,17 @@ export async function storeProjectContent(content: ProjectContent): Promise<bool
 }
 
 /**
- * Retrieve user content from Supabase via n8n
- * Proper DDD: Supabase => n8n => Client
+ * Retrieve user content via Next.js API (DDD-compliant)
+ * Proper DDD: Client => Next.js API => MCP => n8n => Supabase
  */
 export async function retrieveProjectContent(projectId: string): Promise<ProjectContent | null> {
   try {
-    const response = await fetch(`${N8N_URL}/webhook/project-content-retrieve?projectId=${projectId}`, {
+    const response = await fetch(`/api/content/retrieve?projectId=${projectId}`, {
       method: 'GET',
       headers: { 
-        'X-Source': 'alex-ai-dashboard'
-      }
+        'Cache-Control': 'no-cache'
+      },
+      cache: 'no-store'
     });
     
     if (!response.ok) {
@@ -79,9 +82,13 @@ export async function retrieveProjectContent(projectId: string): Promise<Project
       return null;
     }
     
-    const data = await response.json();
-    console.log(`✅ Content retrieved from Supabase via n8n: ${projectId}`);
-    return data;
+    const result = await response.json();
+    if (result.success && result.data) {
+      console.log(`✅ Content retrieved: ${projectId}`);
+      return result.data;
+    }
+    
+    return null;
   } catch (error) {
     console.warn('Content retrieval error:', error);
     return null;
@@ -89,16 +96,15 @@ export async function retrieveProjectContent(projectId: string): Promise<Project
 }
 
 /**
- * Delete project content from Supabase via n8n
- * Proper DDD: Client => n8n => Supabase (delete)
+ * Delete project content via Next.js API (DDD-compliant)
+ * Proper DDD: Client => Next.js API => MCP => n8n => Supabase
  */
 export async function deleteProjectContent(projectId: string): Promise<boolean> {
   try {
-    const response = await fetch(`${N8N_URL}/webhook/project-content-delete`, {
+    const response = await fetch('/api/content/delete', {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json',
-        'X-Source': 'alex-ai-dashboard'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         projectId,
@@ -111,7 +117,7 @@ export async function deleteProjectContent(projectId: string): Promise<boolean> 
       return false;
     }
     
-    console.log(`✅ Content deleted from Supabase via n8n: ${projectId}`);
+    console.log(`✅ Content deleted: ${projectId}`);
     return true;
   } catch (error) {
     console.warn('Content deletion error (non-blocking):', error);

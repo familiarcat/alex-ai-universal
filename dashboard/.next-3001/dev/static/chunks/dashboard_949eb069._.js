@@ -4,14 +4,22 @@
 
 /**
  * Content Sync: Proper DDD Flow for User Content
- * Client => n8n Controller => Supabase Database
+ * Client => Next.js API (Controller) => MCP => n8n => Supabase Database
  * 
  * ⚠️  SEPARATION OF CONCERNS:
  * - Client NEVER accesses Supabase directly
- * - ALL database operations flow through n8n
- * - n8n is the single controller for data access
+ * - Client NEVER accesses n8n directly
+ * - ALL database operations flow through Next.js API routes (controller layer)
+ * - Controller layer handles MCP → n8n → Supabase fallback chain
  * 
  * Memory: Stored in n8n => Supabase RAG
+ * 
+ * Crew: Data (Architecture) + La Forge (Implementation)
+ * Updated: 2025-11-27 - Fixed to use API routes instead of direct n8n calls
+ */ /**
+ * ✅ Proper DDD: Client => Next.js API => MCP => n8n => Supabase
+ * ❌ Never: Client => Supabase (violates separation of concerns)
+ * ❌ Never: Client => n8n (violates separation of concerns)
  */ __turbopack_context__.s([
     "debouncedContentSync",
     ()=>debouncedContentSync,
@@ -22,15 +30,12 @@
     "storeProjectContent",
     ()=>storeProjectContent
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$dashboard$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/dashboard/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
-const N8N_URL = ("TURBOPACK compile-time value", "https://n8n.pbradygeorgen.com") || 'https://n8n.pbradygeorgen.com';
 async function storeProjectContent(content) {
     try {
-        const response = await fetch(`${N8N_URL}/webhook/project-content-store`, {
+        const response = await fetch('/api/content/store', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-Source': 'alex-ai-dashboard'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 ...content,
@@ -42,7 +47,7 @@ async function storeProjectContent(content) {
             console.warn('Content sync failed (non-blocking):', response.statusText);
             return false;
         }
-        console.log(`✅ Content synced to Supabase via n8n: ${content.projectId}`);
+        console.log(`✅ Content synced: ${content.projectId}`);
         return true;
     } catch (error) {
         console.warn('Content sync error (non-blocking):', error);
@@ -51,19 +56,23 @@ async function storeProjectContent(content) {
 }
 async function retrieveProjectContent(projectId) {
     try {
-        const response = await fetch(`${N8N_URL}/webhook/project-content-retrieve?projectId=${projectId}`, {
+        const response = await fetch(`/api/content/retrieve?projectId=${projectId}`, {
             method: 'GET',
             headers: {
-                'X-Source': 'alex-ai-dashboard'
-            }
+                'Cache-Control': 'no-cache'
+            },
+            cache: 'no-store'
         });
         if (!response.ok) {
             console.warn('Content retrieval failed:', response.statusText);
             return null;
         }
-        const data = await response.json();
-        console.log(`✅ Content retrieved from Supabase via n8n: ${projectId}`);
-        return data;
+        const result = await response.json();
+        if (result.success && result.data) {
+            console.log(`✅ Content retrieved: ${projectId}`);
+            return result.data;
+        }
+        return null;
     } catch (error) {
         console.warn('Content retrieval error:', error);
         return null;
@@ -71,11 +80,10 @@ async function retrieveProjectContent(projectId) {
 }
 async function deleteProjectContent(projectId) {
     try {
-        const response = await fetch(`${N8N_URL}/webhook/project-content-delete`, {
+        const response = await fetch('/api/content/delete', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-Source': 'alex-ai-dashboard'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 projectId,
@@ -86,7 +94,7 @@ async function deleteProjectContent(projectId) {
             console.warn('Content deletion failed (non-blocking):', response.statusText);
             return false;
         }
-        console.log(`✅ Content deleted from Supabase via n8n: ${projectId}`);
+        console.log(`✅ Content deleted: ${projectId}`);
         return true;
     } catch (error) {
         console.warn('Content deletion error (non-blocking):', error);

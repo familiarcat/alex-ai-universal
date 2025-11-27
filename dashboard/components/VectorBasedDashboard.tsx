@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react';
 import VectorPrioritySystem, { VectorPriority } from './VectorPrioritySystem';
 import PriorityMatrix from './PriorityMatrix';
 import { DynamicComponentRegistry, ComponentGrid, PriorityComponentSelector } from './DynamicComponentRegistry';
-import { createClient } from '@supabase/supabase-js';
+// REMOVED: Direct Supabase import - now using API routes (DDD-compliant)
 
 interface VectorBasedDashboardProps {
   projectId?: string;
@@ -29,49 +29,42 @@ export default function VectorBasedDashboard({
   const [vectors, setVectors] = useState<VectorPriority[]>([]);
   const [selectedLayout, setSelectedLayout] = useState<'grid' | 'heatmap' | 'timeline'>('grid');
   const [loading, setLoading] = useState(true);
-  const [supabase, setSupabase] = useState<any>(null);
 
+  // Load vectors via API route (DDD-compliant)
   useEffect(() => {
-    const client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
-    setSupabase(client);
-  }, []);
-
-  // Load vectors
-  useEffect(() => {
-    if (!supabase) return;
-
     const loadVectors = async () => {
       try {
         setLoading(true);
         
-        let query = supabase
-          .from('vector_embeddings')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
+        // DDD-Compliant: Use API route (controller layer)
+        const url = new URL('/api/data/vectors', window.location.origin);
+        url.searchParams.set('limit', '50');
         if (projectId) {
-          query = query.eq('metadata->>projectId', projectId);
+          url.searchParams.set('projectId', projectId);
         }
 
-        const { data, error } = await query;
-        if (error) throw error;
+        const response = await fetch(url.toString(), {
+          headers: { 'Cache-Control': 'no-cache' },
+          cache: 'no-store'
+        });
 
-        const transformed: VectorPriority[] = (data || []).map((item: any) => ({
-          id: item.id,
-          coordinates: item.embedding || [],
-          magnitude: Math.sqrt((item.embedding || []).reduce((sum: number, val: number) => sum + val ** 2, 0)),
-          timestamp: new Date(item.created_at).getTime(),
-          domain: item.pattern_type || 'general',
-          projectId: item.metadata?.projectId,
-          crewMember: item.crew_member,
-          metadata: item.metadata
-        }));
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            const transformed: VectorPriority[] = (result.data || []).map((item: any) => ({
+              id: item.id,
+              coordinates: item.embedding || [],
+              magnitude: Math.sqrt((item.embedding || []).reduce((sum: number, val: number) => sum + val ** 2, 0)),
+              timestamp: new Date(item.created_at).getTime(),
+              domain: item.pattern_type || 'general',
+              projectId: item.metadata?.projectId,
+              crewMember: item.crew_member,
+              metadata: item.metadata
+            }));
 
-        setVectors(transformed);
+            setVectors(transformed);
+          }
+        }
       } catch (error: any) {
         console.error('Failed to load vectors:', error);
       } finally {
@@ -85,7 +78,7 @@ export default function VectorBasedDashboard({
       const interval = setInterval(loadVectors, refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [supabase, projectId, autoRefresh, refreshInterval]);
+  }, [projectId, autoRefresh, refreshInterval]);
 
   if (loading) {
     return (

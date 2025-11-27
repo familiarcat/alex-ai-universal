@@ -10,7 +10,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+// REMOVED: Direct Supabase import - now using API routes (DDD-compliant)
 
 interface UIDesign {
   id: string;
@@ -39,65 +39,58 @@ export default function UIDesignComparison() {
   const [selectedDesign, setSelectedDesign] = useState<UIDesign | null>(null);
   const [similarDashboards, setSimilarDashboards] = useState<DashboardDesign[]>([]);
   const [loading, setLoading] = useState(true);
-  const [supabase, setSupabase] = useState<any>(null);
-
-  useEffect(() => {
-    const client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
-    setSupabase(client);
-  }, []);
 
   /**
-   * Load scraped UI designs from Supabase
+   * Load scraped UI designs via API route (DDD-compliant)
    */
   useEffect(() => {
-    if (!supabase) return;
-
     const loadDesigns = async () => {
       try {
         setLoading(true);
 
+        // DDD-Compliant: Use API route (controller layer)
         // Load scraped UI designs
-        const { data: designs, error } = await supabase
-          .from('vector_embeddings')
-          .select('*')
-          .eq('pattern_type', 'ui_design')
-          .order('created_at', { ascending: false })
-          .limit(20);
+        const designsResponse = await fetch('/api/data/vectors?patternType=ui_design&limit=20', {
+          headers: { 'Cache-Control': 'no-cache' },
+          cache: 'no-store'
+        });
 
-        if (error) throw error;
+        if (designsResponse.ok) {
+          const designsResult = await designsResponse.json();
+          if (designsResult.success && designsResult.data) {
+            const formattedDesigns: UIDesign[] = (designsResult.data || []).map((d: any) => ({
+              id: d.id,
+              title: d.metadata?.title || 'Untitled Design',
+              description: d.metadata?.description || '',
+              imageUrl: d.metadata?.imageUrl || '',
+              source: d.metadata?.source || 'unknown',
+              aesthetic_analysis: d.metadata?.aesthetic_analysis || {
+                color_palette: [],
+                mood: 'neutral',
+                layout_structure: '',
+                component_style: ''
+              }
+            }));
 
-        const formattedDesigns: UIDesign[] = (designs || []).map((d: any) => ({
-          id: d.id,
-          title: d.metadata?.title || 'Untitled Design',
-          description: d.metadata?.description || '',
-          imageUrl: d.metadata?.imageUrl || '',
-          source: d.metadata?.source || 'unknown',
-          aesthetic_analysis: d.metadata?.aesthetic_analysis || {
-            color_palette: [],
-            mood: 'neutral',
-            layout_structure: '',
-            component_style: ''
+            setScrapedDesigns(formattedDesigns);
           }
-        }));
-
-        setScrapedDesigns(formattedDesigns);
+        }
 
         // Load dashboard designs for comparison
-        const { data: dashboards, error: dashError } = await supabase
-          .from('vector_embeddings')
-          .select('*')
-          .eq('pattern_type', 'dashboard')
-          .limit(10);
+        const dashboardsResponse = await fetch('/api/data/vectors?patternType=dashboard&limit=10', {
+          headers: { 'Cache-Control': 'no-cache' },
+          cache: 'no-store'
+        });
 
-        if (!dashError && dashboards) {
-          setDashboardDesigns(dashboards.map((d: any) => ({
-            id: d.id,
-            metadata: d.metadata,
-            similarity: 0
-          })));
+        if (dashboardsResponse.ok) {
+          const dashboardsResult = await dashboardsResponse.json();
+          if (dashboardsResult.success && dashboardsResult.data) {
+            setDashboardDesigns(dashboardsResult.data.map((d: any) => ({
+              id: d.id,
+              metadata: d.metadata,
+              similarity: 0
+            })));
+          }
         }
       } catch (error: any) {
         console.error('Error loading designs:', error);
@@ -107,55 +100,25 @@ export default function UIDesignComparison() {
     };
 
     loadDesigns();
-  }, [supabase]);
+  }, []);
 
   /**
-   * Find similar dashboard designs
+   * Find similar dashboard designs via API route (DDD-compliant)
    */
   const findSimilarDashboards = async (design: UIDesign) => {
-    if (!supabase) return;
-
     try {
       setSelectedDesign(design);
 
-      // Get the design's embedding
-      const { data: designData, error } = await supabase
-        .from('vector_embeddings')
-        .select('embedding')
-        .eq('id', design.id)
-        .single();
+      // DDD-Compliant: Use API route for vector similarity search
+      // For now, use client-side fallback until API route is created
+      const comparisons = dashboardDesigns.map(dash => ({
+        ...dash,
+        similarity: calculateSimpleSimilarity(design, dash)
+      })).sort((a, b) => b.similarity - a.similarity);
 
-      if (error || !designData?.embedding) {
-        console.error('Error getting design embedding:', error);
-        return;
-      }
-
-      // Find similar dashboard designs using vector similarity
-      const { data: similar, error: similarError } = await supabase.rpc(
-        'match_vectors',
-        {
-          query_embedding: designData.embedding,
-          match_threshold: 0.7,
-          match_count: 5,
-          pattern_type_filter: 'dashboard'
-        }
-      );
-
-      if (similarError) {
-        // Fallback: manual comparison
-        const comparisons = dashboardDesigns.map(dash => ({
-          ...dash,
-          similarity: calculateSimpleSimilarity(design, dash)
-        })).sort((a, b) => b.similarity - a.similarity);
-
-        setSimilarDashboards(comparisons.slice(0, 5));
-      } else {
-        setSimilarDashboards((similar || []).map((s: any) => ({
-          id: s.id,
-          metadata: s.metadata,
-          similarity: s.similarity || 0
-        })));
-      }
+      setSimilarDashboards(comparisons.slice(0, 5));
+      
+      // TODO: Create /api/data/vectors/similar endpoint for vector similarity search
     } catch (error: any) {
       console.error('Error finding similar dashboards:', error);
     }

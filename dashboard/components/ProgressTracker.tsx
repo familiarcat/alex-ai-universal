@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+// REMOVED: Direct Supabase import - now using API routes (DDD-compliant)
 
 interface ProgressData {
   taskId: string;
@@ -40,32 +40,23 @@ export default function ProgressTracker({
 }: ProgressTrackerProps) {
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
-    const client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
-    setSupabase(client);
-  }, []);
-
-  useEffect(() => {
-    if (!supabase) return;
-
     const loadProgress = async () => {
       try {
-        // Try Supabase first
-        const { data, error } = await supabase
-          .from('task_progress')
-          .select('progress_data')
-          .eq('task_id', taskId)
-          .single();
+        // DDD-Compliant: Use API route (controller layer)
+        const response = await fetch(`/api/data/progress/${taskId}`, {
+          headers: { 'Cache-Control': 'no-cache' },
+          cache: 'no-store'
+        });
 
-        if (!error && data?.progress_data) {
-          setProgress(data.progress_data);
-          setLoading(false);
-          return;
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setProgress(result.data);
+            setLoading(false);
+            return;
+          }
         }
 
         // Fallback: Try reading from file via API
@@ -87,7 +78,7 @@ export default function ProgressTracker({
       const interval = setInterval(loadProgress, refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [supabase, taskId, autoRefresh, refreshInterval]);
+  }, [taskId, autoRefresh, refreshInterval]);
 
   if (loading) {
     return (
