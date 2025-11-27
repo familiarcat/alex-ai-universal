@@ -459,13 +459,14 @@ async function main() {
     const result = await executeMilestonePush();
     
     if (result.skipped) {
-      // Silent exit for no changes
+      // Silent exit for no changes (no action taken, no feedback needed)
       process.exit(0);
     }
     
     if (result.success) {
-      // Completely silent on success - like a "Save" command
-      // Only exit code 0 indicates success
+      // Minimal success feedback - one line confirmation
+      // Like a "Save" command that shows "Saved"
+      success(`Milestone pushed: ${result.commitSha} (${result.filesCount} files)`);
       process.exit(0);
     } else {
       // Error - always show
