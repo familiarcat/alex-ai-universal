@@ -44,20 +44,44 @@ export default function UserExperienceAnalytics() {
     try {
       setLoading(true);
       
-      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      // DDD-Compliant: Use UnifiedDataService (API primary, mock fallback)
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
-      const data = await service.getUXData();
+      const response = await service.getUXData();
       
-      setMetrics(data.metrics || []);
-      setJourney(data.journey || []);
-      setOverallSatisfaction(data.overallSatisfaction || 0);
+      // Handle response structure (data may be nested)
+      const data = response?.data || response;
       
-      // Don't use sample data - show empty state if no data
-      if (!data.metrics || data.metrics.length === 0) {
+      if (data) {
+        setOverallSatisfaction(data.userSatisfaction || 0);
+        
+        // Transform API data to component format
+        if (data.metrics) {
+          setMetrics(data.metrics);
+        } else {
+          // Create metrics from feedback if available
+          const metricsFromFeedback = data.feedback ? [{
+            category: 'User Satisfaction',
+            score: data.userSatisfaction || 0,
+            trend: 'stable' as const,
+            userFeedback: data.feedback.map((f: any) => f.comment || ''),
+            painPoints: [],
+            opportunities: []
+          }] : [];
+          setMetrics(metricsFromFeedback);
+        }
+        
+        setJourney(data.journey || []);
+      } else {
+        // No data - show empty state
         setMetrics([]);
         setJourney([]);
         setOverallSatisfaction(0);
+      }
+      
+      // Show fallback indicator if using mock data
+      if (response?.fallback) {
+        console.debug('Using mock UX data - Supabase table may not exist yet');
       }
     } catch (err: any) {
       console.error('Failed to load UX data:', err);

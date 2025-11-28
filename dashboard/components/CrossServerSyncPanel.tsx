@@ -24,8 +24,30 @@ export default function CrossServerSyncPanel() {
   const [isStarting, setIsStarting] = useState(false);
   const [updates, setUpdates] = useState<SyncUpdate[]>([]);
   const [currentPort, setCurrentPort] = useState<number | null>(null);
+  const [apiSyncStatus, setApiSyncStatus] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const sync = getCrossServerSync();
+
+  // Fetch sync status from API
+  useEffect(() => {
+    async function fetchSyncStatus() {
+      try {
+        setLoading(true);
+        const { getUnifiedDataService } = await import('@/lib/unified-data-service');
+        const service = getUnifiedDataService();
+        const data = await service.getSyncStatus();
+        setApiSyncStatus(data?.data || data);
+      } catch (error) {
+        console.error('Failed to fetch sync status:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSyncStatus();
+    const interval = setInterval(fetchSyncStatus, 30000); // Update every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   // Detect current port
   useEffect(() => {
@@ -184,6 +206,43 @@ export default function CrossServerSyncPanel() {
             {formatTime(syncStatus.lastSync)}
           </p>
         </div>
+
+        {/* API Sync Status */}
+        {apiSyncStatus && (
+          <div className="bg-green-50 dark:bg-green-900/20 rounded p-3 border border-green-200 dark:border-green-800">
+            <p className="text-xs font-semibold text-green-900 dark:text-green-300 mb-2">
+              📡 API Sync Status
+            </p>
+            <div className="space-y-1">
+              <p className="text-xs text-green-700 dark:text-green-400">
+                Status: <span className="font-medium">{apiSyncStatus.status || 'active'}</span>
+              </p>
+              <p className="text-xs text-green-700 dark:text-green-400">
+                Enabled: <span className="font-medium">{apiSyncStatus.enabled ? 'Yes' : 'No'}</span>
+              </p>
+              {apiSyncStatus.servers && apiSyncStatus.servers.length > 0 && (
+                <div className="mt-2">
+                  <p className="text-xs text-green-700 dark:text-green-400 mb-1">Servers:</p>
+                  {apiSyncStatus.servers.map((server: any, idx: number) => (
+                    <p key={idx} className="text-xs text-green-600 dark:text-green-500 ml-2">
+                      • {server.name}: {server.status}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {apiSyncStatus.fallback && (
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                  ⚠️ Using mock data - Supabase table may not exist yet
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+        {loading && (
+          <div className="bg-gray-50 dark:bg-gray-900 rounded p-3">
+            <p className="text-xs text-gray-500 dark:text-gray-400">Loading sync status...</p>
+          </div>
+        )}
 
         {/* Recent Updates */}
         {updates.length > 0 && (

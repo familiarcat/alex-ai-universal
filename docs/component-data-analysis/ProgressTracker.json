@@ -1,0 +1,10 @@
+{
+  "componentName": "ProgressTracker",
+  "filePath": "/dashboard/components/ProgressTracker.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [],
+  "dataFlow": [],
+  "problems": [],
+  "recommendations": []
+}

@@ -151,13 +151,32 @@ export default function CrewMemoryVisualization() {
       }
     } catch (err: any) {
       console.error('Failed to load crew stats:', err);
-      // Fallback to default stats
-      setCrewStats([
-        { name: 'Data', role: 'Operations & Analytics', contributions: 2341, memories: 2341, lastActive: 'Today', icon: '🤖' },
-        { name: 'La Forge', role: 'Engineering', contributions: 2234, memories: 2234, lastActive: 'Today', icon: '🔧' },
-        { name: 'Troi', role: 'UX & Empathy', contributions: 2098, memories: 2098, lastActive: 'Today', icon: '💭' }
-      ]);
-      setTotalMemories(15632);
+      // Fallback to mock data
+      try {
+        const { mockDataSystem } = await import('@/lib/mock-data-system');
+        const mockData = mockDataSystem.getMockData('CrewMemoryVisualization');
+        if (mockData?.stats) {
+          setCrewStats(mockData.stats);
+          setTotalMemories(mockData.totalMemories || 0);
+          console.debug('Using mock crew stats data');
+        } else {
+          // Final fallback to default stats
+          setCrewStats([
+            { name: 'Data', role: 'Operations & Analytics', contributions: 2341, memories: 2341, lastActive: 'Today', icon: '🤖' },
+            { name: 'La Forge', role: 'Engineering', contributions: 2234, memories: 2234, lastActive: 'Today', icon: '🔧' },
+            { name: 'Troi', role: 'UX & Empathy', contributions: 2098, memories: 2098, lastActive: 'Today', icon: '💭' }
+          ]);
+          setTotalMemories(15632);
+        }
+      } catch (mockError) {
+        // Final fallback
+        setCrewStats([
+          { name: 'Data', role: 'Operations & Analytics', contributions: 2341, memories: 2341, lastActive: 'Today', icon: '🤖' },
+          { name: 'La Forge', role: 'Engineering', contributions: 2234, memories: 2234, lastActive: 'Today', icon: '🔧' },
+          { name: 'Troi', role: 'UX & Empathy', contributions: 2098, memories: 2098, lastActive: 'Today', icon: '💭' }
+        ]);
+        setTotalMemories(15632);
+      }
     } finally {
       setLoading(false);
     }

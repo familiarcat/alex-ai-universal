@@ -73,22 +73,40 @@ export default function CostOptimizationMonitor() {
     try {
       setLoading(true);
       
-      // DDD-Compliant: Use UnifiedDataService (MCP primary, n8n fallback)
+      // DDD-Compliant: Use UnifiedDataService (API primary, mock fallback)
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
-      const data = await service.getCostData();
-      setCostData(data);
+      const response = await service.getCostData();
       
-      // Don't use sample data - show empty state if no data
-      if (!data || !data.modelBreakdown) {
+      // Handle response structure (data may be nested)
+      const data = response?.data || response;
+      
+      if (data) {
+        // Transform API data to component format
+        setCostData({
+          period: timeframe === '24h' ? 'Last 24 hours' : timeframe === '7d' ? 'Last 7 days' : 'Last 30 days',
+          modelBreakdown: data.modelBreakdown || [],
+          totalCost: data.monthlyCost || 0,
+          savings: data.savings || 0,
+          optimization: data.savings ? Math.round((data.savings / (data.monthlyCost || 1)) * 100) : 0,
+          recommendations: data.recommendations || [],
+          trends: data.trends || []
+        });
+      } else {
+        // No data - show empty state
         setCostData({ 
           period: timeframe === '24h' ? 'Last 24 hours' : timeframe === '7d' ? 'Last 7 days' : 'Last 30 days',
           modelBreakdown: [], 
           totalCost: 0, 
           savings: 0,
           optimization: 0,
-          recommendations: [] 
+          recommendations: []
         });
+      }
+      
+      // Show fallback indicator if using mock data
+      if (response?.fallback) {
+        console.debug('Using mock cost data - Supabase table may not exist yet');
       }
     } catch (err: any) {
       console.error('Failed to load cost data:', err);

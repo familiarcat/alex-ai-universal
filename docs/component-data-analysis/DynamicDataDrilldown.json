@@ -1,0 +1,14 @@
+{
+  "componentName": "DynamicDataDrilldown",
+  "filePath": "/dashboard/components/DynamicDataDrilldown.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "useAppState (localStorage state)"
+  ],
+  "dataFlow": [
+    "Component → useAppState → localStorage"
+  ],
+  "problems": [],
+  "recommendations": []
+}

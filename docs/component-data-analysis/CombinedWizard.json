@@ -1,0 +1,14 @@
+{
+  "componentName": "CombinedWizard",
+  "filePath": "/dashboard/components/CombinedWizard.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "useAppState (localStorage state)"
+  ],
+  "dataFlow": [
+    "Component → useAppState → localStorage"
+  ],
+  "problems": [],
+  "recommendations": []
+}

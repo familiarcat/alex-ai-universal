@@ -156,6 +156,8 @@
     "dev:servers:start:monitor": "bash scripts/start-dev-servers.sh && node scripts/monitor-dev-servers.js",
     "analyze:components": "node scripts/analyze-component-goals.js",
     "store:component-goals": "node scripts/store-component-goals-rag.js",
+    "analyze:component-data": "node scripts/analyze-component-data-sources.js",
+    "crew:coordinate:component-data": "node scripts/crew-coordinate-component-data.js",
     "alex-ai:activate": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(alex.generateActivationPrompt());\"",
     "alex-ai:status": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(JSON.stringify(alex.getStatus(), null, 2));\""
   },

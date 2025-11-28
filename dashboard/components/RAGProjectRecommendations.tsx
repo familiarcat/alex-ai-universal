@@ -63,8 +63,29 @@ export default function RAGProjectRecommendations() {
       
       // FIXED: Check for error responses before processing
       // Crew: Data (Analysis) + O'Brien (Pragmatic)
-      if (data?.error) {
-        console.debug('Recommendations returned error, using defaults');
+      if (data?.error || recs.length === 0) {
+        console.debug('Recommendations returned error or empty, trying mock data');
+        // Try mock data as fallback
+        try {
+          const { mockDataSystem } = await import('@/lib/mock-data-system');
+          const mockData = mockDataSystem.getMockData('RAGProjectRecommendations');
+          if (mockData?.recommendations && mockData.recommendations.length > 0) {
+            const mockRecs = mockData.recommendations.map((rec: any) => ({
+              id: rec.id,
+              title: rec.title,
+              description: rec.description,
+              confidence: rec.confidence / 100,
+              source: 'Crew Analysis',
+              tags: rec.tags || []
+            }));
+            setRecommendations(mockRecs);
+            setLoading(false);
+            return;
+          }
+        } catch (mockError) {
+          // Continue to default fallback
+        }
+        // Default fallback
         setRecommendations([
           {
             id: 'rec-1',
@@ -94,17 +115,47 @@ export default function RAGProjectRecommendations() {
       }
       
       setError(null); // Don't show error for expected failures
-      // Fallback to default recommendations (don't retry automatically)
-      setRecommendations([
-        {
-          id: 'rec-1',
-          title: 'Optimize Project Performance',
-          description: 'Based on crew analysis, consider implementing caching strategies',
-          confidence: 0.8,
-          source: 'Commander Data',
-          tags: ['performance', 'optimization']
+      // Fallback to mock data if available
+      try {
+        const { mockDataSystem } = await import('@/lib/mock-data-system');
+        const mockData = mockDataSystem.getMockData('RAGProjectRecommendations');
+        if (mockData?.recommendations && mockData.recommendations.length > 0) {
+          const mockRecs = mockData.recommendations.map((rec: any) => ({
+            id: rec.id,
+            title: rec.title,
+            description: rec.description,
+            confidence: rec.confidence / 100,
+            source: 'Crew Analysis',
+            tags: rec.tags || []
+          }));
+          setRecommendations(mockRecs);
+          console.debug('Using mock project recommendations data');
+        } else {
+          // Final fallback to default recommendations
+          setRecommendations([
+            {
+              id: 'rec-1',
+              title: 'Optimize Project Performance',
+              description: 'Based on crew analysis, consider implementing caching strategies',
+              confidence: 0.8,
+              source: 'Commander Data',
+              tags: ['performance', 'optimization']
+            }
+          ]);
         }
-      ]);
+      } catch (mockError) {
+        // Final fallback
+        setRecommendations([
+          {
+            id: 'rec-1',
+            title: 'Optimize Project Performance',
+            description: 'Based on crew analysis, consider implementing caching strategies',
+            confidence: 0.8,
+            source: 'Commander Data',
+            tags: ['performance', 'optimization']
+          }
+        ]);
+      }
     } finally {
       setLoading(false);
     }

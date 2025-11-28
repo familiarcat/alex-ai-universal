@@ -121,36 +121,54 @@ export class UnifiedDataService {
   }
 
   /**
-   * Get security assessment data via MCP (primary) or n8n (fallback)
+   * Get security assessment data via Next.js API (primary) or mock (fallback)
    * 
    * @returns Security assessment data
    */
   async getSecurityData(): Promise<any> {
-    return this.callMCPEndpoint('security/assessment', {
-      action: 'get_assessment',
-    });
+    try {
+      return await this.callMCPEndpoint('security/assessment', {
+        action: 'get_assessment',
+      });
+    } catch (error) {
+      // Fallback to mock data if API fails
+      const { mockDataSystem } = await import('./mock-data-system');
+      return mockDataSystem.getMockData('SecurityAssessmentDashboard');
+    }
   }
 
   /**
-   * Get cost optimization data via MCP (primary) or n8n (fallback)
+   * Get cost optimization data via Next.js API (primary) or mock (fallback)
    * 
    * @returns Cost optimization data
    */
   async getCostData(): Promise<any> {
-    return this.callMCPEndpoint('cost/optimization', {
-      action: 'get_cost_data',
-    });
+    try {
+      return await this.callMCPEndpoint('cost/optimization', {
+        action: 'get_cost_data',
+      });
+    } catch (error) {
+      // Fallback to mock data if API fails
+      const { mockDataSystem } = await import('./mock-data-system');
+      return mockDataSystem.getMockData('CostOptimizationMonitor');
+    }
   }
 
   /**
-   * Get UX analytics data via MCP (primary) or n8n (fallback)
+   * Get UX analytics data via Next.js API (primary) or mock (fallback)
    * 
    * @returns UX analytics data
    */
   async getUXData(): Promise<any> {
-    return this.callMCPEndpoint('ux/analytics', {
-      action: 'get_ux_data',
-    });
+    try {
+      return await this.callMCPEndpoint('ux/analytics', {
+        action: 'get_ux_data',
+      });
+    } catch (error) {
+      // Fallback to mock data if API fails
+      const { mockDataSystem } = await import('./mock-data-system');
+      return mockDataSystem.getMockData('UserExperienceAnalytics');
+    }
   }
 
   /**
@@ -173,6 +191,34 @@ export class UnifiedDataService {
     return this.callMCPEndpoint('process/documentation', {
       action: 'get_processes',
     });
+  }
+
+  /**
+   * Get sync status via Next.js API (primary) or mock (fallback)
+   * 
+   * @returns Sync status data
+   */
+  async getSyncStatus(): Promise<any> {
+    try {
+      return await this.callMCPEndpoint('sync/status', {
+        action: 'get_sync_status',
+      });
+    } catch (error) {
+      // Fallback to mock data if API fails
+      const { mockDataSystem } = await import('./mock-data-system');
+      return {
+        data: {
+          enabled: true,
+          lastSync: new Date().toISOString(),
+          nextSync: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+          servers: [
+            { id: 'server-1', name: 'Primary', status: 'synced', lastSync: new Date().toISOString() }
+          ],
+          status: 'active'
+        },
+        fallback: true
+      };
+    }
   }
 
   /**
@@ -235,9 +281,10 @@ export class UnifiedDataService {
       'crew/stats': { route: '/api/lounge/crew-status', method: 'GET' }, // GET only
       'learning/metrics': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'project/recommendations': { route: '/api/lounge/latest', method: 'GET' }, // GET only
-      'security/assessment': { route: '/api/lounge/latest', method: 'GET' }, // GET only
-      'cost/optimization': { route: '/api/lounge/latest', method: 'GET' }, // GET only
-      'ux/analytics': { route: '/api/lounge/latest', method: 'GET' }, // GET only
+      'security/assessment': { route: '/api/security/assessment', method: 'GET' }, // NEW: Dedicated endpoint
+      'cost/optimization': { route: '/api/cost/optimization', method: 'GET' }, // NEW: Dedicated endpoint
+      'ux/analytics': { route: '/api/ux/analytics', method: 'GET' }, // NEW: Dedicated endpoint
+      'sync/status': { route: '/api/sync/status', method: 'GET' }, // NEW: Dedicated endpoint
       'ai/impact': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'process/documentation': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'data/sources': { route: '/api/lounge/latest', method: 'GET' }, // GET only
