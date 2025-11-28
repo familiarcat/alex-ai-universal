@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 interface ModelUsage {
   model: string;
@@ -35,6 +36,7 @@ export default function CostOptimizationMonitor() {
   const [costData, setCostData] = useState<CostBreakdown | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState<'24h' | '7d' | '30d'>('7d');
+  const [dataResponse, setDataResponse] = useState<any>(null);
 
   useEffect(() => {
     fetchCostData();
@@ -77,6 +79,9 @@ export default function CostOptimizationMonitor() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const response = await service.getCostData();
+      
+      // Store response for status badge
+      setDataResponse(response);
       
       // Handle response structure (data may be nested)
       const data = response?.data || response;
@@ -215,8 +220,13 @@ export default function CostOptimizationMonitor() {
     );
   }
 
+  const dataStatus = useDataStatus(dataResponse);
+
   return (
     <div className="card" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',

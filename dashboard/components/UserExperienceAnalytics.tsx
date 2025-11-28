@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 interface UXMetric {
   category: string;
@@ -35,6 +36,7 @@ export default function UserExperienceAnalytics() {
   const [journey, setJourney] = useState<UserJourney[]>([]);
   const [loading, setLoading] = useState(true);
   const [overallSatisfaction, setOverallSatisfaction] = useState(0);
+  const [dataResponse, setDataResponse] = useState<any>(null);
 
   useEffect(() => {
     fetchUXData();
@@ -48,6 +50,9 @@ export default function UserExperienceAnalytics() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const response = await service.getUXData();
+      
+      // Store response for status badge
+      setDataResponse(response);
       
       // Handle response structure (data may be nested)
       const data = response?.data || response;
@@ -226,9 +231,14 @@ export default function UserExperienceAnalytics() {
     return 'var(--status-error)';
   }
 
+  const dataStatus = useDataStatus(dataResponse);
+
   if (loading) {
     return (
       <div className="card" style={{
+        position: 'relative' // For badge positioning
+      }}>
+        <DataStatusBadge status="loading" position="top-right" />
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
@@ -249,6 +259,9 @@ export default function UserExperienceAnalytics() {
 
   return (
     <div className="card" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',

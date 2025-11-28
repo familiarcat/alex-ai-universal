@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 import { useProgress } from '@/lib/useProgress';
 import { useAsyncErrorHandler } from '@/lib/useAsyncErrorHandler';
 
@@ -26,6 +27,7 @@ export default function LearningAnalyticsDashboard() {
   const [metrics, setMetrics] = useState<LearningMetric[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalGrowth, setTotalGrowth] = useState(0);
+  const [dataResponse, setDataResponse] = useState<any>(null);
   const { start, complete, fail } = useProgress();
   const { handleError, ErrorDisplay } = useAsyncErrorHandler();
 
@@ -53,13 +55,18 @@ export default function LearningAnalyticsDashboard() {
       
       let data = await service.getLearningMetrics({ limit: 1000 }) as any;
       
+      // Store response for status badge
+      setDataResponse(data);
+      
       // FIXED: Check for error responses before processing
       // Crew: Data (Analysis) + O'Brien (Pragmatic)
       if (data?.error) {
         console.debug('Learning metrics returned error, trying mock data');
         // Try mock data as fallback
         const { mockDataSystem } = await import('@/lib/mock-data-system');
-        data = mockDataSystem.getMockData('LearningAnalyticsDashboard');
+        const mockData = mockDataSystem.getMockData('LearningAnalyticsDashboard');
+        data = { ...mockData, fallback: true };
+        setDataResponse(data);
       }
       
       // If still no data and not using mock, try mock data
@@ -67,7 +74,8 @@ export default function LearningAnalyticsDashboard() {
         const { mockDataSystem } = await import('@/lib/mock-data-system');
         const mockData = mockDataSystem.getMockData('LearningAnalyticsDashboard');
         if (mockData?.sessions && mockData.sessions.length > 0) {
-          data = mockData;
+          data = { ...mockData, fallback: true };
+          setDataResponse(data);
           console.debug('Using mock learning metrics data');
         }
       }
@@ -145,14 +153,18 @@ export default function LearningAnalyticsDashboard() {
     }
   }
 
+  const dataStatus = useDataStatus(dataResponse);
+
   if (loading) {
     return (
       <div className="card" style={{
+        position: 'relative', // For badge positioning
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
         marginBottom: '30px'
       }}>
+        <DataStatusBadge status="loading" position="top-right" />
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
           <span style={{ fontSize: '24px' }}>📈</span>
           <h3 style={{ fontSize: '18px', color: 'var(--accent)', margin: 0 }}>

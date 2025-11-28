@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 interface SecurityMetric {
   category: string;
@@ -38,6 +39,7 @@ export default function SecurityAssessmentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [overallScore, setOverallScore] = useState(0);
+  const [dataResponse, setDataResponse] = useState<any>(null);
 
   // FIXED: Add error check to prevent infinite retry loops
   // Crew: Data (Analysis) & La Forge (Implementation)
@@ -85,6 +87,9 @@ export default function SecurityAssessmentDashboard() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const response = await service.getSecurityData();
+      
+      // Store response for status badge
+      setDataResponse(response);
       
       // Handle response structure (data may be nested)
       const data = response?.data || response;
@@ -262,8 +267,13 @@ export default function SecurityAssessmentDashboard() {
   const warningCount = metrics.filter(m => m.status === 'warning').length;
   const secureCount = metrics.filter(m => m.status === 'secure').length;
 
+  const dataStatus = useDataStatus(dataResponse);
+
   return (
     <div className="card" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',

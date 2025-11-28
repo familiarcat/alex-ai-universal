@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 interface Recommendation {
   id: string;
@@ -27,6 +28,7 @@ export default function RAGProjectRecommendations() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataResponse, setDataResponse] = useState<any>(null);
 
   // FIXED: Add error check to prevent infinite retry loops
   // Crew: Data (Analysis) & La Forge (Implementation)
@@ -50,6 +52,9 @@ export default function RAGProjectRecommendations() {
         category: 'project-insights', 
         limit: 5 
       });
+      
+      // Store response for status badge
+      setDataResponse(data);
       
       // Transform RAG memories into recommendations
       const recs: Recommendation[] = (data.sessions || []).slice(0, 5).map((memory: any, index: number) => ({
@@ -129,6 +134,7 @@ export default function RAGProjectRecommendations() {
             tags: rec.tags || []
           }));
           setRecommendations(mockRecs);
+          setDataResponse({ ...mockData, fallback: true });
           console.debug('Using mock project recommendations data');
         } else {
           // Final fallback to default recommendations
@@ -161,9 +167,14 @@ export default function RAGProjectRecommendations() {
     }
   }
 
+  const dataStatus = useDataStatus(dataResponse);
+
   if (loading) {
     return (
       <div className="card" style={{
+        position: 'relative' // For badge positioning
+      }}>
+        <DataStatusBadge status="loading" position="top-right" />
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
@@ -206,6 +217,9 @@ export default function RAGProjectRecommendations() {
 
   return (
     <div className="card" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',

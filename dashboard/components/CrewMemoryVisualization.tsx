@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 interface CrewMemberStats {
   name: string;
@@ -30,6 +31,7 @@ export default function CrewMemoryVisualization() {
   const [crewStats, setCrewStats] = useState<CrewMemberStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalMemories, setTotalMemories] = useState(0);
+  const [dataResponse, setDataResponse] = useState<any>(null);
 
   useEffect(() => {
     fetchCrewStats();
@@ -67,6 +69,9 @@ export default function CrewMemoryVisualization() {
       const { getUnifiedDataService } = await import('@/lib/unified-data-service');
       const service = getUnifiedDataService();
       const data = await service.getCrewStats({ limit: 100 });
+      
+      // Store response for status badge
+      setDataResponse(data);
       
       // FIXED: Check for error responses before processing
       // Crew: Data (Analysis) + O'Brien (Pragmatic)
@@ -158,6 +163,7 @@ export default function CrewMemoryVisualization() {
         if (mockData?.stats) {
           setCrewStats(mockData.stats);
           setTotalMemories(mockData.totalMemories || 0);
+          setDataResponse({ ...mockData, fallback: true });
           console.debug('Using mock crew stats data');
         } else {
           // Final fallback to default stats
@@ -182,9 +188,14 @@ export default function CrewMemoryVisualization() {
     }
   }
 
+  const dataStatus = useDataStatus(dataResponse);
+
   if (loading) {
     return (
       <div className="card" style={{
+        position: 'relative' // For badge positioning
+      }}>
+        <DataStatusBadge status="loading" position="top-right" />
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
@@ -207,6 +218,9 @@ export default function CrewMemoryVisualization() {
 
   return (
     <div className="card" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',

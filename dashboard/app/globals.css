@@ -79,6 +79,23 @@
   /* Content spacing below navigation */
   --content-top-padding: var(--spacing-xl); /* 32px default content padding */
   --content-top-with-nav: calc(var(--nav-spacer-height) + var(--content-top-padding));
+  
+  /* Data Status Indicators - Theme-aware colors for mock vs live data */
+  --data-status-live-color: #00ffaa;
+  --data-status-live-bg: rgba(0, 255, 170, 0.15);
+  --data-status-live-border: rgba(0, 255, 170, 0.3);
+  
+  --data-status-mock-color: #ffaa00;
+  --data-status-mock-bg: rgba(255, 170, 0, 0.15);
+  --data-status-mock-border: rgba(255, 170, 0, 0.3);
+  
+  --data-status-loading-color: #888;
+  --data-status-loading-bg: rgba(136, 136, 136, 0.15);
+  --data-status-loading-border: rgba(136, 136, 136, 0.3);
+  
+  --data-status-error-color: #ff4444;
+  --data-status-error-bg: rgba(255, 68, 68, 0.15);
+  --data-status-error-border: rgba(255, 68, 68, 0.3);
 }
 
 * {

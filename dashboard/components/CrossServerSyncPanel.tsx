@@ -13,6 +13,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getCrossServerSync, SyncStatus, SyncUpdate } from '@/lib/cross-server-sync';
+import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
 
 export default function CrossServerSyncPanel() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
@@ -131,8 +132,13 @@ export default function CrossServerSyncPanel() {
     return '⚪';
   };
 
+  const dataStatus = useDataStatus(apiSyncStatus);
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700" style={{
+      position: 'relative' // For badge positioning
+    }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           🖖 Cross-Server Sync
