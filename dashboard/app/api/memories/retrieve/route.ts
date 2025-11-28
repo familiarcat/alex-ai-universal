@@ -1,9 +1,9 @@
 /**
- * Sync Status API
+ * Memories Retrieve API
  * 
- * GET /api/sync/status
+ * GET /api/memories/retrieve
  * 
- * Returns cross-server sync status
+ * Retrieves memories for a specific agent
  * Falls back to mock data if Supabase unavailable
  * 
  * Leadership: Lieutenant Uhura (Communications) + Geordi La Forge (Infrastructure)
@@ -17,20 +17,23 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUP
 
 export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const agentName = searchParams.get('agent_name') || 'Data';
+    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 100);
+
     // Try to fetch from Supabase
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
       
-      // Query sync status (if table exists)
       let data = null;
       let error = null;
       try {
         const result = await supabase
-          .from('sync_status')
+          .from('crew_memories')
           .select('*')
-          .order('last_sync', { ascending: false })
-          .limit(1)
-          .single();
+          .eq('crew_member', agentName)
+          .order('created_at', { ascending: false })
+          .limit(limit);
         data = result.data;
         error = result.error;
       } catch (e) {
@@ -39,44 +42,45 @@ export async function GET(request: NextRequest) {
         error = { message: 'Table not found' };
       }
 
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return NextResponse.json({
           success: true,
-          data: {
-            enabled: data.enabled || true,
-            lastSync: data.last_sync || new Date().toISOString(),
-            nextSync: data.next_sync || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-            servers: data.servers || [],
-            status: data.status || 'active'
-          }
+          agent_name: agentName,
+          total_memories: data.length,
+          memories: data.map((m: any) => ({
+            id: m.id,
+            content: m.content,
+            crew_member: m.crew_member,
+            timestamp: m.created_at || m.timestamp,
+            importance: m.importance || 'medium'
+          }))
         });
       }
     }
 
     // Fallback to mock data
-    const mockData = {
-      enabled: true,
-      lastSync: new Date().toISOString(),
-      nextSync: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-      servers: [
-        { id: 'server-1', name: 'Primary', status: 'synced', lastSync: new Date().toISOString() },
-        { id: 'server-2', name: 'Secondary', status: 'synced', lastSync: new Date().toISOString() }
-      ],
-      status: 'active'
-    };
+    const mockMemories = Array.from({ length: Math.min(limit, 5) }, (_, i) => ({
+      id: `mock-${i + 1}`,
+      content: `Mock memory ${i + 1} for ${agentName}`,
+      crew_member: agentName,
+      timestamp: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+      importance: i === 0 ? 'high' : 'medium'
+    }));
 
     return NextResponse.json({
       success: true,
-      data: mockData,
+      agent_name: agentName,
+      total_memories: mockMemories.length,
+      memories: mockMemories,
       fallback: true,
       message: 'Using mock data - Supabase table may not exist yet'
     });
   } catch (error: any) {
-    console.error('Sync status API error:', error);
+    console.error('Memories retrieve API error:', error);
     return NextResponse.json({
       success: false,
-      error: error.message || 'Failed to fetch sync status',
-      data: null
+      error: error.message || 'Failed to retrieve memories',
+      memories: []
     }, { status: 500 });
   }
 }

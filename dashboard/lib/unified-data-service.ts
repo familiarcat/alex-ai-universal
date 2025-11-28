@@ -281,10 +281,10 @@ export class UnifiedDataService {
       'crew/stats': { route: '/api/lounge/crew-status', method: 'GET' }, // GET only
       'learning/metrics': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'project/recommendations': { route: '/api/lounge/latest', method: 'GET' }, // GET only
-      'security/assessment': { route: '/api/security/assessment', method: 'GET' }, // NEW: Dedicated endpoint
-      'cost/optimization': { route: '/api/cost/optimization', method: 'GET' }, // NEW: Dedicated endpoint
-      'ux/analytics': { route: '/api/ux/analytics', method: 'GET' }, // NEW: Dedicated endpoint
-      'sync/status': { route: '/api/sync/status', method: 'GET' }, // NEW: Dedicated endpoint
+      'security/assessment': { route: '/api/security/assessment/', method: 'GET' }, // NEW: Dedicated endpoint (trailing slash for Next.js config)
+      'cost/optimization': { route: '/api/cost/optimization/', method: 'GET' }, // NEW: Dedicated endpoint (trailing slash)
+      'ux/analytics': { route: '/api/ux/analytics/', method: 'GET' }, // NEW: Dedicated endpoint (trailing slash)
+      'sync/status': { route: '/api/sync/status/', method: 'GET' }, // NEW: Dedicated endpoint (trailing slash)
       'ai/impact': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'process/documentation': { route: '/api/lounge/latest', method: 'GET' }, // GET only
       'data/sources': { route: '/api/lounge/latest', method: 'GET' }, // GET only

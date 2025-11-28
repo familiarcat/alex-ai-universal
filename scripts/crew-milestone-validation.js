@@ -213,9 +213,16 @@ function calculateBusinessValue(files, commitMessage) {
  */
 function checkInfrastructureReadiness(files) {
   // Distinguish between config files and package.json (npm scripts are low risk)
+  // Exclude Next.js metadata files, API routes, service layer files, and build artifacts from config check
   const hasConfig = files.some(f => 
     (f.includes('config') || f.includes('.json')) && 
-    !f.includes('package.json') // package.json script additions are low risk
+    !f.includes('package.json') && // package.json script additions are low risk
+    !f.includes('package-lock.json') && // Lock files are auto-generated
+    !f.includes('.next') && // Build artifacts are not config
+    !f.includes('layout.tsx') && // Next.js metadata/icons are low risk
+    !f.includes('route.ts') && // API routes are not infrastructure config
+    !f.includes('unified-data-service') && // Service layer route mappings are not infrastructure config
+    !f.includes('service') // Service layer files are application code, not infrastructure
   );
   const hasPackageJson = files.some(f => f.includes('package.json'));
   

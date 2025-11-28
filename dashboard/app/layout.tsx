@@ -15,6 +15,14 @@ import GlobalThemeStyles from '@/components/GlobalThemeStyles';
 export const metadata: Metadata = {
   title: 'Alex AI - Vibe Coding Platform',
   description: 'Multi-project management with AI crew guidance',
+  icons: {
+    icon: [
+      { url: '/api/favicon', type: 'image/svg+xml' }, // Dynamic favicon based on crew analysis
+      { url: '/icon.svg', type: 'image/svg+xml' },    // Fallback static favicon
+    ],
+    shortcut: '/api/favicon',
+    apple: '/api/favicon',
+  },
 };
 
 export default function RootLayout({

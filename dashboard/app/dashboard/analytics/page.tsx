@@ -21,14 +21,17 @@ const AnalyticsDashboardClient = dynamic(() => Promise.resolve(AnalyticsDashboar
 export default function AnalyticsPage() {
   const { style: navStyle } = useNavigationSpacing();
   
+  // Ensure consistent styling to avoid hydration mismatch
+  const containerStyle: React.CSSProperties = {
+    paddingTop: navStyle.paddingTop || '32px',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    paddingBottom: '40px',
+    minHeight: '100vh'
+  };
+  
   return (
-    <div className="dashboard-theme-wrapper" style={{
-      ...navStyle,
-      paddingLeft: '20px',
-      paddingRight: '20px',
-      paddingBottom: '40px',
-      minHeight: '100vh'
-    }}>
+    <div className="dashboard-theme-wrapper" style={containerStyle}>
       <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
         <AnalyticsDashboardClient />
       </div>

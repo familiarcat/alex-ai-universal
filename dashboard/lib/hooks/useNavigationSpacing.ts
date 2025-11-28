@@ -11,6 +11,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+import React from 'react';
 
 export interface NavigationSpacing {
   /** Whether navigation is currently visible */
@@ -39,10 +40,15 @@ export interface NavigationSpacing {
  */
 export function useNavigationSpacing(): NavigationSpacing {
   const pathname = usePathname() || '';
+  const [isClient, setIsClient] = React.useState(false);
+  
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   const isVisible = useMemo(() => {
-    // Check if we're in browser (client-side)
-    if (typeof window === 'undefined') return false;
+    // On server, always return false to avoid hydration mismatch
+    if (!isClient) return false;
     
     // Check for embed parameter
     const isEmbed = new URLSearchParams(window.location.search).get('embed') === '1';
@@ -56,7 +62,7 @@ export function useNavigationSpacing(): NavigationSpacing {
     
     // Navigation is visible on all other pages
     return true;
-  }, [pathname]);
+  }, [pathname, isClient]);
   
   // Navigation dimensions (matching DashboardChrome calculations)
   const navHeight = 100; // Total navigation height (DevNavigation + StatusRibbon + safety margin)

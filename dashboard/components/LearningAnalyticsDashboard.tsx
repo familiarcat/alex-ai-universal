@@ -185,12 +185,14 @@ export default function LearningAnalyticsDashboard() {
     <>
       {ErrorDisplay}
       <div className="card" style={{
+        position: 'relative', // For badge positioning
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
         marginBottom: '30px',
         background: 'var(--card-bg)'
       }}>
+        <DataStatusBadge status={dataStatus} position="top-right" />
         {/* Header */}
         <div style={{ 
           display: 'flex', 

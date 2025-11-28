@@ -1,12 +1,12 @@
 /**
- * Sync Status API
+ * Memories Stats API
  * 
- * GET /api/sync/status
+ * GET /api/memories/stats
  * 
- * Returns cross-server sync status
+ * Returns statistics about crew memories
  * Falls back to mock data if Supabase unavailable
  * 
- * Leadership: Lieutenant Uhura (Communications) + Geordi La Forge (Infrastructure)
+ * Leadership: Commander Data (Analytics) + Geordi La Forge (Infrastructure)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -21,16 +21,13 @@ export async function GET(request: NextRequest) {
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
       
-      // Query sync status (if table exists)
       let data = null;
       let error = null;
       try {
         const result = await supabase
-          .from('sync_status')
-          .select('*')
-          .order('last_sync', { ascending: false })
-          .limit(1)
-          .single();
+          .from('crew_memories')
+          .select('crew_member, id')
+          .limit(1000);
         data = result.data;
         error = result.error;
       } catch (e) {
@@ -40,43 +37,51 @@ export async function GET(request: NextRequest) {
       }
 
       if (!error && data) {
+        // Aggregate stats by crew member
+        const statsByCrew: Record<string, number> = {};
+        data.forEach((m: any) => {
+          const crew = m.crew_member || 'Unknown';
+          statsByCrew[crew] = (statsByCrew[crew] || 0) + 1;
+        });
+
         return NextResponse.json({
           success: true,
-          data: {
-            enabled: data.enabled || true,
-            lastSync: data.last_sync || new Date().toISOString(),
-            nextSync: data.next_sync || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-            servers: data.servers || [],
-            status: data.status || 'active'
-          }
+          total_memories: data.length,
+          by_crew: statsByCrew,
+          last_updated: new Date().toISOString()
         });
       }
     }
 
     // Fallback to mock data
-    const mockData = {
-      enabled: true,
-      lastSync: new Date().toISOString(),
-      nextSync: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-      servers: [
-        { id: 'server-1', name: 'Primary', status: 'synced', lastSync: new Date().toISOString() },
-        { id: 'server-2', name: 'Secondary', status: 'synced', lastSync: new Date().toISOString() }
-      ],
-      status: 'active'
+    const mockStats = {
+      total_memories: 15632,
+      by_crew: {
+        'Data': 2341,
+        'La Forge': 2234,
+        'Troi': 2098,
+        'Riker': 1987,
+        'Picard': 1856,
+        'Worf': 1723,
+        'Crusher': 1645,
+        'Uhura': 1548
+      },
+      last_updated: new Date().toISOString(),
+      fallback: true
     };
 
     return NextResponse.json({
       success: true,
-      data: mockData,
-      fallback: true,
+      ...mockStats,
       message: 'Using mock data - Supabase table may not exist yet'
     });
   } catch (error: any) {
-    console.error('Sync status API error:', error);
+    console.error('Memories stats API error:', error);
     return NextResponse.json({
       success: false,
-      error: error.message || 'Failed to fetch sync status',
-      data: null
+      error: error.message || 'Failed to fetch memory stats',
+      total_memories: 0,
+      by_crew: {}
     }, { status: 500 });
   }
 }

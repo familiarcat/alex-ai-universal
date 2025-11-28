@@ -172,14 +172,13 @@ export default function RAGProjectRecommendations() {
   if (loading) {
     return (
       <div className="card" style={{
-        position: 'relative' // For badge positioning
-      }}>
-        <DataStatusBadge status="loading" position="top-right" />
+        position: 'relative', // For badge positioning
         padding: '24px',
         border: 'var(--border)',
         borderRadius: 'var(--radius)',
         marginBottom: '30px'
       }}>
+        <DataStatusBadge status="loading" position="top-right" />
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
           <span style={{ fontSize: '24px' }}>🧠</span>
           <h3 style={{ fontSize: '18px', color: 'var(--accent)', margin: 0 }}>
@@ -217,15 +216,14 @@ export default function RAGProjectRecommendations() {
 
   return (
     <div className="card" style={{
-      position: 'relative' // For badge positioning
-    }}>
-      <DataStatusBadge status={dataStatus} position="top-right" />
+      position: 'relative', // For badge positioning
       padding: '24px',
       border: 'var(--border)',
       borderRadius: 'var(--radius)',
       marginBottom: '30px',
       background: 'var(--card-bg)'
     }}>
+      <DataStatusBadge status={dataStatus} position="top-right" />
       {/* Header */}
       <div style={{ 
         display: 'flex', 

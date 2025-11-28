@@ -22,13 +22,22 @@ export async function GET(request: NextRequest) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
       
       // Query security audits (if table exists)
-      const { data, error } = await supabase
-        .from('security_audits')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10)
-        .single()
-        .catch(() => ({ data: null, error: null }));
+      let data = null;
+      let error = null;
+      try {
+        const result = await supabase
+          .from('security_audits')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10)
+          .single();
+        data = result.data;
+        error = result.error;
+      } catch (e) {
+        // Table doesn't exist or query failed - use mock data
+        data = null;
+        error = { message: 'Table not found' };
+      }
 
       if (!error && data) {
         return NextResponse.json({
