@@ -104,21 +104,66 @@ export default function UniversalProgressBar({
           </span>
         )}
       </div>
+      {/* Visual Progress Bar with Solid/Faded Backgrounds */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        fontFamily: 'monospace',
-        fontSize: '12px',
-        color: '#aaa'
+        width: '100%'
       }}>
-        <span style={{ minWidth: '40px' }}>
-          [{bar}]
-        </span>
-        <span style={{ fontSize: '11px', color: '#666' }}>
+        <div style={{
+          flex: 1,
+          height: '8px',
+          background: 'rgba(255, 255, 255, 0.1)', // Faded background for unfilled
+          borderRadius: '4px',
+          overflow: 'hidden',
+          position: 'relative',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${percentage}%`,
+            background: color, // Solid background for filled portion
+            borderRadius: '4px',
+            transition: 'width 0.3s ease, background 0.3s ease',
+            boxShadow: `0 0 8px ${color}40`,
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* Shimmer effect for active progress */}
+            {status === 'loading' && animated && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                animation: 'shimmer 2s infinite'
+              }} />
+            )}
+          </div>
+        </div>
+        <span style={{ 
+          fontSize: '11px', 
+          color: '#888',
+          minWidth: '50px',
+          textAlign: 'right',
+          fontFamily: 'monospace'
+        }}>
           {current}/{total}
         </span>
       </div>
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; transform: scale(1); }

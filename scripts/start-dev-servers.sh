@@ -56,6 +56,102 @@ echo ""
 echo "$DASHBOARD_3000_PID" > /tmp/dashboard-3000.pid
 echo "$DASHBOARD_3001_PID" > /tmp/dashboard-3001.pid
 
+echo ""
+echo "⏳ Waiting for servers to be ready (checking every 2 seconds)..."
+echo ""
+
+# Wait for servers to be ready
+MAX_WAIT=120
+WAIT_COUNT=0
+PORT_3000_READY=false
+PORT_3001_READY=false
+
+while [ $WAIT_COUNT -lt $MAX_WAIT ]; do
+  # Check port 3000
+  if ! $PORT_3000_READY; then
+    if curl -s http://localhost:3000 > /dev/null 2>&1; then
+      PORT_3000_READY=true
+      echo "   ✅ Port 3000 is ready!"
+    fi
+  fi
+
+  # Check port 3001
+  if ! $PORT_3001_READY; then
+    if curl -s http://localhost:3001 > /dev/null 2>&1; then
+      PORT_3001_READY=true
+      echo "   ✅ Port 3001 is ready!"
+    fi
+  fi
+
+  # If both are ready, break
+  if $PORT_3000_READY && $PORT_3001_READY; then
+    break
+  fi
+
+  sleep 2
+  WAIT_COUNT=$((WAIT_COUNT + 2))
+  if [ $((WAIT_COUNT % 10)) -eq 0 ]; then
+    echo "   ⏳ Still waiting... (${WAIT_COUNT}s/${MAX_WAIT}s)"
+  fi
+done
+
+# Open browser tabs
+if $PORT_3000_READY || $PORT_3001_READY; then
+  echo ""
+  echo "🌐 Opening browser tabs..."
+  echo ""
+  
+  if command -v open > /dev/null; then
+    # macOS
+    if $PORT_3000_READY; then
+      echo "   📊 Opening Data Dashboard..."
+      open -a "Google Chrome" "http://localhost:3000/dashboard" 2>/dev/null || \
+      open -a "Safari" "http://localhost:3000/dashboard" 2>/dev/null || \
+      open "http://localhost:3000/dashboard" 2>/dev/null
+      sleep 1
+    fi
+    
+    if $PORT_3001_READY; then
+      echo "   🚀 Opening Templating Dashboard..."
+      open -a "Google Chrome" "http://localhost:3001/dashboard" 2>/dev/null || \
+      open -a "Safari" "http://localhost:3001/dashboard" 2>/dev/null || \
+      open "http://localhost:3001/dashboard" 2>/dev/null
+      sleep 1
+    fi
+    
+    echo "   🔗 Opening MCP Status..."
+    open -a "Google Chrome" "http://localhost:3000/api/mcp/status" 2>/dev/null || \
+    open -a "Safari" "http://localhost:3000/api/mcp/status" 2>/dev/null || \
+    open "http://localhost:3000/api/mcp/status" 2>/dev/null
+  else
+    echo "   ⚠️  'open' command not available. Please open manually:"
+    if $PORT_3000_READY; then
+      echo "      • Data Dashboard: http://localhost:3000/dashboard"
+    fi
+    if $PORT_3001_READY; then
+      echo "      • Templating Dashboard: http://localhost:3001/dashboard"
+    fi
+    echo "      • MCP Status: http://localhost:3000/api/mcp/status"
+  fi
+fi
+
+echo ""
 echo "✅ Both servers started successfully!"
-echo "   They will be ready shortly..."
+echo ""
+echo "   📊 Running Environments:"
+echo "      • Data Dashboard: http://localhost:3000/dashboard"
+echo "      • Templating Dashboard: http://localhost:3001/dashboard"
+echo "      • MCP Status: http://localhost:3000/api/mcp/status"
+echo ""
+echo "   📋 Log Files:"
+echo "      • Port 3000: /tmp/dashboard-3000.log"
+echo "      • Port 3001: /tmp/dashboard-3001.log"
+echo ""
+echo "   💡 To view logs in real-time:"
+echo "      tail -f /tmp/dashboard-3000.log"
+echo "      tail -f /tmp/dashboard-3001.log"
+echo ""
+echo "   🛑 To stop servers:"
+echo "      lsof -ti:3000,3001 | xargs kill -9"
+echo ""
 
