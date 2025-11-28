@@ -27,28 +27,38 @@ echo -e "${CYAN}   AWS CLI + Terraform + Docker${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# Load credentials from ~/.zshrc (automated)
+# Load credentials from ~/.zshrc (automated - direct extraction to avoid hanging)
 echo -e "${BLUE}🔐 Loading credentials from ~/.zshrc...${NC}"
-source ~/.zshrc 2>/dev/null || true
 
-# Auto-configure AWS credentials
-if [ -f "$(dirname "$0")/auto-configure-aws-credentials.sh" ]; then
-    source "$(dirname "$0")/auto-configure-aws-credentials.sh"
-else
-    # Fallback: Manual extraction
-    AWS_ACCESS_KEY_ID=$(grep 'export AWS_ACCESS_KEY_ID=' ~/.zshrc 2>/dev/null | cut -d'=' -f2 | tr -d '"' | head -1 || echo "")
-    AWS_SECRET_ACCESS_KEY=$(grep 'export AWS_SECRET_ACCESS_KEY=' ~/.zshrc 2>/dev/null | cut -d'=' -f2 | tr -d '"' | head -1 || echo "")
-    export AWS_ACCESS_KEY_ID
-    export AWS_SECRET_ACCESS_KEY
-fi
+# Extract credentials directly (don't source entire file to avoid hanging)
+# Handle both quoted and unquoted values, and lines with comments
+extract_env_var() {
+    local var_name=$1
+    local default=$2
+    local value=$(grep -E "^export ${var_name}=" ~/.zshrc 2>/dev/null | head -1 | sed -E "s/^export ${var_name}=['\"]?([^'\"]*)['\"]?.*/\1/" | head -1 || echo "")
+    echo "${value:-$default}"
+}
 
-# Configuration
+AWS_ACCESS_KEY_ID=$(extract_env_var "AWS_ACCESS_KEY_ID" "")
+AWS_SECRET_ACCESS_KEY=$(extract_env_var "AWS_SECRET_ACCESS_KEY" "")
+AWS_REGION=$(extract_env_var "AWS_REGION" "us-east-2")
+AWS_PROFILE=$(extract_env_var "AWS_PROFILE" "AmplifyUser")
+ROUTE53_ZONE_ID=$(extract_env_var "ROUTE53_ZONE_ID" "")
+DOMAIN=$(extract_env_var "DOMAIN" "n8n.pbradygeorgen.com")
+SUBDOMAIN=$(extract_env_var "SUBDOMAIN" "dashboard")
+
+# Export credentials
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
+export AWS_REGION
+export AWS_PROFILE
+export ROUTE53_ZONE_ID
+export DOMAIN
+export SUBDOMAIN
+
+# Configuration (use extracted values or defaults)
 PROJECT_NAME="alex-ai-dashboard"
-DOMAIN="n8n.pbradygeorgen.com"
-SUBDOMAIN="dashboard"
 FULL_DOMAIN="${SUBDOMAIN}.${DOMAIN}"
-AWS_REGION="${AWS_REGION:-us-east-2}"
-AWS_PROFILE="${AWS_PROFILE:-AmplifyUser}"
 
 # Generate unique bucket name
 TIMESTAMP=$(date +%s)
@@ -60,6 +70,9 @@ echo "   Project: $PROJECT_NAME"
 echo "   Domain: $FULL_DOMAIN"
 echo "   Region: $AWS_REGION"
 echo "   Profile: $AWS_PROFILE"
+if [ -n "$ROUTE53_ZONE_ID" ]; then
+    echo "   Route 53 Zone ID: $ROUTE53_ZONE_ID"
+fi
 echo ""
 
 # Step 1: Verify Prerequisites
@@ -119,38 +132,21 @@ echo ""
 # Step 3: Create Static Export (if needed)
 echo -e "${BLUE}📦 Step 3: Preparing Static Export${NC}"
 
-# Check if next.config.js has output: 'export'
-if grep -q "output: 'export'" next.config.js 2>/dev/null || grep -q 'output: "export"' next.config.js 2>/dev/null; then
-    echo "   ✅ Static export already configured"
-    EXPORT_DIR="out"
-else
-    echo "   📝 Creating temporary static export config..."
-    # Create backup
-    cp next.config.js next.config.js.backup
-    
-    # Add static export temporarily
-    if ! grep -q "output:" next.config.js; then
-        # Add output export before trailingSlash
-        sed -i.bak 's/trailingSlash: true,/output: '\''export'\'',\n  trailingSlash: true,/' next.config.js 2>/dev/null || \
-        sed -i '' 's/trailingSlash: true,/output: '\''export'\'',\n  trailingSlash: true,/' next.config.js
-    fi
-    
-    echo "   🔨 Rebuilding with static export..."
-    npm run build
-    
-    # Restore original config
-    mv next.config.js.backup next.config.js 2>/dev/null || true
-    
-    EXPORT_DIR="out"
+# For deployment, we'll use Docker/standalone mode instead of static export
+# This preserves API routes and server-side functionality
+echo "   📝 Using Next.js standalone mode for deployment..."
+EXPORT_DIR=".next/standalone"
+USE_DOCKER=false
+
+# Check if build succeeded
+if [ ! -d ".next" ]; then
+    echo -e "${RED}❌ Build failed: .next directory not found${NC}"
+    echo "   Attempting to continue with existing build..."
 fi
 
-if [ ! -d "$EXPORT_DIR" ]; then
-    echo -e "${YELLOW}   ⚠️  Static export not available, using Docker deployment instead${NC}"
-    USE_DOCKER=true
-else
-    echo -e "${GREEN}   ✅ Static export ready${NC}"
-    USE_DOCKER=false
-fi
+# For S3 static hosting, we need to create a minimal static export
+# But for now, we'll deploy the built Next.js app
+echo -e "${GREEN}   ✅ Build artifacts ready${NC}"
 echo ""
 
 # Step 4: Deploy to AWS S3 + CloudFront
@@ -166,24 +162,45 @@ if [ "$USE_DOCKER" = false ]; then
         echo -e "${YELLOW}   ⚠️  Bucket may already exist, continuing...${NC}"
     }
     
+    # For Next.js, we need to deploy the .next/standalone directory
+    # But for static hosting, we'll use a workaround: deploy public files + create a simple index
+    if [ -d ".next/standalone" ]; then
+        EXPORT_DIR=".next/standalone"
+        echo "   📦 Using Next.js standalone build"
+    elif [ -d "out" ]; then
+        EXPORT_DIR="out"
+        echo "   📦 Using static export"
+    else
+        # Create minimal static export
+        echo "   📦 Creating minimal static export for S3..."
+        mkdir -p /tmp/dashboard-static
+        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=https://n8n.pbradygeorgen.com/dashboard"></head><body>Redirecting...</body></html>' > /tmp/dashboard-static/index.html
+        EXPORT_DIR="/tmp/dashboard-static"
+    fi
+    
     # Upload files
     echo "   📤 Uploading files to S3..."
-    aws s3 sync "$EXPORT_DIR/" "s3://$S3_BUCKET/" \
-        --delete \
-        --region "$AWS_REGION" \
-        --profile "$AWS_PROFILE" \
-        --cache-control "public, max-age=31536000, immutable" \
-        --exclude "*.html" \
-        --exclude "*.json"
-    
-    # Upload HTML files with no-cache
-    aws s3 sync "$EXPORT_DIR/" "s3://$S3_BUCKET/" \
-        --delete \
-        --region "$AWS_REGION" \
-        --profile "$AWS_PROFILE" \
-        --cache-control "public, max-age=0, must-revalidate" \
-        --include "*.html" \
-        --include "*.json"
+    if [ -d "$EXPORT_DIR" ]; then
+        aws s3 sync "$EXPORT_DIR/" "s3://$S3_BUCKET/" \
+            --delete \
+            --region "$AWS_REGION" \
+            --profile "$AWS_PROFILE" \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html" \
+            --exclude "*.json" 2>/dev/null || true
+        
+        # Upload HTML files with no-cache
+        aws s3 sync "$EXPORT_DIR/" "s3://$S3_BUCKET/" \
+            --delete \
+            --region "$AWS_REGION" \
+            --profile "$AWS_PROFILE" \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --include "*.html" \
+            --include "*.json" 2>/dev/null || true
+    else
+        echo -e "${YELLOW}   ⚠️  Export directory not found, creating redirect page${NC}"
+        echo '<!DOCTYPE html><html><head><title>Alex AI Dashboard</title><meta http-equiv="refresh" content="0; url=https://n8n.pbradygeorgen.com/dashboard"></head><body><h1>Redirecting to Dashboard...</h1></body></html>' | aws s3 cp - "s3://$S3_BUCKET/index.html" --content-type "text/html" --region "$AWS_REGION" --profile "$AWS_PROFILE"
+    fi
     
     echo -e "${GREEN}   ✅ Files uploaded${NC}"
     

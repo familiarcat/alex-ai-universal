@@ -5,6 +5,8 @@
  * with dynamic component interchangeability
  */
 
+'use client';
+
 import dynamic from 'next/dynamic';
 
 const VectorBasedDashboard = dynamic(() => import('@/components/VectorBasedDashboard'), {
