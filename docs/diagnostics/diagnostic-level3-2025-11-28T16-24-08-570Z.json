@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-11-28T16:24:08.570Z",
+  "level": "level3",
+  "result": {
+    "level": "level3",
+    "team": [
+      "crusher",
+      "data",
+      "troi"
+    ],
+    "cost": 10,
+    "roi": 300,
+    "scope": "health_check"
+  },
+  "options": {
+    "issue": null,
+    "issueSeverity": "medium",
+    "issueScope": "component"
+  }
+}

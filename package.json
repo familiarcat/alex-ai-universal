@@ -159,7 +159,16 @@
     "analyze:component-data": "node scripts/analyze-component-data-sources.js",
     "crew:coordinate:component-data": "node scripts/crew-coordinate-component-data.js",
     "alex-ai:activate": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(alex.generateActivationPrompt());\"",
-    "alex-ai:status": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(JSON.stringify(alex.getStatus(), null, 2));\""
+    "alex-ai:status": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(JSON.stringify(alex.getStatus(), null, 2));\"",
+    "diagnostic": "node scripts/diagnostic-system.js",
+    "diagnostic:level1": "node scripts/diagnostic-system.js level1",
+    "diagnostic:level2": "node scripts/diagnostic-system.js level2",
+    "diagnostic:level3": "node scripts/diagnostic-system.js level3",
+    "diagnostic:security": "node scripts/diagnostic-system.js level2 security",
+    "diagnostic:performance": "node scripts/diagnostic-system.js level2 performance",
+    "diagnostic:ux": "node scripts/diagnostic-system.js level2 ux",
+    "diagnostic:infrastructure": "node scripts/diagnostic-system.js level2 infrastructure",
+    "diagnostic:health": "node scripts/diagnostic-system.js level3"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

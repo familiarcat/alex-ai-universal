@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-11-28T16:24:05.764Z",
+  "level": "level2",
+  "result": {
+    "level": "level2",
+    "focusArea": "security",
+    "team": [
+      "riker",
+      "data"
+    ],
+    "cost": 21,
+    "roi": 233,
+    "scope": "targeted"
+  },
+  "options": {
+    "focusArea": "security",
+    "issue": "Authentication system review",
+    "issueSeverity": "medium",
+    "issueScope": "component"
+  }
+}
