@@ -12,8 +12,9 @@
  * Reviewed by: Lieutenant Worf (Security) & Lieutenant Uhura (Communications)
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
+import { getUnifiedDataService } from '@/lib/unified-data-service';
 
 interface SecurityMetric {
   category: string;
@@ -41,9 +42,18 @@ export default function SecurityAssessmentDashboard() {
   const [overallScore, setOverallScore] = useState(0);
   const [dataResponse, setDataResponse] = useState<any>(null);
 
+  // FIXED: Use static import instead of dynamic import to prevent HMR warnings
+  // Crew: La Forge (Infrastructure) + Data (Analysis)
+  const serviceRef = useRef<ReturnType<typeof getUnifiedDataService> | null>(null);
+  
   // FIXED: Add error check to prevent infinite retry loops
   // Crew: Data (Analysis) & La Forge (Implementation)
   useEffect(() => {
+    // Initialize service once (stable reference for HMR)
+    if (!serviceRef.current) {
+      serviceRef.current = getUnifiedDataService();
+    }
+    
     // Only fetch if not already in error state (prevents infinite retries)
     if (!error) {
       fetchSecurityData();
@@ -84,8 +94,8 @@ export default function SecurityAssessmentDashboard() {
       setLoading(true);
       
       // DDD-Compliant: Use UnifiedDataService (API primary, mock fallback)
-      const { getUnifiedDataService } = await import('@/lib/unified-data-service');
-      const service = getUnifiedDataService();
+      // FIXED: Use static import via ref to prevent HMR warnings
+      const service = serviceRef.current!;
       const response = await service.getSecurityData();
       
       // Store response for status badge

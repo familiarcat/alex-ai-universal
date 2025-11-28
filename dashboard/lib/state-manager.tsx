@@ -6,10 +6,12 @@
  * Reviewed by: Commander Data (Architecture) & Lt. Cmdr. La Forge (Implementation)
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { debouncedContentSync } from './content-sync';
 import { debouncedSettingsSync, retrieveSettings } from './settings-sync';
 import { emitProjectUpdate, emitThemeUpdate, initializeStateSync } from './state-sync-integration';
+import { createStateSyncManager, StateSyncManager, SyncConfig } from './state-sync-manager';
+import { getTierContext, detectTierFromPath } from './tier-detection';
 
 export type ComponentRole = 'hero' | 'header' | 'footer' | 'feature' | 'testimonial' | 'cta' | 'gallery' | 'content';
 
@@ -133,12 +135,48 @@ export function StateProvider({ children }: { children: ReactNode }) {
   // Lazy initialization: getInitialState() runs ONCE before first render
   const [state, setState] = useState(getInitialState);
   
+  // 🖖 Three-Tier State Sync Manager
+  const syncManagerRef = useRef<StateSyncManager | null>(null);
+  
   // 🎯 PROPER DDD: Sync from Supabase on mount (load authoritative settings)
   // Note: Uses intelligent fallback pattern (localStorage → Supabase → default)
   // FIXED: Prioritize localStorage theme, only override if Supabase has a different saved value
   useEffect(() => {
     // Initialize event-driven sync integration
     initializeStateSync();
+    
+    // Initialize three-tier state sync manager
+    if (typeof window !== 'undefined' && !syncManagerRef.current) {
+      const pathname = window.location.pathname;
+      const tierContext = getTierContext(pathname);
+      
+      const syncConfig: Partial<SyncConfig> = {
+        syncInterval: 30000, // 30 seconds
+        conflictResolution: 'merge',
+        enableOptimisticUpdates: true,
+        enableVectorStorage: true,
+        projectScope: tierContext.projectId,
+        userId: tierContext.userId
+      };
+      
+      syncManagerRef.current = createStateSyncManager(syncConfig);
+      
+      // Start periodic sync
+      syncManagerRef.current.startPeriodicSync((result) => {
+        if (result.conflict) {
+          console.warn(`🔄 Sync conflict resolved for project:`, result);
+        }
+      });
+      
+      console.log('🖖 Three-Tier State Sync Manager initialized');
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (syncManagerRef.current) {
+        syncManagerRef.current.stopPeriodicSync();
+      }
+    };
     
     // Get current theme from localStorage (already loaded in getInitialState)
     const currentTheme = state.globalTheme;
@@ -222,6 +260,13 @@ export function StateProvider({ children }: { children: ReactNode }) {
       
       // 🎯 PROPER DDD: Sync to Supabase via n8n (single source of truth)
       debouncedContentSync(newState.projects[projectId], 2000);
+      
+      // 🖖 Three-Tier Sync: Trigger immediate sync for critical updates
+      if (syncManagerRef.current) {
+        syncManagerRef.current.syncProject(projectId).catch(error => {
+          console.error('Sync error:', error);
+        });
+      }
       
       // 🖖 Event-Driven Sync: Emit WebSocket event (only on actual change)
       emitProjectUpdate(projectId, field, value);

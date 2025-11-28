@@ -12,8 +12,9 @@
  * Reviewed by: Commander Riker (Tactical) & Quark (Business Operations)
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
+import { getUnifiedDataService } from '@/lib/unified-data-service';
 
 interface ModelUsage {
   model: string;
@@ -38,7 +39,16 @@ export default function CostOptimizationMonitor() {
   const [timeframe, setTimeframe] = useState<'24h' | '7d' | '30d'>('7d');
   const [dataResponse, setDataResponse] = useState<any>(null);
 
+  // FIXED: Use static import instead of dynamic import to prevent HMR warnings
+  // Crew: La Forge (Infrastructure) + Data (Analysis)
+  const serviceRef = useRef<ReturnType<typeof getUnifiedDataService> | null>(null);
+
   useEffect(() => {
+    // Initialize service once (stable reference for HMR)
+    if (!serviceRef.current) {
+      serviceRef.current = getUnifiedDataService();
+    }
+    
     fetchCostData();
     // Cost optimization: Only poll when tab is visible, increased interval to 10 minutes
     let intervalId: NodeJS.Timeout | null = null;
@@ -76,8 +86,8 @@ export default function CostOptimizationMonitor() {
       setLoading(true);
       
       // DDD-Compliant: Use UnifiedDataService (API primary, mock fallback)
-      const { getUnifiedDataService } = await import('@/lib/unified-data-service');
-      const service = getUnifiedDataService();
+      // FIXED: Use static import via ref to prevent HMR warnings
+      const service = serviceRef.current!;
       const response = await service.getCostData();
       
       // Store response for status badge

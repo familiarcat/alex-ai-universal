@@ -1,0 +1,42 @@
+{
+  "name": "RBAC Check Permission",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rbac-check",
+        "responseMode": "responseNode"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "rpc",
+        "functionName": "check_user_permission"
+      },
+      "name": "Check Permission",
+      "type": "n8n-nodes-base.postgres",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { hasPermission: $json[0].check_user_permission } }}"
+      },
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Check Permission", "type": "main", "index": 0 }]]
+    },
+    "Check Permission": {
+      "main": [[{ "node": "Respond", "type": "main", "index": 0 }]]
+    }
+  }
+}
+

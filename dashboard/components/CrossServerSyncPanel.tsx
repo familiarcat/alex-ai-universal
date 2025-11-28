@@ -11,9 +11,10 @@
  * separate "project" websites with real-time updates.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getCrossServerSync, SyncStatus, SyncUpdate } from '@/lib/cross-server-sync';
 import DataStatusBadge, { useDataStatus } from './DataStatusBadge';
+import { getUnifiedDataService } from '@/lib/unified-data-service';
 
 export default function CrossServerSyncPanel() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
@@ -31,12 +32,20 @@ export default function CrossServerSyncPanel() {
   const sync = getCrossServerSync();
 
   // Fetch sync status from API
+  // FIXED: Use static import instead of dynamic import to prevent HMR warnings
+  // Crew: La Forge (Infrastructure) + Data (Analysis)
+  const serviceRef = useRef<ReturnType<typeof getUnifiedDataService> | null>(null);
+  
   useEffect(() => {
+    // Initialize service once (stable reference for HMR)
+    if (!serviceRef.current) {
+      serviceRef.current = getUnifiedDataService();
+    }
+    
     async function fetchSyncStatus() {
       try {
         setLoading(true);
-        const { getUnifiedDataService } = await import('@/lib/unified-data-service');
-        const service = getUnifiedDataService();
+        const service = serviceRef.current!;
         const data = await service.getSyncStatus();
         setApiSyncStatus(data?.data || data);
       } catch (error) {
@@ -45,6 +54,7 @@ export default function CrossServerSyncPanel() {
         setLoading(false);
       }
     }
+    
     fetchSyncStatus();
     const interval = setInterval(fetchSyncStatus, 30000); // Update every 30 seconds
     return () => clearInterval(interval);
