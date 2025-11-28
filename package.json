@@ -153,7 +153,11 @@
     "dev:servers:start": "bash scripts/start-dev-servers.sh",
     "dev:servers:start:browser": "bash scripts/start-dev-with-browser.sh",
     "dev:servers:restart": "bash scripts/restart-dev-complete.sh",
-    "dev:servers:start:monitor": "bash scripts/start-dev-servers.sh && node scripts/monitor-dev-servers.js"
+    "dev:servers:start:monitor": "bash scripts/start-dev-servers.sh && node scripts/monitor-dev-servers.js",
+    "analyze:components": "node scripts/analyze-component-goals.js",
+    "store:component-goals": "node scripts/store-component-goals-rag.js",
+    "alex-ai:activate": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(alex.generateActivationPrompt());\"",
+    "alex-ai:status": "node -e \"const {AlexAIInstantiation} = require('./lib/crew/alex-ai-instantiation.ts'); const alex = new AlexAIInstantiation(); console.log(JSON.stringify(alex.getStatus(), null, 2));\""
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

@@ -334,3 +334,4 @@ See:
 - `scripts/mcp/mcp-store-memory.js` - CLI script using universal MCP
 - `dashboard/lib/n8n-client.js` - Legacy n8n client (being migrated)
 
+
