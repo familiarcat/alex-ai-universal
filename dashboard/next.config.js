@@ -1,6 +1,17 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
 const nextConfig = {
+  // Turbopack configuration (Next.js 15+)
+  // Note: Turbopack is faster but experimental. Use --webpack flag to fallback.
+  experimental: {
+    // Turbopack optimizations
+    turbo: {
+      // Resolve workspace root for monorepo compatibility
+      resolveAlias: {
+        // Ensure proper resolution in monorepo
+      },
+    },
+  },
   // Silence multi-lockfile warning by pointing tracing root to repo root
   outputFileTracingRoot: path.join(__dirname, '..'),
   // Enable static exports for deployment (commented out for dev)
