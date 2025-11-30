@@ -2,9 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    "lib": ["ES2020"],
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "lib": [
+      "ES2020"
+    ],
+    "outDir": "dist/packages/cursor-extension",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,7 +19,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
+    "typeRoots": [
+      "../../node_modules/@types",
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*"
@@ -29,10 +34,3 @@
     "**/*.spec.ts"
   ]
 }
-
-
-
-
-
-
-

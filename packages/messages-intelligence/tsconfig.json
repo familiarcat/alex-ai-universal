@@ -2,9 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    "lib": ["ES2020"],
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "lib": [
+      "ES2020"
+    ],
+    "outDir": "dist/packages/messages-intelligence",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -27,4 +29,3 @@
     "**/*.test.ts"
   ]
 }
-

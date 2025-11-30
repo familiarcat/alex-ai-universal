@@ -6,7 +6,8 @@
   },
   "buildArtifacts": {
     "integrityVerification": true,
-    "isolation": true
+    "isolation": true,
+    "signing": false
   },
   "dataFlow": {
     "pattern": "Extensions → API Gateway → Auth → Domain → Infrastructure",

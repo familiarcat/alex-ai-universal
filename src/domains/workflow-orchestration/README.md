@@ -1,203 +1,81 @@
-# ⚙️ Workflow Orchestration Domain - MIGRATED ✅
-
-**Bounded Context:** N8N workflow management and autonomous automation  
-**Owner:** Lieutenant Uhura  
-**Status:** **Migration Complete**
+# Workflow Orchestration Domain
 
 ## Purpose
-
-The Workflow Orchestration domain handles:
-- N8N workflow deployment
-- Workflow execution and monitoring
-- Webhook management
-- Autonomous workflow operations
-
-## Ubiquitous Language
-
-- **Workflow**: N8N automation sequence
-- **Execution**: Single run of a workflow
-- **Webhook**: HTTP endpoint triggering workflow
-- **Node**: Individual step in workflow
-- **Trigger**: Event that starts workflow
+Manages workflow execution and orchestration, integrating both n8n workflows and MCP tools.
 
 ## Architecture
 
-```
-workflow-orchestration/
-├── domain/
-│   ├── aggregates/
-│   │   ├── workflow.ts ✅
-│   │   └── execution.ts ✅
-│   ├── value-objects/
-│   │   ├── webhook-url.ts ✅
-│   │   └── execution-status.ts ✅
-│   ├── events/
-│   │   ├── workflow-deployed.event.ts ✅
-│   │   ├── workflow-activated.event.ts ✅
-│   │   ├── workflow-deactivated.event.ts ✅
-│   │   ├── workflow-executed.event.ts ✅
-│   │   └── execution-failed.event.ts ✅
-│   └── services/
-├── application/
-│   ├── commands/
-│   │   ├── deploy-workflow.command.ts ✅
-│   │   └── execute-workflow.command.ts ✅
-│   └── queries/
-│       ├── get-workflow-status.query.ts ✅
-│       └── list-workflows.query.ts ✅
-└── infrastructure/
-    ├── n8n-client.ts ✅
-    ├── n8n-workflow.adapter.ts ✅
-    └── repositories/
-        ├── workflow.repository.interface.ts ✅
-        └── execution.repository.interface.ts ✅
-```
+### Current State
+- **n8n Workflows**: Deployed at n8n.pbradygeorgen.com
+- **MCP Server**: Deployed at mcp.pbradygeorgen.com
+- **Migration Status**: In Progress
 
-## Key Domain Objects
+### Target State (DDD)
+- **Workflow Aggregate**: Unified workflow management
+- **MCP Tools**: Primary execution engine
+- **n8n Compatibility**: Legacy support during migration
 
-### Aggregates
+## Integration Points
 
-#### Workflow (Root)
-- **Identity**: Workflow ID
-- **Properties**: Name, N8N workflow ID, nodes, connections, webhook URL, active status
-- **Invariants**:
-  - Must have valid name
-  - Must have at least one node
-  - Cannot activate if not deployed
-- **Key Methods**:
-  - `deploy(n8nWorkflowId, webhookUrl?)` - Deploy to N8N
-  - `activate()` - Activate workflow
-  - `deactivate()` - Deactivate workflow
-  - `extractWebhookPath()` - Get webhook path from nodes
+### N8N → MCP Migration
+- All n8n workflows being migrated to MCP tools
+- MCP tools provide same functionality with better architecture
+- DDD structure enables clean separation of concerns
 
-#### Execution
-- **Identity**: Execution ID
-- **Properties**: Workflow ID, status, input, output, error, timestamps
-- **Invariants**:
-  - Status transitions must follow lifecycle
-  - Terminal states (completed/failed/canceled) are immutable
-- **Key Methods**:
-  - `start(n8nExecutionId)` - Start execution
-  - `complete(output)` - Mark as completed
-  - `fail(error)` - Mark as failed
-  - `cancel()` - Cancel execution
+### Domain Responsibilities
+1. **Workflow Definition**: Store workflow metadata
+2. **Workflow Execution**: Execute via MCP or n8n (during transition)
+3. **Workflow Monitoring**: Track execution status
+4. **Workflow Migration**: Coordinate n8n → MCP migration
 
-### Value Objects
+## Aggregates
+- **Workflow** (root) - Workflow definition and lifecycle
+- **WorkflowExecution** - Individual execution instance
 
-#### WebhookURL
-- Validates webhook URLs (HTTP/HTTPS)
-- Provides parsed components (protocol, hostname, port, path)
-- Immutable
+## Entities
+- **N8NWorkflow** - Legacy n8n workflow (being migrated)
+- **MCPTool** - MCP tool implementation
+- **WorkflowMapping** - Maps n8n workflows to MCP tools
 
-#### ExecutionStatus
-- Enumeration: pending, running, completed, failed, canceled
-- Validates state transitions
-- Immutable
+## Value Objects
+- **WebhookURL** - Webhook endpoint URL
+- **ExecutionStatus** - Status of workflow execution
+- **MigrationStatus** - Status of n8n → MCP migration
 
 ## Domain Events
+- **WorkflowDeployed** - Workflow deployed to execution engine
+- **WorkflowExecuted** - Workflow execution started/completed
+- **WorkflowMigrated** - Workflow migrated from n8n to MCP
+- **WorkflowDeprecated** - n8n workflow deprecated in favor of MCP
 
-- `WorkflowDeployedEvent`: Workflow deployed to N8N
-- `WorkflowActivatedEvent`: Workflow activated
-- `WorkflowDeactivatedEvent`: Workflow deactivated
-- `WorkflowExecutedEvent`: Workflow execution completed
-- `ExecutionFailedEvent`: Workflow execution failed
+## Commands
+- **DeployWorkflow** - Deploy workflow to execution engine
+- **ExecuteWorkflow** - Execute workflow with parameters
+- **MigrateWorkflow** - Migrate n8n workflow to MCP
+- **DeprecateWorkflow** - Mark n8n workflow as deprecated
 
-## Infrastructure Integration
+## Queries
+- **GetWorkflowStatus** - Get workflow execution status
+- **ListWorkflows** - List all workflows (n8n + MCP)
+- **GetMigrationStatus** - Get n8n → MCP migration progress
 
-### N8N Client
-- Low-level HTTP client for N8N API
-- Supports all N8N API operations
-- Handles both HTTP and HTTPS
-- Authentication via API key
+## Infrastructure
 
-### N8N Workflow Adapter (Ports & Adapters)
-- Translates domain models to N8N API
-- Implements `WorkflowAdapter` interface
-- Handles workflow deployment, activation, execution
-- Auto-discovers webhook URLs
+### Repositories
+- **WorkflowRepository** - Store workflow definitions
+- **ExecutionRepository** - Store execution history
 
-### Factory
-```typescript
-import { createN8NAdapter } from '@workflows/infrastructure/n8n-workflow.adapter';
+### Adapters
+- **N8NAdapter** - Execute workflows via n8n API
+- **MCPAdapter** - Execute workflows via MCP server
+- **MigrationAdapter** - Coordinate n8n → MCP migration
 
-const adapter = createN8NAdapter(); // Uses N8N_URL and N8N_API_KEY from env
-```
+## Status
+🟡 In Progress - DDD structure created, MCP integration in progress
 
-## Example Usage
-
-### Deploy Workflow
-```typescript
-const workflow = Workflow.create({
-  id: 'wf-001',
-  name: 'Knowledge Base RAG Ingestion',
-  nodes: ragWorkflowNodes,
-  connections: ragWorkflowConnections,
-});
-
-const adapter = createN8NAdapter();
-const { n8nWorkflowId, webhookUrl } = await adapter.deploy(workflow);
-
-workflow.deploy(n8nWorkflowId, webhookUrl);
-workflow.activate();
-
-await adapter.activate(n8nWorkflowId);
-```
-
-### Execute Workflow
-```typescript
-const execution = Execution.create({
-  id: 'exec-001',
-  workflowId: 'wf-001',
-  input: { documents: [...] },
-  triggeredBy: 'commander-data',
-});
-
-const result = await adapter.execute(workflow, execution.input);
-execution.complete(result);
-```
-
-## Migration Status
-
-- [x] Directory structure created
-- [x] Aggregates defined (Workflow, Execution)
-- [x] Value objects implemented (WebhookURL, ExecutionStatus)
-- [x] Domain events defined (5 events)
-- [x] Commands/queries created
-- [x] Repository interfaces defined
-- [x] N8N client extracted from scripts
-- [x] N8N adapter implemented (Ports & Adapters)
-- [ ] Tests written (next phase)
-- [ ] Legacy scripts refactored to use domain (next phase)
-
-## Dependencies
-
-- **Outbound**: None (infrastructure only)
-- **Inbound**:
-  - Project Management (deployment workflows)
-  - Knowledge Management (RAG ingestion workflow)
-  - All domains (can trigger workflows)
-
-## Crew Review
-
-**Lieutenant Uhura:**
-> "Communications systems are operational! The N8N domain is clean, well-structured, and follows DDD principles perfectly. The adapter pattern makes it easy to swap N8N for another orchestration system in the future. Hailing frequencies open! ✅"
-
-**Lt. Cmdr. La Forge:**
-> "The infrastructure adapter is brilliant! Clean separation between domain logic and N8N API. The webhook URL value object is a nice touch - ensures URLs are always valid. Great work, Uhura! 🛠️"
-
-**Commander Data:**
-> "Domain analysis complete. Aggregates properly designed. State transitions validated. Event-driven architecture implemented. Probability of successful integration: 98.7%. Excellent work."
-
----
-
-**Anti-Hallucination Score: 100%**
-
-All code:
-- ✅ Follows DDD principles
-- ✅ Implements Ports & Adapters pattern
-- ✅ Extracted from real N8N scripts (scripts/n8n-cli-tools.js)
-- ✅ Type-safe with TypeScript
-- ✅ Immutable value objects
-- ✅ Domain events for communication
-
-**Migration Complete!** 🎉
+## Next Steps
+1. Implement MCP adapter in infrastructure layer
+2. Create workflow migration service
+3. Port n8n workflows to MCP tools
+4. Update application layer to use MCP as primary
+5. Deprecate n8n workflows after migration complete
