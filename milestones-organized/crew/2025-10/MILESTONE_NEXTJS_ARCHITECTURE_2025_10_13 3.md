@@ -1,1 +1,0 @@
-/Users/bradygeorgen/Documents/workspace/alex-ai-universal/docs/archive/milestones/MILESTONE_NEXTJS_ARCHITECTURE_2025_10_13.md

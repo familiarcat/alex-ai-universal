@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/api/health/route.ts"],"sourcesContent":["/**\n * Health check endpoint\n * GET /api/health\n */\n\nimport { NextResponse } from 'next/server';\n\nexport async function GET() {\n  return NextResponse.json({\n    status: 'healthy',\n    timestamp: Date.now(),\n    port: process.env.PORT || 3000,\n    environment: process.env.NODE_ENV || 'development',\n  });\n}\n"],"names":[],"mappings":"AAAA;;;CAGC;;;;AAED;;AAEO,eAAe;IACpB,OAAO,6JAAY,CAAC,IAAI,CAAC;QACvB,QAAQ;QACR,WAAW,KAAK,GAAG;QACnB,MAAM,QAAQ,GAAG,CAAC,IAAI,IAAI;QAC1B,aAAa,mDAAwB;IACvC;AACF"}}]
-}

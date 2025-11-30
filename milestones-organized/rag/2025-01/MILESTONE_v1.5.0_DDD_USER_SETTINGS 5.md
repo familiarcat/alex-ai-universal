@@ -1,1 +1,0 @@
-/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones/2025-01/MILESTONE_v1.5.0_DDD_USER_SETTINGS.md

@@ -1,8 +1,0 @@
-node_modules/
-dist/
-.yalc/
-coverage/
-src/*.js
-extension.js
-src/*.js.map
-src/*.d.ts

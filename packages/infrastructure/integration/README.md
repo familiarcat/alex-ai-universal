@@ -1,3 +1,0 @@
-# integration
-
-DDD Layer: infrastructure

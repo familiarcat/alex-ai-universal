@@ -252,11 +252,22 @@ class NPXCLIHandler {
 
   /**
    * Handle Observation Lounge requests
+   * Uses MCP-N8N Controller for intelligent routing
    */
   async handleObservationLounge(message: string): Promise<void> {
     try {
-      const https = require('https');
-      const { URL } = require('url');
+      // Import MCP-N8N Controller
+      let controller: any;
+      try {
+        const { createMCPN8NController } = require('@alex-ai/core/controller/mcp-n8n-controller');
+        controller = createMCPN8NController();
+      } catch (error) {
+        // Fallback to direct path if package not available
+        const path = require('path');
+        const controllerPath = path.join(__dirname, '../../core/src/controller/mcp-n8n-controller');
+        const { createMCPN8NController } = require(controllerPath);
+        controller = createMCPN8NController();
+      }
       
       // Parse the message to extract parameters
       const lowerMessage = message.toLowerCase();
@@ -281,125 +292,93 @@ class NPXCLIHandler {
         discussionType = 'strategic';
       }
       
-      const n8nUrl = process.env.N8N_URL || process.env.NEXT_PUBLIC_N8N_URL || 'https://n8n.pbradygeorgen.com';
-      const webhookUrl = new URL('/webhook/observation-lounge', n8nUrl);
-      
-      const payload = {
-        topic: topic || 'Crew coordination session',
-        context: {
-          source: 'cursor-ai',
-          message: message,
-          format: isCinematic ? 'cinematic' : 'standard'
-        },
-        crew_members: crewMembers || 'all',
-        discussion_type: discussionType,
-        priority: lowerMessage.includes('urgent') || lowerMessage.includes('critical') ? 'high' : 'medium',
-        format: isCinematic ? 'cinematic' : 'standard'
-      };
-      
       console.log('🎭 Organizing Crew in Observation Lounge...');
       console.log('==========================================\n');
       console.log('📋 Session Parameters:');
-      console.log(`   Topic: ${payload.topic}`);
-      console.log(`   Format: ${payload.format}`);
+      console.log(`   Topic: ${topic}`);
+      console.log(`   Format: ${isCinematic ? 'cinematic' : 'standard'}`);
       console.log(`   Discussion Type: ${discussionType}`);
-      console.log(`   Crew Members: ${payload.crew_members}`);
-      console.log(`   Priority: ${payload.priority}`);
-      console.log('\n🚀 Triggering DDD Flow:');
-      console.log('   Client (Cursor AI) → n8n.pbradygeorgen.com → Supabase');
-      console.log('   All crew memories will be retrieved and coordinated\n');
+      console.log(`   Crew Members: ${crewMembers || 'all'}`);
+      console.log('\n🚀 Using MCP-N8N Controller:');
+      console.log('   Client → Controller (MCP <-> n8n) → Supabase\n');
       
-      const postData = JSON.stringify(payload);
+      // Check health first
+      const health = await controller.checkHealth();
+      console.log('📊 System Health:');
+      console.log(`   MCP: ${health.mcp ? '✅ Healthy' : '❌ Unhealthy'}`);
+      console.log(`   n8n: ${health.n8n ? '✅ Healthy' : '❌ Unhealthy'}\n`);
       
-      const options = {
-        hostname: webhookUrl.hostname,
-        port: webhookUrl.port || 443,
-        path: webhookUrl.pathname,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData)
+      // Execute via controller (tries MCP first, falls back to n8n)
+      const result = await controller.executeCrewWorkflow({
+        crewMember: crewMembers,
+        workflow: 'observation-lounge',
+        tool: 'observation_lounge_coordination',
+        parameters: {
+          topic: topic,
+          format: isCinematic ? 'cinematic' : 'standard',
+          discussionType: discussionType,
+        },
+        context: {
+          source: 'cursor-ai',
+          message: message,
+        },
+      });
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Execution failed');
+      }
+      
+      console.log(`✅ Execution successful via ${result.method.toUpperCase()}`);
+      console.log(`   Execution time: ${result.metadata?.executionTime}ms\n`);
+      
+      // Display results
+      if (result.data) {
+        const data = result.data;
+        
+        if (data.session) {
+          console.log('📊 Session Details:');
+          console.log(`   Session ID: ${data.session.id}`);
+          console.log(`   Status: ${data.session.status}`);
+          console.log(`   Participants: ${data.session.participants || 'All crew'}`);
+          console.log(`   Total Crew: ${data.session.total_crew || 10}\n`);
         }
-      };
-      
-      return new Promise((resolve, reject) => {
-        const req = https.request(options, (res) => {
-          let data = '';
-          res.on('data', (chunk) => { data += chunk; });
-          res.on('end', () => {
-            try {
-              const response = JSON.parse(data);
-              
-              if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-                console.log('✅ Observation Lounge Session Initiated!\n');
-                
-                if (response.session) {
-                  console.log('📊 Session Details:');
-                  console.log(`   Session ID: ${response.session.id}`);
-                  console.log(`   Status: ${response.session.status}`);
-                  console.log(`   Participants: ${response.session.participants || 'All crew'}`);
-                  console.log(`   Total Crew: ${response.session.total_crew || 10}\n`);
-                }
-                
-                if (response.crew_insights) {
-                  console.log('👥 Crew Insights:');
-                  Object.entries(response.crew_insights).forEach(([crew, insight]: [string, any]) => {
-                    if (insight.status === 'success') {
-                      console.log(`   ✅ ${crew}: ${insight.summary || 'Analysis complete'}`);
-                    }
-                  });
-                  console.log('');
-                }
-                
-                if (response.synthesis) {
-                  console.log('🎯 Synthesized Findings:');
-                  if (typeof response.synthesis === 'string') {
-                    console.log(`   ${response.synthesis}\n`);
-                  } else if (response.synthesis.summary) {
-                    console.log(`   ${response.synthesis.summary}\n`);
-                  }
-                }
-                
-                if (response.recommendations && response.recommendations.length > 0) {
-                  console.log('💡 Recommendations:');
-                  response.recommendations.forEach((rec: string, idx: number) => {
-                    console.log(`   ${idx + 1}. ${rec}`);
-                  });
-                  console.log('');
-                }
-                
-                if (isCinematic) {
-                  console.log('🎬 Cinematic Format:');
-                  console.log('   Crew responses will be formatted in cinematic narrative style');
-                  console.log('   Full session details stored in Supabase for future reference\n');
-                }
-                
-                console.log('💾 Memories stored in Supabase via n8n workflow');
-                console.log('🔄 DDD Flow Complete: Client → n8n → Supabase\n');
-                
-                resolve();
-              } else {
-                console.error(`❌ Observation Lounge returned status ${res.statusCode}`);
-                console.error(`   Response: ${data.substring(0, 200)}`);
-                reject(new Error(`HTTP ${res.statusCode}`));
-              }
-            } catch (error: any) {
-              console.error('❌ Failed to parse Observation Lounge response:', error.message);
-              console.log('📄 Raw response:', data.substring(0, 500));
-              reject(error);
+        
+        if (data.crew_insights) {
+          console.log('👥 Crew Insights:');
+          Object.entries(data.crew_insights).forEach(([crew, insight]: [string, any]) => {
+            if (insight.status === 'success') {
+              console.log(`   ✅ ${crew}: ${insight.summary || 'Analysis complete'}`);
             }
           });
-        });
+          console.log('');
+        }
         
-        req.on('error', (error: Error) => {
-          console.error('❌ Failed to connect to Observation Lounge:', error.message);
-          console.error(`   URL: ${webhookUrl.toString()}`);
-          reject(error);
-        });
+        if (data.synthesis) {
+          console.log('🎯 Synthesized Findings:');
+          if (typeof data.synthesis === 'string') {
+            console.log(`   ${data.synthesis}\n`);
+          } else if (data.synthesis.summary) {
+            console.log(`   ${data.synthesis.summary}\n`);
+          }
+        }
         
-        req.write(postData);
-        req.end();
-      });
+        if (data.recommendations && data.recommendations.length > 0) {
+          console.log('💡 Recommendations:');
+          data.recommendations.forEach((rec: string, idx: number) => {
+            console.log(`   ${idx + 1}. ${rec}`);
+          });
+          console.log('');
+        }
+        
+        if (isCinematic) {
+          console.log('🎬 Cinematic Format:');
+          console.log('   Crew responses will be formatted in cinematic narrative style');
+          console.log('   Full session details stored in Supabase for future reference\n');
+        }
+        
+        console.log('💾 Memories stored in Supabase via controller');
+        console.log('🔄 DDD Flow Complete: Client → Controller (MCP <-> n8n) → Supabase\n');
+      }
     } catch (error: any) {
       console.error(`❌ Observation Lounge failed: ${error.message}`);
       throw error;

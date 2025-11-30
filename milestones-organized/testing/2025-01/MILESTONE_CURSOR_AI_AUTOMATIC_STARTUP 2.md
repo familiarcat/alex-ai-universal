@@ -1,1 +1,0 @@
-/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones/2025-01/MILESTONE_CURSOR_AI_AUTOMATIC_STARTUP.md

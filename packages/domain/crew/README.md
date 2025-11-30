@@ -1,3 +1,0 @@
-# crew
-
-DDD Layer: domain

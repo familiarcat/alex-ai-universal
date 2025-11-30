@@ -1,1 +1,0 @@
-/Users/bradygeorgen/Documents/workspace/alex-ai-universal/examples/demo-project/MILESTONE_PUSH_SUCCESS.md

@@ -1,5 +1,0 @@
-# Test Videos for RAG Enrichment
-https://www.youtube.com/watch?v=yVwZSoFJWSQ&t=2351s
-https://www.youtube.com/watch?v=0fYi8SGA20k&list=WL&index=5&t=41s
-https://www.youtube.com/watch?v=m9iaJNJE2-M&list=WL&index=12&t=146s
-

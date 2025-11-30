@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySignature } from '../../../../lib/hmac';
+import { executeCrewWorkflow, checkControllerHealth } from '../../../../lib/mcp-n8n-controller-service';
 
 // Use CommonJS helper to interop with lib/n8n-client.js
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -42,34 +43,83 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Quick health check (non-fatal)
-  const health = await testN8nConnection();
+  // Quick health check (non-fatal) - Check both n8n and controller
+  const n8nHealth = await testN8nConnection();
+  const controllerHealth = await checkControllerHealth().catch(() => ({ mcp: false, n8n: false }));
 
   try {
-    // Forward to constructor-event webhook, reusing our secure header pattern
-    const headers: Record<string, string> = {};
-    if (crewKey && secret) {
-      const ts = Date.now();
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { signBody } = require('../../../../lib/hmac');
-      headers['X-Crew-Key'] = crewKey;
-      headers['X-Timestamp'] = String(ts);
-      headers['X-Signature'] = signBody(JSON.stringify(payload) + String(ts), secret);
+    // Use MCP-N8N Controller for intelligent routing (MCP first, n8n fallback)
+    const result = await executeCrewWorkflow({
+      workflow: 'constructor-event',
+      tool: 'crew_engagement',
+      parameters: {
+        type: 'cursor-engage',
+        message: payload.message,
+        platform: payload.platform || 'cursor',
+        sessionId: payload.sessionId || '',
+        editor: payload.editor || {},
+        metadata: payload.metadata || {},
+        timestamp: new Date().toISOString(),
+      },
+      context: {
+        source: 'dashboard-api',
+        headers: crewKey && secret ? {
+          'X-Crew-Key': crewKey,
+          'X-Timestamp': String(Date.now()),
+          'X-Signature': (() => {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const { signBody } = require('../../../../lib/hmac');
+            return signBody(JSON.stringify(payload) + String(Date.now()), secret);
+          })()
+        } : {}
+      }
+    });
+
+    if (!result.success) {
+      // Fallback to direct n8n if controller fails
+      const headers: Record<string, string> = {};
+      if (crewKey && secret) {
+        const ts = Date.now();
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { signBody } = require('../../../../lib/hmac');
+        headers['X-Crew-Key'] = crewKey;
+        headers['X-Timestamp'] = String(ts);
+        headers['X-Signature'] = signBody(JSON.stringify(payload) + String(ts), secret);
+      }
+
+      const fallbackResult = await triggerWebhookWithHeaders('constructor-event', {
+        type: 'cursor-engage',
+        message: payload.message,
+        platform: payload.platform || 'cursor',
+        sessionId: payload.sessionId || '',
+        editor: payload.editor || {},
+        metadata: payload.metadata || {},
+        timestamp: new Date().toISOString(),
+      }, headers);
+
+      return NextResponse.json({ 
+        ok: true, 
+        method: 'n8n-fallback',
+        controller: controllerHealth,
+        n8n: n8nHealth, 
+        result: fallbackResult 
+      });
     }
 
-    const result = await triggerWebhookWithHeaders('constructor-event', {
-      type: 'cursor-engage',
-      message: payload.message,
-      platform: payload.platform || 'cursor',
-      sessionId: payload.sessionId || '',
-      editor: payload.editor || {},
-      metadata: payload.metadata || {},
-      timestamp: new Date().toISOString(),
-    }, headers);
-
-    return NextResponse.json({ ok: true, n8n: health, result });
+    return NextResponse.json({ 
+      ok: true, 
+      method: result.method,
+      controller: controllerHealth,
+      n8n: n8nHealth, 
+      result: result.data 
+    });
   } catch (err: any) {
-    return NextResponse.json({ ok: false, n8n: health, error: err?.message || 'forward failed' }, { status: 502 });
+    return NextResponse.json({ 
+      ok: false, 
+      controller: controllerHealth,
+      n8n: n8nHealth, 
+      error: err?.message || 'execution failed' 
+    }, { status: 502 });
   }
 }
 

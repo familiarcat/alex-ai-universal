@@ -1,3 +1,0 @@
-# messaging
-
-DDD Layer: infrastructure

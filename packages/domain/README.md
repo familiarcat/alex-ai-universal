@@ -1,3 +1,0 @@
-# domain
-
-DDD Layer: domain

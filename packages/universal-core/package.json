@@ -1,8 +1,0 @@
-{
-  "name": "@alex-ai/universal-core",
-  "version": "1.0.0",
-  "description": "Local development stub for Alex AI universal core",
-  "main": "index.js",
-  "keywords": ["alex-ai","universal-extension"],
-  "license": "MIT"
-}

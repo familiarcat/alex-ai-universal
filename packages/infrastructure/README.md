@@ -1,3 +1,0 @@
-# infrastructure
-
-DDD Layer: infrastructure

@@ -1,3 +1,0 @@
-# application
-
-DDD Layer: application

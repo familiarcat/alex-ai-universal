@@ -49,6 +49,9 @@ export { ScenarioAnalysisCLI } from './scenario-analysis/scenario-analysis-cli';
 // Crew Consciousness System
 export { CrewConsciousnessWorkflow, ProjectAnalysisRequest, CrewConsciousnessSession, CrewMemberAnalysis, CollectiveInsights } from './crew-consciousness/crew-consciousness-workflow';
 
+// MCP-N8N Controller
+export { MCPN8NController, createMCPN8NController, ControllerConfig, ExecutionResult, CrewWorkflowRequest } from './controller/mcp-n8n-controller';
+
 // N8N Supabase Integration
 export { N8NSupabaseClient, n8nSupabaseClient } from './n8n-supabase-client';
 export { SupabaseN8NMigration, supabaseN8NMigration } from './supabase-n8n-migration';

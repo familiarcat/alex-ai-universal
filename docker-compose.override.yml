@@ -1,4 +1,0 @@
-services:
-  n8n:
-    environment:
-      INSTANCE_ROLE: main

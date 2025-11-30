@@ -1,3 +1,0 @@
-# ai
-
-DDD Layer: domain
