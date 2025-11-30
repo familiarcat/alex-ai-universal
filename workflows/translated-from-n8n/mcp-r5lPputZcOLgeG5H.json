@@ -1,0 +1,192 @@
+{
+  "id": "mcp-r5lPputZcOLgeG5H",
+  "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - MCP Enhancement - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "1b0c76fd-f6de-4db6-8228-ea6f55fd4325",
+      "name": "Enhanced MCP Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-mcp-enhanced",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-mcp-enhanced",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Enhanced MCP Webhook Trigger"
+      }
+    },
+    {
+      "id": "8714747c-5562-444e-8827-4b102d880dff",
+      "name": "GitHub MCP Repository Scraper",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        200
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.github.com/repos/modelcontextprotocol/servers",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "GitHub MCP Repository Scraper"
+      }
+    },
+    {
+      "id": "5a9346b5-fab7-4edb-becb-d8439ca104aa",
+      "name": "MCP Documentation Scraper",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        400
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://modelcontextprotocol.io/docs",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "MCP Documentation Scraper"
+      }
+    },
+    {
+      "id": "f065a873-13e6-4575-81d9-d24c1cbc1e3c",
+      "name": "Alex AI MCP Knowledge Analyzer",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        300
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Alex AI MCP Knowledge Analyzer"
+      }
+    },
+    {
+      "id": "366ec636-81bc-4eeb-a5ce-ce008af628b1",
+      "name": "MCP Knowledge Base Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        300
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/mcp_knowledge_base",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "MCP Knowledge Base Storage"
+      }
+    },
+    {
+      "id": "a129b8a1-2dbb-41c3-aa88-7a96378a8b8e",
+      "name": "Enhanced MCP Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Enhanced MCP Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Enhanced MCP Webhook Trigger-GitHub MCP Repository Scraper",
+      "source": "Enhanced MCP Webhook Trigger",
+      "target": "GitHub MCP Repository Scraper",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Enhanced MCP Webhook Trigger-MCP Documentation Scraper",
+      "source": "Enhanced MCP Webhook Trigger",
+      "target": "MCP Documentation Scraper",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-GitHub MCP Repository Scraper-Alex AI MCP Knowledge Analyzer",
+      "source": "GitHub MCP Repository Scraper",
+      "target": "Alex AI MCP Knowledge Analyzer",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-MCP Documentation Scraper-Alex AI MCP Knowledge Analyzer",
+      "source": "MCP Documentation Scraper",
+      "target": "Alex AI MCP Knowledge Analyzer",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Alex AI MCP Knowledge Analyzer-MCP Knowledge Base Storage",
+      "source": "Alex AI MCP Knowledge Analyzer",
+      "target": "MCP Knowledge Base Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-MCP Knowledge Base Storage-Enhanced MCP Response",
+      "source": "MCP Knowledge Base Storage",
+      "target": "Enhanced MCP Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "1b0c76fd-f6de-4db6-8228-ea6f55fd4325",
+      "nodeName": "Enhanced MCP Webhook Trigger",
+      "webhookPath": "alex-ai-mcp-enhanced",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-mcp-enhanced",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "r5lPputZcOLgeG5H",
+    "convertedAt": "2025-11-21T14:24:04.685Z",
+    "originalName": "PROJECT - Alex AI - MCP Enhancement - Production"
+  }
+}

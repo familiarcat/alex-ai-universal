@@ -1,0 +1,353 @@
+{
+  "id": "mcp-PSS0SjngUOxCQUT5",
+  "name": "Documentation Generation from RAG",
+  "description": "Converted from n8n workflow: Documentation Generation from RAG",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "a3e844af-6b58-41ae-8d64-1f592a97591e",
+      "name": "Documentation Generation Request",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-documentation",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "generate-documentation",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Documentation Generation Request"
+      }
+    },
+    {
+      "id": "998b421a-17e4-495f-8234-be4fbb327731",
+      "name": "Parse Documentation Request",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Extract documentation generation parameters\nconst request = $input.first().json.body;\n\nreturn {\n  json: {\n    doc_type: request.docType || 'getting_started',\n    audience: request.audience || 'user',\n    category: request.category || null,\n    query: request.query || `Generate comprehensive documentation for ${request.docType} aimed at ${request.audience} audience`,\n    include_diagrams: request.includeDiagrams !== false,\n    include_examples: request.includeExamples !== false,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Parse Documentation Request"
+      }
+    },
+    {
+      "id": "e5a32969-8618-4e39-822b-48e4d5ba7af5",
+      "name": "Generate Query Embedding",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "[REDACTED]",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "text-embedding-3-small"
+            },
+            {
+              "name": "input",
+              "value": "={{ $json.query }}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Generate Query Embedding"
+      }
+    },
+    {
+      "id": "ec7b1a55-a2db-4302-8fb3-057c7ac5d80d",
+      "name": "Search RAG Knowledge",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "[REDACTED]",
+        "query": "=SELECT * FROM search_documentation_knowledge(\n  '{{$json.data[0].embedding}}'::vector,\n  '{{$('Parse Documentation Request').item.json.doc_type}}'::doc_type,\n  '{{$('Parse Documentation Request').item.json.audience}}'::audience_type,\n  {{$('Parse Documentation Request').item.json.category ? \"'\" + $('Parse Documentation Request').item.json.category + \"'\" : 'NULL'}},\n  0.7,\n  20\n)"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Search RAG Knowledge"
+      }
+    },
+    {
+      "id": "1d0ee60e-ecb1-42a2-bcf3-79339f2dc17f",
+      "name": "Get System Relationships",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        900,
+        500
+      ],
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "[REDACTED]",
+        "query": "=SELECT * FROM get_component_relationships(\n  NULL,\n  NULL,\n  TRUE\n)"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Get System Relationships"
+      }
+    },
+    {
+      "id": "47189006-6ea5-4049-af4d-919743a69c9a",
+      "name": "Get Active Components",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        900,
+        700
+      ],
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "[REDACTED]",
+        "query": "SELECT * FROM get_active_components(NULL, NULL)"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Get Active Components"
+      }
+    },
+    {
+      "id": "e3336f51-8cbc-4a35-a346-67fa1a9da10a",
+      "name": "Combine and Organize Content",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Combine all data sources for documentation generation\nconst request = $('Parse Documentation Request').item.json;\nconst ragKnowledge = $('Search RAG Knowledge').all();\nconst relationships = $('Get System Relationships').all();\nconst components = $('Get Active Components').all();\n\n// Group components by layer for architecture diagrams\nfunction groupByLayer(components) {\n  const layers = {};\n  components.forEach(comp => {\n    const layer = comp.json.layer || 'other';\n    if (!layers[layer]) {\n      layers[layer] = [];\n    }\n    layers[layer].push(comp.json);\n  });\n  return layers;\n}\n\n// Generate Mermaid architecture diagram\nfunction generateArchitectureDiagram(components, relationships) {\n  const layers = groupByLayer(components);\n  \n  let diagram = 'graph TB\\n';\n  \n  // Add subgraphs for each layer\n  Object.entries(layers).forEach(([layerName, layerComps]) => {\n    diagram += `    subgraph \"${layerName.toUpperCase()}\"\\n`;\n    layerComps.forEach(comp => {\n      const compId = comp.component_name.replace(/[^a-zA-Z0-9]/g, '_');\n      diagram += `        ${compId}[${comp.component_name}]\\n`;\n    });\n    diagram += `    end\\n`;\n  });\n  \n  // Add relationships\n  relationships.forEach(rel => {\n    const sourceId = rel.json.source_component.replace(/[^a-zA-Z0-9]/g, '_');\n    const targetId = rel.json.target_component.replace(/[^a-zA-Z0-9]/g, '_');\n    const style = rel.json.mermaid_style === 'dashed' ? '-->' : '-->';\n    const label = rel.json.protocol ? `|${rel.json.protocol}|` : '';\n    diagram += `    ${sourceId} ${style}${label} ${targetId}\\n`;\n  });\n  \n  // Add styling\n  diagram += `\\n    classDef frontend fill:#3f51b5,color:#fff\\n`;\n  diagram += `    classDef api fill:#4caf50,color:#fff\\n`;\n  diagram += `    classDef integration fill:#ff9800,color:#fff\\n`;\n  diagram += `    classDef database fill:#9c27b0,color:#fff\\n`;\n  \n  return diagram;\n}\n\n// Generate data flow sequence diagram\nfunction generateDataFlowDiagram(relationships) {\n  let diagram = 'sequenceDiagram\\n';\n  \n  // Get unique participants\n  const participants = new Set();\n  relationships.forEach(rel => {\n    participants.add(rel.json.source_component);\n    participants.add(rel.json.target_component);\n  });\n  \n  // Add participants\n  Array.from(participants).forEach(p => {\n    const pId = p.replace(/[^a-zA-Z0-9]/g, '_');\n    diagram += `    participant ${pId} as ${p}\\n`;\n  });\n  \n  // Add interactions\n  relationships.forEach(rel => {\n    const sourceId = rel.json.source_component.replace(/[^a-zA-Z0-9]/g, '_');\n    const targetId = rel.json.target_component.replace(/[^a-zA-Z0-9]/g, '_');\n    const protocol = rel.json.protocol || 'communicates';\n    diagram += `    ${sourceId}->>${targetId}: ${protocol}\\n`;\n  });\n  \n  return diagram;\n}\n\n// Organize knowledge by sections\nfunction organizeKnowledgeSections(ragKnowledge) {\n  const sections = {\n    overview: [],\n    setup: [],\n    usage: [],\n    examples: [],\n    troubleshooting: [],\n    advanced: []\n  };\n  \n  ragKnowledge.forEach(item => {\n    const category = item.json.category.toLowerCase();\n    const content = {\n      title: item.json.title,\n      summary: item.json.summary,\n      content: item.json.content,\n      code_examples: item.json.code_examples,\n      keywords: item.json.keywords\n    };\n    \n    if (category.includes('overview') || category.includes('introduction')) {\n      sections.overview.push(content);\n    } else if (category.includes('setup') || category.includes('installation')) {\n      sections.setup.push(content);\n    } else if (category.includes('usage') || category.includes('guide')) {\n      sections.usage.push(content);\n    } else if (category.includes('example')) {\n      sections.examples.push(content);\n    } else if (category.includes('troubleshoot') || category.includes('issue')) {\n      sections.troubleshooting.push(content);\n    } else {\n      sections.advanced.push(content);\n    }\n  });\n  \n  return sections;\n}\n\n// Generate complete documentation\nconst sections = organizeKnowledgeSections(ragKnowledge);\nconst architectureDiagram = generateArchitectureDiagram(components, relationships);\nconst dataFlowDiagram = generateDataFlowDiagram(relationships);\n\nreturn {\n  json: {\n    request: request,\n    knowledge_sources: ragKnowledge.length,\n    relationship_count: relationships.length,\n    component_count: components.length,\n    sections: sections,\n    diagrams: {\n      architecture: architectureDiagram,\n      dataFlow: dataFlowDiagram\n    },\n    metadata: {\n      generated_at: new Date().toISOString(),\n      doc_type: request.doc_type,\n      audience: request.audience,\n      includes_diagrams: request.include_diagrams,\n      includes_examples: request.include_examples\n    }\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Combine and Organize Content"
+      }
+    },
+    {
+      "id": "71738fe4-d25b-49b1-b61c-424158413bba",
+      "name": "Generate Markdown Documentation",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Generate markdown documentation from organized content\nconst data = $input.first().json;\nconst { sections, diagrams, metadata, request } = data;\n\n// Helper function to render section\nfunction renderSection(title, items, includeCodeExamples = true) {\n  if (!items || items.length === 0) return '';\n  \n  let markdown = `\\n## ${title}\\n\\n`;\n  \n  items.forEach(item => {\n    markdown += `### ${item.title}\\n\\n`;\n    markdown += `${item.content}\\n\\n`;\n    \n    if (includeCodeExamples && item.code_examples && item.code_examples.length > 0) {\n      item.code_examples.forEach(example => {\n        markdown += `\\`\\`\\`${example.language || 'javascript'}\\n${example.code}\\n\\`\\`\\`\\n\\n`;\n      });\n    }\n  });\n  \n  return markdown;\n}\n\n// Start building markdown\nlet markdown = `# ${getTitleForDocType(request.doc_type, request.audience)}\\n\\n`;\n\nmarkdown += `> **Generated:** ${new Date(metadata.generated_at).toLocaleString()}  \\n`;\nmarkdown += `> **Audience:** ${request.audience}  \\n`;\nmarkdown += `> **Knowledge Sources:** ${data.knowledge_sources} RAG entries\\n\\n`;\n\nmarkdown += `---\\n\\n`;\n\n// Add overview section\nif (sections.overview.length > 0) {\n  markdown += renderSection('Overview', sections.overview, false);\n}\n\n// Add system architecture diagram if applicable\nif (request.include_diagrams && (request.doc_type === 'architecture' || request.doc_type === 'getting_started')) {\n  markdown += `\\n## System Architecture\\n\\n`;\n  markdown += `\\`\\`\\`mermaid\\n${diagrams.architecture}\\n\\`\\`\\`\\n\\n`;\n}\n\n// Add setup section\nif (sections.setup.length > 0) {\n  markdown += renderSection('Installation & Setup', sections.setup, true);\n}\n\n// Add usage section\nif (sections.usage.length > 0) {\n  markdown += renderSection('Usage Guide', sections.usage, true);\n}\n\n// Add data flow diagram for integration guides\nif (request.include_diagrams && request.doc_type === 'integration_guide') {\n  markdown += `\\n## Data Flow\\n\\n`;\n  markdown += `\\`\\`\\`mermaid\\n${diagrams.dataFlow}\\n\\`\\`\\`\\n\\n`;\n}\n\n// Add examples section\nif (sections.examples.length > 0 && request.include_examples) {\n  markdown += renderSection('Examples', sections.examples, true);\n}\n\n// Add troubleshooting section\nif (sections.troubleshooting.length > 0) {\n  markdown += renderSection('Troubleshooting', sections.troubleshooting, false);\n}\n\n// Add advanced section\nif (sections.advanced.length > 0) {\n  markdown += renderSection('Advanced Topics', sections.advanced, true);\n}\n\n// Add footer\nmarkdown += `\\n---\\n\\n`;\nmarkdown += `*This documentation was automatically generated from ${data.knowledge_sources} knowledge sources in the RAG memory system.*\\n\\n`;\nmarkdown += `*Last updated: ${new Date(metadata.generated_at).toLocaleString()}*\\n`;\n\n// Helper function for titles\nfunction getTitleForDocType(docType, audience) {\n  const titles = {\n    'getting_started': `Getting Started Guide`,\n    'installation': `Installation Guide`,\n    'configuration': `Configuration Guide`,\n    'architecture': `System Architecture Documentation`,\n    'api_reference': `API Reference`,\n    'integration_guide': `Integration Guide`,\n    'user_guide': `User Guide`,\n    'developer_guide': `Developer Guide`,\n    'contributor_guide': `Contributor Guide`,\n    'troubleshooting': `Troubleshooting Guide`,\n    'deployment': `Deployment Guide`\n  };\n  \n  let title = titles[docType] || 'Documentation';\n  if (audience && audience !== 'all') {\n    title += ` (${audience.charAt(0).toUpperCase() + audience.slice(1)})`;\n  }\n  \n  return title;\n}\n\nreturn {\n  json: {\n    markdown: markdown,\n    metadata: metadata,\n    file_name: `${request.doc_type}-${request.audience}.md`,\n    file_path: `docs/${getPathForDocType(request.doc_type)}/${request.doc_type}-${request.audience}.md`,\n    source_count: data.knowledge_sources\n  }\n};\n\n// Helper function for file paths\nfunction getPathForDocType(docType) {\n  const paths = {\n    'getting_started': 'getting-started',\n    'installation': 'getting-started',\n    'configuration': 'getting-started',\n    'architecture': 'architecture',\n    'api_reference': 'api-reference',\n    'integration_guide': 'integrations',\n    'user_guide': 'user-guide',\n    'developer_guide': 'developer-guide',\n    'contributor_guide': 'contributor-guide',\n    'troubleshooting': 'troubleshooting',\n    'deployment': 'deployment'\n  };\n  \n  return paths[docType] || 'general';\n}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Generate Markdown Documentation"
+      }
+    },
+    {
+      "id": "f2c07919-b031-4f7e-82ba-06097c5bd30b",
+      "name": "Log Documentation Generation",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "[REDACTED]",
+        "operation": "insert",
+        "table": "documentation_generations",
+        "columns": "doc_type, audience, query, rag_sources, generated_content, mermaid_diagrams, file_path, source_count",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Log Documentation Generation"
+      }
+    },
+    {
+      "id": "1c3c28d9-30e3-4a1f-8c59-1ebe296fb940",
+      "name": "Format Success Response",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1780,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Prepare success response\nconst data = $input.first().json;\n\nreturn {\n  json: {\n    success: true,\n    message: 'Documentation generated successfully',\n    file_path: data.file_path,\n    file_name: data.file_name,\n    source_count: data.source_count,\n    generated_at: data.metadata.generated_at,\n    markdown: data.markdown,\n    metadata: data.metadata\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Format Success Response"
+      }
+    },
+    {
+      "id": "775b22df-090a-4b17-bb6e-b1e6134dc502",
+      "name": "Return Documentation",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        2000,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Return Documentation"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Documentation Generation Request-Parse Documentation Request",
+      "source": "Documentation Generation Request",
+      "target": "Parse Documentation Request",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Parse Documentation Request-Generate Query Embedding",
+      "source": "Parse Documentation Request",
+      "target": "Generate Query Embedding",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Parse Documentation Request-Get System Relationships",
+      "source": "Parse Documentation Request",
+      "target": "Get System Relationships",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Parse Documentation Request-Get Active Components",
+      "source": "Parse Documentation Request",
+      "target": "Get Active Components",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Generate Query Embedding-Search RAG Knowledge",
+      "source": "Generate Query Embedding",
+      "target": "Search RAG Knowledge",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Search RAG Knowledge-Combine and Organize Content",
+      "source": "Search RAG Knowledge",
+      "target": "Combine and Organize Content",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Get System Relationships-Combine and Organize Content",
+      "source": "Get System Relationships",
+      "target": "Combine and Organize Content",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Get Active Components-Combine and Organize Content",
+      "source": "Get Active Components",
+      "target": "Combine and Organize Content",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Combine and Organize Content-Generate Markdown Documentation",
+      "source": "Combine and Organize Content",
+      "target": "Generate Markdown Documentation",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Generate Markdown Documentation-Log Documentation Generation",
+      "source": "Generate Markdown Documentation",
+      "target": "Log Documentation Generation",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Log Documentation Generation-Format Success Response",
+      "source": "Log Documentation Generation",
+      "target": "Format Success Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Format Success Response-Return Documentation",
+      "source": "Format Success Response",
+      "target": "Return Documentation",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "a3e844af-6b58-41ae-8d64-1f592a97591e",
+      "nodeName": "Documentation Generation Request",
+      "webhookPath": "generate-documentation",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=generate-documentation",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "PSS0SjngUOxCQUT5",
+    "convertedAt": "2025-11-21T14:24:04.673Z",
+    "originalName": "Documentation Generation from RAG"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "id": "mcp-a8NPgojFmLTkchG2",
+  "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "4eae1d54-1fed-49ed-b6fa-ab0c1a8b07f0",
+      "name": "Commander William Riker Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-william-riker",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-commander-william-riker",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander William Riker Directive"
+      }
+    },
+    {
+      "id": "4d3ff1b8-7213-464c-aace-2bda7b5d98c7",
+      "name": "Commander William Riker Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "POST",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'riker',\n      knowledgeType: 'problem_solution',\n      priority: 'high',\n      title: 'Tactical Execution Plan',\n      summary: summaryLine.trim() || 'Tactical execution guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'riker']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander William Riker Memory Retrieval"
+      }
+    },
+    {
+      "id": "cb0a1dab-27be-4896-85d8-37e03737b36d",
+      "name": "LLM Selection Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        336
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "LLM Selection Agent"
+      }
+    },
+    {
+      "id": "a23df749-9ed3-4d70-b6fd-fd02ac58211c",
+      "name": "Commander William Riker AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander William Riker AI Agent"
+      }
+    },
+    {
+      "id": "50e2f550-3b4a-4979-9e27-eae8759b98d7",
+      "name": "Commander William Riker Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander William Riker Memory Storage"
+      }
+    },
+    {
+      "id": "05964f1f-5ead-42df-a382-eb2f0d14fc76",
+      "name": "Observation Lounge Communication",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge Communication"
+      }
+    },
+    {
+      "id": "cc2756e3-81f6-4709-91de-2ff0c01666ac",
+      "name": "Commander William Riker Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "options": {},
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_riker',\n  crew_name: 'Commander William Riker',\n  role: 'First Officer',\n  summary: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander William Riker AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander William Riker Directive').item.json || null,\n  memory: $('Commander William Riker Memory Storage').item.json || null,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander William Riker AI Agent').item.json?.model || null,\n    usage: $('Commander William Riker AI Agent').item.json?.usage || null\n  }\n} }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander William Riker Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Commander William Riker Directive-Commander William Riker Memory Retrieval",
+      "source": "Commander William Riker Directive",
+      "target": "Commander William Riker Memory Retrieval",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-LLM Selection Agent-Commander William Riker AI Agent",
+      "source": "LLM Selection Agent",
+      "target": "Commander William Riker AI Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander William Riker AI Agent-Observation Lounge Communication",
+      "source": "Commander William Riker AI Agent",
+      "target": "Observation Lounge Communication",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge Communication-Commander William Riker Memory Storage",
+      "source": "Observation Lounge Communication",
+      "target": "Commander William Riker Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander William Riker Memory Retrieval-LLM Selection Agent",
+      "source": "Commander William Riker Memory Retrieval",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander William Riker Memory Storage-Commander William Riker Response",
+      "source": "Commander William Riker Memory Storage",
+      "target": "Commander William Riker Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "4eae1d54-1fed-49ed-b6fa-ab0c1a8b07f0",
+      "nodeName": "Commander William Riker Directive",
+      "webhookPath": "crew-commander-william-riker",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-commander-william-riker",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "a8NPgojFmLTkchG2",
+    "convertedAt": "2025-11-21T14:24:04.677Z",
+    "originalName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "alex-ai-demo-project",
+  "version": "1.0.0",
+  "description": "Demo project showcasing Alex AI Universal Integration with enhanced features",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/production-server.js",
+    "start:production": "NODE_ENV=production node src/production-server.js",
+    "demo": "node index.js",
+    "demo:enhanced": "node index.js --enhanced",
+    "demo:standalone": "node standalone-enhanced-demo.js",
+    "demo:clean": "node clean-enhanced-demo.js",
+    "demo:simple": "node simple-demo.js",
+    "demo:production": "node start-production.js",
+    "build": "node build-script.js",
+    "test": "node test-runner.js",
+    "web": "node src/web-server.js",
+    "web:dynamic": "node src/dynamic-web-server.js",
+    "dashboard": "node src/dashboard-server.js",
+    "dashboard:simple": "node src/simple-dashboard-server.js",
+    "dashboard:enhanced": "node src/enhanced-dashboard-server.js",
+    "dashboard:realtime": "node src/realtime-dashboard-server.js",
+    "dashboard:integrated": "node src/integrated-dashboard-server.js",
+    "dashboard:enhanced-interactive": "node src/enhanced-interactive-dashboard-server.js",
+    "integrated-system": "node src/integrated-system-server.js",
+    "dashboard-frontend": "node src/dashboard-frontend-integration-server.js",
+    "simple-dashboard": "node src/simple-dashboard-frontend-server.js",
+    "clean-dashboard": "node src/clean-dashboard-frontend-server.js",
+    "fixed-dashboard": "node src/fixed-dashboard-frontend-server.js",
+    "enhanced-dashboard": "node src/enhanced-dashboard-with-live-preview.js",
+    "unified-api": "node src/unified-api-server.js",
+    "dev": "node dev-environment.js",
+    "dev:web": "NODE_ENV=development node src/dynamic-web-server.js",
+    "dev:dashboard": "NODE_ENV=development node src/enhanced-dashboard-server.js",
+    "production": "node start-production.js",
+    "docker:build": "docker build -t alex-ai-dashboard .",
+    "docker:run": "docker run -p 3000:3000 alex-ai-dashboard",
+    "docker:compose": "docker-compose up --build",
+    "vercel": "vercel",
+    "vercel:dev": "vercel dev",
+    "vercel:deploy": "vercel --prod",
+    "alex-ai:init": "alex-ai universal-init",
+    "alex-ai:sync": "alex-ai universal-sync",
+    "alex-ai:crew": "alex-ai crew-engage",
+    "alex-ai:chat": "alex-ai chat-capture",
+    "alex-ai:status": "alex-ai status"
+  },
+  "keywords": [
+    "alex-ai",
+    "universal-integration",
+    "crew-ai",
+    "chat-analysis",
+    "n8n",
+    "rag"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.3"
+  },
+  "alexAI": {
+    "capabilities": [
+      "demo-project",
+      "text-conversation-analysis",
+      "universal-features"
+    ]
+  }
+}

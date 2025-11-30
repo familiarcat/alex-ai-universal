@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+"use strict";
+
+const { spawnSync } = require('node:child_process');
+const path = require('node:path');
+
+function runScriptInScripts(script, args = []) {
+  const scriptPath = path.join(__dirname, '..', 'scripts', script);
+  const res = spawnSync(process.execPath, [scriptPath, ...args], { stdio: 'inherit', env: process.env });
+  process.exitCode = res.status || 0;
+}
+
+function runLocalCLI(args = []) {
+  // Prefer built dist, fall back to JS in src (already present)
+  const distPath = path.join(__dirname, '..', 'packages', 'cli', 'dist', 'alex-ai-cli.js');
+  const srcPath = path.join(__dirname, '..', 'packages', 'cli', 'src', 'alex-ai-cli.js');
+  const cliPath = require('fs').existsSync(distPath) ? distPath : srcPath;
+  const res = spawnSync(process.execPath, [cliPath, ...args], { stdio: 'inherit', env: process.env });
+  process.exitCode = res.status || 0;
+}
+
+const [, , cmd, ...rest] = process.argv;
+
+switch (cmd) {
+  case 'init':
+    runScriptInScripts('cli-init.js', rest);
+    break;
+  case 'verify':
+    runScriptInScripts('cli-verify.js', rest);
+    break;
+  case 'triage':
+    runScriptInScripts('cli-triage.js', rest);
+    break;
+  case 'engage':
+    runLocalCLI(['engage', ...rest]);
+    break;
+  case 'chat':
+    runLocalCLI(['chat', ...rest]);
+    break;
+  case 'dashboard':
+  case 'view-dashboard':
+    runScriptInScripts('view-dashboard.js', rest);
+    break;
+  default: {
+    console.log('Alex AI CLI');
+    console.log('Usage:');
+    console.log('  alex-ai init            # add workflow and env templates to current repo');
+    console.log('  alex-ai verify          # preflight check for secrets and permissions');
+    console.log('  alex-ai triage [--item <number>|--all]  # triage issues/PRs locally');
+    console.log('  alex-ai engage "<message>"  # one-shot engagement via local CLI');
+    console.log('  alex-ai chat            # interactive chat via local CLI');
+    console.log('  alex-ai dashboard       # start local dashboard with live refresh');
+    process.exitCode = 0;
+  }
+}
+
+

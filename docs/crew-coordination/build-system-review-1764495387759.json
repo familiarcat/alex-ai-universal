@@ -1,0 +1,80 @@
+{
+  "timestamp": "2025-11-30T09:36:27.753Z",
+  "configs": {
+    "webpack": [],
+    "nextjs": [
+      "dashboard/deploy/next.config.js",
+      "dashboard/next.config.js",
+      "examples/alex-ai-nextjs/next.config.js",
+      "examples/alex-ai-nextjs/next.config.ts",
+      "output/test-project-001/next.config.js",
+      "samples/nextjs-agentic-demo/next.config.ts"
+    ],
+    "typescript": [
+      "dashboard/tsconfig.json",
+      "examples/alex-ai-nextjs/tsconfig.json",
+      "packages/cli/tsconfig.json",
+      "packages/core/tsconfig.json",
+      "packages/cursor-extension/tsconfig.json",
+      "packages/cursor-spell-check-extension/tsconfig.json",
+      "packages/dashboard-core/tsconfig.json",
+      "packages/messages-intelligence/tsconfig.json",
+      "packages/rate-limiter/tsconfig.json",
+      "packages/universal-extension/tsconfig.json",
+      "packages/vscode-extension/tsconfig.json",
+      "samples/nextjs-agentic-demo/tsconfig.json",
+      "tests/memory-harness/tsconfig.json",
+      "tsconfig.json"
+    ]
+  },
+  "vscodeExtension": {
+    "packageJson": "packages/vscode-extension/package.json",
+    "tsConfig": "packages/vscode-extension/tsconfig.json",
+    "analysis": {
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/packages/vscode-extension/package.json",
+      "name": "@alex-ai/vscode-extension",
+      "scripts": {
+        "compile": "tsc -p tsconfig.json",
+        "build": "npm run compile",
+        "clean": "rm -rf dist",
+        "dev": "code --extensionDevelopmentPath=.",
+        "smoke": "node ./test/smoke.js",
+        "test:integration": "node ./test/runTest.js",
+        "test": "npm run smoke && npm run test:integration",
+        "lint": "eslint . --ext .js,.ts",
+        "lint:fix": "eslint . --ext .js,.ts --fix"
+      },
+      "dependencies": [
+        "@alex-ai/universal-extension"
+      ],
+      "devDependencies": [
+        "@types/mocha",
+        "@types/node",
+        "@types/vscode",
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "@vscode/test-electron",
+        "eslint",
+        "mocha",
+        "typescript"
+      ],
+      "hasWebpack": false,
+      "hasTypeScript": true,
+      "hasNextJS": false
+    }
+  },
+  "recommendations": [
+    {
+      "type": "info",
+      "message": "No webpack found. Consider using TypeScript compiler directly or adding webpack for bundling."
+    },
+    {
+      "type": "suggestion",
+      "message": "VS Code extension could benefit from webpack for bundling dependencies and optimizing output."
+    },
+    {
+      "type": "opportunity",
+      "message": "Next.js build configuration exists - can reference patterns for webpack setup."
+    }
+  ]
+}

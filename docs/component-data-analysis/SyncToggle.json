@@ -1,0 +1,27 @@
+{
+  "componentName": "SyncToggle",
+  "filePath": "/dashboard/components/SyncToggle.js",
+  "hasLiveData": true,
+  "hasMockData": true,
+  "dataSources": [
+    "fetch(/api/sync-status)",
+    "fetch(/api/sync-toggle)",
+    "fetch(/api/sync-toggle)",
+    "API: /api/sync-status",
+    "API: /api/sync-toggle",
+    "API: /api/sync-toggle",
+    "useState with empty initial value (needs data)"
+  ],
+  "dataFlow": [
+    "Component → fetch(/api/sync-status) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/sync-toggle) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/sync-toggle) → Next.js API → Supabase/n8n",
+    "Component → /api/sync-status → Supabase/n8n",
+    "Component → /api/sync-toggle → Supabase/n8n",
+    "Component → /api/sync-toggle → Supabase/n8n"
+  ],
+  "problems": [
+    "Component initializes with empty data - needs live data source"
+  ],
+  "recommendations": []
+}

@@ -1,0 +1,493 @@
+{
+  "createdAt": "2025-08-27T02:25:46.038Z",
+  "updatedAt": "2025-09-21T05:16:04.188Z",
+  "id": "eviPmIvTnoJcnaas",
+  "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "federation-mission",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "mission_coordinator",
+      "name": "Mission Coordinator - Picard",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        400,
+        304
+      ],
+      "webhookId": "5968286c-fdaa-46ef-a1db-9b961cf175ae"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Enhanced Federation Crew Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        352,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "mission_analysis",
+      "name": "Mission Analysis & Planning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "execution_commander",
+      "name": "Execution Commander - Riker",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_1_data",
+      "name": "Data - Analytics & Logic Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_2_geordi",
+      "name": "Geordi - Engineering Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_3_crusher",
+      "name": "Crusher - Health & Optimization Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_4_worf",
+      "name": "Worf - Security Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_5_troi",
+      "name": "Troi - UX & Empathy Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1408
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_6_uhura",
+      "name": "Uhura - Communications & I/O Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "specialist_7_quark",
+      "name": "Quark - Business & Budget Specialist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        608,
+        1808
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "observation_lounge",
+      "name": "Observation Lounge - Crew Coordination Hub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        800,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Enhanced Federation Crew Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        368,
+        736
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Federation Crew Response Aggregator\nconst missionAnalysis = $('Mission Analysis & Planning').first().json;\nconst executionCommander = $('Execution Commander - Riker').first().json;\nconst dataSpecialist = $('Data - Analytics & Logic Specialist').first().json;\nconst geordiSpecialist = $('Geordi - Engineering Specialist').first().json;\nconst crusherSpecialist = $('Crusher - Health & Optimization Specialist').first().json;\nconst worfSpecialist = $('Worf - Security Specialist').first().json;\nconst troiSpecialist = $('Troi - UX & Empathy Specialist').first().json;\nconst uhuraSpecialist = $('Uhura - Communications & I/O Specialist').first().json;\nconst quarkSpecialist = $('Quark - Business & Budget Specialist').first().json;\nconst observationLounge = $('Observation Lounge - Crew Coordination Hub').first().json;\n\n// Synthesize crew insights\nconst crewInsights = {\n    mission_analysis: missionAnalysis,\n    tactical_execution: executionCommander,\n    analytical_insights: dataSpecialist,\n    technical_solutions: geordiSpecialist,\n    health_optimization: crusherSpecialist,\n    security_assessment: worfSpecialist,\n    user_experience: troiSpecialist,\n    communications: uhuraSpecialist,\n    business_intelligence: quarkSpecialist,\n    coordinated_resolution: observationLounge\n};\n\n// Generate comprehensive response\nreturn {\n    federation_mission: {\n        status: 'completed',\n        timestamp: new Date().toISOString(),\n        crew_coordination: 'successful',\n        mission_resolution: observationLounge,\n        crew_insights: crewInsights,\n        next_actions: generateNextActions(crewInsights),\n        recommendations: generateRecommendations(crewInsights)\n    }\n};\n\nfunction generateNextActions(insights) {\n    // Generate actionable next steps based on crew insights\n    return {\n        immediate: ['Review security protocols', 'Optimize system performance'],\n        short_term: ['Implement technical solutions', 'Monitor health metrics'],\n        long_term: ['Establish ongoing monitoring', 'Plan future optimizations']\n    };\n}\n\nfunction generateRecommendations(insights) {\n    // Generate strategic recommendations\n    return {\n        priority: 'High',\n        risk_level: 'Low',\n        success_probability: 'Excellent',\n        crew_confidence: 'Unified'\n    };\n}"
+      },
+      "id": "response_aggregator",
+      "name": "Response Aggregator & Synthesizer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "federation_response",
+      "name": "Federation Response Handler",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        1008
+      ]
+    }
+  ],
+  "connections": {
+    "Mission Coordinator - Picard": {
+      "main": [
+        [
+          {
+            "node": "Mission Analysis & Planning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mission Analysis & Planning": {
+      "main": [
+        [
+          {
+            "node": "Execution Commander - Riker",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data - Analytics & Logic Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Geordi - Engineering Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Crusher - Health & Optimization Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Worf - Security Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Troi - UX & Empathy Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Uhura - Communications & I/O Specialist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Quark - Business & Budget Specialist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Commander - Riker": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data - Analytics & Logic Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Geordi - Engineering Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crusher - Health & Optimization Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Worf - Security Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Troi - UX & Empathy Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uhura - Communications & I/O Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quark - Business & Budget Specialist": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge - Crew Coordination Hub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge - Crew Coordination Hub": {
+      "main": [
+        [
+          {
+            "node": "Response Aggregator & Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Aggregator & Synthesizer": {
+      "main": [
+        [
+          {
+            "node": "Federation Response Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enhanced Federation Crew Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Enhanced Federation Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enhanced Federation Crew Memory Retrieval": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "900fd3ee-e961-4814-af67-eb06a5aadbd2",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:46.040Z",
+      "updatedAt": "2025-08-27T02:25:46.040Z",
+      "role": "workflow:owner",
+      "workflowId": "eviPmIvTnoJcnaas",
+      "projectId": "4Pe2tfKPH8e3rX41",
+      "project": {
+        "createdAt": "2025-08-25T04:21:27.484Z",
+        "updatedAt": "2025-08-25T04:34:05.592Z",
+        "id": "4Pe2tfKPH8e3rX41",
+        "name": "Brady Georgen <brady@pbradygeorgen.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-08-25T04:21:27.484Z",
+            "updatedAt": "2025-08-25T04:21:27.484Z",
+            "role": "project:personalOwner",
+            "userId": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+            "projectId": "4Pe2tfKPH8e3rX41",
+            "user": {
+              "createdAt": "2025-08-25T04:21:26.701Z",
+              "updatedAt": "2025-09-21T04:00:05.000Z",
+              "id": "5e07dbef-2d2f-46b5-ad7d-2b23e96ea566",
+              "email": "brady@pbradygeorgen.com",
+              "firstName": "Brady",
+              "lastName": "Georgen",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-08-25T04:35:52.493Z",
+                "personalization_survey_n8n_version": "1.107.4",
+                "automationGoalDevops": [
+                  "other"
+                ],
+                "automationGoalDevopsOther": "Experimentation",
+                "companyIndustryExtended": [
+                  "it-industry",
+                  "msp",
+                  "media-industry",
+                  "marketing-industry"
+                ],
+                "companySize": "personalUser",
+                "companyType": "other",
+                "role": "it",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "YIm1VzYzVdphsjb9",
+                "userActivatedAt": 1756858725166,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1757328495060
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-09-21",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

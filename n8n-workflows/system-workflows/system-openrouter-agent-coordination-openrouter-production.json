@@ -1,0 +1,115 @@
+{
+  "id": "VQDH8tqWvVmigWd1",
+  "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "082503f8-8939-40c4-9620-81e3eff05d82",
+        "options": {}
+      },
+      "id": "federation_directive",
+      "name": "Federation Directive Receiver",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "webhookId": "082503f8-8939-40c4-9620-81e3eff05d82"
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_storage",
+      "name": "Federation Concise Agency Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "id": "memory_retrieval",
+      "name": "Federation Concise Agency Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "response_handler",
+      "name": "Response Handler",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Federation Directive Receiver": {
+      "main": [
+        [
+          {
+            "node": "Response Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federation Concise Agency Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Federation Concise Agency Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "126cfb45-2fb1-41b2-8c6f-a39831d65916",
+  "triggerCount": 1,
+  "createdAt": "2025-08-27T02:25:46.380Z",
+  "updatedAt": "2025-09-21T23:52:43.930Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.801Z",
+  "_category": "system-workflows",
+  "_source": "remote-n8n",
+  "_localPath": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/n8n-workflows/system-workflows/system-openrouter-agent-coordination-openrouter-production.json",
+  "_localModified": "2025-09-21T23:52:43.794Z",
+  "_localCategory": "system-workflows",
+  "isArchived": false,
+  "shared": [
+    {
+      "createdAt": "2025-08-27T02:25:46.381Z",
+      "updatedAt": "2025-08-27T02:25:46.381Z",
+      "role": "workflow:owner",
+      "workflowId": "VQDH8tqWvVmigWd1",
+      "projectId": "4Pe2tfKPH8e3rX41"
+    }
+  ],
+  "_lastSyncedAt": "2025-09-28T09:01:25.982Z"
+}

@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-09-21T08:12:30.460Z",
+  "crewMembers": [
+    {
+      "name": "Captain Jean Luc Picard",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Commander Data",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Commander William Riker",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Lieutenant Commander Geordi La Forge",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Lieutenant Worf",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Counselor Deanna Troi",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Dr. Beverly Crusher",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Lieutenant Uhura",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    },
+    {
+      "name": "Quark",
+      "status": "active",
+      "lastSync": "2025-09-21T08:12:30.461Z",
+      "workflowId": null,
+      "memoryCount": 0
+    }
+  ],
+  "systemStatus": {
+    "n8nConnected": false,
+    "ragConnected": false,
+    "workflowsSynced": 0,
+    "memoriesSynced": 0
+  }
+}

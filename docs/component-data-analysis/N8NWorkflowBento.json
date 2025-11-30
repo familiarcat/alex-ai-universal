@@ -1,0 +1,14 @@
+{
+  "componentName": "N8NWorkflowBento",
+  "filePath": "/dashboard/components/N8NWorkflowBento.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "useAppState (localStorage state)"
+  ],
+  "dataFlow": [
+    "Component → useAppState → localStorage"
+  ],
+  "problems": [],
+  "recommendations": []
+}

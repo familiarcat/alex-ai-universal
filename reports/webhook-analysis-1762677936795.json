@@ -1,0 +1,496 @@
+{
+  "generatedAt": "2025-11-09T08:45:36.795Z",
+  "results": [
+    {
+      "id": "1FgRj1CLUMnSIpvY",
+      "name": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+      "active": true,
+      "createdAt": "2025-11-03T11:09:13.567Z",
+      "updatedAt": "2025-11-08T10:26:51.932Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Webhook Trigger",
+          "path": "knowledge-ingest",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6YQVP2lXuzWEMLJH",
+      "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:35.495Z",
+      "updatedAt": "2025-11-08T10:26:53.502Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Observation Lounge Trigger",
+          "path": "observation-lounge",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7QD25cMR5JKbM7nD",
+      "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:36.370Z",
+      "updatedAt": "2025-11-08T10:26:55.091Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Federation Directive Receiver",
+          "path": "082503f8-8939-40c4-9620-81e3eff05d82",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "A8djpQJfwDTnMJnv",
+      "name": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:40.372Z",
+      "updatedAt": "2025-11-08T10:26:56.676Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Quark Directive",
+          "path": "crew-quark-optimized",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "Bcu0ySPIXX27mSYH",
+      "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:39.227Z",
+      "updatedAt": "2025-11-08T10:26:58.270Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Lieutenant Commander Geordi La Forge Directive",
+          "path": "crew-lieutenant-commander-geordi-la-forge",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "Gn5P2OXIPxIU1USr",
+      "name": "Project Content Store (Dashboard => Supabase)",
+      "active": true,
+      "createdAt": "2025-11-03T11:09:17.506Z",
+      "updatedAt": "2025-11-08T10:26:59.842Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Webhook Trigger",
+          "path": "project-content-store",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "JFhM6NbWgNU8KQz7",
+      "name": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:36.646Z",
+      "updatedAt": "2025-11-08T10:27:01.445Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Prompt Interception",
+          "path": "anti-hallucination",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "NaExwWejsSLVd5ai",
+      "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:39.516Z",
+      "updatedAt": "2025-11-08T10:27:03.060Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Lieutenant Uhura Directive",
+          "path": "crew-lieutenant-uhura",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "WHCq57iYp7bAYfUZ",
+      "name": "Anti-Hallucination Crew Workflow",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:37.231Z",
+      "updatedAt": "2025-11-08T10:27:04.636Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Prompt Interception",
+          "path": "anti-hallucination",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aDQeEuI2ww6l02xM",
+      "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:39.812Z",
+      "updatedAt": "2025-11-08T10:27:06.213Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Lieutenant Worf Directive",
+          "path": "crew-lieutenant-worf",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aQSbIwT4JGJ9z1F3",
+      "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:38.129Z",
+      "updatedAt": "2025-11-08T10:27:07.782Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Commander Data Directive",
+          "path": "crew-commander-data",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eJm8awXujdfR3kH4",
+      "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:38.970Z",
+      "updatedAt": "2025-11-08T10:27:09.356Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Dr. Beverly Crusher Directive",
+          "path": "crew-dr-beverly-crusher",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hEHWeCy2L0dTHQKJ",
+      "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-06T10:05:03.003Z",
+      "updatedAt": "2025-11-08T10:27:10.925Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Chief O'Brien Directive",
+          "path": "crew-chief-obrien",
+          "method": "POST",
+          "status": {
+            "success": true,
+            "status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "iyBzru43CreIhi6R",
+      "name": "Project Content Retrieve (Supabase => Dashboard)",
+      "active": true,
+      "createdAt": "2025-11-03T11:09:18.026Z",
+      "updatedAt": "2025-11-08T10:27:12.537Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Webhook Trigger",
+          "path": "project-content-retrieve",
+          "method": "GET",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lrcDjOHwjAjgOi7q",
+      "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:37.574Z",
+      "updatedAt": "2025-11-08T10:27:14.124Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Captain Jean-Luc Picard Directive",
+          "path": "crew-captain-jean-luc-picard",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ma2guAdSn8WJvQCO",
+      "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:38.679Z",
+      "updatedAt": "2025-11-08T10:27:15.697Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Counselor Deanna Troi Directive",
+          "path": "crew-counselor-deanna-troi",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "o5DRBwrD2KlF3IFe",
+      "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:34.411Z",
+      "updatedAt": "2025-11-08T10:27:17.267Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Webhook Trigger",
+          "path": "llm-collaboration",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oxfVjOErD1xkNQBG",
+      "name": "Project Content Delete (Dashboard => Supabase)",
+      "active": true,
+      "createdAt": "2025-11-03T11:09:18.522Z",
+      "updatedAt": "2025-11-08T10:27:18.842Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Webhook Trigger",
+          "path": "project-content-delete",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "qQkrVVms2dYbI5CU",
+      "name": "Anti-Hallucination Crew Workflow (HTTP)",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:36.923Z",
+      "updatedAt": "2025-11-08T10:27:20.408Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Prompt Interception",
+          "path": "anti-hallucination-http",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rxfZ44yqV1E1sm4V",
+      "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:40.106Z",
+      "updatedAt": "2025-11-08T10:27:21.982Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Quark Directive",
+          "path": "crew-quark-optimized",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "uBaHswjF8hQGMSPD",
+      "name": "PROJECT - Alex AI - Crew Integration - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:40.695Z",
+      "updatedAt": "2025-11-08T10:27:23.557Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Unified Crew Webhook Trigger",
+          "path": "alex-ai-unified-crew",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wkQnU1qlwixsdGZc",
+      "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:37.853Z",
+      "updatedAt": "2025-11-08T10:27:25.145Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Chief O'Brien Directive",
+          "path": "crew-chief-obrien",
+          "method": "POST",
+          "status": {
+            "success": true,
+            "status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "yj96QWvzZvn5lzCB",
+      "name": "UTILITY - Crew Management - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:41.034Z",
+      "updatedAt": "2025-11-08T10:27:26.716Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": []
+    },
+    {
+      "id": "yn5snWtN7IKu19hD",
+      "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "active": true,
+      "createdAt": "2025-11-03T11:08:38.395Z",
+      "updatedAt": "2025-11-08T10:27:28.290Z",
+      "owners": [],
+      "webhookCount": 1,
+      "webhooks": [
+        {
+          "nodeName": "Commander William Riker Directive",
+          "path": "crew-commander-william-riker",
+          "method": "POST",
+          "status": {
+            "success": false,
+            "status": 404,
+            "message": "Request failed with status code 404"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "name": "project-content-delete",
+    "description": "Client => n8n => Supabase (Soft Delete)",
+    "exported": "2025-11-02T03:04:43.091Z",
+    "n8nVersion": "fd7dd7ce-bf93-4878-8b21-c1ba5606ae37"
+  },
+  "workflow": {
+    "name": "Project Content Delete (Dashboard => Supabase)",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "project-content-delete",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "webhook-trigger",
+        "name": "Webhook Trigger",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          256,
+          304
+        ],
+        "webhookId": "55c85e3d-d831-476f-9271-a9c3e98deea2"
+      },
+      {
+        "parameters": {
+          "functionCode": "// Validate projectId\nconst body = $input.item.json.body;\n\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nconsole.log('🗑️ Soft-deleting project:', body.projectId);\n\nreturn { \n  json: { \n    project_id: body.projectId,\n    deleted_at: new Date().toISOString()\n  } \n};"
+        },
+        "id": "validate-input",
+        "name": "Validate Input",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [
+          464,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "projects",
+          "matchType": "allFilters"
+        },
+        "id": "supabase-soft-delete",
+        "name": "Supabase Soft Delete",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          656,
+          304
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "N96bQKR0loSF14d3",
+            "name": "Supabase Account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"projectId\": $('Validate Input').item.json.project_id, \"message\": \"Project deleted successfully\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "id": "response-success",
+        "name": "Response Success",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [
+          864,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to delete project\" } }}",
+          "options": {
+            "responseCode": 500
+          }
+        },
+        "id": "response-error",
+        "name": "Response Error",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [
+          864,
+          464
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Validate Input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate Input": {
+        "main": [
+          [
+            {
+              "node": "Supabase Soft Delete",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase Soft Delete": {
+        "main": [
+          [
+            {
+              "node": "Response Success",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "session_id": "youtube-m9iaJNJE2-M-1763744348086",
+  "category": "youtube_video",
+  "title": "I Built an AI Content Agent With N8N and Claude (Step-by-Step)",
+  "content": "Title: I Built an AI Content Agent With N8N and Claude (Step-by-Step)\n\nAuthor: Greg Isenberg\n\nThumbnail: https://i.ytimg.com/vi/m9iaJNJE2-M/hqdefault.jpg\n\nDescription:\nJoin me as chat I with The Boring Marketer as we demonstrate a complete n8n workflow automation that can save content creators 10-15 hours weekly by scraping top-performing content, generating new content ideas, and publishing to social. The system uses N8N to orchestrate multiple AI tools that research, write, and even create images for posts, with an optional human review step before publishing.\n\nBuild an AI Content Automation in n8n: https://www.gregisenberg.com/ai-content-automation\n\nGet ideas, tools, and tactics to 10x your marketing: https://www.skool.com/the-vibe-marketers\n\nTimestamps:\n\n00:00 - Intro\n01:58 - Why use this Content AI Agent\n03:05 - Demoing the n8n workflow\n03:33 - Explanation workflow stages\n04:52 - Appify for content scraping\n05:57 - Researching Viral Content\n06:59 - Content curation and Idea generation\n11:47 - Overview of OpenRouter for accessing multiple LLMs\n13:23 - Claude 3.7 Sonnet for content creation\n14:23 - Prompting Tips\n18:05 - Demo of the human review/posting process\n22:33 - Get free workflow template\n\nKey Points:\n\n• The workflow uses N8N to automate content creation by scraping top-performing content from YouTube and X (Twitter)\n• The system processes this data through various LLMs (including Claude and OpenAI) to generate original content ideas\n• The workflow can automatically create and publish LinkedIn posts with minimal human intervention\n• Tools mentioned include Appify (for scraping), OpenRouter (for accessing multiple LLMs), and Claude 3.7 Sonnet (for writing)\n\n1) THE PROBLEM:\n\nCreating quality content across multiple platforms is EXHAUSTING.\n\nMost marketers waste hours researching, writing, and publishing—only to get mediocre results.\n\nWhat if AI could do the heavy lifting while you focus on strategy?\n\nThat's exactly what this workflow solves!\n\n2) THE WORKFLOW OVERVIEW:\n\nThis N8n automation has 4 key stages:\n• Data collection from YouTube \\u0026 X\n• Content idea generation\n• Research \\u0026 validation\n• Content creation \\u0026 publishing\n\nAll with minimal human input! Let's dive deeper...\n\n3) STAGE 1: DATA COLLECTION \n\nThe workflow uses Appify to:\n• Scrape top-performing YouTube videos on your topic\n• Transcribe video content automatically\n• Pull relevant tweets from X\n• Compile everything into one massive data block\n\nThis gives your AI REAL context about what's working!\n\n4) STAGE 2: IDEA GENERATION \n\nOnce you have the data, the workflow:\n• Feeds everything to an OpenAI LLM\n• Analyzes patterns in high-performing content\n• Generates fresh angles and hooks\n• Identifies optimal content formats\n\nNo more staring at blank screens wondering what to write!\n\n5) STAGE 3: RESEARCH \\u0026 VALIDATION \n\nThis is where it gets POWERFUL:\n• Uses Perplexity (via OpenRouter) to find facts \\u0026 stats\n• Validates content ideas with real-world data\n• Prevents AI hallucinations\n• Adds credibility to your content\n\nYour posts will be backed by ACTUAL research!\n\n6) STAGE 4: CONTENT CREATION \n\nThe workflow uses Claude 3.7 Sonnet (the BEST writing AI right now) to:\n• Create a complete LinkedIn post\n• Generate an accompanying image\n• Format everything properly\n• Send to you for approval via Slack\n\nOne click and it's published!\n\n7) PRO TIPS FROM @boringmarketer:\n\n• Give AI specific brand voice instructions\n• Tell it to avoid corporate jargon and fluff\n• Ban those AI-looking dashes (---)\n• Mention \\",
+  "tags": [
+    "youtube",
+    "video",
+    "rag",
+    "enriched"
+  ],
+  "metadata": {
+    "videoId": "m9iaJNJE2-M",
+    "author": "Greg Isenberg",
+    "thumbnail": "https://i.ytimg.com/vi/m9iaJNJE2-M/hqdefault.jpg",
+    "source_url": "https://www.youtube.com/watch?v=m9iaJNJE2-M&list=WL&index=12&t=146s",
+    "transcriptChunks": 0,
+    "hasComments": false,
+    "frameCount": 0,
+    "enrichedAt": "2025-11-21T16:59:08.087Z"
+  }
+}

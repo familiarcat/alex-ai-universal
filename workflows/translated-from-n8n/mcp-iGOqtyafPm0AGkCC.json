@@ -1,0 +1,168 @@
+{
+  "id": "mcp-iGOqtyafPm0AGkCC",
+  "name": "Project Content Store (Dashboard => Supabase)",
+  "description": "Converted from n8n workflow: Project Content Store (Dashboard => Supabase)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-content-store",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "project-content-store",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "validate-transform",
+      "name": "Validate & Transform",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Validate and transform project content\nconst body = $input.item.json.body;\n\n// Required fields\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nif (!body.headline) {\n  throw new Error('headline is required');\n}\n\n// Build project data\nconst projectData = {\n  project_id: body.projectId,\n  headline: body.headline,\n  subheadline: body.subheadline || '',\n  description: body.description || '',\n  theme: body.theme || 'midnight',\n  project_type: body.projectType || 'business',\n  business_type: body.businessType || null,\n  components: body.components ? JSON.stringify(body.components) : null,\n  pages: body.pages ? JSON.stringify(body.pages) : null,\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('📦 Storing project:', projectData.project_id);\n\nreturn { json: projectData };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Validate & Transform"
+      }
+    },
+    {
+      "id": "supabase-upsert",
+      "name": "Supabase Upsert",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "projects",
+        "columns": "project_id,headline,subheadline,description,theme,project_type,business_type,components,pages,updated_at",
+        "options": {
+          "onConflict": "project_id",
+          "skipOnConflict": false,
+          "upsert": true
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Upsert"
+      }
+    },
+    {
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"projectId\": $json.project_id, \"message\": \"Project stored successfully\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "response-error",
+      "name": "Response Error",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        450
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to store project\" } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Error"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Validate & Transform",
+      "source": "Webhook Trigger",
+      "target": "Validate & Transform",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate & Transform-Supabase Upsert",
+      "source": "Validate & Transform",
+      "target": "Supabase Upsert",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Upsert-Response Success",
+      "source": "Supabase Upsert",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "webhook-trigger",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "project-content-store",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=project-content-store",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "iGOqtyafPm0AGkCC",
+    "convertedAt": "2025-11-21T14:24:04.681Z",
+    "originalName": "Project Content Store (Dashboard => Supabase)"
+  }
+}

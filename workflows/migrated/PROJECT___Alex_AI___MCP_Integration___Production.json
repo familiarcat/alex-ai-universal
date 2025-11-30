@@ -1,0 +1,54 @@
+{
+  "name": "PROJECT - Alex AI - MCP Integration - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "819a2907-3c4c-4568-a6ba-2a813e877137",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-mcp-request",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Respond Success"
+      ]
+    },
+    {
+      "id": "fb718fec-c544-4c5f-9b29-d020d415118a",
+      "type": "transform",
+      "config": {
+        "name": "Respond Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI MCP Request Handler - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "w1PGO3hrExjXlA8F",
+    "originalName": "PROJECT - Alex AI - MCP Integration - Production",
+    "migratedAt": "2025-11-21T11:19:39.216Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979216-zwr4hj",
+  "createdAt": "2025-11-21T11:19:39.216Z",
+  "updatedAt": "2025-11-21T11:19:39.216Z"
+}

@@ -1,0 +1,38 @@
+name: setup-node-workspace
+description: Checkout repo (or download artifact) and setup Node.js with cached dependencies
+inputs:
+  download-artifact:
+    description: "If true, download artifact instead of checkout"
+    required: false
+    default: "false"
+  artifact-name:
+    description: "Name of artifact to download when download-artifact is true"
+    required: false
+    default: "workspace"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      if: ${{ inputs.download-artifact != 'true' }}
+      uses: actions/checkout@v4
+
+    - name: Download workspace artifact
+      if: ${{ inputs.download-artifact == 'true' }}
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: .
+
+    - name: Use Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+

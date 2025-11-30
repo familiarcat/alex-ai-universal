@@ -1,0 +1,73 @@
+{
+  "updatedAt": "2025-11-20T17:44:30.401Z",
+  "createdAt": "2025-11-20T01:15:45.359Z",
+  "id": "PXoVbAuphRhwsaum",
+  "name": "PROJECT - Alex AI - Job Opportunities - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Webhook Trigger",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-job-opportunities",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "eb69a3e3-79cc-4c0c-8f6f-0389788b878d"
+    },
+    {
+      "name": "Respond Success",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Job Opportunities - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "position": [
+        460,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "4a7f0f9a-c2ec-4f6b-ad85-1b07c95691a9"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "2a424c92-d8ab-47cd-b646-6526d4ef71ca",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:45.361Z",
+      "createdAt": "2025-11-20T01:15:45.361Z",
+      "role": "workflow:owner",
+      "workflowId": "PXoVbAuphRhwsaum",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

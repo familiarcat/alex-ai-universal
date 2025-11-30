@@ -1,0 +1,157 @@
+{
+  "id": "mcp-XyYkm6y1P8Pw6HbK",
+  "name": "Project Content Delete (Dashboard => Supabase)",
+  "description": "Converted from n8n workflow: Project Content Delete (Dashboard => Supabase)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-content-delete",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "project-content-delete",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Validate projectId\nconst body = $input.item.json.body;\n\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nconsole.log('🗑️ Soft-deleting project:', body.projectId);\n\nreturn { \n  json: { \n    project_id: body.projectId,\n    deleted_at: new Date().toISOString()\n  } \n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Validate Input"
+      }
+    },
+    {
+      "id": "supabase-soft-delete",
+      "name": "Supabase Soft Delete",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "update",
+        "table": "projects",
+        "updateKey": "project_id",
+        "columnsToUpdate": "deleted_at",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Soft Delete"
+      }
+    },
+    {
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"projectId\": $('Validate Input').item.json.project_id, \"message\": \"Project deleted successfully\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "response-error",
+      "name": "Response Error",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        450
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to delete project\" } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Error"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Validate Input",
+      "source": "Webhook Trigger",
+      "target": "Validate Input",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Input-Supabase Soft Delete",
+      "source": "Validate Input",
+      "target": "Supabase Soft Delete",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Soft Delete-Response Success",
+      "source": "Supabase Soft Delete",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "webhook-trigger",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "project-content-delete",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=project-content-delete",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "XyYkm6y1P8Pw6HbK",
+    "convertedAt": "2025-11-21T14:24:04.676Z",
+    "originalName": "Project Content Delete (Dashboard => Supabase)"
+  }
+}

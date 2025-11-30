@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-11-28T13:48:59.651Z",
+  "mission": "Three-Tier Dashboard Architecture with Synchronized State",
+  "tiers": {
+    "tier1": {
+      "name": "Main Dashboard",
+      "description": "Universal dashboard managing all projects",
+      "access": "Full administrative access",
+      "stateSource": "Supabase (primary) + localStorage (cache)"
+    },
+    "tier2": {
+      "name": "Project Dashboards",
+      "description": "User-controlled dashboards with security-based features",
+      "access": "Role-based access control",
+      "stateSource": "Supabase (project-scoped) + localStorage (user cache)"
+    },
+    "tier3": {
+      "name": "Published Sites",
+      "description": "Read-only published sites with secure interactions",
+      "access": "Public read, authenticated write",
+      "stateSource": "Supabase (read-only) + CDN cache"
+    }
+  },
+  "syncArchitecture": {
+    "client": "localStorage (optimistic updates)",
+    "controller": "n8n/MCP (validation & transformation)",
+    "storage": "Supabase (vector storage, single source of truth)",
+    "flow": "Client → Controller → Supabase → Vector Index → Client"
+  },
+  "recommendations": [],
+  "implementation": {
+    "phases": [],
+    "priorities": []
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "name": "UTILITY - AI Controller - OpenRouter - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "7a2a16fc-e354-4a1c-9d07-2d88e84390f6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Cursor AI Controller Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "enhanced-unified-ai",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      }
+    },
+    {
+      "id": "e31b343d-5157-48b8-8fea-d62321f3b876",
+      "type": "transform",
+      "config": {
+        "name": "Enhanced Input Validator & Router",
+        "parameters": {
+          "jsCode": "// Enhanced input validation for Cursor + Claude + OpenRouter integration\nconst inputData = $input.all()[0].json;\n\n// Validate required fields\nif (!inputData.task_description) {\n  throw new Error('task_description is required');\n}\n\n// Extract task context and determine routing strategy\nconst context = inputData.context || {};\nconst budgetConstraints = inputData.budget_constraints || { max_cost: 0.10 };\nconst cursorContext = inputData.cursor_context || {};\nconst claudeCrewContext = inputData.claude_crew_context || {};\n\n// Determine if this should go to local Claude agents or OpenRouter\nconst shouldUseLocalClaude = context.use_local_claude || false;\nconst taskComplexity = context.task_complexity || 'medium';\nconst taskType = context.task_type || 'general';\n\n// Prepare enhanced data structure for unified processing\nreturn {\n  // Core task information\n  task_description: inputData.task_description,\n  task_type: taskType,\n  task_complexity: taskComplexity,\n  \n  // Context information\n  context: context,\n  cursor_context: cursorContext,\n  claude_crew_context: claudeCrewContext,\n  \n  // Routing decisions\n  routing_strategy: {\n    use_local_claude: shouldUseLocalClaude,\n    use_openrouter: !shouldUseLocalClaude,\n    fallback_strategy: 'openrouter'\n  },\n  \n  // Budget and constraints\n  budget_constraints: budgetConstraints,\n  \n  // Metadata\n  timestamp: new Date().toISOString(),\n  request_id: $node[\"cursor-webhook-trigger\"].json.request_id || Date.now().toString(),\n  source: 'cursor_extension'\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      }
+    },
+    {
+      "id": "2419161c-f1b0-4ed4-a5d3-558da64542b6",
+      "type": "transform",
+      "config": {
+        "name": "Intelligent Routing Decision Engine",
+        "parameters": {
+          "jsCode": "// Route to local Claude agents or OpenRouter based on task complexity and type\nconst routingData = $input.all()[0].json;\nconst { routing_strategy, task_complexity, task_type } = routingData;\n\n// Decision logic for routing\nlet targetSystem = 'openrouter';\nlet reasoning = '';\n\nif (routing_strategy.use_local_claude) {\n  // Use local Claude agents for:\n  // - Strategic planning (Captain Picard)\n  // - Complex analysis (Commander Data)\n  // - System architecture (Geordi La Forge)\n  if (['strategic_planning', 'complex_analysis', 'system_architecture'].includes(task_type)) {\n    targetSystem = 'local_claude';\n    reasoning = `Task type '${task_type}' with ${task_complexity} complexity - routing to local Claude crew`;\n  }\n}\n\n// Always use OpenRouter for:\n// - Code generation (GPT-4o is excellent)\n// - Quick analysis (Claude Haiku is cost-effective)\n// - Multimodal tasks (GPT-4o supports images)\nif (['code_generation', 'quick_analysis', 'multimodal'].includes(task_type)) {\n  targetSystem = 'openrouter';\n  reasoning = `Task type '${task_type}' - routing to OpenRouter for optimal performance`;\n}\n\n// Cost optimization: Use local Claude for high-complexity strategic tasks\nif (task_complexity === 'high' && task_type === 'strategic_planning') {\n  targetSystem = 'local_claude';\n  reasoning = 'High-complexity strategic planning - using local Claude crew for cost optimization';\n}\n\nreturn {\n  ...routingData,\n  routing_decision: {\n    target_system: targetSystem,\n    reasoning: reasoning,\n    estimated_cost: targetSystem === 'local_claude' ? 0.0 : 0.05,\n    response_time: targetSystem === 'local_claude' ? 'fast' : 'medium'\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          680,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      }
+    },
+    {
+      "id": "772dca3d-0c91-4509-ae50-13dd51329cad",
+      "type": "transform",
+      "config": {
+        "name": "Enhanced Python Router (Local Claude + OpenRouter)",
+        "parameters": {
+          "command": "python3",
+          "arguments": "enhanced_unified_router.py",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "position": [
+          900,
+          300
+        ],
+        "originalType": "n8n-nodes-base.executeCommand"
+      }
+    },
+    {
+      "id": "dd53cb1b-8fea-4f4d-962c-04c5781a3ed6",
+      "type": "transform",
+      "config": {
+        "name": "Cursor UI Enhancement & Response Formatter",
+        "parameters": {
+          "jsCode": "// Process the enhanced router output and format for Cursor UI\nconst routerOutput = $input.all()[0].json;\n\n// Check if execution was successful\nif (routerOutput.error) {\n  return {\n    success: false,\n    error: routerOutput.error,\n    timestamp: new Date().toISOString(),\n    ui_feedback: {\n      message: 'Routing failed - please try again',\n      type: 'error',\n      show_retry: true\n    }\n  };\n}\n\n// Parse the router output\nconst result = JSON.parse(routerOutput.stdout || '{}');\n\nif (result.success) {\n  // Enhanced response with UI elements for Cursor\n  return {\n    success: true,\n    \n    // Core response data\n    ai_response: result.execution_result.response,\n    model_used: result.execution_result.model_used,\n    \n    // Enhanced routing information\n    routing_summary: {\n      task_type: result.routing_summary.task_type,\n      complexity: result.routing_summary.complexity,\n      selected_model: result.routing_summary.selected_model,\n      reasoning: result.routing_summary.reasoning,\n      total_cost: result.routing_summary.total_cost,\n      system_used: result.routing_summary.system_used\n    },\n    \n    // UI enhancement data for Cursor\n    ui_enhancements: {\n      // Visual cues for LLM models\n      model_visual_cue: {\n        model_name: result.routing_summary.selected_model,\n        provider: result.routing_summary.system_used,\n        icon: result.routing_summary.system_used === 'local_claude' ? '🤖' : '🌐',\n        color: result.routing_summary.system_used === 'local_claude' ? '#00ff00' : '#0080ff'\n      },\n      \n      // Cost display\n      cost_display: {\n        total_cost: result.routing_summary.total_cost,\n        cost_breakdown: result.execution_result.cost_breakdown || {},\n        cost_efficiency: result.routing_summary.cost_efficiency || 'high',\n        savings_vs_alternative: result.routing_summary.savings_vs_alternative || 0.0\n      },\n      \n      // Sub-agent consistency indicators\n      sub_agent_status: {\n        crew_member_used: result.routing_summary.crew_member || null,\n        crew_consistency: result.routing_summary.crew_consistency || 'high',\n        n8n_workflow_status: 'active',\n        last_sync: new Date().toISOString()\n      },\n      \n      // Performance metrics\n      performance_metrics: {\n        response_time: result.execution_result.response_time || 'fast',\n        token_usage: result.execution_result.token_usage || {},\n        model_confidence: result.routing_summary.confidence || 0.95\n      }\n    },\n    \n    // Alternative suggestions\n    alternatives: result.llm_selection.alternatives || [],\n    \n    // Metadata\n    timestamp: new Date().toISOString(),\n    request_id: result.request_id\n  };\n} else {\n  return {\n    success: false,\n    error: result.error || 'Unknown error occurred',\n    timestamp: new Date().toISOString(),\n    ui_feedback: {\n      message: 'AI processing failed - check logs for details',\n      type: 'error',\n      show_retry: true\n    }\n  };\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          1120,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      }
+    },
+    {
+      "id": "15d97e74-6468-49b3-b9e0-573afa920a49",
+      "type": "transform",
+      "config": {
+        "name": "Enhanced Webhook Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1340,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "d82e020a-43a9-42c8-a16f-0197ceab6d27",
+      "type": "transform",
+      "config": {
+        "name": "Enhanced Logging & Monitoring",
+        "parameters": {
+          "jsCode": "// Enhanced logging and monitoring for the unified system\nconst responseData = $input.all()[0].json;\n\nif (responseData.success) {\n  const { routing_summary, ui_enhancements } = responseData;\n  \n  console.log(`🚀 Enhanced Unified AI Success:`);\n  console.log(`   Task Type: ${routing_summary.task_type}`);\n  console.log(`   Complexity: ${routing_summary.complexity}`);\n  console.log(`   System Used: ${routing_summary.system_used}`);\n  console.log(`   Model: ${routing_summary.selected_model}`);\n  console.log(`   Cost: $${routing_summary.total_cost}`);\n  console.log(`   UI Enhancement: ${ui_enhancements.model_visual_cue.icon} ${ui_enhancements.model_visual_cue.model_name}`);\n  \n  // Log sub-agent consistency\n  if (ui_enhancements.sub_agent_status.crew_member_used) {\n    console.log(`   Crew Member: ${ui_enhancements.sub_agent_status.crew_member_used}`);\n    console.log(`   Crew Consistency: ${ui_enhancements.sub_agent_status.crew_consistency}`);\n  }\n  \n  // Log cost optimization\n  if (ui_enhancements.cost_display.savings_vs_alternative > 0) {\n    console.log(`   Cost Savings: $${ui_enhancements.cost_display.savings_vs_alternative}`);\n  }\n} else {\n  console.error(`❌ Enhanced Unified AI Failed: ${responseData.error}`);\n}\n\n// Pass through the data for potential further processing\nreturn responseData;"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          1120,
+          500
+        ],
+        "originalType": "n8n-nodes-base.code"
+      }
+    },
+    {
+      "id": "6eabdf85-acca-443c-8220-61a4218981fc",
+      "type": "transform",
+      "config": {
+        "name": "Real-time Status Updater",
+        "parameters": {
+          "jsCode": "// Real-time status updates for Cursor UI\nconst statusData = $input.all()[0].json;\n\nif (statusData.success) {\n  // Update N8N workflow status\n  const workflowStatus = {\n    status: 'active',\n    last_execution: new Date().toISOString(),\n    performance_metrics: statusData.ui_enhancements.performance_metrics,\n    cost_metrics: statusData.ui_enhancements.cost_display,\n    sub_agent_status: statusData.ui_enhancements.sub_agent_status\n  };\n  \n  // This could be sent to a status endpoint or stored for Cursor to query\n  console.log('📊 Workflow Status Updated:', workflowStatus);\n  \n  // Return status for potential real-time updates\n  return {\n    workflow_status: workflowStatus,\n    cursor_ui_update: {\n      model_status: statusData.ui_enhancements.model_visual_cue,\n      cost_status: statusData.ui_enhancements.cost_display,\n      performance_status: statusData.ui_enhancements.performance_metrics\n    }\n  };\n}\n\nreturn statusData;"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          1340,
+          500
+        ],
+        "originalType": "n8n-nodes-base.code"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "1jLMbG6FEsE30jey",
+    "originalName": "UTILITY - AI Controller - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.202Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979203-12tem",
+  "createdAt": "2025-11-21T11:19:39.203Z",
+  "updatedAt": "2025-11-21T11:19:39.203Z"
+}

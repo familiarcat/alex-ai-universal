@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex AI Dashboard - Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status-card {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff00;
+        }
+        .status-card.disconnected {
+            border-left-color: #ff0000;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected { background-color: #00ff00; }
+        .disconnected { background-color: #ff0000; }
+        .loading { background-color: #ffaa00; }
+        .test-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #0052a3;
+        }
+        .results {
+            background: #333;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖖 Alex AI Dashboard - Connection Test</h1>
+            <p>Testing N8N and Supabase connections</p>
+        </div>
+
+        <div class="status-card" id="n8n-status">
+            <h3>
+                <span class="status-indicator loading" id="n8n-indicator"></span>
+                N8N Connection
+            </h3>
+            <p id="n8n-details">Testing connection...</p>
+            <button class="test-button" onclick="testN8N()">Test N8N</button>
+            <div class="results" id="n8n-results"></div>
+        </div>
+
+        <div class="status-card" id="supabase-status">
+            <h3>
+                <span class="status-indicator loading" id="supabase-indicator"></span>
+                Supabase Connection
+            </h3>
+            <p id="supabase-details">Testing connection...</p>
+            <button class="test-button" onclick="testSupabase()">Test Supabase</button>
+            <div class="results" id="supabase-results"></div>
+        </div>
+
+        <div class="status-card">
+            <h3>🎯 Connection Summary</h3>
+            <p id="summary">Running tests...</p>
+            <button class="test-button" onclick="testAll()">Test All Connections</button>
+        </div>
+    </div>
+
+    <script>
+        async function testN8N() {
+            const indicator = document.getElementById('n8n-indicator');
+            const details = document.getElementById('n8n-details');
+            const results = document.getElementById('n8n-results');
+            
+            indicator.className = 'status-indicator loading';
+            details.textContent = 'Testing N8N connection...';
+            
+            try {
+                const response = await fetch('https://n8n.pbradygeorgen.com/api/v1/workflows', {
+                    headers: {
+                        'X-N8N-API-KEY': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZTA3ZGJlZi0yZDJmLTQ2YjUtYWQ3ZC0yYjIzZTk2ZWE1NjYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzU4NjgxMzY5fQ._vFzyUok70PS3wI0bTSpB9QDxzLGHM3Ou9n4XvZF0aA',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    indicator.className = 'status-indicator connected';
+                    details.textContent = `✅ Connected - ${data.data?.length || 0} workflows found`;
+                    results.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                indicator.className = 'status-indicator disconnected';
+                details.textContent = `❌ Connection failed: ${error.message}`;
+                results.textContent = error.toString();
+            }
+        }
+
+        async function testSupabase() {
+            const indicator = document.getElementById('supabase-indicator');
+            const details = document.getElementById('supabase-details');
+            const results = document.getElementById('supabase-results');
+            
+            indicator.className = 'status-indicator loading';
+            details.textContent = 'Testing Supabase connection...';
+            
+            try {
+                const response = await fetch('https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/agent_memories?select=*&limit=5', {
+                    headers: {
+                        'apikey': 'sb_secret_TCaP5QXq4PHTtsjxcU1l1Q_XB5nRLJg',
+                        'Authorization': 'Bearer sb_secret_TCaP5QXq4PHTtsjxcU1l1Q_XB5nRLJg',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    indicator.className = 'status-indicator connected';
+                    details.textContent = `✅ Connected - ${data.length || 0} records found`;
+                    results.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    const errorData = await response.json();
+                    if (errorData.code === '42P01') {
+                        indicator.className = 'status-indicator connected';
+                        details.textContent = '✅ Connected - Table needs to be created';
+                        results.textContent = 'Table "agent_memories" does not exist. This is expected for first-time setup.';
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${errorData.message || response.statusText}`);
+                    }
+                }
+            } catch (error) {
+                indicator.className = 'status-indicator disconnected';
+                details.textContent = `❌ Connection failed: ${error.message}`;
+                results.textContent = error.toString();
+            }
+        }
+
+        async function testAll() {
+            document.getElementById('summary').textContent = 'Running all tests...';
+            await testN8N();
+            await testSupabase();
+            
+            const n8nConnected = document.getElementById('n8n-indicator').classList.contains('connected');
+            const supabaseConnected = document.getElementById('supabase-indicator').classList.contains('connected');
+            
+            if (n8nConnected && supabaseConnected) {
+                document.getElementById('summary').textContent = '🎉 All connections successful! Dashboard is ready.';
+            } else {
+                document.getElementById('summary').textContent = '⚠️ Some connections failed. Check individual test results.';
+            }
+        }
+
+        // Auto-run tests on page load
+        window.onload = function() {
+            testAll();
+        };
+    </script>
+</body>
+</html>

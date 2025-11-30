@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "name": "Alex AI Core",
+      "path": "../packages/core"
+    },
+    {
+      "name": "Alex AI CLI",
+      "path": "../packages/cli"
+    },
+    {
+      "name": "Test Projects",
+      "path": "./test-projects"
+    }
+  ],
+  "settings": {
+    "alex-ai.enabled": true,
+    "alex-ai.privateRegistry": "https://npm.pkg.github.com",
+    "alex-ai.testingMode": true
+  },
+  "extensions": {
+    "recommendations": [
+      "alex-ai.vscode-extension"
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "requestMethod": "GET",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Quark",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": false,
+        "options": {},
+        "headerParametersUi": {},
+        "queryParametersUi": {},
+        "infoMessage": ""
+      },
+      "id": "656dfc0f-650f-4355-a1a7-b453f1cfab48",
+      "name": "Quark Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generic-sub-workflow",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "generic_sub_webhook",
+      "name": "Generic Sub Workflow Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        112,
+        112
+      ]
+    },
+    {
+      "id": "33908237-4f98-412f-a173-d18dfecf9b0d",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        256,
+        112
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "generic_sub_response",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        672,
+        112
+      ]
+    }
+  ],
+  "connections": {
+    "Generic Sub Workflow Webhook": {
+      "main": [
+        [
+          {
+            "node": "Quark Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Quark Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quark Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "active": false
+}

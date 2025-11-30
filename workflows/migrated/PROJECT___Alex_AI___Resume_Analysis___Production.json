@@ -1,0 +1,54 @@
+{
+  "name": "PROJECT - Alex AI - Resume Analysis - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "e3bb0eb7-e4ba-43b5-b9ee-c168a255cc95",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-resume-analysis",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Respond Success"
+      ]
+    },
+    {
+      "id": "01261c7f-c85d-4c24-83ca-77f2dec9935d",
+      "type": "transform",
+      "config": {
+        "name": "Respond Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Resume Analysis - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "T5FqVPDqS5ks3sVx",
+    "originalName": "PROJECT - Alex AI - Resume Analysis - Production",
+    "migratedAt": "2025-11-21T11:19:39.211Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979211-3ohoze",
+  "createdAt": "2025-11-21T11:19:39.211Z",
+  "updatedAt": "2025-11-21T11:19:39.211Z"
+}

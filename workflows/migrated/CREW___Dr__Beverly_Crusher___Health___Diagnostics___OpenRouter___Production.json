@@ -1,0 +1,163 @@
+{
+  "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "3729a59b-cd8e-49dd-b41c-b27a54f87a43",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Dr. Beverly Crusher Directive",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-dr-beverly-crusher",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Dr. Beverly Crusher Memory Retrieval"
+      ]
+    },
+    {
+      "id": "fa402984-669f-46b5-b89e-a35ac9cd3854",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Dr. Beverly Crusher Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Dr. Beverly Crusher",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "de64bb07-7187-44eb-86f7-8356165e13b8",
+      "type": "workflowExecute",
+      "config": {
+        "name": "LLM Selection Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          352
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Dr. Beverly Crusher AI Agent"
+      ]
+    },
+    {
+      "id": "8f3c7153-f12f-4813-91c1-5096c018e064",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Dr. Beverly Crusher AI Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge Communication"
+      ]
+    },
+    {
+      "id": "e995362a-7c84-4620-b08c-f080cf3d48eb",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Dr. Beverly Crusher Memory Storage",
+        "parameters": {
+          "authentication": "none",
+          "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "sendBody": true,
+          "jsonParameters": true,
+          "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'crusher',\n      knowledgeType: 'medical_assessment',\n      priority: 'high',\n      title: 'Health Diagnostics Advisory',\n      summary: summaryLine.trim() || 'Medical diagnostics guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'crusher']\n    }\n  };\n})() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Dr. Beverly Crusher Response"
+      ]
+    },
+    {
+      "id": "fcdddcbb-6c79-49a0-96de-d6838a49997d",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge Communication",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Dr. Beverly Crusher Memory Storage"
+      ]
+    },
+    {
+      "id": "fa14e926-c1c2-4f9d-b1c6-5702e28bb498",
+      "type": "transform",
+      "config": {
+        "name": "Dr. Beverly Crusher Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ {\n  success: true,\n  crew_member: 'dr_crusher',\n  crew_name: 'Dr. Beverly Crusher',\n  role: 'Chief Medical Officer',\n  summary: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Dr. Beverly Crusher AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Dr. Beverly Crusher Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Dr. Beverly Crusher AI Agent').item.json?.model || null,\n    usage: $('Dr. Beverly Crusher AI Agent').item.json?.usage || null\n  }\n} }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1136,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "BBWlzjKJ411IDzCL",
+    "originalName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.206Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979206-p8mk9p",
+  "createdAt": "2025-11-21T11:19:39.206Z",
+  "updatedAt": "2025-11-21T11:19:39.206Z"
+}

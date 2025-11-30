@@ -1,0 +1,14 @@
+{
+  "componentName": "AnalyticsDashboard",
+  "filePath": "/dashboard/components/AnalyticsDashboard.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "useAppState (localStorage state)"
+  ],
+  "dataFlow": [
+    "Component → useAppState → localStorage"
+  ],
+  "problems": [],
+  "recommendations": []
+}

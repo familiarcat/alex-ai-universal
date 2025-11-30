@@ -1,0 +1,22 @@
+{
+  "name": "alex-ai-demo-project",
+  "version": "1.0.0",
+  "description": "Alex AI Demo - Smart Home Automation System (Clean Version)",
+  "build": {
+    "entry": "./clean-enhanced-demo.js",
+    "output": "./dist",
+    "publicPath": "/",
+    "devServer": {
+      "port": 3000,
+      "open": true
+    }
+  },
+  "scripts": {
+    "build": "node build-script.js",
+    "dev": "node clean-enhanced-demo.js",
+    "start": "npm run dev",
+    "test": "node test-runner.js"
+  },
+  "buildTime": "2025-10-06T07:39:02.158Z",
+  "cleanBuild": true
+}

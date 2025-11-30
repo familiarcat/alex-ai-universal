@@ -1,0 +1,6 @@
+{
+  "RoleARN": "arn:aws:iam::860268930466:role/firehose-n8n-waf-role-1762852850",
+  "BucketARN": "arn:aws:s3:::aws-waf-logs-n8n-1762852850",
+  "BufferingHints": {"IntervalInSeconds": 300, "SizeInMBs": 5},
+  "CompressionFormat": "GZIP"
+}

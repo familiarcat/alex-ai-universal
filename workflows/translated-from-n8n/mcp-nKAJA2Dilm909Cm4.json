@@ -1,0 +1,197 @@
+{
+  "id": "mcp-nKAJA2Dilm909Cm4",
+  "name": "Knowledge Embed (Generate AI Embeddings)",
+  "description": "Converted from n8n workflow: Knowledge Embed (Generate AI Embeddings)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "78fd4764-01bb-44fd-ab22-fb95ee3101f6",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-embed",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "knowledge-embed",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "e5ec0327-5538-4252-8358-b10bb5cf3e95",
+      "name": "Prepare Text",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Prepare content for embedding generation\nconst body = $input.item.json.body;\n\nif (!body.session_id) {\n  throw new Error('session_id is required');\n}\n\nif (!body.content && !body.text_to_embed) {\n  throw new Error('content or text_to_embed is required');\n}\n\n// Build text for embedding (combine title + summary + content)\nconst textToEmbed = body.text_to_embed || (\n  (body.title || '') + '\\n\\n' +\n  (body.executive_summary || '') + '\\n\\n' +\n  JSON.stringify(body.content || {})\n);\n\nconsole.log('🧠 Generating embedding for:', body.session_id);\nconsole.log('   Text length:', textToEmbed.length, 'characters');\n\nreturn { \n  json: {\n    session_id: body.session_id,\n    text: textToEmbed,\n    model: 'text-embedding-3-small'\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Prepare Text"
+      }
+    },
+    {
+      "id": "f7364526-241f-4f85-a3a3-d2b1ad2468e8",
+      "name": "Generate Embedding (OpenAI)",
+      "type": "mcp.unknown",
+      "originalType": "n8n-nodes-base.openAi",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "resource": "text",
+        "operation": "embeddings",
+        "options": {
+          "model": "={{ $json.model }}"
+        },
+        "text": "={{ $json.text }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Generate Embedding (OpenAI)"
+      }
+    },
+    {
+      "id": "4ce5d3da-b2ed-4cf9-952b-0cc0dbb030c5",
+      "name": "Format Embedding",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Extract embedding vector and prepare for storage\nconst embeddingData = $input.item.json.data?.[0]?.embedding;\n\nif (!embeddingData || !Array.isArray(embeddingData)) {\n  throw new Error('Invalid embedding response from OpenAI');\n}\n\nconst sessionId = $('Prepare Text').item.json.session_id;\nconst model = $('Prepare Text').item.json.model;\n\nconsole.log('✅ Embedding generated:', embeddingData.length, 'dimensions');\n\nreturn {\n  json: {\n    session_id: sessionId,\n    content_embedding: JSON.stringify(embeddingData),\n    embedding_model: model,\n    embedding_generated_at: new Date().toISOString()\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Format Embedding"
+      }
+    },
+    {
+      "id": "b8d6b24e-6571-4246-a2a6-dc5ca99d9afe",
+      "name": "Store Embedding",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        1050,
+        300
+      ],
+      "parameters": {
+        "operation": "update",
+        "table": "knowledge_base",
+        "columns": "content_embedding,embedding_model,embedding_generated_at",
+        "filters": {
+          "conditions": [
+            {
+              "column": "session_id",
+              "condition": "equals",
+              "value": "={{ $json.session_id }}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Store Embedding"
+      }
+    },
+    {
+      "id": "4e8818bc-2dc5-4dc1-a1c1-bb140c3371ae",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1250,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"embedding_dimensions\": 1536, \"message\": \"Embedding generated and stored\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Prepare Text",
+      "source": "Webhook Trigger",
+      "target": "Prepare Text",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Prepare Text-Generate Embedding (OpenAI)",
+      "source": "Prepare Text",
+      "target": "Generate Embedding (OpenAI)",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Generate Embedding (OpenAI)-Format Embedding",
+      "source": "Generate Embedding (OpenAI)",
+      "target": "Format Embedding",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Format Embedding-Store Embedding",
+      "source": "Format Embedding",
+      "target": "Store Embedding",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Store Embedding-Response Success",
+      "source": "Store Embedding",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "78fd4764-01bb-44fd-ab22-fb95ee3101f6",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "knowledge-embed",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=knowledge-embed",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "nKAJA2Dilm909Cm4",
+    "convertedAt": "2025-11-21T14:24:04.684Z",
+    "originalName": "Knowledge Embed (Generate AI Embeddings)"
+  }
+}

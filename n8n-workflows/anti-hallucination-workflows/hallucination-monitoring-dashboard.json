@@ -1,0 +1,229 @@
+{
+  "id": "eudNA8lttXSkXIa0",
+  "name": "Hallucination Monitoring Dashboard",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Collect hallucination monitoring data\nconst timestamp = new Date().toISOString();\n\n// Simulate system metrics collection\nconst systemMetrics = {\n  timestamp,\n  totalPrompts: Math.floor(Math.random() * 100) + 50,\n  hallucinationsDetected: Math.floor(Math.random() * 10) + 1,\n  correctionsApplied: Math.floor(Math.random() * 8) + 1,\n  averageProcessingTime: Math.floor(Math.random() * 5000) + 2000,\n  systemHealth: Math.random() * 0.4 + 0.6 // 60-100%\n};\n\n// Simulate crew member accuracy data\nconst crewMemberAccuracy = {\n  'Captain Picard': Math.random() * 0.2 + 0.8,\n  'Commander Data': Math.random() * 0.15 + 0.85,\n  'Counselor Troi': Math.random() * 0.25 + 0.75,\n  'Lieutenant Worf': Math.random() * 0.2 + 0.8,\n  'Commander Riker': Math.random() * 0.18 + 0.82,\n  'Lieutenant Commander La Forge': Math.random() * 0.15 + 0.85,\n  'Doctor Crusher': Math.random() * 0.22 + 0.78,\n  'Lieutenant Commander Tasha Yar': Math.random() * 0.2 + 0.8,\n  'Lieutenant Commander Spock': Math.random() * 0.12 + 0.88\n};\n\n// Simulate LLM performance data\nconst llmPerformance = {\n  'anthropic/claude-3-opus': Math.random() * 0.15 + 0.85,\n  'anthropic/claude-3-sonnet': Math.random() * 0.18 + 0.82,\n  'openai/gpt-4-turbo': Math.random() * 0.16 + 0.84,\n  'openai/gpt-4': Math.random() * 0.17 + 0.83,\n  'openai/gpt-3.5-turbo': Math.random() * 0.2 + 0.8\n};\n\n// Generate trend analysis\nconst trends = {\n  hallucinationRate: {\n    current: systemMetrics.hallucinationsDetected / systemMetrics.totalPrompts,\n    trend: Math.random() > 0.5 ? 'decreasing' : 'increasing',\n    change: Math.random() * 0.1 - 0.05 // -5% to +5%\n  },\n  systemHealth: {\n    current: systemMetrics.systemHealth,\n    trend: systemMetrics.systemHealth > 0.8 ? 'stable' : 'declining',\n    change: Math.random() * 0.05 - 0.025 // -2.5% to +2.5%\n  },\n  processingTime: {\n    current: systemMetrics.averageProcessingTime,\n    trend: systemMetrics.averageProcessingTime < 3000 ? 'improving' : 'degrading',\n    change: Math.random() * 500 - 250 // -250ms to +250ms\n  }\n};\n\n// Generate alerts\nconst alerts = [];\nif (systemMetrics.systemHealth < 0.7) {\n  alerts.push({\n    type: 'warning',\n    message: 'System health below 70%',\n    severity: 'medium'\n  });\n}\nif (systemMetrics.hallucinationsDetected / systemMetrics.totalPrompts > 0.15) {\n  alerts.push({\n    type: 'error',\n    message: 'Hallucination rate above 15%',\n    severity: 'high'\n  });\n}\nif (systemMetrics.averageProcessingTime > 10000) {\n  alerts.push({\n    type: 'warning',\n    message: 'Processing time above 10 seconds',\n    severity: 'medium'\n  });\n}\n\nreturn {\n  systemMetrics,\n  crewMemberAccuracy,\n  llmPerformance,\n  trends,\n  alerts,\n  timestamp,\n  monitoringPeriod: '5 minutes'\n};"
+      },
+      "id": "metrics-collection",
+      "name": "Metrics Collection",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.alerts.length }}",
+              "operation": "larger",
+              "value2": "0"
+            }
+          ]
+        }
+      },
+      "id": "alert-check",
+      "name": "Alert Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Process alerts and generate notifications\nconst monitoringData = $input.first().json;\nconst alerts = monitoringData.alerts;\n\n// Generate alert notifications\nconst notifications = alerts.map(alert => ({\n  id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,\n  type: alert.type,\n  severity: alert.severity,\n  message: alert.message,\n  timestamp: monitoringData.timestamp,\n  systemHealth: monitoringData.systemMetrics.systemHealth,\n  recommendedActions: generateRecommendedActions(alert)\n}));\n\nfunction generateRecommendedActions(alert) {\n  switch (alert.type) {\n    case 'warning':\n      return [\n        'Review system configuration',\n        'Check crew member performance',\n        'Monitor for additional issues'\n      ];\n    case 'error':\n      return [\n        'Immediate investigation required',\n        'Review hallucination detection thresholds',\n        'Consider system restart if persistent',\n        'Escalate to system administrator'\n      ];\n    default:\n      return ['Monitor system closely'];\n  }\n}\n\nreturn {\n  ...monitoringData,\n  notifications,\n  alertCount: alerts.length\n};"
+      },
+      "id": "alert-processing",
+      "name": "Alert Processing",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Generate monitoring dashboard data\nconst monitoringData = $input.first().json;\n\n// Format dashboard data\nconst dashboardData = {\n  timestamp: monitoringData.timestamp,\n  summary: {\n    systemHealth: Math.round(monitoringData.systemMetrics.systemHealth * 100),\n    totalPrompts: monitoringData.systemMetrics.totalPrompts,\n    hallucinationRate: Math.round((monitoringData.systemMetrics.hallucinationsDetected / monitoringData.systemMetrics.totalPrompts) * 100),\n    correctionsApplied: monitoringData.systemMetrics.correctionsApplied,\n    averageProcessingTime: monitoringData.systemMetrics.averageProcessingTime\n  },\n  trends: monitoringData.trends,\n  alerts: monitoringData.alerts || [],\n  notifications: monitoringData.notifications || [],\n  crewPerformance: Object.entries(monitoringData.crewMemberAccuracy).map(([member, accuracy]) => ({\n    crewMember: member,\n    accuracy: Math.round(accuracy * 100),\n    status: accuracy > 0.8 ? 'excellent' : accuracy > 0.7 ? 'good' : 'needs_attention'\n  })),\n  llmPerformance: Object.entries(monitoringData.llmPerformance).map(([llm, performance]) => ({\n    llm,\n    performance: Math.round(performance * 100),\n    status: performance > 0.85 ? 'optimal' : performance > 0.8 ? 'good' : 'needs_optimization'\n  })),\n  recommendations: generateRecommendations(monitoringData)\n};\n\nfunction generateRecommendations(data) {\n  const recommendations = [];\n  \n  if (data.systemMetrics.systemHealth < 0.8) {\n    recommendations.push({\n      type: 'system_health',\n      priority: 'high',\n      message: 'System health is below optimal. Consider reviewing hallucination detection thresholds.'\n    });\n  }\n  \n  if (data.systemMetrics.averageProcessingTime > 5000) {\n    recommendations.push({\n      type: 'performance',\n      priority: 'medium',\n      message: 'Processing time is high. Consider optimizing LLM selection or reducing crew size.'\n    });\n  }\n  \n  const lowAccuracyCrew = Object.entries(data.crewMemberAccuracy)\n    .filter(([_, accuracy]) => accuracy < 0.8)\n    .map(([member, _]) => member);\n  \n  if (lowAccuracyCrew.length > 0) {\n    recommendations.push({\n      type: 'crew_training',\n      priority: 'medium',\n      message: `Crew members with low accuracy: ${lowAccuracyCrew.join(', ')}. Consider additional training.`\n    });\n  }\n  \n  return recommendations;\n}\n\nreturn dashboardData;"
+      },
+      "id": "dashboard-generation",
+      "name": "Dashboard Generation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": "hallucination_monitoring",
+        "columns": "timestamp, system_health, total_prompts, hallucination_rate, corrections_applied, processing_time, alerts_count, recommendations_count",
+        "values": "={{ $json.timestamp }}, {{ $json.summary.systemHealth }}, {{ $json.summary.totalPrompts }}, {{ $json.summary.hallucinationRate }}, {{ $json.summary.correctionsApplied }}, {{ $json.summary.averageProcessingTime }}, {{ $json.alerts.length }}, {{ $json.recommendations.length }}"
+      },
+      "id": "database-storage",
+      "name": "Database Storage",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Log monitoring results\nconst dashboardData = $input.first().json;\n\nconsole.log('🛡️ Anti-Hallucination Monitoring Dashboard');\nconsole.log('==========================================');\nconsole.log(`📊 System Health: ${dashboardData.summary.systemHealth}%`);\nconsole.log(`📝 Total Prompts: ${dashboardData.summary.totalPrompts}`);\nconsole.log(`🚨 Hallucination Rate: ${dashboardData.summary.hallucinationRate}%`);\nconsole.log(`🔧 Corrections Applied: ${dashboardData.summary.correctionsApplied}`);\nconsole.log(`⏱️  Average Processing Time: ${dashboardData.summary.averageProcessingTime}ms`);\n\nif (dashboardData.alerts.length > 0) {\n  console.log('\\n⚠️  Active Alerts:');\n  dashboardData.alerts.forEach(alert => {\n    console.log(`  ${alert.type.toUpperCase()}: ${alert.message}`);\n  });\n}\n\nif (dashboardData.recommendations.length > 0) {\n  console.log('\\n💡 Recommendations:');\n  dashboardData.recommendations.forEach(rec => {\n    console.log(`  [${rec.priority.toUpperCase()}] ${rec.message}`);\n  });\n}\n\nconsole.log('\\n👥 Crew Performance:');\ndashboardData.crewPerformance.forEach(crew => {\n  console.log(`  ${crew.crewMember}: ${crew.accuracy}% (${crew.status})`);\n});\n\nconsole.log('\\n🤖 LLM Performance:');\ndashboardData.llmPerformance.forEach(llm => {\n  console.log(`  ${llm.llm}: ${llm.performance}% (${llm.status})`);\n});\n\nreturn {\n  ...dashboardData,\n  loggedAt: new Date().toISOString(),\n  logLevel: 'INFO'\n};"
+      },
+      "id": "monitoring-log",
+      "name": "Monitoring Log",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Skip alert processing when no alerts\nconst monitoringData = $input.first().json;\n\nreturn {\n  ...monitoringData,\n  alertCount: 0,\n  notifications: [],\n  message: 'No alerts to process'\n};"
+      },
+      "id": "no-alerts",
+      "name": "No Alerts",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        900,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Metrics Collection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Metrics Collection": {
+      "main": [
+        [
+          {
+            "node": "Alert Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Check": {
+      "main": [
+        [
+          {
+            "node": "Alert Processing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Processing": {
+      "main": [
+        [
+          {
+            "node": "Dashboard Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Alerts": {
+      "main": [
+        [
+          {
+            "node": "Dashboard Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dashboard Generation": {
+      "main": [
+        [
+          {
+            "node": "Database Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Database Storage": {
+      "main": [
+        [
+          {
+            "node": "Monitoring Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "943c1d80-0ab1-44f0-8dc8-0282983077e0",
+  "triggerCount": 0,
+  "createdAt": "2025-09-21T21:31:47.720Z",
+  "updatedAt": "2025-09-21T21:31:47.720Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.796Z",
+  "_category": "anti-hallucination-workflows",
+  "_source": "remote-n8n"
+}

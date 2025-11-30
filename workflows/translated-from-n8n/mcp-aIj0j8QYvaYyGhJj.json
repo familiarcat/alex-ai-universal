@@ -1,0 +1,150 @@
+{
+  "id": "mcp-aIj0j8QYvaYyGhJj",
+  "name": "Knowledge Update (RAG UPDATE - Versioning)",
+  "description": "Converted from n8n workflow: Knowledge Update (RAG UPDATE - Versioning)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-update",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "knowledge-update",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "validate-update",
+      "name": "Validate Update",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Validate update request and prepare versioned update\nconst body = $input.item.json.body;\n\nif (!body.session_id) {\n  throw new Error('session_id is required for updates');\n}\n\n// Build update data\nconst updateData = {\n  session_id: body.session_id,\n  \n  // Fields that can be updated\n  title: body.title,\n  executive_summary: body.executive_summary,\n  category: body.category,\n  \n  // Append-only fields (merge with existing)\n  additional_decisions: body.additional_decisions,\n  additional_patterns: body.additional_patterns,\n  additional_insights: body.additional_insights,\n  \n  // Metadata\n  update_reason: body.update_reason || 'Manual update',\n  updated_by: body.updated_by || 'system',\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('📝 Updating knowledge:', updateData.session_id, '| Reason:', updateData.update_reason);\n\nreturn { json: updateData };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Validate Update"
+      }
+    },
+    {
+      "id": "supabase-update",
+      "name": "Supabase Update",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "update",
+        "table": "knowledge_base",
+        "columns": "title,executive_summary,category,updated_at",
+        "filters": {
+          "conditions": [
+            {
+              "column": "session_id",
+              "condition": "equals",
+              "value": "={{ $json.session_id }}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Update"
+      }
+    },
+    {
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"message\": \"Knowledge updated successfully\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Validate Update",
+      "source": "Webhook Trigger",
+      "target": "Validate Update",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Update-Supabase Update",
+      "source": "Validate Update",
+      "target": "Supabase Update",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Update-Response Success",
+      "source": "Supabase Update",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "webhook-trigger",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "knowledge-update",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=knowledge-update",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "aIj0j8QYvaYyGhJj",
+    "convertedAt": "2025-11-21T14:24:04.677Z",
+    "originalName": "Knowledge Update (RAG UPDATE - Versioning)"
+  }
+}

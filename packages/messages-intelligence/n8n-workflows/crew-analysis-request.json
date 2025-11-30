@@ -1,0 +1,320 @@
+{
+  "name": "Alex AI - Crew Analysis Request",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-analysis",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Crew Analysis Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "crew-analysis-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the incoming request\nconst request = $input.first().json;\n\n// Validate required fields\nconst requiredFields = ['crewMember', 'conversationId', 'analysisType'];\nconst missingFields = requiredFields.filter(field => !request[field]);\n\nif (missingFields.length > 0) {\n  return [{\n    json: {\n      error: true,\n      message: `Missing required fields: ${missingFields.join(', ')}`,\n      statusCode: 400\n    }\n  }];\n}\n\n// Validate crew member\nconst validCrewMembers = [\n  'Captain Picard',\n  'Commander Data',\n  'Worf',\n  'Geordi La Forge',\n  'Beverly Crusher',\n  'Deanna Troi',\n  'William Riker',\n  'Tasha Yar',\n  'Quark'\n];\n\nif (!validCrewMembers.includes(request.crewMember)) {\n  return [{\n    json: {\n      error: true,\n      message: `Invalid crew member: ${request.crewMember}. Valid members: ${validCrewMembers.join(', ')}`,\n      statusCode: 400\n    }\n  }];\n}\n\n// Process date range if provided\nlet dateRange = null;\nif (request.dateRange) {\n  const now = new Date();\n  switch (request.dateRange) {\n    case 'last_week':\n      dateRange = {\n        start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),\n        end: now\n      };\n      break;\n    case 'last_month':\n      dateRange = {\n        start: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),\n        end: now\n      };\n      break;\n    case 'last_3_months':\n      dateRange = {\n        start: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000),\n        end: now\n      };\n      break;\n    default:\n      if (request.startDate && request.endDate) {\n        dateRange = {\n          start: new Date(request.startDate),\n          end: new Date(request.endDate)\n        };\n      }\n  }\n}\n\n// Return processed request\nreturn [{\n  json: {\n    error: false,\n    crewMember: request.crewMember,\n    conversationId: request.conversationId,\n    analysisType: request.analysisType,\n    dateRange: dateRange,\n    specificQuestions: request.specificQuestions || [],\n    timestamp: new Date().toISOString(),\n    requestId: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`\n  }\n}];"
+      },
+      "id": "validate-request",
+      "name": "Validate Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "no-error",
+              "leftValue": "={{$json.error}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-validation",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "message": "SECURITY PROTOCOL: External API calls disabled to maintain Prime Directive compliance. All crew analysis remains local-only.",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Request-ID",
+              "value": "={{$json.requestId}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "crewMember",
+              "value": "={{$json.crewMember}}"
+            },
+            {
+              "name": "conversationId",
+              "value": "={{$json.conversationId}}"
+            },
+            {
+              "name": "analysisType",
+              "value": "={{$json.analysisType}}"
+            },
+            {
+              "name": "dateRange",
+              "value": "={{JSON.stringify($json.dateRange)}}"
+            },
+            {
+              "name": "specificQuestions",
+              "value": "={{JSON.stringify($json.specificQuestions)}}"
+            }
+          ]
+        }
+      },
+      "id": "perform-crew-analysis",
+      "name": "Local Crew Analysis Only",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 4.1,
+      "position": [
+        900,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format the crew analysis response\nconst analysis = $input.first().json;\n\n// Create a structured response\nconst response = {\n  success: true,\n  crewMember: analysis.crewMember,\n  conversationId: analysis.conversationId,\n  analysisType: analysis.analysisType,\n  timestamp: new Date().toISOString(),\n  requestId: analysis.requestId,\n  analysis: {\n    summary: analysis.summary,\n    insights: analysis.insights,\n    recommendations: analysis.recommendations,\n    report: analysis.report\n  },\n  metadata: {\n    processingTime: analysis.processingTime || 'N/A',\n    messageCount: analysis.messageCount || 0,\n    dateRange: analysis.dateRange || null\n  }\n};\n\nreturn [{ json: response }];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{JSON.stringify($json)}}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "X-Request-ID",
+                "value": "={{$json.requestId}}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "return-success-response",
+      "name": "Return Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{JSON.stringify($json)}}",
+        "options": {
+          "responseCode": 400,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "return-error-response",
+      "name": "Return Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/notifications/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "Alex AI - Crew Analysis Request"
+            },
+            {
+              "name": "message",
+              "value": "{{$json.crewMember}} completed analysis for conversation: {{$json.conversationId}}"
+            },
+            {
+              "name": "type",
+              "value": "info"
+            },
+            {
+              "name": "metadata",
+              "value": "={{JSON.stringify({requestId: $json.requestId, analysisType: $json.analysisType})}}"
+            }
+          ]
+        }
+      },
+      "id": "send-notification",
+      "name": "Send Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1120,
+        400
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Crew Analysis Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Request": {
+      "main": [
+        [
+          {
+            "node": "Check Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Validation": {
+      "main": [
+        [
+          {
+            "node": "Perform Crew Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perform Crew Analysis": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Return Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "alex-ai-universal"
+  },
+  "id": "crew-analysis-request",
+  "tags": [
+    {
+      "createdAt": "2025-01-27T00:00:00.000Z",
+      "updatedAt": "2025-01-27T00:00:00.000Z",
+      "id": "alex-ai",
+      "name": "Alex AI"
+    },
+    {
+      "createdAt": "2025-01-27T00:00:00.000Z",
+      "updatedAt": "2025-01-27T00:00:00.000Z",
+      "id": "crew-analysis",
+      "name": "Crew Analysis"
+    }
+  ]
+}

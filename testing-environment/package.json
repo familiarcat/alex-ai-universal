@@ -1,0 +1,15 @@
+{
+  "name": "alex-ai-testing-environment",
+  "version": "1.0.0",
+  "description": "Alex AI Testing Environment",
+  "private": true,
+  "dependencies": {
+    "@alex-ai/core": "file:../local-registry/alex-ai-core-1.0.0-private.tgz",
+    "@alex-ai/cli": "file:../local-registry/alex-ai-cli-1.0.0-private.tgz"
+  },
+  "devDependencies": {
+    "@alex-ai/vscode": "file:../local-registry/alex-ai-vscode-1.0.0-private.tgz",
+    "@alex-ai/cursor": "file:../local-registry/alex-ai-cursor-1.0.0-private.tgz",
+    "@alex-ai/web": "file:../local-registry/alex-ai-web-1.0.0-private.tgz"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "1b0c76fd-f6de-4db6-8228-ea6f55fd4325",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Enhanced MCP Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-mcp-enhanced",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "GitHub MCP Repository Scraper",
+        "MCP Documentation Scraper"
+      ]
+    },
+    {
+      "id": "8714747c-5562-444e-8827-4b102d880dff",
+      "type": "workflowExecute",
+      "config": {
+        "name": "GitHub MCP Repository Scraper",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.github.com/repos/modelcontextprotocol/servers",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          200
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Alex AI MCP Knowledge Analyzer"
+      ]
+    },
+    {
+      "id": "5a9346b5-fab7-4edb-becb-d8439ca104aa",
+      "type": "workflowExecute",
+      "config": {
+        "name": "MCP Documentation Scraper",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://modelcontextprotocol.io/docs",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          400
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Alex AI MCP Knowledge Analyzer"
+      ]
+    },
+    {
+      "id": "f065a873-13e6-4575-81d9-d24c1cbc1e3c",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Alex AI MCP Knowledge Analyzer",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          300
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "MCP Knowledge Base Storage"
+      ]
+    },
+    {
+      "id": "366ec636-81bc-4eeb-a5ce-ce008af628b1",
+      "type": "workflowExecute",
+      "config": {
+        "name": "MCP Knowledge Base Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/mcp_knowledge_base",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          300
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Enhanced MCP Response"
+      ]
+    },
+    {
+      "id": "a129b8a1-2dbb-41c3-aa88-7a96378a8b8e",
+      "type": "transform",
+      "config": {
+        "name": "Enhanced MCP Response",
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "r5lPputZcOLgeG5H",
+    "originalName": "PROJECT - Alex AI - MCP Enhancement - Production",
+    "migratedAt": "2025-11-21T11:19:39.216Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979216-efc71s",
+  "createdAt": "2025-11-21T11:19:39.216Z",
+  "updatedAt": "2025-11-21T11:19:39.216Z"
+}

@@ -1,0 +1,78 @@
+{
+  "id": "mcp-w1PGO3hrExjXlA8F",
+  "name": "PROJECT - Alex AI - MCP Integration - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - MCP Integration - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "819a2907-3c4c-4568-a6ba-2a813e877137",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-mcp-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-mcp-request",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "fb718fec-c544-4c5f-9b29-d020d415118a",
+      "name": "Respond Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI MCP Request Handler - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Respond Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Respond Success",
+      "source": "Webhook Trigger",
+      "target": "Respond Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "819a2907-3c4c-4568-a6ba-2a813e877137",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "alex-ai-mcp-request",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-mcp-request",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "w1PGO3hrExjXlA8F",
+    "convertedAt": "2025-11-21T14:24:04.686Z",
+    "originalName": "PROJECT - Alex AI - MCP Integration - Production"
+  }
+}

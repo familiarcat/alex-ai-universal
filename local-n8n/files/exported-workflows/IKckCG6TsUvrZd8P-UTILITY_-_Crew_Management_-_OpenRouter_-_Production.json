@@ -1,0 +1,42 @@
+{
+  "name": "UTILITY - Crew Management - OpenRouter - Production",
+  "nodes": [
+    {
+      "id": "crew_request",
+      "name": "Crew Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "crew_response",
+      "name": "Crew Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Crew Request": {
+      "main": [
+        [
+          {
+            "node": "Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null
+}

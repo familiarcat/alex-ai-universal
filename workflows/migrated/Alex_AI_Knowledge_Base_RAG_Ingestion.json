@@ -1,0 +1,469 @@
+{
+  "name": "Alex AI Knowledge Base RAG Ingestion",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "f3d6a19a-25d8-40b5-b56a-aeffef55d410",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ingest-knowledge",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Extract Payload"
+      ]
+    },
+    {
+      "id": "9acf927f-1fc8-4960-a50c-6640d2b315cc",
+      "type": "transform",
+      "config": {
+        "name": "Extract Payload",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "extract-metadata",
+                "name": "documents",
+                "value": "={{ $json.documents }}",
+                "type": "array"
+              },
+              {
+                "id": "session-id",
+                "name": "session_id",
+                "value": "={{ $json.session_id }}",
+                "type": "string"
+              },
+              {
+                "id": "timestamp",
+                "name": "timestamp",
+                "value": "={{ new Date().toISOString() }}",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.set",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.set"
+      },
+      "next": [
+        "Split Into Items"
+      ]
+    },
+    {
+      "id": "16d2b534-da62-4469-823d-321fba6a0afc",
+      "type": "transform",
+      "config": {
+        "name": "Split Into Items",
+        "parameters": {
+          "fieldToSplitOut": "documents",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.splitInBatches"
+      },
+      "next": [
+        "Extract Document Metadata"
+      ]
+    },
+    {
+      "id": "4525c9d2-00e2-4f53-829d-bc02691c33e9",
+      "type": "transform",
+      "config": {
+        "name": "Extract Document Metadata",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "doc-title",
+                "name": "title",
+                "value": "={{ $json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "doc-content",
+                "name": "content",
+                "value": "={{ $json.content }}",
+                "type": "string"
+              },
+              {
+                "id": "doc-tags",
+                "name": "tags",
+                "value": "={{ $json.tags }}",
+                "type": "array"
+              },
+              {
+                "id": "doc-date",
+                "name": "date",
+                "value": "={{ $json.date }}",
+                "type": "string"
+              },
+              {
+                "id": "doc-session",
+                "name": "session",
+                "value": "={{ $json.session }}",
+                "type": "string"
+              },
+              {
+                "id": "doc-score",
+                "name": "anti_hallucination_score",
+                "value": "={{ $json.anti_hallucination_score || 100 }}",
+                "type": "number"
+              },
+              {
+                "id": "doc-priority",
+                "name": "priority",
+                "value": "={{ $json.priority || 'medium' }}",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.set",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.set"
+      },
+      "next": [
+        "Chunk Document"
+      ]
+    },
+    {
+      "id": "f10ce1b9-b570-4318-b799-565cee6698a8",
+      "type": "transform",
+      "config": {
+        "name": "Chunk Document",
+        "parameters": {
+          "functionCode": "const text = $json.content || '';\\nconst chunkSize = 1000;\\nconst overlap = 200;\\nconst results = [];\\nfor (let i = 0; i < text.length; i += chunkSize - overlap) {\\n  const chunk = text.slice(i, i + chunkSize);\\n  results.push({ json: { ...$json, chunk, chunk_index: results.length }});\\n}\\nreturn results;"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          1050,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Generate OpenAI Embeddings"
+      ]
+    },
+    {
+      "id": "f36783bb-7677-497d-bac8-5232b0dbb22e",
+      "type": "transform",
+      "config": {
+        "name": "Generate OpenAI Embeddings",
+        "parameters": {
+          "resource": "embeddings",
+          "operation": "create",
+          "model": "text-embedding-3-small",
+          "input": "={{ $json.chunk }}"
+        },
+        "type": "n8n-nodes-base.openAi",
+        "position": [
+          1250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.openAi"
+      },
+      "next": [
+        "Extract Embedding"
+      ]
+    },
+    {
+      "id": "7ac46764-46a4-4e77-9020-c77b73ff02cc",
+      "type": "transform",
+      "config": {
+        "name": "Extract Embedding",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "embedding",
+                "name": "embedding",
+                "value": "={{ $json.data[0].embedding }}",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.set",
+        "position": [
+          1450,
+          180
+        ],
+        "originalType": "n8n-nodes-base.set"
+      },
+      "next": [
+        "Store in Supabase"
+      ]
+    },
+    {
+      "id": "218e3211-9271-49ae-a95d-9da24fee34d9",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Store in Supabase",
+        "parameters": {
+          "operation": "insert",
+          "table": "knowledge_base",
+          "columns": {
+            "mappings": [
+              {
+                "column": "title",
+                "value": "={{ $json.title }}"
+              },
+              {
+                "column": "content",
+                "value": "={{ $json.chunk }}"
+              },
+              {
+                "column": "embedding",
+                "value": "={{ $json.embedding }}"
+              },
+              {
+                "column": "metadata",
+                "value": "={{ JSON.stringify({ tags: $json.tags, date: $json.date, session: $json.session, priority: $json.priority, anti_hallucination_score: $json.anti_hallucination_score, chunk_index: $json.chunk_index }) }}"
+              },
+              {
+                "column": "session_id",
+                "value": "={{ $('Extract Payload').item.json.session_id }}"
+              },
+              {
+                "column": "created_at",
+                "value": "={{ new Date().toISOString() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          1450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Check for Errors"
+      ]
+    },
+    {
+      "id": "08d7f7b8-560d-46a9-94ca-884a51ecc3ce",
+      "type": "transform",
+      "config": {
+        "name": "Check for Errors",
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "check-error",
+                "leftValue": "={{ $json.error }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          1650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Log Error",
+        "Log Success"
+      ]
+    },
+    {
+      "id": "6f963ee7-ccec-464b-a487-4d7f961302b3",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Log Error",
+        "parameters": {
+          "operation": "insert",
+          "table": "rag_ingestion_log",
+          "columns": {
+            "mappings": [
+              {
+                "column": "session_id",
+                "value": "={{ $('Extract Payload').item.json.session_id }}"
+              },
+              {
+                "column": "status",
+                "value": "error"
+              },
+              {
+                "column": "error_message",
+                "value": "={{ $json.error }}"
+              },
+              {
+                "column": "document_title",
+                "value": "={{ $json.title }}"
+              },
+              {
+                "column": "timestamp",
+                "value": "={{ new Date().toISOString() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          1850,
+          200
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Prepare Response"
+      ]
+    },
+    {
+      "id": "7edc5477-a505-4bc0-852e-875289ed5767",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Log Success",
+        "parameters": {
+          "operation": "insert",
+          "table": "rag_ingestion_log",
+          "columns": {
+            "mappings": [
+              {
+                "column": "session_id",
+                "value": "={{ $('Extract Payload').item.json.session_id }}"
+              },
+              {
+                "column": "status",
+                "value": "success"
+              },
+              {
+                "column": "document_title",
+                "value": "={{ $json.title }}"
+              },
+              {
+                "column": "chunks_created",
+                "value": "={{ $json.chunk_index + 1 }}"
+              },
+              {
+                "column": "timestamp",
+                "value": "={{ new Date().toISOString() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          1850,
+          400
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Prepare Response"
+      ]
+    },
+    {
+      "id": "f88b0c76-6d6a-4f80-a711-1f3f8eb1c37a",
+      "type": "transform",
+      "config": {
+        "name": "Prepare Response",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "response-success",
+                "name": "success",
+                "value": "true",
+                "type": "boolean"
+              },
+              {
+                "id": "response-message",
+                "name": "message",
+                "value": "Knowledge base updated successfully",
+                "type": "string"
+              },
+              {
+                "id": "response-session",
+                "name": "session_id",
+                "value": "={{ $('Extract Payload').item.json.session_id }}",
+                "type": "string"
+              },
+              {
+                "id": "response-timestamp",
+                "name": "timestamp",
+                "value": "={{ new Date().toISOString() }}",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.set",
+        "position": [
+          2050,
+          300
+        ],
+        "originalType": "n8n-nodes-base.set"
+      },
+      "next": [
+        "Webhook Response"
+      ]
+    },
+    {
+      "id": "d8bb4b30-2a33-447c-9cc8-2c8a54260813",
+      "type": "transform",
+      "config": {
+        "name": "Webhook Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          2250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "c0HYTqTFtktCE3Fk",
+    "originalName": "Alex AI Knowledge Base RAG Ingestion",
+    "migratedAt": "2025-11-21T11:19:39.213Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979213-ymzhe8",
+  "createdAt": "2025-11-21T11:19:39.213Z",
+  "updatedAt": "2025-11-21T11:19:39.213Z"
+}

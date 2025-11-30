@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "error": "Request failed with status code 404",
+  "status": 404,
+  "milestone": {
+    "title": "🚀 Milestone v2.4.0 — Automated Crew Webhook Registration",
+    "overview": "A new automation layer has been added so the crew can manage every production webhook without touching the n8n UI. We now orchestrate workflow activation, webhook warm‑up, and verification entirely through CLI tooling, using shared credentials sourced from `~/.zshrc`.",
+    "deliverables": "- `scripts/activate-all-n8n-workflows.js` confirms every workflow is active via the REST API.\n- `scripts/register-all-webhooks.js` enumerates webhook nodes and warms both `/webhook-test` and production endpoints.\n- Credential strategy defined for loading n8n/Supabase keys from `~/.zshrc`, enabling future “crewdential” automation.",
+    "status": "- Workflows: 32/32 active.\n- Webhooks: only `crew-chief-obrien` responding (HTTP 200); others still return 404 because workflow executions require owner-level credentials. Automation now logs this clearly for follow-up.",
+    "nextSteps": "1. Obtain an owner API key that can execute `/rest/workflows/{id}/run` so remaining endpoints register successfully.\n2. Wrap the new scripts in a top-level shell orchestrator (one command to activate → execute → verify).\n3. Persist credential snapshots and crew assignments in Supabase so “strange new worlds” automation can self-heal.\n\nWe’re ready to chart those strange new worlds knowing the crew has a documented, scriptable path to keep every webhook online.",
+    "sourceFile": "MILESTONE_v2.4.0_AUTOMATED_CREW_WEBHOOK_REGISTRATION.md",
+    "timestamp": "2025-11-09T08:17:27.399Z"
+  }
+}

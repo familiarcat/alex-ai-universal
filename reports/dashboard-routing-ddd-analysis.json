@@ -1,0 +1,319 @@
+{
+  "timestamp": "2025-11-26T09:33:36.266Z",
+  "routes": {
+    "pages": [
+      {
+        "path": "auth/signin",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/auth/signin/page.tsx",
+        "relativePath": "auth/signin/page.tsx"
+      },
+      {
+        "path": "clear-state",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/clear-state/page.tsx",
+        "relativePath": "clear-state/page.tsx"
+      },
+      {
+        "path": "creative/[projectId]",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/creative/[projectId]/page.tsx",
+        "relativePath": "creative/[projectId]/page.tsx"
+      },
+      {
+        "path": "dashboard/analytics",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/dashboard/analytics/page.tsx",
+        "relativePath": "dashboard/analytics/page.tsx"
+      },
+      {
+        "path": "dashboard",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/dashboard/page.tsx",
+        "relativePath": "dashboard/page.tsx"
+      },
+      {
+        "path": "dashboard/vector-priority",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/dashboard/vector-priority/page.tsx",
+        "relativePath": "dashboard/vector-priority/page.tsx"
+      },
+      {
+        "path": "demos/theme-gallery",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/demos/theme-gallery/page.tsx",
+        "relativePath": "demos/theme-gallery/page.tsx"
+      },
+      {
+        "path": "errors",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/errors/page.tsx",
+        "relativePath": "errors/page.tsx"
+      },
+      {
+        "path": "gallery",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/gallery/page.tsx",
+        "relativePath": "gallery/page.tsx"
+      },
+      {
+        "path": "mcp",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/mcp/page.tsx",
+        "relativePath": "mcp/page.tsx"
+      },
+      {
+        "path": "observation-lounge",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/observation-lounge/page.tsx",
+        "relativePath": "observation-lounge/page.tsx"
+      },
+      {
+        "path": "/",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/page.tsx",
+        "relativePath": "page.tsx"
+      },
+      {
+        "path": "projects/[projectId]",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/projects/[projectId]/page.tsx",
+        "relativePath": "projects/[projectId]/page.tsx"
+      },
+      {
+        "path": "projects/new",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/projects/new/page.tsx",
+        "relativePath": "projects/new/page.tsx"
+      },
+      {
+        "path": "projects",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/projects/page.tsx",
+        "relativePath": "projects/page.tsx"
+      },
+      {
+        "path": "projects/preview",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/projects/preview/page.tsx",
+        "relativePath": "projects/preview/page.tsx"
+      },
+      {
+        "path": "quiz",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/quiz/page.tsx",
+        "relativePath": "quiz/page.tsx"
+      },
+      {
+        "path": "reports/architecture",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/reports/architecture/page.tsx",
+        "relativePath": "reports/architecture/page.tsx"
+      },
+      {
+        "path": "reports/observation-lounge",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/reports/observation-lounge/page.tsx",
+        "relativePath": "reports/observation-lounge/page.tsx"
+      },
+      {
+        "path": "settings",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/settings/page.tsx",
+        "relativePath": "settings/page.tsx"
+      },
+      {
+        "path": "themes/a11y",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/themes/a11y/page.tsx",
+        "relativePath": "themes/a11y/page.tsx"
+      },
+      {
+        "path": "themes/template",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/themes/template/page.tsx",
+        "relativePath": "themes/template/page.tsx"
+      },
+      {
+        "path": "wizard",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/wizard/page.tsx",
+        "relativePath": "wizard/page.tsx"
+      },
+      {
+        "path": "workflows/management",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/workflows/management/page.tsx",
+        "relativePath": "workflows/management/page.tsx"
+      },
+      {
+        "path": "workflows",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/workflows/page.tsx",
+        "relativePath": "workflows/page.tsx"
+      }
+    ],
+    "layouts": [
+      {
+        "path": "/",
+        "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/layout.tsx",
+        "relativePath": "layout.tsx"
+      }
+    ],
+    "middleware": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/middleware.ts",
+    "redirects": []
+  },
+  "navComponents": {
+    "DevNavigation": {
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/components/DevNavigation.tsx",
+      "hasRouter": true,
+      "links": [
+        "/dashboard",
+        "/gallery",
+        "/quiz",
+        "/wizard",
+        "/reports/observation-lounge",
+        "/reports/architecture",
+        "/projects/alpha",
+        "/projects/beta",
+        "/projects/gamma",
+        "/projects/temporal"
+      ]
+    },
+    "DashboardChrome": null,
+    "CommandPalette": {
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/components/CommandPalette.tsx",
+      "hasRouter": true,
+      "links": []
+    },
+    "links": [
+      "/dashboard",
+      "/gallery",
+      "/quiz",
+      "/wizard",
+      "/reports/observation-lounge",
+      "/reports/architecture",
+      "/projects/alpha",
+      "/projects/beta",
+      "/projects/gamma",
+      "/projects/temporal"
+    ]
+  },
+  "dddAnalysis": {
+    "issues": [
+      {
+        "type": "missing_context_route",
+        "context": "Dashboard",
+        "message": "No routes found for Dashboard bounded context"
+      },
+      {
+        "type": "missing_context_route",
+        "context": "Projects",
+        "message": "No routes found for Projects bounded context"
+      },
+      {
+        "type": "missing_context_route",
+        "context": "Authentication",
+        "message": "No routes found for Authentication bounded context"
+      },
+      {
+        "type": "missing_context_route",
+        "context": "Reports",
+        "message": "No routes found for Reports bounded context"
+      },
+      {
+        "type": "missing_context_route",
+        "context": "MCP",
+        "message": "No routes found for MCP bounded context"
+      },
+      {
+        "type": "broken_link",
+        "link": "/dashboard",
+        "message": "Navigation link \"/dashboard\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/gallery",
+        "message": "Navigation link \"/gallery\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/quiz",
+        "message": "Navigation link \"/quiz\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/wizard",
+        "message": "Navigation link \"/wizard\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/reports/observation-lounge",
+        "message": "Navigation link \"/reports/observation-lounge\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/reports/architecture",
+        "message": "Navigation link \"/reports/architecture\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/projects/alpha",
+        "message": "Navigation link \"/projects/alpha\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/projects/beta",
+        "message": "Navigation link \"/projects/beta\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/projects/gamma",
+        "message": "Navigation link \"/projects/gamma\" points to non-existent route"
+      },
+      {
+        "type": "broken_link",
+        "link": "/projects/temporal",
+        "message": "Navigation link \"/projects/temporal\" points to non-existent route"
+      }
+    ],
+    "recommendations": []
+  },
+  "fixes": [
+    {
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/app/page.tsx",
+      "issue": "Root page redirect",
+      "fix": "Ensure root page properly redirects to /dashboard using Next.js navigation"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /dashboard",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /gallery",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /quiz",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /wizard",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /reports/observation-lounge",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /reports/architecture",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /projects/alpha",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /projects/beta",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /projects/gamma",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "Navigation components",
+      "issue": "Broken link: /projects/temporal",
+      "fix": "Update navigation to use valid route or create missing route"
+    },
+    {
+      "file": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/dashboard/middleware.ts",
+      "issue": "Middleware protection",
+      "fix": "Ensure /dashboard route is properly handled in middleware (auth check)"
+    }
+  ]
+}

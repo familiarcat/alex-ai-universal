@@ -1,0 +1,170 @@
+{
+  "id": "FEdNQJgLBjJVh3oP",
+  "name": "PROJECT - Alex AI - Crew Integration - Production",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-unified-crew",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "unified_webhook_trigger",
+      "name": "Unified Crew Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "alex_ai_crew_analyzer",
+      "name": "Alex AI Crew Analyzer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "id": "federation_crew_analyzer",
+      "name": "Federation Crew Analyzer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Unified Crew Analysis Aggregator\nconst alexAIResponse = $(\"Alex AI Crew Analyzer\").first().json;\nconst federationResponse = $(\"Federation Crew Analyzer\").first().json;\n\nconst unifiedAnalysis = {\n    timestamp: new Date().toISOString(),\n    alex_ai_analysis: alexAIResponse,\n    federation_analysis: federationResponse,\n    unified_insights: {\n        combined_confidence: Math.round((alexAIResponse.confidence_score + federationResponse.confidence_score) / 2),\n        cross_crew_synergy: \"High\",\n        recommendation_quality: \"Excellent\",\n        unified_recommendations: [\n            \"Leverage both Alex AI and Federation crew expertise\",\n            \"Implement cross-crew collaboration protocols\",\n            \"Maintain unified knowledge base integration\"\n        ]\n    },\n    system_status: \"unified_operational\"\n};\n\nreturn [{ json: unifiedAnalysis }];"
+      },
+      "id": "unified_analysis_aggregator",
+      "name": "Unified Analysis Aggregator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        688,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/alex_ai_crew_memories",
+        "options": {}
+      },
+      "id": "unified_memory_storage",
+      "name": "Unified Memory Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "unified_response",
+      "name": "Unified Crew Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Unified Crew Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Alex AI Crew Analyzer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Federation Crew Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alex AI Crew Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Unified Analysis Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federation Crew Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Unified Analysis Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unified Analysis Aggregator": {
+      "main": [
+        [
+          {
+            "node": "Unified Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unified Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Unified Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "ccd5e565-051c-420c-8644-af46f887f512",
+  "triggerCount": 1,
+  "createdAt": "2025-09-07T08:43:07.484Z",
+  "updatedAt": "2025-09-21T21:31:49.381Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.797Z",
+  "_category": "crew-workflows",
+  "_source": "remote-n8n"
+}

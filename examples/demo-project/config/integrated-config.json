@@ -1,0 +1,683 @@
+{
+  "frontendConfig": {
+    "title": "🖖 Alex AI Universal Dashboard",
+    "heading": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!!!!!",
+    "subtitle": "Real-Time Controlled eded Interface",
+    "description": "This entireish frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+    "backgroundColor": "#2f2e8a",
+    "textColor": "#ffffff",
+    "accentColor": "#00ff00",
+    "theme": "dark",
+    "layout": "flex",
+    "showSidebar": true,
+    "showFooter": true,
+    "showHeader": true,
+    "showNavigation": true,
+    "features": [
+      {
+        "icon": "🖖",
+        "title": "Real-Time Control",
+        "description": "Complete dashboard control over every frontend element"
+      },
+      {
+        "icon": "👥",
+        "title": "Crew AI Integration",
+        "description": "Nine specialized AI crew members monitoring all changes"
+      },
+      {
+        "icon": "⚡",
+        "title": "Instant Updates",
+        "description": "Changes applied immediately via WebSocket technology"
+      },
+      {
+        "icon": "🛡️",
+        "title": "Secure Architecture",
+        "description": "Complete separation between dashboard and frontend"
+      },
+      {
+        "icon": "📊",
+        "title": "Live Monitoring",
+        "description": "Real-time system health and performance monitoring"
+      },
+      {
+        "icon": "🚀",
+        "title": "Production Ready",
+        "description": "Optimized for deployment on any cloud platform"
+      }
+    ],
+    "crew": [
+      {
+        "id": "picard",
+        "name": "Captain Jean-Luc Picard",
+        "role": "Strategic Commander",
+        "avatar": "🖖",
+        "status": "active"
+      },
+      {
+        "id": "riker",
+        "name": "Commander William Riker",
+        "role": "First Officer",
+        "avatar": "👤",
+        "status": "active"
+      },
+      {
+        "id": "data",
+        "name": "Commander Data",
+        "role": "Operations Officer",
+        "avatar": "🤖",
+        "status": "active"
+      },
+      {
+        "id": "laforge",
+        "name": "Lieutenant Commander Geordi La Forge",
+        "role": "Chief Engineer",
+        "avatar": "🔧",
+        "status": "active"
+      },
+      {
+        "id": "worf",
+        "name": "Lieutenant Worf",
+        "role": "Security Officer",
+        "avatar": "🛡️",
+        "status": "active"
+      },
+      {
+        "id": "troi",
+        "name": "Counselor Deanna Troi",
+        "role": "Ship's Counselor",
+        "avatar": "💭",
+        "status": "active"
+      },
+      {
+        "id": "crusher",
+        "name": "Dr. Beverly Crusher",
+        "role": "Chief Medical Officer",
+        "avatar": "🏥",
+        "status": "active"
+      },
+      {
+        "id": "uhura",
+        "name": "Lieutenant Uhura",
+        "role": "Communications Officer",
+        "avatar": "📡",
+        "status": "active"
+      },
+      {
+        "id": "quark",
+        "name": "Quark",
+        "role": "Business Operations",
+        "avatar": "💰",
+        "status": "active"
+      }
+    ]
+  },
+  "commandHistory": [
+    {
+      "timestamp": "2025-10-05T12:21:18.145Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "dark",
+        "timestamp": "2025-10-05T12:21:18.142Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "classic",
+        "newValue": "dark",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T12:21:11.279Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "classic",
+        "timestamp": "2025-10-05T12:21:11.276Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "classic",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T12:20:34.822Z",
+      "command": {
+        "type": "design",
+        "target": "backgroundColor",
+        "value": "#2f2e8a",
+        "timestamp": "2025-10-05T12:20:34.794Z"
+      },
+      "result": {
+        "success": true,
+        "target": "backgroundColor",
+        "oldValue": "#2E8B57",
+        "newValue": "#2f2e8a",
+        "message": "Design updated: backgroundColor"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T09:18:12.256Z",
+      "command": {
+        "type": "content",
+        "target": "description",
+        "value": "This entireish frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "timestamp": "2025-10-05T09:18:12.250Z"
+      },
+      "result": {
+        "success": true,
+        "target": "description",
+        "oldValue": "This entire frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "newValue": "This entireish frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "message": "Content updated: description"
+      },
+      "connections": 11
+    },
+    {
+      "timestamp": "2025-10-05T09:12:39.719Z",
+      "command": {
+        "type": "layout",
+        "target": "showSidebar",
+        "value": true,
+        "timestamp": "2025-10-05T09:12:39.701Z"
+      },
+      "result": {
+        "success": true,
+        "target": "showSidebar",
+        "oldValue": true,
+        "newValue": true,
+        "message": "Layout updated: showSidebar"
+      },
+      "connections": 8
+    },
+    {
+      "timestamp": "2025-10-05T09:05:42.468Z",
+      "command": {
+        "type": "content",
+        "target": "description",
+        "value": "This entire frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "timestamp": "2025-10-05T09:05:42.466Z"
+      },
+      "result": {
+        "success": true,
+        "target": "description",
+        "oldValue": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "newValue": "This entire frontend ddded is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "message": "Content updated: description"
+      },
+      "connections": 5
+    },
+    {
+      "timestamp": "2025-10-05T09:05:27.157Z",
+      "command": {
+        "type": "content",
+        "target": "description",
+        "value": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "timestamp": "2025-10-05T09:05:27.151Z"
+      },
+      "result": {
+        "success": true,
+        "target": "description",
+        "oldValue": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "newValue": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "message": "Content updated: description"
+      },
+      "connections": 5
+    },
+    {
+      "timestamp": "2025-10-05T09:02:19.288Z",
+      "command": {
+        "type": "content",
+        "target": "subtitle",
+        "value": "Real-Time Controlled eded Interface",
+        "timestamp": "2025-10-05T09:02:19.272Z"
+      },
+      "result": {
+        "success": true,
+        "target": "subtitle",
+        "oldValue": "Real-Time Controlled Interface",
+        "newValue": "Real-Time Controlled eded Interface",
+        "message": "Content updated: subtitle"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:48:53.140Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!!!!!",
+        "timestamp": "2025-10-05T07:48:53.130Z"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!",
+        "newValue": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!!!!!",
+        "message": "Content updated: heading"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:47:58.645Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "star-trek",
+        "timestamp": "2025-10-05T07:47:58.631Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "classic",
+        "newValue": "star-trek",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:45:13.600Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "classic",
+        "timestamp": "2025-10-05T07:45:13.594Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "minimal",
+        "newValue": "classic",
+        "message": "Design updated: theme"
+      },
+      "connections": 7
+    },
+    {
+      "timestamp": "2025-10-05T07:41:22.691Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "🚀 DEVELOPMENT MODE - REAL Ish-TIME DASHBOARD!",
+        "newValue": "🚀 DEVELOPMENT MODE - THEME STATE FIXED!",
+        "message": "Content updated: heading"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T07:41:18.873Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "minimal"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "minimal",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T07:41:14.913Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "star-trek"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "dark",
+        "newValue": "star-trek",
+        "message": "Design updated: theme"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T07:36:30.287Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "dark"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "corporate",
+        "newValue": "dark",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:36:26.345Z",
+      "command": {
+        "type": "layout",
+        "target": "layout",
+        "value": "flex"
+      },
+      "result": {
+        "success": true,
+        "target": "layout",
+        "oldValue": "grid",
+        "newValue": "flex",
+        "message": "Layout updated: layout"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:36:22.456Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "corporate"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "minimal",
+        "newValue": "corporate",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:36:18.167Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "minimal"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "minimal",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:36:14.758Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "star-trek"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "star-trek",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:34:58.188Z",
+      "command": {
+        "type": "content",
+        "target": "description",
+        "value": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "timestamp": "2025-10-05T07:34:58.180Z"
+      },
+      "result": {
+        "success": true,
+        "target": "description",
+        "oldValue": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system.",
+        "newValue": "This entire frontend is controlled in real-time by our secure dashboard. Every element you see can be modified instantly through our backend control system. !!!!",
+        "message": "Content updated: description"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:33:26.467Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🚀 DEVELOPMENT MODE - REAL Ish-TIME DASHBOARD!",
+        "timestamp": "2025-10-05T07:33:26.460Z"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD!",
+        "newValue": "🚀 DEVELOPMENT MODE - REAL Ish-TIME DASHBOARD!",
+        "message": "Content updated: heading"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:28.062Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "star-trek",
+        "timestamp": "2025-10-05T07:31:28.059Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "classic",
+        "newValue": "star-trek",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:23.695Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "classic",
+        "timestamp": "2025-10-05T07:31:23.692Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "modern",
+        "newValue": "classic",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:19.844Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "modern",
+        "timestamp": "2025-10-05T07:31:19.842Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "modern",
+        "newValue": "modern",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:16.260Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "modern",
+        "timestamp": "2025-10-05T07:31:16.258Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "dark",
+        "newValue": "modern",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:09.297Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "dark",
+        "timestamp": "2025-10-05T07:31:09.292Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "modern",
+        "newValue": "dark",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:31:00.167Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "modern",
+        "timestamp": "2025-10-05T07:31:00.159Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "star-trek",
+        "newValue": "modern",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:30:55.801Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "star-trek",
+        "timestamp": "2025-10-05T07:30:55.795Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "classic",
+        "newValue": "star-trek",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:30:29.679Z",
+      "command": {
+        "type": "design",
+        "target": "theme",
+        "value": "classic",
+        "timestamp": "2025-10-05T07:30:29.675Z"
+      },
+      "result": {
+        "success": true,
+        "target": "theme",
+        "oldValue": "modern",
+        "newValue": "classic",
+        "message": "Design updated: theme"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T07:29:34.077Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD!",
+        "timestamp": "2025-10-05T07:29:34.063Z"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD",
+        "newValue": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD!",
+        "message": "Content updated: heading"
+      },
+      "connections": 2
+    },
+    {
+      "timestamp": "2025-10-05T03:14:34.944Z",
+      "command": {
+        "type": "design",
+        "target": "backgroundColor",
+        "value": "#2E8B57"
+      },
+      "result": {
+        "success": true,
+        "target": "backgroundColor",
+        "oldValue": "#8B4513",
+        "newValue": "#2E8B57",
+        "message": "Design updated: backgroundColor"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T03:14:21.430Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "🖖 REAL-TIME DASHBOARD CONTROL TEST",
+        "newValue": "🚀 DEVELOPMENT MODE - REAL-TIME DASHBOARD",
+        "message": "Content updated: heading"
+      },
+      "connections": 6
+    },
+    {
+      "timestamp": "2025-10-05T02:02:49.947Z",
+      "command": {
+        "type": "design",
+        "target": "backgroundColor",
+        "value": "#8B4513"
+      },
+      "result": {
+        "success": true,
+        "target": "backgroundColor",
+        "oldValue": "#1e3c72",
+        "newValue": "#8B4513",
+        "message": "Design updated: backgroundColor"
+      },
+      "connections": 3
+    },
+    {
+      "timestamp": "2025-10-05T02:02:44.825Z",
+      "command": {
+        "type": "content",
+        "target": "heading",
+        "value": "🖖 REAL-TIME DASHBOARD CONTROL TEST"
+      },
+      "result": {
+        "success": true,
+        "target": "heading",
+        "oldValue": "Welcome to Alex AI Universal",
+        "newValue": "🖖 REAL-TIME DASHBOARD CONTROL TEST",
+        "message": "Content updated: heading"
+      },
+      "connections": 3
+    }
+  ],
+  "timestamp": "2025-10-05T12:21:18.145Z"
+}

@@ -1,0 +1,130 @@
+{
+  "name": "User Settings Store (Dashboard => Supabase)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "webhook-trigger",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "settings-store",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate & Transform"
+      ]
+    },
+    {
+      "id": "validate-transform",
+      "type": "transform",
+      "config": {
+        "name": "Validate & Transform",
+        "parameters": {
+          "functionCode": "// Validate and transform user settings\nconst body = $input.item.json.body;\n\n// Use 'default' user for MVP (single-user system)\nconst userId = body.userId || 'default';\n\n// Validate globalTheme is provided\nif (!body.globalTheme) {\n  throw new Error('globalTheme is required');\n}\n\n// Build settings data\nconst settingsData = {\n  user_id: userId,\n  global_theme: body.globalTheme,\n  preferences: body.preferences ? JSON.stringify(body.preferences) : '{}',\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('⚙️ Storing settings for user:', settingsData.user_id, '| Theme:', settingsData.global_theme);\n\nreturn { json: settingsData };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Supabase Upsert"
+      ]
+    },
+    {
+      "id": "supabase-upsert",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Upsert",
+        "parameters": {
+          "operation": "insert",
+          "table": "user_settings",
+          "columns": "user_id,global_theme,preferences,updated_at",
+          "options": {
+            "onConflict": "user_id",
+            "skipOnConflict": false,
+            "upsert": true
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "response-success",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"userId\": $json.user_id, \"globalTheme\": $json.global_theme, \"message\": \"Settings stored successfully\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "response-error",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to store settings\" } }}",
+          "options": {
+            "responseCode": 500
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          450
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "a3WOKLGOqk9ZTsqs",
+    "originalName": "User Settings Store (Dashboard => Supabase)",
+    "migratedAt": "2025-11-21T11:19:39.212Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979212-niit3m",
+  "createdAt": "2025-11-21T11:19:39.212Z",
+  "updatedAt": "2025-11-21T11:19:39.212Z"
+}

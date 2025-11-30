@@ -1,0 +1,402 @@
+{
+  "id": "mcp-JNVUGysrSx7zepxf",
+  "name": "Crew Memory Storage Workflow (Optimized)",
+  "description": "Converted from n8n workflow: Crew Memory Storage Workflow (Optimized)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "aa35e2b1-3d7c-4bba-abcb-083ac814de00",
+      "name": "Crew Memory Storage Webhook",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-memory-storage",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-memory-storage",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Crew Memory Storage Webhook"
+      }
+    },
+    {
+      "id": "626f5c3d-d8c3-44bc-bd1b-93537ad49100",
+      "name": "Prime Directive Memory Processor (Optimized)",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const CREW_MEMBER_MAP = {\n  picard: 'Captain Jean-Luc Picard',\n  riker: 'Commander William Riker',\n  data: 'Commander Data',\n  la_forge: 'Lieutenant Commander Geordi La Forge',\n  worf: 'Lieutenant Worf',\n  troi: 'Counselor Deanna Troi',\n  crusher: 'Dr. Beverly Crusher',\n  uhura: 'Lieutenant Uhura',\n  quark: 'Quark',\n  chief_obrien: \"Chief Miles O'Brien\",\n  diagnostic_officer: 'Diagnostic Officer',\n};\n\nconst VALID_KNOWLEDGE_TYPES = new Set([\n  'technical_analysis',\n  'strategic_assessment',\n  'medical_assessment',\n  'security_analysis',\n  'engineering_solution',\n  'communication_protocol',\n  'business_optimization',\n  'problem_solution',\n  'reference_documentation',\n  'lesson_learned',\n  'best_practice',\n  'troubleshooting_guide',\n  'milestone',\n  'chat_session',\n  'conversation'\n]);\n\nconst VALID_PRIORITIES = new Set(['low', 'medium', 'high', 'critical']);\n\n// Prime Directive Compliance Processing for Crew Memories\nconst incoming = $input.first().json || {};\nconst memory = incoming.body?.body || incoming.body || incoming;\n\nconst memoryId = isUuid(memory.id) ? memory.id : generateUuid();\nconst crewMemberId = normalizeCrewMember(memory.crewMember);\nconst knowledgeType = normalizeKnowledgeType(memory.knowledgeType);\nconst priorityLevel = normalizePriority(memory.priority);\n\n// Generate semantic hash for deduplication\nconst contentForHash = (memory.detailedAnalysis || memory.summary || memory.content || '').toLowerCase()\n  .replace(/\\s+/g, ' ')\n  .replace(/[^\\w\\s]/g, '')\n  .trim();\nconst semanticHash = generateSemanticHash(contentForHash);\n\n// Extract enhanced tags with functional roles\nconst enhancedTags = extractEnhancedTags(memory, contentForHash);\n\n// Extract and process crew memory data\nconst processedMemory = {\n  id: memoryId,\n  timestamp: new Date().toISOString(),\n  crew_member: crewMemberId,\n  crew_member_name: getCrewMemberName(crewMemberId),\n  knowledge_type: knowledgeType,\n  priority: priorityLevel,\n  \n  // Core Knowledge Content (Prime Directive Compliant)\n  title: memory.title || 'Crew Memory Entry',\n  summary: memory.summary || 'Crew memory generated via automated workflow validation.',\n  detailed_analysis: generalizeContent(memory.detailedAnalysis || ''),\n  key_findings: normalizeList(memory.keyFindings),\n  conclusions: normalizeList(memory.conclusions),\n  recommendations: normalizeList(memory.recommendations),\n  \n  // Reference Information (Prime Directive Compliant)\n  referenced_documents: extractReferences(memory.detailedAnalysis || ''),\n  related_topics: enhancedTags.topics,\n  applicable_scenarios: extractApplicableScenarios(memory.detailedAnalysis || ''),\n  general_principles: extractGeneralPrinciples(memory.detailedAnalysis || ''),\n  \n  // Technical Metadata\n  tags: enhancedTags.all,\n  keywords: extractKeywords(memory.detailedAnalysis || ''),\n  complexity_level: calculateComplexityLevel(memory.detailedAnalysis || ''),\n  confidence_level: calculateConfidenceLevel(crewMemberId, knowledgeType),\n  \n  // Deduplication Metadata\n  semantic_hash: semanticHash,\n  content_fingerprint: contentForHash.substring(0, 200),\n  \n  // Functional Role/Intention\n  functional_role: enhancedTags.functionalRole,\n  intention: enhancedTags.intention,\n  \n  // Prime Directive Compliance\n  prime_directive_compliance: 'compliant',\n  ambiguity_level: 7,\n  project_specificity: false,\n  \n  // Semantic Content for Vector Embedding\n  semantic_text: generateSemanticText(memory, crewMemberId, knowledgeType),\n  \n  // Collaboration Metadata\n  validated_by: [],\n  conflict_resolutions: [],\n  \n  // Storage Metadata\n  storage_timestamp: new Date().toISOString(),\n  last_accessed: new Date().toISOString(),\n  access_count: 0,\n};\n\n// Helper Functions\nfunction getCrewMemberName(crewMember) {\n  return CREW_MEMBER_MAP[crewMember] || 'Unknown Crew Member';\n}\n\nfunction normalizeCrewMember(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (CREW_MEMBER_MAP[normalized]) {\n      return normalized;\n    }\n  }\n  return 'picard';\n}\n\nfunction normalizeKnowledgeType(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (VALID_KNOWLEDGE_TYPES.has(normalized)) {\n      return normalized;\n    }\n  }\n  // Auto-detect from content\n  const content = (value || '').toLowerCase();\n  if (content.includes('milestone') || content.includes('commit')) return 'milestone';\n  if (content.includes('chat') || content.includes('conversation')) return 'chat_session';\n  return 'technical_analysis';\n}\n\nfunction normalizePriority(value) {\n  if (typeof value === 'string') {\n    const normalized = value.trim().toLowerCase();\n    if (VALID_PRIORITIES.has(normalized)) {\n      return normalized;\n    }\n  }\n  return 'medium';\n}\n\nfunction normalizeList(value) {\n  if (Array.isArray(value)) {\n    return value.filter((entry) => entry !== undefined && entry !== null);\n  }\n  if (value === undefined || value === null || value === '') {\n    return [];\n  }\n  return [value];\n}\n\nfunction generateSemanticHash(text) {\n  let hash = 0;\n  for (let i = 0; i < Math.min(text.length, 500); i++) {\n    const char = text.charCodeAt(i);\n    hash = ((hash << 5) - hash) + char;\n    hash = hash & hash;\n  }\n  return Math.abs(hash).toString(36);\n}\n\nfunction extractEnhancedTags(memory, content) {\n  const baseTags = normalizeList(memory.tags || []);\n  const allTags = new Set(baseTags);\n  const topics = [];\n  let functionalRole = 'general';\n  let intention = 'knowledge_storage';\n  \n  // Extract functional roles from content\n  const rolePatterns = {\n    'infrastructure': /infrastructure|deployment|terraform|docker|aws|ec2|server/i,\n    'testing': /test|spec|validation|verification|litmus|harness/i,\n    'cost_optimization': /cost|pricing|budget|optimization|savings/i,\n    'security': /security|auth|encryption|vulnerability|threat/i,\n    'integration': /integration|api|webhook|workflow|n8n/i,\n    'database': /database|supabase|migration|sql|schema/i,\n    'memory_management': /memory|storage|vector|embedding|rag/i,\n    'milestone': /milestone|commit|push|deployment/i,\n    'chat_session': /chat|conversation|session|discussion/i\n  };\n  \n  for (const [role, pattern] of Object.entries(rolePatterns)) {\n    if (pattern.test(content) || pattern.test(memory.title || '') || pattern.test(memory.summary || '')) {\n      functionalRole = role;\n      allTags.add(`role-${role}`);\n      allTags.add(`functional-${role}`);\n      break;\n    }\n  }\n  \n  // Extract intention from content\n  if (content.includes('fix') || content.includes('bug') || content.includes('error')) {\n    intention = 'bug_fix';\n    allTags.add('intention-bug_fix');\n  } else if (content.includes('implement') || content.includes('create') || content.includes('add')) {\n    intention = 'feature_implementation';\n    allTags.add('intention-feature');\n  } else if (content.includes('optimize') || content.includes('improve') || content.includes('enhance')) {\n    intention = 'optimization';\n    allTags.add('intention-optimization');\n  } else if (content.includes('test') || content.includes('validate')) {\n    intention = 'testing';\n    allTags.add('intention-testing');\n  }\n  \n  // Extract topics from keywords\n  const keywords = extractKeywords(content);\n  keywords.slice(0, 5).forEach(kw => {\n    if (kw.length > 4) {\n      topics.push(kw);\n      allTags.add(`topic-${kw}`);\n    }\n  });\n  \n  // Add milestone tag if applicable\n  if (memory.tags && Array.isArray(memory.tags) && memory.tags.some(t => t.includes('milestone'))) {\n    allTags.add('milestone');\n    allTags.add('git-milestone');\n    intention = 'milestone_tracking';\n  }\n  \n  // Add chat session tag if applicable\n  if (memory.platform === 'cursor-ai' || memory.sessionId?.includes('chat')) {\n    allTags.add('chat-session');\n    allTags.add('cursor-ai');\n    intention = 'conversation_storage';\n  }\n  \n  return {\n    all: Array.from(allTags),\n    topics,\n    functionalRole,\n    intention\n  };\n}\n\nfunction generalizeContent(text) {\n  return text\n    .replace(/\\b[A-Z]{2,}_[A-Z0-9_]+\\b/g, '[PROJECT_REFERENCE]')\n    .replace(/\\b\\d{4}-\\d{2}-\\d{2}\\b/g, '[DATE_REFERENCE]')\n    .replace(/\\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\\b/gi, '[ID_REFERENCE]')\n    .replace(/\\b[a-z]+-ai-[a-z]+\\b/g, '[SYSTEM_REFERENCE]')\n    .replace(/\\b\\/Users\\/[^/\\s]+\\b/g, '[PATH_REFERENCE]');\n}\n\nfunction extractReferences(text) {\n  const references = [];\n  const urlRegex = /https?:\\/\\/[^\\s]+/g;\n  const urls = text.match(urlRegex);\n  if (urls) references.push(...urls);\n  const docRegex = /(?:see|refer to|according to|documented in|based on)\\s+([^.!?]+)/gi;\n  const docMatches = text.match(docRegex);\n  if (docMatches) references.push(...docMatches);\n  const toolRegex = /(?:using|with|via|through)\\s+([A-Za-z0-9_-]+(?:\\.[a-z]+)?)/gi;\n  const toolMatches = text.match(toolRegex);\n  if (toolMatches) references.push(...toolMatches);\n  return [...new Set(references)];\n}\n\nfunction extractApplicableScenarios(text) {\n  const scenarios = [];\n  const scenarioRegex = /(?:when|if|in case of|during|while)\\s+([^.!?]+)/gi;\n  const matches = text.match(scenarioRegex);\n  if (matches) {\n    scenarios.push(...matches.map((match) => match.replace(/^(?:when|if|in case of|during|while)\\s+/i, '')));\n  }\n  return scenarios.slice(0, 5);\n}\n\nfunction extractGeneralPrinciples(text) {\n  const principles = [];\n  const principleRegex = /(?:always|never|should|must|generally|typically|usually|best practice|principle)\\s+([^.!?]+)/gi;\n  const matches = text.match(principleRegex);\n  if (matches) principles.push(...matches);\n  const importanceRegex = /it is important to\\s+([^.!?]+)/gi;\n  const importanceMatches = text.match(importanceRegex);\n  if (importanceMatches) principles.push(...importanceMatches);\n  return principles.slice(0, 10);\n}\n\nfunction extractKeywords(text) {\n  const words = text.toLowerCase().split(/\\W+/);\n  const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should']);\n  const wordCount = new Map();\n  words.forEach((word) => {\n    if (word.length > 3 && !stopWords.has(word)) {\n      wordCount.set(word, (wordCount.get(word) || 0) + 1);\n    }\n  });\n  return Array.from(wordCount.entries())\n    .sort((a, b) => b[1] - a[1])\n    .slice(0, 15)\n    .map(([word]) => word);\n}\n\nfunction calculateComplexityLevel(text) {\n  const technicalTerms = ['algorithm', 'optimization', 'architecture', 'implementation', 'configuration', 'integration', 'deployment', 'monitoring', 'analysis', 'framework'];\n  const technicalCount = technicalTerms.filter((term) => text.toLowerCase().includes(term)).length;\n  const lengthFactor = Math.min(text.length / 1000, 10);\n  return Math.min(10, Math.max(1, Math.round(technicalCount + lengthFactor)));\n}\n\nfunction calculateConfidenceLevel(crewMember, knowledgeType) {\n  const expertiseMatrix = {\n    picard: { strategic_assessment: 95, mission_continuity: 95, crew_coordination: 90 },\n    riker: { tactical_operations: 95, workflow_management: 95, team_coordination: 90 },\n    data: { technical_analysis: 95, logical_assessment: 95, system_optimization: 90 },\n    la_forge: { infrastructure_health: 95, system_monitoring: 95, preventive_maintenance: 90 },\n    worf: { security_analysis: 95, threat_assessment: 95, defensive_strategies: 90 },\n    troi: { user_experience: 95, psychological_assessment: 95, communication_optimization: 90 },\n    crusher: { system_health: 95, medical_diagnosis: 95, preventive_care: 90 },\n    uhura: { communication_systems: 95, data_transmission: 95, network_optimization: 90 },\n    quark: { business_optimization: 95, cost_analysis: 95, efficiency_metrics: 90 },\n    chief_obrien: { pragmatic_solutions: 95, troubleshooting_guide: 95, operations_management: 90 },\n    diagnostic_officer: { technical_analysis: 90, troubleshooting_guide: 90, reference_documentation: 85 },\n  };\n  const crewExpertise = expertiseMatrix[crewMember] || {};\n  const typeMatch = Object.keys(crewExpertise).find((expertise) => knowledgeType.includes(expertise.split('_')[0]));\n  return typeMatch ? crewExpertise[typeMatch] : 75;\n}\n\nfunction generateSemanticText(memory, crewMember, knowledgeType) {\n  const findings = normalizeList(memory.keyFindings);\n  const conclusions = normalizeList(memory.conclusions);\n  const recommendations = normalizeList(memory.recommendations);\n  const principles = extractGeneralPrinciples(memory.detailedAnalysis || '');\n  const references = extractReferences(memory.detailedAnalysis || '');\n  const scenarios = extractApplicableScenarios(memory.detailedAnalysis || '');\n  return `\n    ${memory.title || 'Crew Memory Entry'}. ${memory.summary || ''}.\n    Crew Member: ${getCrewMemberName(crewMember)}.\n    Knowledge Type: ${knowledgeType}.\n    Key Findings: ${findings.join(', ') || 'N/A'}.\n    Conclusions: ${conclusions.join(', ') || 'N/A'}.\n    Recommendations: ${recommendations.join(', ') || 'N/A'}.\n    General Principles: ${principles.join(', ') || 'N/A'}.\n    Referenced Documents: ${references.join(', ') || 'N/A'}.\n    Applicable Scenarios: ${scenarios.join(', ') || 'N/A'}.\n  `.trim();\n}\n\nfunction generateUuid() {\n  const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';\n  return template.replace(/[xy]/g, (c) => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nfunction isUuid(value) {\n  if (!value || typeof value !== 'string') return false;\n  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);\n}\n\nreturn {\n  json: {\n    ...processedMemory,\n    vector_embedding_ready: true,\n    prime_directive_status: 'compliant',\n    processing_timestamp: new Date().toISOString(),\n  },\n};\n"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Prime Directive Memory Processor (Optimized)"
+      }
+    },
+    {
+      "id": "657e8943-021b-49bb-a5b1-3e58bb340108",
+      "name": "Check for Duplicates",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "GET",
+        "url": "={{ `https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?semantic_hash=eq.${$json.semantic_hash}&select=id,title,summary&limit=1` }}",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}` }) }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Check for Duplicates"
+      }
+    },
+    {
+      "id": "693f762b-3739-4c85-942d-62b7b031d32e",
+      "name": "If No Duplicate Found",
+      "type": "mcp.logic",
+      "originalType": "n8n-nodes-base.if",
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "duplicate-check",
+              "leftValue": "={{ $json.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "If No Duplicate Found"
+      }
+    },
+    {
+      "id": "49ee2adb-c53f-47b0-bcc4-6f62e5bab04a",
+      "name": "Supabase Crew Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "POST",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' }) }}",
+        "bodyParametersJson": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Crew Memory Storage"
+      }
+    },
+    {
+      "id": "9ef1c808-0207-4e29-b60f-853bb16e8ce7",
+      "name": "Handle Duplicate (Update Existing)",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1120,
+        400
+      ],
+      "parameters": {
+        "jsCode": "// Duplicate Found - Update existing memory instead\nconst existing = $('Check for Duplicates').first().json[0];\nconst newMemory = $('Prime Directive Memory Processor (Optimized)').first().json;\n\nreturn {\n  json: {\n    ...existing,\n    // Update access count and last accessed\n    access_count: (existing.access_count || 0) + 1,\n    last_accessed: new Date().toISOString(),\n    // Merge tags if new ones are different\n    tags: [...new Set([...(existing.tags || []), ...(newMemory.tags || [])])],\n    duplicate_detected: true,\n    original_id: existing.id\n  }\n};\n"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Handle Duplicate (Update Existing)"
+      }
+    },
+    {
+      "id": "cd2088a1-14eb-4356-97a0-b36fe0e90207",
+      "name": "Update Duplicate Memory",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1340,
+        400
+      ],
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "PATCH",
+        "url": "={{ `https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?id=eq.${$json.id}` }}",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json' }) }}",
+        "bodyParametersJson": "={{ JSON.stringify({ access_count: $json.access_count, last_accessed: $json.last_accessed, tags: $json.tags }) }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Update Duplicate Memory"
+      }
+    },
+    {
+      "id": "e2347d13-5a8b-4140-b578-3ae75400488d",
+      "name": "Generate Vector Embedding",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1120,
+        500
+      ],
+      "parameters": {
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{ `Bearer ${$env.OPENAI_API_KEY}` }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "text-embedding-3-small"
+            },
+            {
+              "name": "input",
+              "value": "={{ $json.semantic_text }}"
+            },
+            {
+              "name": "encoding_format",
+              "value": "float"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Generate Vector Embedding"
+      }
+    },
+    {
+      "id": "fa19a731-1f9e-4b67-8b76-f5886cfe51d4",
+      "name": "Store Vector Embedding",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1340,
+        500
+      ],
+      "parameters": {
+        "authentication": "none",
+        "requestMethod": "PATCH",
+        "url": "={{ `https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?id=eq.${$('Supabase Crew Memory Storage').first().json.id || $json.id}` }}",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={{ JSON.stringify({ apikey: $env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY, Authorization: `Bearer ${$env.SUPABASE_SERVICE_ROLE_KEY || $env.SUPABASE_API_KEY}`, 'Content-Type': 'application/json' }) }}",
+        "bodyParametersJson": "={{ JSON.stringify({ vector_embedding: $json.embedding?.data?.[0]?.embedding || null }) }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Store Vector Embedding"
+      }
+    },
+    {
+      "id": "c0345478-a257-4397-940f-1681df5c59c0",
+      "name": "Generate Success Report",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Crew Memory Storage Success Report\nconst payload = $input.first().json;\nconst memory = Array.isArray(payload) ? payload[0] : payload || {};\n\nif (!memory.id) {\n  throw new Error('Supabase response missing memory record');\n}\n\nconst successReport = {\n  report_id: `CREW_MEMORY_REPORT_${Date.now()}`,\n  timestamp: new Date().toISOString(),\n  crew: memory.crew_member_name,\n  report_type: memory.duplicate_detected ? 'duplicate_updated' : 'crew_memory_storage_success',\n  memory_id: memory.id,\n  \n  storage_status: {\n    supabase_storage: 'successful',\n    vector_embedding: memory.vector_embedding ? 'generated' : 'pending',\n    prime_directive_compliance: memory.prime_directive_compliance,\n    knowledge_type: memory.knowledge_type,\n    confidence_level: memory.confidence_level,\n    duplicate_detected: memory.duplicate_detected || false,\n  },\n  \n  organization: {\n    functional_role: memory.functional_role,\n    intention: memory.intention,\n    tags_count: memory.tags?.length || 0,\n    topics_count: memory.related_topics?.length || 0\n  },\n  \n  prime_directive_validation: {\n    project_specificity_removed: memory.project_specificity === false,\n    general_principles_extracted: getLength(memory.general_principles),\n    references_documented: getLength(memory.referenced_documents),\n    applicable_scenarios_identified: getLength(memory.applicable_scenarios),\n    ambiguity_level: memory.ambiguity_level,\n  },\n  \n  knowledge_contributions: {\n    key_findings: getLength(memory.key_findings),\n    conclusions: getLength(memory.conclusions),\n    recommendations: getLength(memory.recommendations),\n    general_principles: getLength(memory.general_principles),\n    complexity_level: memory.complexity_level,\n  },\n  \n  integration_status: {\n    library_computer_access: 'enabled',\n    semantic_search: memory.vector_embedding ? 'available' : 'pending',\n    crew_validation: 'ready',\n    collective_intelligence: 'updated',\n  },\n  \n  next_steps: [\n    'Memory available for semantic search across crew',\n    'Ready for validation by other crew members',\n    'Contributing to collective intelligence database',\n    'General principles available for future reference',\n  ],\n  \n  crew_notes: memory.duplicate_detected \n    ? 'Duplicate memory detected and updated instead of creating new entry. Tags merged and access count incremented.'\n    : 'Crew memory successfully stored with full Prime Directive compliance. Knowledge is generalized and ready for cross-crew retrieval.',\n};\n\nfunction getLength(value) {\n  return Array.isArray(value) ? value.length : 0;\n}\n\nreturn {\n  json: successReport,\n};\n"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Generate Success Report"
+      }
+    },
+    {
+      "id": "a66797b2-4ebc-485a-8788-ab82e50aee1e",
+      "name": "Crew Memory Storage Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1780,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Crew Memory Storage Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Crew Memory Storage Webhook-Prime Directive Memory Processor (Optimized)",
+      "source": "Crew Memory Storage Webhook",
+      "target": "Prime Directive Memory Processor (Optimized)",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Prime Directive Memory Processor (Optimized)-Check for Duplicates",
+      "source": "Prime Directive Memory Processor (Optimized)",
+      "target": "Check for Duplicates",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Check for Duplicates-If No Duplicate Found",
+      "source": "Check for Duplicates",
+      "target": "If No Duplicate Found",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-If No Duplicate Found-Supabase Crew Memory Storage",
+      "source": "If No Duplicate Found",
+      "target": "Supabase Crew Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-If No Duplicate Found-Generate Vector Embedding",
+      "source": "If No Duplicate Found",
+      "target": "Generate Vector Embedding",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-If No Duplicate Found-Handle Duplicate (Update Existing)",
+      "source": "If No Duplicate Found",
+      "target": "Handle Duplicate (Update Existing)",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Crew Memory Storage-Generate Success Report",
+      "source": "Supabase Crew Memory Storage",
+      "target": "Generate Success Report",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Handle Duplicate (Update Existing)-Update Duplicate Memory",
+      "source": "Handle Duplicate (Update Existing)",
+      "target": "Update Duplicate Memory",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Update Duplicate Memory-Generate Success Report",
+      "source": "Update Duplicate Memory",
+      "target": "Generate Success Report",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Generate Vector Embedding-Store Vector Embedding",
+      "source": "Generate Vector Embedding",
+      "target": "Store Vector Embedding",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Store Vector Embedding-Generate Success Report",
+      "source": "Store Vector Embedding",
+      "target": "Generate Success Report",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Generate Success Report-Crew Memory Storage Response",
+      "source": "Generate Success Report",
+      "target": "Crew Memory Storage Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "aa35e2b1-3d7c-4bba-abcb-083ac814de00",
+      "nodeName": "Crew Memory Storage Webhook",
+      "webhookPath": "crew-memory-storage",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-memory-storage",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "JNVUGysrSx7zepxf",
+    "convertedAt": "2025-11-21T14:24:04.671Z",
+    "originalName": "Crew Memory Storage Workflow (Optimized)"
+  }
+}

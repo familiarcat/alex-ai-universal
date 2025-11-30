@@ -1,0 +1,166 @@
+{
+  "name": "Project Content Store",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "931bb939-2afd-416c-aeee-3f95678f9357",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "path": "project-content-store",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate Input"
+      ]
+    },
+    {
+      "id": "b7f290b9-10d8-4539-81ed-68118aa18017",
+      "type": "transform",
+      "config": {
+        "name": "Validate Input",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{$json.body.projectId}}",
+                "operation": "isNotEmpty"
+              },
+              {
+                "value1": "={{$json.body.headline}}",
+                "operation": "isNotEmpty"
+              },
+              {
+                "value1": "={{$json.headers['x-source']}}",
+                "value2": "alex-ai-dashboard"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Supabase Upsert",
+        "Response Error"
+      ]
+    },
+    {
+      "id": "a1dd2f56-c704-4e9a-9fae-e2fed9414a72",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Upsert",
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "INSERT INTO project_content (project_id, headline, subheadline, description, theme, business_type, components, pages, updated_at, version)\nVALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9, COALESCE((SELECT version FROM project_content WHERE project_id = $1), 0) + 1)\nON CONFLICT (project_id) DO UPDATE SET\n  headline = EXCLUDED.headline,\n  subheadline = EXCLUDED.subheadline,\n  description = EXCLUDED.description,\n  theme = EXCLUDED.theme,\n  business_type = EXCLUDED.business_type,\n  components = EXCLUDED.components,\n  pages = EXCLUDED.pages,\n  updated_at = EXCLUDED.updated_at\nRETURNING *;",
+          "parameters": {
+            "values": [
+              {
+                "name": "$1",
+                "value": "={{$json.body.projectId}}"
+              },
+              {
+                "name": "$2",
+                "value": "={{$json.body.headline}}"
+              },
+              {
+                "name": "$3",
+                "value": "={{$json.body.subheadline || ''}}"
+              },
+              {
+                "name": "$4",
+                "value": "={{$json.body.description || ''}}"
+              },
+              {
+                "name": "$5",
+                "value": "={{$json.body.theme || 'gradient'}}"
+              },
+              {
+                "name": "$6",
+                "value": "={{$json.body.businessType || null}}"
+              },
+              {
+                "name": "$7",
+                "value": "={{JSON.stringify($json.body.components || [])}}"
+              },
+              {
+                "name": "$8",
+                "value": "={{JSON.stringify($json.body.pages || {})}}"
+              },
+              {
+                "name": "$9",
+                "value": "={{$json.body.updatedAt}}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "position": [
+          650,
+          200
+        ],
+        "originalType": "n8n-nodes-base.postgres"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "9bbe3dbc-b653-4421-aca5-ad0b7e84e9c2",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"projectId\": $json.project_id, \"version\": $json.version, \"syncedAt\": $json.synced_at } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          200
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "e9d2bb26-1e03-4cc5-b7bf-c620da791c83",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseCode": 400,
+          "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input: missing required fields\" } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          650,
+          400
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "iFj0GnVytIe4HGBj",
+    "originalName": "Project Content Store",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-h0kkik",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

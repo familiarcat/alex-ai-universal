@@ -1,0 +1,6 @@
+{
+  "ResourceArn": "arn:aws:wafv2:us-east-1:860268930466:global/webacl/CreatedByALB-dba8dfe6-992b-495c-b861-174e96215bee/f1912b4f-5f9c-4c5a-ba09-3b07f89ccdb0",
+  "LogDestinationConfigs": [
+    "arn:aws:logs:us-east-1:860268930466:log-group:/aws/waf/n8n-webacl"
+  ]
+}

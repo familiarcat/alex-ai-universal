@@ -1,0 +1,16 @@
+{
+  "AlarmName": "n8n-health-check-failed",
+  "AlarmDescription": "N8N server health check failed - trigger automated restart",
+  "MetricName": "N8NHealthCheck",
+  "Namespace": "AlexAI/N8N",
+  "Statistic": "Minimum",
+  "Period": 60,
+  "EvaluationPeriods": 2,
+  "Threshold": 1,
+  "ComparisonOperator": "LessThanThreshold",
+  "ActionsEnabled": true,
+  "AlarmActions": [
+    "arn:aws:sns:us-east-2:YOUR_ACCOUNT_ID:n8n-alerts",
+    "arn:aws:lambda:us-east-2:YOUR_ACCOUNT_ID:function:n8n-auto-restart"
+  ]
+}

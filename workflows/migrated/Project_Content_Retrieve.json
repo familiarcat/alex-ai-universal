@@ -1,0 +1,177 @@
+{
+  "name": "Project Content Retrieve",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "7d6d5f6f-b423-4788-bd58-97355d3ef6c6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "path": "project-content-retrieve",
+          "httpMethod": "GET",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate Input"
+      ]
+    },
+    {
+      "id": "afd283ea-eccb-44f6-ad0e-41bcd65516a6",
+      "type": "transform",
+      "config": {
+        "name": "Validate Input",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{$json.query.projectId}}",
+                "operation": "isNotEmpty"
+              },
+              {
+                "value1": "={{$json.headers['x-source']}}",
+                "value2": "alex-ai-dashboard"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Supabase Select",
+        "Response Error"
+      ]
+    },
+    {
+      "id": "ee1c7e1c-bac6-4620-94e8-9f2476848e11",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Select",
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT * FROM project_content WHERE project_id = $1 AND deleted_at IS NULL;",
+          "parameters": {
+            "values": [
+              {
+                "name": "$1",
+                "value": "={{$json.query.projectId}}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "position": [
+          650,
+          200
+        ],
+        "originalType": "n8n-nodes-base.postgres"
+      },
+      "next": [
+        "Check Found"
+      ]
+    },
+    {
+      "id": "79aebf89-1b9b-419d-984f-4f4a7f291e1f",
+      "type": "transform",
+      "config": {
+        "name": "Check Found",
+        "parameters": {
+          "conditions": {
+            "number": [
+              {
+                "value1": "={{$json.length}}",
+                "operation": "larger",
+                "value2": 0
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          850,
+          200
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Response Success",
+        "Response Not Found"
+      ]
+    },
+    {
+      "id": "58fd4f68-9660-4347-9760-d9cc04c8c9de",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{$json[0]}}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1050,
+          100
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "8e888012-e21d-43a2-9867-73f11a957e90",
+      "type": "transform",
+      "config": {
+        "name": "Response Not Found",
+        "parameters": {
+          "respondWith": "json",
+          "responseCode": 404,
+          "responseBody": "={{ { \"success\": false, \"error\": \"Project not found\" } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1050,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "7eca6dd8-6674-4a8e-aaf8-2539ec89e09b",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseCode": 400,
+          "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input: missing projectId\" } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          650,
+          400
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "Vp9509kJNN7vxp2c",
+    "originalName": "Project Content Retrieve",
+    "migratedAt": "2025-11-21T11:19:39.211Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979211-y4m5d8",
+  "createdAt": "2025-11-21T11:19:39.211Z",
+  "updatedAt": "2025-11-21T11:19:39.211Z"
+}

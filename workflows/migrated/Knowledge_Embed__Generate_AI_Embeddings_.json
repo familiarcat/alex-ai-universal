@@ -1,0 +1,149 @@
+{
+  "name": "Knowledge Embed (Generate AI Embeddings)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "78fd4764-01bb-44fd-ab22-fb95ee3101f6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "knowledge-embed",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Prepare Text"
+      ]
+    },
+    {
+      "id": "e5ec0327-5538-4252-8358-b10bb5cf3e95",
+      "type": "transform",
+      "config": {
+        "name": "Prepare Text",
+        "parameters": {
+          "functionCode": "// Prepare content for embedding generation\nconst body = $input.item.json.body;\n\nif (!body.session_id) {\n  throw new Error('session_id is required');\n}\n\nif (!body.content && !body.text_to_embed) {\n  throw new Error('content or text_to_embed is required');\n}\n\n// Build text for embedding (combine title + summary + content)\nconst textToEmbed = body.text_to_embed || (\n  (body.title || '') + '\\n\\n' +\n  (body.executive_summary || '') + '\\n\\n' +\n  JSON.stringify(body.content || {})\n);\n\nconsole.log('🧠 Generating embedding for:', body.session_id);\nconsole.log('   Text length:', textToEmbed.length, 'characters');\n\nreturn { \n  json: {\n    session_id: body.session_id,\n    text: textToEmbed,\n    model: 'text-embedding-3-small'\n  }\n};"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Generate Embedding (OpenAI)"
+      ]
+    },
+    {
+      "id": "f7364526-241f-4f85-a3a3-d2b1ad2468e8",
+      "type": "transform",
+      "config": {
+        "name": "Generate Embedding (OpenAI)",
+        "parameters": {
+          "resource": "text",
+          "operation": "embeddings",
+          "options": {
+            "model": "={{ $json.model }}"
+          },
+          "text": "={{ $json.text }}"
+        },
+        "type": "n8n-nodes-base.openAi",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.openAi"
+      },
+      "next": [
+        "Format Embedding"
+      ]
+    },
+    {
+      "id": "4ce5d3da-b2ed-4cf9-952b-0cc0dbb030c5",
+      "type": "transform",
+      "config": {
+        "name": "Format Embedding",
+        "parameters": {
+          "functionCode": "// Extract embedding vector and prepare for storage\nconst embeddingData = $input.item.json.data?.[0]?.embedding;\n\nif (!embeddingData || !Array.isArray(embeddingData)) {\n  throw new Error('Invalid embedding response from OpenAI');\n}\n\nconst sessionId = $('Prepare Text').item.json.session_id;\nconst model = $('Prepare Text').item.json.model;\n\nconsole.log('✅ Embedding generated:', embeddingData.length, 'dimensions');\n\nreturn {\n  json: {\n    session_id: sessionId,\n    content_embedding: JSON.stringify(embeddingData),\n    embedding_model: model,\n    embedding_generated_at: new Date().toISOString()\n  }\n};"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Store Embedding"
+      ]
+    },
+    {
+      "id": "b8d6b24e-6571-4246-a2a6-dc5ca99d9afe",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Store Embedding",
+        "parameters": {
+          "operation": "update",
+          "table": "knowledge_base",
+          "columns": "content_embedding,embedding_model,embedding_generated_at",
+          "filters": {
+            "conditions": [
+              {
+                "column": "session_id",
+                "condition": "equals",
+                "value": "={{ $json.session_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          1050,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "4e8818bc-2dc5-4dc1-a1c1-bb140c3371ae",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"embedding_dimensions\": 1536, \"message\": \"Embedding generated and stored\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "nKAJA2Dilm909Cm4",
+    "originalName": "Knowledge Embed (Generate AI Embeddings)",
+    "migratedAt": "2025-11-21T11:19:39.215Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979215-jr5zx",
+  "createdAt": "2025-11-21T11:19:39.215Z",
+  "updatedAt": "2025-11-21T11:19:39.215Z"
+}

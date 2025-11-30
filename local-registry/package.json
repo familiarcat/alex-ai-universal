@@ -1,0 +1,7 @@
+{
+  "name": "alex-ai-local-registry",
+  "version": "1.0.0",
+  "description": "Local private registry for Alex AI packages",
+  "private": true,
+  "dependencies": {}
+}

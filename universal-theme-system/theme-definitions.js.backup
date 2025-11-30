@@ -1,0 +1,442 @@
+/**
+ * Universal Theme System - Single Source of Truth (DDD Compliant)
+ * 
+ * This file contains all theme definitions:
+ * - CSS tokens for dashboard/DOM usage
+ * - Content templates for business content
+ * - Server renderings for project servers
+ * 
+ * Domain: Theme System
+ * Aggregate Root: Theme Definitions
+ */
+
+const THEME_DEFINITIONS = {
+  // Shared accessibility tokens
+  _a11y: {
+    minContrastAA: 4.5, // WCAG AA body text
+    minContrastAAA: 7.0, // WCAG AAA
+    focusRing: '0 0 0 3px rgba(0, 150, 255, 0.6)'
+  },
+
+  gradient: {
+    name: 'Gradient Fusion',
+    icon: '🌈',
+    description: 'Vibrant multi-color gradients',
+    category: 'vibrant',
+    // CSS tokens for dashboard/DOM
+    css: {
+      '--primary': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      '--secondary': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      '--accent': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      '--background': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      '--surface': '#ffffff',
+      '--text': '#1a202c',
+      '--heading': '#111827',
+      '--text-muted': 'rgba(45,55,72,0.85)',
+      '--border': 'transparent',
+      '--shadow': '0 10px 40px rgba(102, 126, 234, 0.3)',
+      '--on-primary': '#0a0a0a',
+      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.25), rgba(0,0,0,0.0))'
+    },
+    features: {
+      multiGradients: true,
+      vibrantColors: true,
+      fluidDesign: true,
+      dynamic: true
+    },
+    // Content templates for business context
+    content: {
+      businessType: 'Fashion E-commerce',
+      customerProfile: 'Millennials/Gen Z, creative professionals',
+      pricePoint: '$30-150',
+      hero: {
+        headline: '✨ Discover Your Next Obsession',
+        subheadline: 'Curated collections of premium streetwear and creative essentials that spark joy',
+        cta: 'Shop the Collection →',
+        ctaSecondary: 'View New Drops'
+      },
+      features: [
+        {
+          icon: '👟',
+          title: 'Limited Edition Drops',
+          description: 'Exclusive sneaker releases you won\'t find anywhere else. New drops every Friday.',
+          benefit: 'Be the first to rock the latest styles'
+        },
+        {
+          icon: '🎨',
+          title: 'Curated Collections',
+          description: 'Hand-picked by our style team. Every piece tells a story.',
+          benefit: 'Discover unique pieces that match your vibe'
+        },
+        {
+          icon: '📦',
+          title: 'Free Express Shipping',
+          description: 'Get your order in 2-3 days. Free returns within 30 days.',
+          benefit: 'Risk-free shopping with fast delivery'
+        },
+        {
+          icon: '🌟',
+          title: 'VIP Membership',
+          description: 'Join our community for early access, exclusive discounts, and style tips.',
+          benefit: 'Save 20% on every order'
+        }
+      ],
+      socialProof: {
+        heading: 'Join 25,000+ Style Enthusiasts',
+        testimonials: [
+          { text: 'Best sneaker drops! Always authentic, always fire 🔥', author: '@styleicon' },
+          { text: 'The curation is *chef\'s kiss*. Every piece is perfection.', author: '@designlover' }
+        ]
+      }
+    },
+    // Server-side CSS renderings for project servers
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);',
+      heroBackground: 'background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);',
+      cardBackground: 'background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);',
+      cardHover: 'border-color: #f093fb; box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4); transform: translateY(-2px);',
+      buttonPrimary: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);',
+      buttonSecondary: 'background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);',
+      buttonSecondaryHover: 'background: rgba(255, 255, 255, 0.25);'
+    }
+  },
+
+  pastel: {
+    name: 'Pastel Minimalism',
+    icon: '🌸',
+    description: 'Soft pastels with whitespace',
+    category: 'minimal',
+    css: {
+      '--primary': '350 70% 85%',
+      '--secondary': '200 60% 85%',
+      '--accent': '280 50% 85%',
+      '--background': 'linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)',
+      '--surface': '#ffffff',
+      '--text': '#4a4a4a',
+      '--heading': '#2d2d2d',
+      '--text-muted': 'rgba(74,74,74,0.85)',
+      '--border': 'rgba(0, 0, 0, 0.05)',
+      '--shadow': '0 2px 8px rgba(0, 0, 0, 0.05)'
+    },
+    features: {
+      softColors: true,
+      whitespace: true,
+      minimal: true,
+      gentle: true
+    },
+    content: {
+      businessType: 'Healthcare Services',
+      customerProfile: 'Families, health-conscious adults 30-65',
+      pricePoint: '$100-500 per visit',
+      hero: {
+        headline: 'Compassionate Care, When You Need It Most',
+        subheadline: 'Board-certified providers dedicated to your health, wellness, and peace of mind',
+        cta: 'Schedule Your Appointment',
+        ctaSecondary: 'Meet Our Providers'
+      },
+      features: [
+        {
+          icon: '👨‍⚕️',
+          title: 'Board-Certified Providers',
+          description: '15+ years of combined experience. Your health is in expert hands.',
+          benefit: 'Trust in proven medical expertise'
+        },
+        {
+          icon: '📱',
+          title: 'Telemedicine Available',
+          description: 'See your provider from home. Convenient, secure video consultations.',
+          benefit: 'Quality care on your schedule'
+        },
+        {
+          icon: '🔒',
+          title: 'HIPAA Compliant & Secure',
+          description: 'Your privacy is our priority. End-to-end encrypted patient records.',
+          benefit: 'Your information stays confidential'
+        },
+        {
+          icon: '💳',
+          title: 'Insurance Accepted',
+          description: 'We work with most major insurance providers. Flexible payment options available.',
+          benefit: 'Affordable care that fits your budget'
+        }
+      ],
+      trust: {
+        heading: 'Why Patients Choose Us',
+        credentials: [
+          '✅ Board Certified Physicians',
+          '✅ 10,000+ Patients Served',
+          '✅ 4.9/5 Patient Satisfaction',
+          '✅ HIPAA Compliant Facility'
+        ]
+      }
+    },
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%);',
+      heroBackground: 'background: #ffffff; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);',
+      cardBackground: 'background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.06);',
+      cardHover: 'box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); transform: translateY(-2px);',
+      buttonPrimary: 'background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #ffffff; box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);',
+      buttonSecondary: 'background: #ffffff; color: #4a4a4a; border: 2px solid rgba(74, 74, 74, 0.2);',
+      buttonSecondaryHover: 'background: #f8f8f8; border-color: rgba(74, 74, 74, 0.3);'
+    }
+  },
+
+  cyberpunk: {
+    name: 'Cyberpunk Neon',
+    icon: '🔮',
+    description: 'Futuristic neon aesthetics',
+    category: 'futuristic',
+    css: {
+      '--primary': '300 100% 50%',
+      '--secondary': '180 100% 50%',
+      '--accent': '60 100% 50%',
+      '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
+      '--surface': '#1a0f2e',
+      '--text': '#00ffff',
+      '--heading': '#ffffff',
+      '--text-muted': 'rgba(0,255,255,0.85)',
+      '--border': '#ff00ff',
+      '--shadow': '0 0 20px #ff00ff',
+      '--glow': '0 0 30px currentColor',
+      '--scan-lines': 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px)'
+    },
+    features: {
+      neonColors: true,
+      scanLines: true,
+      glitch: true,
+      futuristic: true,
+      highTech: true
+    },
+    content: {
+      businessType: 'Analytics SaaS',
+      customerProfile: 'Developers, data analysts, tech companies',
+      pricePoint: '$0-299/month (freemium)',
+      hero: {
+        headline: '⚡ Unlock the Power of Your Data',
+        subheadline: 'Real-time analytics, custom dashboards, and ML-powered insights for modern teams',
+        cta: 'Start Free Trial →',
+        ctaSecondary: 'View Live Demo'
+      },
+      features: [
+        {
+          icon: '📊',
+          title: 'Real-Time Dashboards',
+          description: 'Sub-second data updates. See your metrics evolve in real-time.',
+          benefit: '99.9% uptime, <100ms latency',
+          technical: 'WebSocket + TimescaleDB'
+        },
+        {
+          icon: '🔌',
+          title: 'RESTful API & SDKs',
+          description: 'Full-featured API with SDKs for Python, JavaScript, Go, and Rust.',
+          benefit: 'Integrate in minutes, not hours',
+          technical: 'OpenAPI 3.0 spec included'
+        },
+        {
+          icon: '🤖',
+          title: 'ML-Powered Predictions',
+          description: 'Anomaly detection, forecasting, and intelligent alerts built-in.',
+          benefit: 'Know what happens before it happens',
+          technical: 'TensorFlow.js + Python ML models'
+        },
+        {
+          icon: '📈',
+          title: 'Custom Report Builder',
+          description: 'Drag-and-drop interface. Export to CSV, JSON, PDF, or SQL.',
+          benefit: 'Any question, any format, any time',
+          technical: 'SQL-compatible query builder'
+        }
+      ],
+      technical: {
+        heading: '🛠️ Built for Developers',
+        specs: [
+          { label: 'API Rate Limit', value: '10,000 req/min' },
+          { label: 'Data Retention', value: '13 months' },
+          { label: 'Query Performance', value: '<50ms p95' },
+          { label: 'Webhooks', value: 'Real-time events' },
+          { label: 'SDKs', value: 'Python, JS, Go, Rust' }
+        ],
+        codeExample: true
+      },
+      pricing: [
+        {
+          name: 'Free',
+          price: '$0',
+          features: ['1 Dashboard', '1K events/month', 'Basic analytics', 'Community support'],
+          cta: 'Start Free'
+        },
+        {
+          name: 'Pro',
+          price: '$49/mo',
+          features: ['Unlimited dashboards', '100K events/month', 'API access', 'Email support'],
+          cta: 'Start Trial',
+          popular: true
+        },
+        {
+          name: 'Enterprise',
+          price: 'Custom',
+          features: ['Unlimited everything', 'SLA guarantee', 'Dedicated support', 'White-label'],
+          cta: 'Contact Sales'
+        }
+      ]
+    },
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 100%);',
+      heroBackground: 'background: rgba(0, 255, 170, 0.05); border: 1px solid rgba(0, 255, 170, 0.3); box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);',
+      cardBackground: 'background: rgba(26, 15, 46, 0.7); border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 15px rgba(255, 0, 255, 0.15);',
+      cardHover: 'border-color: #00ffaa; box-shadow: 0 0 25px rgba(0, 255, 170, 0.4), 0 0 15px rgba(255, 0, 255, 0.2);',
+      buttonPrimary: 'background: #00ffaa; color: #0a0015; font-weight: 700; box-shadow: 0 0 20px rgba(0, 255, 170, 0.5);',
+      buttonSecondary: 'background: transparent; color: #00ffaa; border: 2px solid #00ffaa;',
+      buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.15); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
+    }
+  },
+
+  glassmorphism: {
+    name: 'Glassmorphism Modern',
+    icon: '🪟',
+    description: 'Frosted glass with blur effects',
+    category: 'modern',
+    css: {
+      '--primary': '265 100% 65%',
+      '--secondary': '285 75% 75%',
+      '--accent': '310 80% 80%',
+      '--background': 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      '--surface': 'rgba(255, 255, 255, 0.1)',
+      '--text': '#0f172a',
+      '--heading': '#0b1220',
+      '--text-muted': 'rgba(15,23,42,0.8)',
+      '--border': 'rgba(0, 0, 0, 0.2)',
+      '--shadow': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+      '--blur': '10px',
+      '--on-primary': '#0a0a0a',
+      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0.0))'
+    },
+    features: {
+      backdropBlur: true,
+      glassPanels: true,
+      transparentSurfaces: true,
+      gradientBackgrounds: true
+    },
+    content: {
+      businessType: 'Tech SaaS',
+      customerProfile: 'Startups, creative agencies, modern businesses',
+      pricePoint: '$29-199/month',
+      hero: {
+        headline: 'Modern Design, Infinite Possibilities',
+        subheadline: 'Beautiful glass interfaces that adapt to your brand',
+        cta: 'Get Started →',
+        ctaSecondary: 'View Gallery'
+      }
+    },
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);',
+      heroBackground: 'background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);',
+      cardBackground: 'background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);',
+      cardHover: 'border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5); transform: translateY(-3px);',
+      buttonPrimary: 'background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #ffffff; backdrop-filter: blur(8px); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);',
+      buttonSecondary: 'background: rgba(255, 255, 255, 0.12); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px);',
+      buttonSecondaryHover: 'background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.3);'
+    }
+  },
+
+  midnight: {
+    name: 'Midnight Dark',
+    icon: '🌙',
+    description: 'Deep dark with neon accents',
+    category: 'dark',
+    css: {
+      '--primary': '180 100% 65%',
+      '--secondary': '300 100% 60%',
+      '--accent': '140 100% 70%',
+      '--background': 'linear-gradient(135deg, #0a0a0f 0%, #121218 100%)',
+      '--surface': '#1a1a24',
+      '--text': '#e0e0e0',
+      '--heading': '#ffffff',
+      '--text-muted': 'rgba(224,224,224,0.85)',
+      '--border': 'rgba(0, 255, 255, 0.2)',
+      '--shadow': '0 0 20px rgba(0, 255, 255, 0.3)',
+      '--glow': '0 0 10px currentColor',
+      '--on-primary': '#0a0a0a',
+      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0.0))'
+    },
+    features: {
+      trueDark: true,
+      neonAccents: true,
+      glowEffects: true,
+      highContrast: true
+    },
+    content: {
+      businessType: 'Developer Tools',
+      customerProfile: 'Developers, DevOps, technical teams',
+      pricePoint: '$0-99/month',
+      hero: {
+        headline: 'Dark Mode, Bright Future',
+        subheadline: 'Professional tools designed for developers who code in the dark',
+        cta: 'Start Coding →',
+        ctaSecondary: 'View Docs'
+      }
+    },
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #1a1a24 100%);',
+      heroBackground: 'background: rgba(0, 255, 255, 0.04); border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);',
+      cardBackground: 'background: #1a1a24; border: 1px solid rgba(0, 255, 255, 0.15); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);',
+      cardHover: 'border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.35), 0 8px 30px rgba(0, 0, 0, 0.6);',
+      buttonPrimary: 'background: #00ffff; color: #0a0a0a; font-weight: 700; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);',
+      buttonSecondary: 'background: transparent; color: #00ffff; border: 2px solid #00ffff;',
+      buttonSecondaryHover: 'background: rgba(0, 255, 255, 0.1); box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);'
+    }
+  },
+
+  offworld: {
+    name: 'Offworld Panel',
+    icon: '🛸',
+    description: 'Dark nebula backdrop, glass panels, neon-accent UI',
+    category: 'futuristic',
+    css: {
+      '--primary': '165 100% 65%',
+      '--secondary': '285 80% 72%',
+      '--accent': '#00ffaa',
+      '--background': 'linear-gradient(135deg, #0a0015 0%, #150a1f 100%)',
+      '--surface': 'rgba(0, 255, 170, 0.05)',
+      '--text': '#d0d0d0',
+      '--heading': '#00ffaa',
+      '--text-muted': 'rgba(208,208,208,0.8)',
+      '--border': '1px solid rgba(0, 255, 170, 0.2)',
+      '--shadow': '0 10px 30px rgba(0, 255, 170, 0.12)',
+      '--blur': '10px',
+      '--panel': 'rgba(0, 255, 170, 0.03)',
+      '--panel-strong': 'rgba(0, 255, 170, 0.1)',
+      '--glow': '0 0 16px rgba(0, 255, 170, 0.6)',
+      '--on-primary': '#0a0a0a',
+      '--scrim': 'linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.0))'
+    },
+    features: {
+      glassPanels: true,
+      neonAccents: true,
+      blurBackdrops: true,
+      highContrastDark: true
+    },
+    content: {
+      businessType: 'Space Tech',
+      customerProfile: 'Space enthusiasts, sci-fi fans, innovators',
+      pricePoint: '$50-500/month',
+      hero: {
+        headline: 'Beyond Earth, Into the Future',
+        subheadline: 'Advanced interfaces for exploring new frontiers',
+        cta: 'Launch Mission →',
+        ctaSecondary: 'View Galaxy'
+      }
+    },
+    serverCSS: {
+      background: 'background: linear-gradient(135deg, #0a0015 0%, #150a1f 50%, #1a0f2e 100%);',
+      heroBackground: 'background: rgba(0, 255, 170, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 170, 0.25); box-shadow: 0 0 20px rgba(0, 255, 170, 0.15);',
+      cardBackground: 'background: rgba(0, 255, 170, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 255, 170, 0.2); box-shadow: 0 10px 30px rgba(0, 255, 170, 0.12);',
+      cardHover: 'border-color: rgba(0, 255, 170, 0.4); box-shadow: 0 0 30px rgba(0, 255, 170, 0.25), 0 15px 40px rgba(0, 0, 0, 0.4); transform: translateY(-2px);',
+      buttonPrimary: 'background: #00ffaa; color: #0a0a0a; font-weight: 700; box-shadow: 0 0 16px rgba(0, 255, 170, 0.6);',
+      buttonSecondary: 'background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.3);',
+      buttonSecondaryHover: 'background: rgba(0, 255, 170, 0.2); border-color: rgba(0, 255, 170, 0.5); box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);'
+    }
+  }
+};
+
+module.exports = { THEME_DEFINITIONS };

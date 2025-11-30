@@ -1,0 +1,110 @@
+{
+  "timestamp": "2025-09-21T21:19:38.402Z",
+  "refactoring": {
+    "processed": [],
+    "errors": [
+      {
+        "workflow": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      },
+      {
+        "workflow": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+        "error": "Request failed with status code 400"
+      }
+    ],
+    "summary": {
+      "total": 8,
+      "successful": 0,
+      "failed": 8
+    }
+  },
+  "testing": {
+    "manual": [
+      {
+        "workflowId": "36KPle5mPiMaazG6",
+        "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+        "success": false,
+        "mode": "manual",
+        "error": "Request failed with status code 404"
+      },
+      {
+        "workflowId": "BdNHOluRYUw2JxGW",
+        "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+        "success": false,
+        "mode": "manual",
+        "error": "Request failed with status code 404"
+      },
+      {
+        "workflowId": "GhSB8EpZWXLU78LM",
+        "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+        "success": false,
+        "mode": "manual",
+        "error": "Request failed with status code 404"
+      }
+    ],
+    "webhook": [
+      {
+        "workflowId": "36KPle5mPiMaazG6",
+        "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+        "success": true,
+        "mode": "webhook",
+        "response": "",
+        "executionTime": "unknown"
+      },
+      {
+        "workflowId": "BdNHOluRYUw2JxGW",
+        "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+        "success": true,
+        "mode": "webhook",
+        "response": "",
+        "executionTime": "unknown"
+      },
+      {
+        "workflowId": "GhSB8EpZWXLU78LM",
+        "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+        "success": true,
+        "mode": "webhook",
+        "response": "",
+        "executionTime": "unknown"
+      }
+    ],
+    "summary": {
+      "totalTests": 6,
+      "manualSuccess": 0,
+      "webhookSuccess": 3,
+      "totalSuccess": 3
+    }
+  },
+  "summary": {
+    "workflowsProcessed": 8,
+    "workflowsRefactored": 0,
+    "refactoringErrors": 8,
+    "totalTests": 6,
+    "successfulTests": 3,
+    "successRate": 50
+  }
+}

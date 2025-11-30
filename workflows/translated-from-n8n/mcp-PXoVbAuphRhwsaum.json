@@ -1,0 +1,78 @@
+{
+  "id": "mcp-PXoVbAuphRhwsaum",
+  "name": "PROJECT - Alex AI - Job Opportunities - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - Job Opportunities - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "eb69a3e3-79cc-4c0c-8f6f-0389788b878d",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-job-opportunities",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-job-opportunities",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "4a7f0f9a-c2ec-4f6b-ad85-1b07c95691a9",
+      "name": "Respond Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Job Opportunities - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Respond Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Respond Success",
+      "source": "Webhook Trigger",
+      "target": "Respond Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "eb69a3e3-79cc-4c0c-8f6f-0389788b878d",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "alex-ai-job-opportunities",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-job-opportunities",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "PXoVbAuphRhwsaum",
+    "convertedAt": "2025-11-21T14:24:04.673Z",
+    "originalName": "PROJECT - Alex AI - Job Opportunities - Production"
+  }
+}

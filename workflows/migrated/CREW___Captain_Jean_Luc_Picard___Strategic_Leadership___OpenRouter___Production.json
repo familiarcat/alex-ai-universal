@@ -1,0 +1,163 @@
+{
+  "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "da4cffd1-f2ce-42cb-aad0-853f75042f1e",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Captain Jean-Luc Picard Directive",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-captain-jean-luc-picard",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Captain Jean-Luc Picard Memory Retrieval"
+      ]
+    },
+    {
+      "id": "174b89b9-cae7-42c2-ad7e-298899264921",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Captain Jean-Luc Picard Memory Retrieval",
+        "parameters": {
+          "authentication": "none",
+          "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "sendBody": true,
+          "jsonParameters": true,
+          "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'picard',\n      knowledgeType: 'strategic_assessment',\n      priority: 'high',\n      title: 'Strategic Leadership Advisory',\n      summary: summaryLine.trim() || 'Strategic leadership guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'picard']\n    }\n  };\n})() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "43f33216-b7e2-40c0-b8cd-844622dcb03d",
+      "type": "workflowExecute",
+      "config": {
+        "name": "LLM Selection Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          336
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Captain Jean-Luc Picard AI Agent"
+      ]
+    },
+    {
+      "id": "c0848f47-34a2-44b9-82c5-ff8f7b632709",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Captain Jean-Luc Picard AI Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge Communication"
+      ]
+    },
+    {
+      "id": "f53673f1-e3ec-41ed-bbdc-a2cf65041a20",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Captain Jean-Luc Picard Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Captain Jean-Luc Picard Response Formatter"
+      ]
+    },
+    {
+      "id": "649d0a58-57f4-456a-8519-a84f11ae877a",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge Communication",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Captain Jean-Luc Picard Memory Storage"
+      ]
+    },
+    {
+      "id": "67a8c75f-8f14-4c58-b698-e47c3f48226a",
+      "type": "transform",
+      "config": {
+        "name": "Captain Jean-Luc Picard Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ {\n  success: true,\n  crew_member: 'captain_picard',\n  crew_name: 'Captain Jean-Luc Picard',\n  role: 'Commanding Officer',\n  summary: $('Captain Jean-Luc Picard AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Captain Jean-Luc Picard AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Captain Jean-Luc Picard AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Captain Jean-Luc Picard Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Captain Jean-Luc Picard AI Agent').item.json?.model || null,\n    usage: $('Captain Jean-Luc Picard AI Agent').item.json?.usage || null\n  }\n} }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "Say3IHgvp6zdLYI7",
+    "originalName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.211Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979211-j364x9",
+  "createdAt": "2025-11-21T11:19:39.211Z",
+  "updatedAt": "2025-11-21T11:19:39.211Z"
+}

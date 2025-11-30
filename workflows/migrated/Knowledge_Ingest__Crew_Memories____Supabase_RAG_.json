@@ -1,0 +1,130 @@
+{
+  "name": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "2103b2c3-0f04-4c7f-8f1b-4a44bb35330e",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "knowledge-ingest",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Transform Payload"
+      ]
+    },
+    {
+      "id": "3edbf751-3936-4edd-83d0-a84e2c911a1a",
+      "type": "transform",
+      "config": {
+        "name": "Transform Payload",
+        "parameters": {
+          "functionCode": "// Transform crew memory payload for RAG storage\nconst body = $input.item.json.body;\n\n// Handle both simple and rich crew memory formats\nconst isRichFormat = body.critical_decisions && body.crew_members_involved;\n\nlet ragData;\n\nif (isRichFormat) {\n  // Rich comprehensive crew memory format\n  ragData = {\n    session_id: body.conversation_id || `crew-memory-${Date.now()}`,\n    category: 'crew_memory_comprehensive',\n    title: body.title,\n    executive_summary: body.executive_summary,\n    session_duration: body.session_duration,\n    crew_members: JSON.stringify(body.crew_members_involved || []),\n    \n    // Decisions and patterns\n    critical_decisions: JSON.stringify(body.critical_decisions || []),\n    bugs_fixed: JSON.stringify(body.bugs_fixed || []),\n    technical_patterns: JSON.stringify(body.technical_patterns_discovered || []),\n    \n    // Knowledge\n    lessons_learned: JSON.stringify(body.lessons_learned || []),\n    user_insights: JSON.stringify(body.user_insights || []),\n    architectural_decisions: JSON.stringify(body.architectural_decisions_for_rag || []),\n    knowledge_base_entries: JSON.stringify(body.knowledge_base_entries || []),\n    \n    // Metadata\n    tags: JSON.stringify([\n      'crew-memory',\n      'comprehensive-session',\n      ...(body.key_topics || []),\n      ...(body.rag_storage_metadata?.tags || [])\n    ]),\n    \n    // Searchable content (full JSON for vector embedding)\n    content: JSON.stringify(body),\n    \n    // Timestamps\n    session_date: body.session_date || new Date().toISOString().split('T')[0],\n    created_at: new Date().toISOString()\n  };\n} else {\n  // Simple format (backward compatibility)\n  ragData = {\n    session_id: body.session_id || `knowledge-${Date.now()}`,\n    category: body.category || 'general_knowledge',\n    title: body.title || 'Untitled',\n    executive_summary: body.summary || body.description || '',\n    content: JSON.stringify(body),\n    tags: JSON.stringify(body.tags || []),\n    session_date: new Date().toISOString().split('T')[0],\n    created_at: new Date().toISOString()\n  };\n}\n\nconsole.log('📚 Ingesting knowledge:', ragData.session_id, '|', ragData.title);\n\nreturn { json: ragData };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Supabase Upsert"
+      ]
+    },
+    {
+      "id": "0c464fc3-61a0-497f-9efe-73bab8dc456d",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Upsert",
+        "parameters": {
+          "operation": "insert",
+          "table": "knowledge_base",
+          "columns": "session_id,category,title,executive_summary,content,tags,session_date,created_at,crew_members,critical_decisions,bugs_fixed,technical_patterns,lessons_learned,user_insights,architectural_decisions,knowledge_base_entries",
+          "options": {
+            "onConflict": "session_id",
+            "skipOnConflict": false,
+            "upsert": true
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "5e9c30d7-84a8-4ece-9b69-6bf82ef653cf",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"session_id\": $json.session_id, \"title\": $json.title, \"message\": \"Knowledge ingested to RAG\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "3aa6e1fe-159f-4cd3-a8a4-05e80e67a2c3",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to ingest knowledge\" } }}",
+          "options": {
+            "responseCode": 500
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          450
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "fGqL10I7EDA5bzmW",
+    "originalName": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-sjsgrf",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

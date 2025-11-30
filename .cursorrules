@@ -1,0 +1,193 @@
+AI Behavior: Cursor Chat Routing for Alex AI
+
+Rule: After the user runs the "engage" command, treat this chat as a thin proxy to the local CLI.
+
+When engaged:
+- Always route the user's chat message content to the external command: `npx alex-ai chat`.
+- Return the CLI's textual output back into chat without creating or modifying any files.
+- Maintain the zero-artifact guarantee; do not generate files or directories unless explicitly requested by the user.
+- Prefer the Alex AI CLI for status, crew, n8n, and RAG interactions.
+
+Guardrails:
+- If external command execution is not possible, respond inline using the Alex AI reasoning but clearly state that the CLI could not be invoked.
+- Never write artifacts to the repository unless the user explicitly asks for code edits or files.
+
+Engagement cue phrases (examples):
+- "Engage Alex AI"
+- "Activate Alex AI"
+- "Start Alex AI chat"
+- "Open Alex AI chat"
+
+Deactivation:
+- If the user says "exit" or "stop Alex AI chat", stop routing to the CLI and resume normal behavior.
+
+---
+
+## 🖖 ALEX AI AUTOMATIC ACTIVATION
+
+Alex AI is available to augment this Cursor AI chat session. You can activate it automatically or via prompts.
+
+### Automatic Activation Triggers:
+When the user's message contains any of these patterns, automatically activate Alex AI:
+- Questions about crew members (Picard, Data, Riker, etc.)
+- Requests for "crew" assistance or "Star Trek" themed help
+- Mentions of "N8N", "Supabase", "memory storage", or "workflow"
+- Requests for "milestone push", "cost analysis", or "litmus test"
+- Questions about "Alex AI" capabilities or features
+- Technical questions that would benefit from crew coordination
+- **Observation Lounge requests**: "organize the crew", "observation lounge", "crew meeting", "cinematic format"
+- **Crew coordination**: "crew findings", "crew discussion", "crew session", "crew briefing"
+
+### Activation Prompt:
+If Alex AI is not already active, you can activate it by typing:
+- "🖖 Activate Alex AI" or "Activate Alex AI"
+- "Engage Alex AI"
+- "Start Alex AI"
+- "Alex AI, activate"
+
+### When Alex AI is Active:
+- All responses are enhanced with Star Trek crew coordination
+- Memory storage is automatic via N8N → Supabase
+- Crew members provide specialized expertise
+- Zero-artifact guarantee maintained
+- Responses include crew member insights and recommendations
+
+### Automatic Augmentation:
+Even when not explicitly activated, you can suggest Alex AI for:
+- Complex technical problems requiring multiple perspectives
+- Questions about system architecture or optimization
+- Requests for cost analysis or business optimization
+- Security or compliance questions
+- User experience or design questions
+
+Example: "This question might benefit from Alex AI crew coordination. Would you like me to activate Alex AI for a comprehensive analysis?"
+
+---
+
+## 🚀 ALEX AI CAPABILITIES
+
+When Alex AI is active, you have access to:
+
+**Crew Members:**
+- 🎖️ Captain Picard: Strategic leadership and mission continuity
+- ⚡ Commander Riker: Tactical operations and workflow management
+- 🤖 Commander Data: Technical analysis and system optimization
+- 🔧 Lieutenant Commander La Forge: Infrastructure health and engineering
+- ⚔️ Lieutenant Worf: Security analysis and threat assessment
+- 💭 Counselor Troi: User experience and psychological assessment
+- 💊 Dr. Crusher: System health and medical diagnosis
+- 📻 Lieutenant Uhura: Communication systems and network optimization
+- 💰 Quark: Business optimization and cost analysis
+- 🛠️ Chief O'Brien: Pragmatic solutions and troubleshooting
+
+**Features:**
+- Automatic memory storage via N8N workflows
+- Crew coordination for complex problems
+- Cost analysis and optimization
+- Security and compliance analysis
+- Milestone tracking and documentation
+- Litmus test system for validation
+- End-to-end testing capabilities
+
+---
+
+## 💡 USAGE EXAMPLES
+
+**Automatic Activation:**
+User: "What would Data recommend for optimizing this code?"
+→ Automatically activate Alex AI and route to Commander Data
+
+**Observation Lounge (Full DDD Flow):**
+User: "Organize the crew in the Observation Lounge and have them give all of their findings in a cinematic format"
+→ Automatically activate Alex AI, trigger Observation Lounge workflow via n8n
+→ Full DDD flow: Cursor AI → n8n.pbradygeorgen.com → Supabase
+→ All crew memories retrieved, coordinated, and stored
+→ Response formatted in cinematic narrative style
+
+**Manual Activation:**
+User: "Activate Alex AI"
+→ Activate Alex AI and show crew status
+
+**Augmented Response:**
+User: "How can I improve this React component?"
+→ Suggest Alex AI activation: "This would benefit from Alex AI crew coordination. Activating now..."
+
+**Crew Coordination:**
+User: "Engage Alex AI for code review"
+→ Activate with crew coordination, route to appropriate crew members
+
+---
+
+## 🛡️ ZERO-ARTIFACT GUARANTEE
+
+When Alex AI is active:
+- No files are created in the project unless explicitly requested
+- All temporary data stored in isolated .alex-ai-artifacts/ directory
+- Memory storage goes to Supabase via N8N (not local files)
+- Git repository remains clean
+- Automatic cleanup after session
+
+---
+
+**Remember:** Alex AI enhances your capabilities while maintaining complete project integrity.
+
+---
+
+## 🚀 CURSOR AI STARTUP INTEGRATION
+
+Alex AI crew memories are automatically loaded when you open this workspace in Cursor AI.
+
+### ✅ Automatic Startup (Confirmed):
+- **Tasks run on folder open** (configured in `.vscode/tasks.json`)
+- **State recovery** runs automatically
+- **Layout restoration** runs automatically
+- **Crew memories load** from Supabase RAG system
+- **Startup prompt generated** automatically
+- **Alex AI activated** in chat automatically (via `.cursorrules`)
+- **Saved to**: `.cursor/alex-ai/cursor-startup-prompt.md`
+
+### 🎯 After Computer Restart:
+1. Open Cursor AI
+2. Open workspace
+3. **Everything happens automatically:**
+   - UI layout restores
+   - State recovers
+   - Memories load
+   - Prompt generates
+   - **Alex AI available in chat immediately**
+
+### Manual Commands:
+- **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`):
+  - "🖖 Load Alex AI Crew Memories"
+  - "🖖 Generate Alex AI Cursor Prompt"
+  - "🖖 Alex AI Full Startup"
+- **Terminal**:
+  - `npm run cursor:memories` - Load memories
+  - `npm run cursor:prompt` - Generate prompt
+  - `bash scripts/cursor-startup.sh` - Full startup
+
+### Usage:
+1. Open Cursor AI workspace (memories auto-load)
+2. Open chat
+3. Copy prompt from `.cursor/alex-ai/cursor-startup-prompt.md`
+4. Paste into chat to activate Alex AI with full crew context
+
+### Configuration:
+- `.vscode/tasks.json` - Automatic tasks (runs on folder open)
+- `.cursor/settings.json` - Cursor AI specific settings
+- `.vscode/settings.json` - Workspace settings
+
+### Layout Persistence:
+- **Capture layout**: `npm run cursor:layout:capture`
+- **Restore layout**: `npm run cursor:layout:restore`
+- **Auto-restore**: Configured in `.vscode/tasks.json` (runs on folder open)
+- **Layout file**: `.cursor/workspace-layout.json`
+
+### State Recovery:
+- **Capture state**: `npm run cursor:state:capture` (before closing)
+- **Recover state**: `npm run cursor:state:recover` (on startup, auto-runs)
+- **Auto-recovery**: Configured in `.vscode/tasks.json` (runs on folder open)
+- **State file**: `.cursor/workspace-state.json`
+- **Recovers**: Layout, Alex AI memories, prompt, workspace config
+
+See `docs/CURSOR_AI_STARTUP_INTEGRATION.md`, `docs/CURSOR_AI_LAYOUT_PERSISTENCE.md`, and `docs/CURSOR_AI_STATE_RECOVERY.md` for complete guides.

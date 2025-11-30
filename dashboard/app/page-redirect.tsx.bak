@@ -1,0 +1,17 @@
+/**
+ * Home Page - Redirects to Dashboard
+ * Reviewed by: Commander Riker (Tactical Flow)
+ */
+
+import { redirect } from 'next/navigation';
+
+export default function HomePage() {
+  redirect('/dashboard');
+}
+
+/**
+ * Code Review - Commander Riker:
+ * "Simple and effective. Don't make users guess where to go - direct them to the
+ * dashboard immediately. Tactical efficiency: 100%."
+ */
+

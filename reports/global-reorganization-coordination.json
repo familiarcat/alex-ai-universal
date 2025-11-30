@@ -1,0 +1,546 @@
+{
+  "timestamp": "2025-11-26T07:52:21.212Z",
+  "crewRoster": [
+    {
+      "name": "Captain Picard",
+      "emoji": "🎖️",
+      "role": "Strategic Leadership",
+      "expertise": [
+        "architecture",
+        "mission continuity",
+        "strategic planning",
+        "DDD domain modeling"
+      ],
+      "cost": "high",
+      "capacity": "strategic"
+    },
+    {
+      "name": "Commander Riker",
+      "emoji": "⚡",
+      "role": "Tactical Operations",
+      "expertise": [
+        "project management",
+        "team organization",
+        "workflow optimization",
+        "coordination"
+      ],
+      "cost": "medium",
+      "capacity": "high"
+    },
+    {
+      "name": "Commander Data",
+      "emoji": "🤖",
+      "role": "Technical Analysis",
+      "expertise": [
+        "code analysis",
+        "structure optimization",
+        "DDD patterns",
+        "technical architecture"
+      ],
+      "cost": "medium",
+      "capacity": "very-high"
+    },
+    {
+      "name": "Lt. Cmdr. La Forge",
+      "emoji": "🔧",
+      "role": "Infrastructure Engineering",
+      "expertise": [
+        "build systems",
+        "deployment",
+        "infrastructure",
+        "CI/CD"
+      ],
+      "cost": "medium",
+      "capacity": "high"
+    },
+    {
+      "name": "Chief O'Brien",
+      "emoji": "🛠️",
+      "role": "Pragmatic Solutions",
+      "expertise": [
+        "migration planning",
+        "practical implementation",
+        "testing",
+        "troubleshooting"
+      ],
+      "cost": "low",
+      "capacity": "high"
+    },
+    {
+      "name": "Quark",
+      "emoji": "💰",
+      "role": "Business Operations",
+      "expertise": [
+        "cost optimization",
+        "resource allocation",
+        "team efficiency",
+        "ROI analysis"
+      ],
+      "cost": "low",
+      "capacity": "medium"
+    },
+    {
+      "name": "Lt. Worf",
+      "emoji": "⚔️",
+      "role": "Security & Compliance",
+      "expertise": [
+        "security",
+        "compliance",
+        "auditing",
+        "DDD bounded contexts"
+      ],
+      "cost": "medium",
+      "capacity": "medium"
+    },
+    {
+      "name": "Counselor Troi",
+      "emoji": "💭",
+      "role": "User Experience",
+      "expertise": [
+        "UX design",
+        "user psychology",
+        "accessibility",
+        "DDD user journeys"
+      ],
+      "cost": "low",
+      "capacity": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "structure-analysis",
+      "name": "Structure Analysis & Planning",
+      "complexity": "high",
+      "requires": [
+        "code analysis",
+        "DDD patterns",
+        "technical architecture"
+      ],
+      "priority": 1,
+      "estimatedCost": "medium"
+    },
+    {
+      "id": "path-migration",
+      "name": "Path & Import Updates",
+      "complexity": "very-high",
+      "requires": [
+        "code analysis",
+        "practical implementation",
+        "testing"
+      ],
+      "priority": 2,
+      "estimatedCost": "high"
+    },
+    {
+      "id": "build-system",
+      "name": "Build System Updates",
+      "complexity": "medium",
+      "requires": [
+        "build systems",
+        "infrastructure",
+        "CI/CD"
+      ],
+      "priority": 2,
+      "estimatedCost": "medium"
+    },
+    {
+      "id": "milestone-organization",
+      "name": "Milestone File Organization",
+      "complexity": "medium",
+      "requires": [
+        "code analysis",
+        "practical implementation"
+      ],
+      "priority": 3,
+      "estimatedCost": "low"
+    },
+    {
+      "id": "documentation",
+      "name": "Documentation Updates",
+      "complexity": "low",
+      "requires": [
+        "project management",
+        "coordination"
+      ],
+      "priority": 3,
+      "estimatedCost": "low"
+    },
+    {
+      "id": "testing",
+      "name": "Testing & Validation",
+      "complexity": "high",
+      "requires": [
+        "testing",
+        "troubleshooting",
+        "practical implementation"
+      ],
+      "priority": 4,
+      "estimatedCost": "medium"
+    },
+    {
+      "id": "security-audit",
+      "name": "Security & Compliance Audit",
+      "complexity": "medium",
+      "requires": [
+        "security",
+        "compliance",
+        "DDD bounded contexts"
+      ],
+      "priority": 2,
+      "estimatedCost": "low"
+    }
+  ],
+  "teamAssignments": [
+    {
+      "task": {
+        "id": "structure-analysis",
+        "name": "Structure Analysis & Planning",
+        "complexity": "high",
+        "requires": [
+          "code analysis",
+          "DDD patterns",
+          "technical architecture"
+        ],
+        "priority": 1,
+        "estimatedCost": "medium"
+      },
+      "team": [
+        {
+          "name": "Commander Data",
+          "emoji": "🤖",
+          "role": "Technical Analysis",
+          "expertise": [
+            "code analysis",
+            "structure optimization",
+            "DDD patterns",
+            "technical architecture"
+          ],
+          "cost": "medium",
+          "capacity": "very-high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 100
+    },
+    {
+      "task": {
+        "id": "security-audit",
+        "name": "Security & Compliance Audit",
+        "complexity": "medium",
+        "requires": [
+          "security",
+          "compliance",
+          "DDD bounded contexts"
+        ],
+        "priority": 2,
+        "estimatedCost": "low"
+      },
+      "team": [
+        {
+          "name": "Lt. Worf",
+          "emoji": "⚔️",
+          "role": "Security & Compliance",
+          "expertise": [
+            "security",
+            "compliance",
+            "auditing",
+            "DDD bounded contexts"
+          ],
+          "cost": "medium",
+          "capacity": "medium"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 100
+    },
+    {
+      "task": {
+        "id": "build-system",
+        "name": "Build System Updates",
+        "complexity": "medium",
+        "requires": [
+          "build systems",
+          "infrastructure",
+          "CI/CD"
+        ],
+        "priority": 2,
+        "estimatedCost": "medium"
+      },
+      "team": [
+        {
+          "name": "Lt. Cmdr. La Forge",
+          "emoji": "🔧",
+          "role": "Infrastructure Engineering",
+          "expertise": [
+            "build systems",
+            "deployment",
+            "infrastructure",
+            "CI/CD"
+          ],
+          "cost": "medium",
+          "capacity": "high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 100
+    },
+    {
+      "task": {
+        "id": "path-migration",
+        "name": "Path & Import Updates",
+        "complexity": "very-high",
+        "requires": [
+          "code analysis",
+          "practical implementation",
+          "testing"
+        ],
+        "priority": 2,
+        "estimatedCost": "high"
+      },
+      "team": [
+        {
+          "name": "Chief O'Brien",
+          "emoji": "🛠️",
+          "role": "Pragmatic Solutions",
+          "expertise": [
+            "migration planning",
+            "practical implementation",
+            "testing",
+            "troubleshooting"
+          ],
+          "cost": "low",
+          "capacity": "high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 67
+    },
+    {
+      "task": {
+        "id": "milestone-organization",
+        "name": "Milestone File Organization",
+        "complexity": "medium",
+        "requires": [
+          "code analysis",
+          "practical implementation"
+        ],
+        "priority": 3,
+        "estimatedCost": "low"
+      },
+      "team": [
+        {
+          "name": "Chief O'Brien",
+          "emoji": "🛠️",
+          "role": "Pragmatic Solutions",
+          "expertise": [
+            "migration planning",
+            "practical implementation",
+            "testing",
+            "troubleshooting"
+          ],
+          "cost": "low",
+          "capacity": "high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 50
+    },
+    {
+      "task": {
+        "id": "documentation",
+        "name": "Documentation Updates",
+        "complexity": "low",
+        "requires": [
+          "project management",
+          "coordination"
+        ],
+        "priority": 3,
+        "estimatedCost": "low"
+      },
+      "team": [
+        {
+          "name": "Commander Riker",
+          "emoji": "⚡",
+          "role": "Tactical Operations",
+          "expertise": [
+            "project management",
+            "team organization",
+            "workflow optimization",
+            "coordination"
+          ],
+          "cost": "medium",
+          "capacity": "high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 100
+    },
+    {
+      "task": {
+        "id": "testing",
+        "name": "Testing & Validation",
+        "complexity": "high",
+        "requires": [
+          "testing",
+          "troubleshooting",
+          "practical implementation"
+        ],
+        "priority": 4,
+        "estimatedCost": "medium"
+      },
+      "team": [
+        {
+          "name": "Chief O'Brien",
+          "emoji": "🛠️",
+          "role": "Pragmatic Solutions",
+          "expertise": [
+            "migration planning",
+            "practical implementation",
+            "testing",
+            "troubleshooting"
+          ],
+          "cost": "low",
+          "capacity": "high"
+        }
+      ],
+      "estimatedCost": "low",
+      "efficiency": 100
+    }
+  ],
+  "workflow": [
+    {
+      "name": "Phase 1: Analysis & Planning",
+      "tasks": [
+        {
+          "id": "structure-analysis",
+          "name": "Structure Analysis & Planning",
+          "complexity": "high",
+          "requires": [
+            "code analysis",
+            "DDD patterns",
+            "technical architecture"
+          ],
+          "priority": 1,
+          "estimatedCost": "medium"
+        }
+      ]
+    },
+    {
+      "name": "Phase 2: Core Migration",
+      "tasks": [
+        {
+          "id": "security-audit",
+          "name": "Security & Compliance Audit",
+          "complexity": "medium",
+          "requires": [
+            "security",
+            "compliance",
+            "DDD bounded contexts"
+          ],
+          "priority": 2,
+          "estimatedCost": "low"
+        },
+        {
+          "id": "build-system",
+          "name": "Build System Updates",
+          "complexity": "medium",
+          "requires": [
+            "build systems",
+            "infrastructure",
+            "CI/CD"
+          ],
+          "priority": 2,
+          "estimatedCost": "medium"
+        },
+        {
+          "id": "path-migration",
+          "name": "Path & Import Updates",
+          "complexity": "very-high",
+          "requires": [
+            "code analysis",
+            "practical implementation",
+            "testing"
+          ],
+          "priority": 2,
+          "estimatedCost": "high"
+        }
+      ]
+    },
+    {
+      "name": "Phase 3: Organization & Cleanup",
+      "tasks": [
+        {
+          "id": "milestone-organization",
+          "name": "Milestone File Organization",
+          "complexity": "medium",
+          "requires": [
+            "code analysis",
+            "practical implementation"
+          ],
+          "priority": 3,
+          "estimatedCost": "low"
+        },
+        {
+          "id": "documentation",
+          "name": "Documentation Updates",
+          "complexity": "low",
+          "requires": [
+            "project management",
+            "coordination"
+          ],
+          "priority": 3,
+          "estimatedCost": "low"
+        }
+      ]
+    },
+    {
+      "name": "Phase 4: Validation & Testing",
+      "tasks": [
+        {
+          "id": "testing",
+          "name": "Testing & Validation",
+          "complexity": "high",
+          "requires": [
+            "testing",
+            "troubleshooting",
+            "practical implementation"
+          ],
+          "priority": 4,
+          "estimatedCost": "medium"
+        }
+      ]
+    }
+  ],
+  "dddAnalysis": {
+    "boundedContexts": {
+      "current": [
+        "AI Integration Framework (root)",
+        "Dashboard Application (dashboard/)",
+        "MCP Server (mcp-server/)",
+        "Crew Coordination (crew-members/)",
+        "RAG System (supabase/)"
+      ],
+      "proposed": [
+        "AI Integration Framework (root) - Core Domain",
+        "Project Management Domain (projects/) - Supporting Domain",
+        "Dashboard Application (projects/dashboard/) - Application Layer",
+        "MCP Server (mcp-server/) - Infrastructure Layer",
+        "Crew Coordination (crew-members/) - Domain Service"
+      ]
+    },
+    "layers": {
+      "current": "Mixed (framework and application at same level)",
+      "proposed": "Clear separation: Framework (root) → Projects (projects/) → Applications"
+    },
+    "entities": {
+      "current": "Projects scattered across multiple locations",
+      "proposed": "Unified Project entity in projects/ bounded context"
+    }
+  },
+  "summary": {
+    "totalTasks": 7,
+    "totalCrewMembers": 8,
+    "phases": 4,
+    "dddCompliant": true
+  }
+}

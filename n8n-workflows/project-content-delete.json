@@ -1,0 +1,109 @@
+{
+  "name": "Project Content Delete",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "project-content-delete",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "project-content-delete"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.projectId}}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{$json.headers['x-source']}}",
+              "value2": "alex-ai-dashboard"
+            }
+          ]
+        }
+      },
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE project_content SET deleted_at = NOW() WHERE project_id = $1 AND deleted_at IS NULL RETURNING project_id, deleted_at;",
+        "parameters": {
+          "values": [
+            {
+              "name": "$1",
+              "value": "={{$json.body.projectId}}"
+            }
+          ]
+        }
+      },
+      "id": "supabase-soft-delete",
+      "name": "Supabase Soft Delete",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [650, 200],
+      "credentials": {
+        "postgres": {
+          "id": "supabase-postgres",
+          "name": "Supabase PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"projectId\": $json[0].project_id, \"deletedAt\": $json[0].deleted_at } }}"
+      },
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 400,
+        "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input: missing projectId\" } }}"
+      },
+      "id": "response-error",
+      "name": "Response Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{"node": "Validate Input", "type": "main", "index": 0}]]
+    },
+    "Validate Input": {
+      "main": [
+        [{"node": "Supabase Soft Delete", "type": "main", "index": 0}],
+        [{"node": "Response Error", "type": "main", "index": 0}]
+      ]
+    },
+    "Supabase Soft Delete": {
+      "main": [[{"node": "Response Success", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": ["alex-ai", "project-content", "ddd"],
+  "meta": {
+    "description": "Soft delete user project content from Supabase. Part of proper DDD flow: Client => n8n => Supabase",
+    "author": "Alex AI Crew"
+  }
+}
+

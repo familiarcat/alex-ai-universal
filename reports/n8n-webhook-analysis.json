@@ -1,0 +1,402 @@
+{
+  "timestamp": "2025-11-12T01:59:48.585Z",
+  "analytics": {
+    "totalWorkflows": 16,
+    "totalWebhookNodes": 16,
+    "nodesMissingWebhookId": 0,
+    "nodesDisabled": 0,
+    "baseline": {
+      "total": 2,
+      "webhookIdPresence": [
+        true,
+        true
+      ]
+    }
+  },
+  "webhooks": [
+    {
+      "workflowId": "1FgRj1CLUMnSIpvY",
+      "workflowName": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+      "nodeName": "Webhook Trigger",
+      "nodeDisabled": false,
+      "path": "knowledge-ingest",
+      "webhookId": "knowledge-ingest-crew-memories-supabase-rag-webhook-trigger-knowledge-ingest-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-ingest",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "6YQVP2lXuzWEMLJH",
+      "workflowName": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "nodeName": "Observation Lounge Trigger",
+      "nodeDisabled": false,
+      "path": "observation-lounge",
+      "webhookId": "coordination-observation-lounge-openrouter-production-observation-lounge-trigger-observation-lounge-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "observation-lounge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "7QD25cMR5JKbM7nD",
+      "workflowName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "nodeName": "Federation Directive Receiver",
+      "nodeDisabled": false,
+      "path": "082503f8-8939-40c4-9620-81e3eff05d82",
+      "webhookId": "system-openrouter-agent-coordination-openrouter-production-federation-directive-receiver-082503f8-8939-40c4-9620-81e3eff05d82-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "path": "082503f8-8939-40c4-9620-81e3eff05d82",
+        "options": {},
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "Bcu0ySPIXX27mSYH",
+      "workflowName": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "nodeName": "Lieutenant Commander Geordi La Forge Directive",
+      "nodeDisabled": false,
+      "path": "crew-lieutenant-commander-geordi-la-forge",
+      "webhookId": "lieutenant-commander-geordi-la-forge-infrastructure-openrouter-production-lieutenant-commander-geordi-la-forge-directive-crew-lieutenant-commander-geordi-la-forge-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-commander-geordi-la-forge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "NaExwWejsSLVd5ai",
+      "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "nodeName": "Lieutenant Uhura Directive",
+      "nodeDisabled": false,
+      "path": "crew-lieutenant-uhura",
+      "webhookId": "lieutenant-uhura-communications-i-o-openrouter-production-lieutenant-uhura-directive-crew-lieutenant-uhura-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-uhura",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "NcBJBopp4bfQmz8g",
+      "workflowName": "SYSTEM - Mission Control - OpenRouter - Production",
+      "nodeName": "Mission Directive",
+      "nodeDisabled": false,
+      "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+      "webhookId": "system-mission-control-openrouter-production-mission-directive-0283b7ab-c44c-47c2-925a-513054e1105f-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+        "options": {},
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "aDQeEuI2ww6l02xM",
+      "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "nodeName": "Lieutenant Worf Directive",
+      "nodeDisabled": false,
+      "path": "crew-lieutenant-worf",
+      "webhookId": "lieutenant-worf-security-compliance-openrouter-production-lieutenant-worf-directive-crew-lieutenant-worf-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-worf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "aQSbIwT4JGJ9z1F3",
+      "workflowName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "nodeName": "Commander Data Directive",
+      "nodeDisabled": false,
+      "path": "crew-commander-data",
+      "webhookId": "commander-data-android-analytics-openrouter-production-commander-data-directive-crew-commander-data-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-data",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "eJm8awXujdfR3kH4",
+      "workflowName": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "nodeName": "Dr. Beverly Crusher Directive",
+      "nodeDisabled": false,
+      "path": "crew-dr-beverly-crusher",
+      "webhookId": "dr-beverly-crusher-health-diagnostics-openrouter-production-dr-beverly-crusher-directive-crew-dr-beverly-crusher-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-dr-beverly-crusher",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "hEHWeCy2L0dTHQKJ",
+      "workflowName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "nodeName": "Chief O'Brien Directive",
+      "nodeDisabled": false,
+      "path": "crew-chief-obrien",
+      "webhookId": "obrien-pragmatic-solutions-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-chief-obrien",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "lrcDjOHwjAjgOi7q",
+      "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "nodeName": "Captain Jean-Luc Picard Directive",
+      "nodeDisabled": false,
+      "path": "crew-captain-jean-luc-picard",
+      "webhookId": "captain-jean-luc-picard-strategic-leadership-openrouter-production-captain-jean-luc-picard-directive-crew-captain-jean-luc-picard-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-captain-jean-luc-picard",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "ma2guAdSn8WJvQCO",
+      "workflowName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "nodeName": "Counselor Deanna Troi Directive",
+      "nodeDisabled": false,
+      "path": "crew-counselor-deanna-troi",
+      "webhookId": "counselor-deanna-troi-user-experience-openrouter-production-counselor-deanna-troi-directive-crew-counselor-deanna-troi-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-counselor-deanna-troi",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "nVFNIlPkrvujdQ7E",
+      "workflowName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "nodeName": "Mission Coordinator - Picard",
+      "nodeDisabled": false,
+      "path": "federation-mission",
+      "webhookId": "system-enhanced-mission-control-openrouter-production-mission-coordinator-picard-federation-mission-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "federation-mission",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "o5DRBwrD2KlF3IFe",
+      "workflowName": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "nodeName": "Webhook Trigger",
+      "nodeDisabled": false,
+      "path": "llm-collaboration",
+      "webhookId": "coordination-democratic-collaboration-openrouter-production-webhook-trigger-llm-collaboration-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "path": "llm-collaboration",
+        "options": {},
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "wkQnU1qlwixsdGZc",
+      "workflowName": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "nodeName": "Chief O'Brien Directive",
+      "nodeDisabled": false,
+      "path": "crew-chief-obrien",
+      "webhookId": "chief-miles-o-brien-pragmatic-solutions-openrouter-production-chief-o-brien-directive-crew-chief-obrien-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-chief-obrien",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    },
+    {
+      "workflowId": "yn5snWtN7IKu19hD",
+      "workflowName": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "nodeName": "Commander William Riker Directive",
+      "nodeDisabled": false,
+      "path": "crew-commander-william-riker",
+      "webhookId": "commander-william-riker-tactical-execution-openrouter-production-commander-william-riker-directive-crew-commander-william-riker-webhook",
+      "httpMethod": "POST",
+      "responseMode": "responseNode",
+      "restartWebhook": false,
+      "isFullPath": false,
+      "hasWebhookId": true,
+      "rawParameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-william-riker",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "comparisonToBrien": {
+        "webhookIdMatches": true,
+        "httpMethodMatches": true,
+        "responseModeMatches": true
+      }
+    }
+  ]
+}

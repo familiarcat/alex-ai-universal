@@ -1,0 +1,27 @@
+{
+  "budgetUsdPerCrew": 1.0,
+  "durationMinutes": 120,
+  "openrouter": {
+    "models": [
+      "google/gemini-1.5-pro",
+      "openai/gpt-4o-mini",
+      "openai/gpt-4o",
+      "anthropic/claude-3-5-sonnet",
+      "meta/llama-3.1-70b-instruct"
+    ]
+  },
+  "topics": {
+    "picard": ["product strategy", "decision frameworks", "roadmapping"],
+    "data": ["LLM evaluation", "vector search", "RAG architectures"],
+    "geordi": ["Next.js 15", "edge compute", "observability"],
+    "worf": ["supply-chain security", "signed releases", "secrets hygiene"],
+    "crusher": ["SRE playbooks", "health checks", "resilience engineering"],
+    "riker": ["agile rituals", "parallel work models", "incident command"],
+    "troi": ["UX heuristics", "emotion-driven design", "onboarding flows"],
+    "uhura": ["API integration", "protocol design", "docs quality"],
+    "quark": ["pricing models", "ROI metrics", "growth loops"]
+  }
+}
+
+
+

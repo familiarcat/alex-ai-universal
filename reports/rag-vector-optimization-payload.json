@@ -1,0 +1,3899 @@
+{
+  "timestamp": "2025-11-26T09:25:08.923Z",
+  "total_records": 96,
+  "records": [
+    {
+      "memory_id": "milestone-85c6e519c5ab",
+      "title": "🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture",
+      "description": "# 🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture",
+      "category": "architecture",
+      "content": "🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture. # 🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture. Keywords: crossfade, flash, content, zero, smooth, unified, architecture, theme, lines, visual. Category: architecture.",
+      "tags": [
+        "architecture",
+        "milestone",
+        "crossfade",
+        "flash",
+        "content",
+        "zero",
+        "smooth",
+        "unified",
+        "architecture",
+        "theme",
+        "lines",
+        "visual"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_SUMMARY.md",
+        "timestamp": "2025-11-26T09:25:08.908Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.908Z",
+      "updated_at": "2025-11-26T09:25:08.908Z"
+    },
+    {
+      "memory_id": "milestone-b01c69dfae68",
+      "title": "🏆 MILESTONE: DDD Architecture Migration Complete",
+      "description": "# 🏆 MILESTONE: DDD Architecture Migration Complete",
+      "category": "architecture",
+      "content": "🏆 MILESTONE: DDD Architecture Migration Complete. # 🏆 MILESTONE: DDD Architecture Migration Complete. Keywords: domain, crew, architecture, project, complete, management, files, domains, ready, event. Category: architecture.",
+      "tags": [
+        "architecture",
+        "milestone",
+        "domain",
+        "crew",
+        "architecture",
+        "project",
+        "complete",
+        "management",
+        "files",
+        "domains",
+        "ready",
+        "event",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.909Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 55,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.909Z",
+      "updated_at": "2025-11-26T09:25:08.909Z"
+    },
+    {
+      "memory_id": "milestone-06f3b9b707c6",
+      "title": "🤖 Automated Milestone Push System",
+      "description": "The Automated Milestone Push System enables seamless milestone creation when the crew reaches unanimous consensus. If all crew members approve a milestone push (with or without minor edits), the system automatically executes the complete milestone push process.",
+      "category": "crew",
+      "content": "🤖 Automated Milestone Push System. The Automated Milestone Push System enables seamless milestone creation when the crew reaches unanimous consensus. If all crew members approve a milestone push (with or without minor edits), the system automatically executes the complete milestone push process.. Keywords: review, crew, milestone, push, system, approve, decision, auto, consensus, execute. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "review",
+        "crew",
+        "milestone",
+        "push",
+        "system",
+        "approve",
+        "decision",
+        "auto",
+        "consensus",
+        "execute",
+        "crew-picard",
+        "crew-troi",
+        "crew-crusher",
+        "crew-uhura",
+        "crew-quark"
+      ],
+      "crew_member": "picard",
+      "priority": "high",
+      "metadata": {
+        "fileName": "AUTOMATED_MILESTONE_PUSH_SYSTEM.md",
+        "timestamp": "2025-01-25",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 50,
+            "memoryCount": 2
+          },
+          {
+            "crewMember": {
+              "id": "troi",
+              "name": "Counselor Troi"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "crusher",
+              "name": "Dr. Crusher"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "uhura",
+              "name": "Lieutenant Uhura"
+            },
+            "relevance": "high",
+            "score": 54,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "quark",
+              "name": "Quark"
+            },
+            "relevance": "high",
+            "score": 55,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard",
+            "troi",
+            "crusher",
+            "uhura",
+            "quark"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.909Z",
+      "updated_at": "2025-11-26T09:25:08.909Z"
+    },
+    {
+      "memory_id": "milestone-0d230b6ab228",
+      "title": "🖖 Milestone: Crew Vector System Implementation",
+      "description": "**Date:** January 21, 2025  \n**Status:** ✅ Phase 1 & 2 Complete - Phase 3 In Progress  \n**System:** MCP + Supabase RAG + OpenRouter Optimization",
+      "category": "crew",
+      "content": "🖖 Milestone: Crew Vector System Implementation. **Date:** January 21, 2025  \n**Status:** ✅ Phase 1 & 2 Complete - Phase 3 In Progress  \n**System:** MCP + Supabase RAG + OpenRouter Optimization. Keywords: crew, member, knowledge, members, query, vector, system, optimization, openrouter, specialization. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "member",
+        "knowledge",
+        "members",
+        "query",
+        "vector",
+        "system",
+        "optimization",
+        "openrouter",
+        "specialization",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-21_CREW_VECTOR_SYSTEM_IMPLEMENTATION.md",
+        "timestamp": "2025-11-26T09:25:08.909Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 37,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.909Z",
+      "updated_at": "2025-11-26T09:25:08.909Z"
+    },
+    {
+      "memory_id": "milestone-9d7655567add",
+      "title": "🗂️ Milestone: File System Reorganization Plan",
+      "description": "**Date:** 2025-01-22  \n**Type:** Infrastructure Improvement  \n**Status:** 📋 Planning",
+      "category": "crew",
+      "content": "🗂️ Milestone: File System Reorganization Plan. **Date:** 2025-01-22  \n**Type:** Infrastructure Improvement  \n**Status:** 📋 Planning. Keywords: scripts, crew, youtube, quantum, documentation, milestones, milestone, docs, observation, lounge. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "scripts",
+        "crew",
+        "youtube",
+        "quantum",
+        "documentation",
+        "milestones",
+        "milestone",
+        "docs",
+        "observation",
+        "lounge",
+        "crew-picard",
+        "crew-riker"
+      ],
+      "crew_member": "picard",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-22_FILE_SYSTEM_REORGANIZATION_PLAN.md",
+        "timestamp": "2025-01-22",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 2
+          },
+          {
+            "crewMember": {
+              "id": "riker",
+              "name": "Commander Riker"
+            },
+            "relevance": "high",
+            "score": 55,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard",
+            "riker"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.909Z",
+      "updated_at": "2025-11-26T09:25:08.909Z"
+    },
+    {
+      "memory_id": "milestone-b433a5f270df",
+      "title": "Milestone: Identity Theories Integration System",
+      "description": "**Date**: November 21, 2025  \n**Category**: Crew Identity Enhancement, MCP System, RAG Integration  \n**Status**: ✅ Complete",
+      "category": "crew",
+      "content": "Milestone: Identity Theories Integration System. **Date**: November 21, 2025  \n**Category**: Crew Identity Enhancement, MCP System, RAG Integration  \n**Status**: ✅ Complete. Keywords: integration, crew, theories, system, identity, theory, flow, youtube, member, network. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "integration",
+        "crew",
+        "theories",
+        "system",
+        "identity",
+        "theory",
+        "flow",
+        "youtube",
+        "member",
+        "network",
+        "crew-data",
+        "crew-worf"
+      ],
+      "crew_member": "data",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-22_IDENTITY_THEORIES_INTEGRATION_SYSTEM.md",
+        "timestamp": "2025-11-26T09:25:08.909Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 63,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "worf",
+              "name": "Lieutenant Worf"
+            },
+            "relevance": "high",
+            "score": 31,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data",
+            "worf"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.909Z",
+      "updated_at": "2025-11-26T09:25:08.909Z"
+    },
+    {
+      "memory_id": "milestone-f3b6e8fc5fb4",
+      "title": "🖖 Milestone: Quantum Physics Crew Identity Propagation System",
+      "description": "# 🖖 Milestone: Quantum Physics Crew Identity Propagation System",
+      "category": "crew",
+      "content": "🖖 Milestone: Quantum Physics Crew Identity Propagation System. # 🖖 Milestone: Quantum Physics Crew Identity Propagation System. Keywords: quantum, crew, system, physics, commander, lieutenant, identity, propagation, principles, youtube. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "quantum",
+        "crew",
+        "system",
+        "physics",
+        "commander",
+        "lieutenant",
+        "identity",
+        "propagation",
+        "principles",
+        "youtube"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-22_QUANTUM_PHYSICS_CREW_IDENTITY_PROPAGATION.md",
+        "timestamp": "2025-01-22",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-86318db3f756",
+      "title": "🖖 Milestone: Observation Lounge Consolidation & Optimization",
+      "description": "# 🖖 Milestone: Observation Lounge Consolidation & Optimization",
+      "category": "crew",
+      "content": "🖖 Milestone: Observation Lounge Consolidation & Optimization. # 🖖 Milestone: Observation Lounge Consolidation & Optimization. Keywords: crew, observation, lounge, cost, scripts, optimized, dashboard, optimization, status, automatic. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "observation",
+        "lounge",
+        "cost",
+        "scripts",
+        "optimized",
+        "dashboard",
+        "optimization",
+        "status",
+        "automatic"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_OBSERVATION_LOUNGE_CONSOLIDATION.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-0e0e794f6cff",
+      "title": "🚀 MILESTONE: Project Structure Optimized - Ready for Next Phase",
+      "description": "# 🚀 MILESTONE: Project Structure Optimized - Ready for Next Phase",
+      "category": "crew",
+      "content": "🚀 MILESTONE: Project Structure Optimized - Ready for Next Phase. # 🚀 MILESTONE: Project Structure Optimized - Ready for Next Phase. Keywords: crew, ready, files, structure, professional, next, user, knowledge, project, complete. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "ready",
+        "files",
+        "structure",
+        "professional",
+        "next",
+        "user",
+        "knowledge",
+        "project",
+        "complete",
+        "crew-picard"
+      ],
+      "crew_member": "picard",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_READY_FOR_NEXT_PHASE_2025_01_19.md",
+        "timestamp": "2025-11-26T09:25:08.910Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 50,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-71f91fcdf117",
+      "title": "Milestone v2.3.0: Complete Crew Automation & Communication System",
+      "description": "# Milestone v2.3.0: Complete Crew Automation & Communication System",
+      "category": "crew",
+      "content": "Milestone v2.3.0: Complete Crew Automation & Communication System. # Milestone v2.3.0: Complete Crew Automation & Communication System. Keywords: crew, layer, deployment, complete, automation, scripts, webhook, result, schema, manual. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "layer",
+        "deployment",
+        "complete",
+        "automation",
+        "scripts",
+        "webhook",
+        "result",
+        "schema",
+        "manual"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.3.0_COMPLETE_CREW_AUTOMATION.md",
+        "timestamp": "2025-11-26T09:25:08.910Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-3b3416f878e9",
+      "title": "🚀 Milestone v2.5.0 — Alex AI CLI Restoration & Universal Orchestration",
+      "description": "- **Fixed critical Alex AI CLI startup failure** caused by missing compiled JavaScript in `@alex-ai/universal-extension` package\n- Diagnosed and resolved TypeScript compilation issue where `packages/universal-extension/src/index.js` was empty (0 bytes)\n- Compiled TypeScript sources to generate proper `dist/` directory with all required JavaScript modules\n- Updated `packages/universal-extension/package.json` to point to `dist/index.js` instead of empty `src/index.js`\n- **Established Alex AI as Un",
+      "category": "crew",
+      "content": "🚀 Milestone v2.5.0 — Alex AI CLI Restoration & Universal Orchestration. - **Fixed critical Alex AI CLI startup failure** caused by missing compiled JavaScript in `@alex-ai/universal-extension` package\n- Diagnosed and resolved TypeScript compilation issue where `packages/universal-extension/src/index.js` was empty (0 bytes)\n- Compiled TypeScript sources to generate proper `dist/` directory with all required JavaScript modules\n- Updated `packages/universal-extension/package.json` to point to `dist/index.js` instead of empty `src/index.js`\n- **Established Alex AI as Un. Keywords: alex, universal, extension, crew, orchestration, package, typescript, packages, index, dist. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "alex",
+        "universal",
+        "extension",
+        "crew",
+        "orchestration",
+        "package",
+        "typescript",
+        "packages",
+        "index",
+        "dist"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.5.0_ALEX_AI_CLI_RESTORATION.md",
+        "timestamp": "2025-11-26T09:25:08.910Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-737e525f6561",
+      "title": "🖖 Milestone v2.5.1 — Crew Identity & Communication Protocol",
+      "description": "- **Established crew-based communication protocol** for all Alex AI engagements\n- Transitioned from singular \"I\" to plural \"we\" language to properly represent collective crew intelligence\n- Formalized that Alex AI operates as a **crew of specialized AI agents**, not a single entity\n- Each crew member brings distinct personas, expertise, and knowledge domains\n- Communication now reflects the collaborative, multi-agent architecture at Alex AI's core",
+      "category": "crew",
+      "content": "🖖 Milestone v2.5.1 — Crew Identity & Communication Protocol. - **Established crew-based communication protocol** for all Alex AI engagements\n- Transitioned from singular \"I\" to plural \"we\" language to properly represent collective crew intelligence\n- Formalized that Alex AI operates as a **crew of specialized AI agents**, not a single entity\n- Each crew member brings distinct personas, expertise, and knowledge domains\n- Communication now reflects the collaborative, multi-agent architecture at Alex AI's core. Keywords: crew, communication, alex, language, this, protocol, collective, each, member, lieutenant. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "communication",
+        "alex",
+        "language",
+        "this",
+        "protocol",
+        "collective",
+        "each",
+        "member",
+        "lieutenant"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.5.1_CREW_IDENTITY_PROTOCOL.md",
+        "timestamp": "2025-11-26T09:25:08.910Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.910Z",
+      "updated_at": "2025-11-26T09:25:08.910Z"
+    },
+    {
+      "memory_id": "milestone-e5a89416427c",
+      "title": "🚀 Milestone v2.6.0 — Multi-Vessel Architecture: Crew Serves on Any Ship",
+      "description": "- **Established architectural principle:** Alex AI crew are elite Starfleet officers who can serve on any vessel\n- **Host LLM becomes the Ship's Computer** for that specific vessel (USS Cursor, USS VS Code, USS Claude Terminal, etc.)\n- **Crew expertise remains consistent** across all platforms while adapting to each ship's unique capabilities\n- **Platform independence achieved** through crew-as-transferable-officers model\n- **Canon-accurate metaphor:** Like actual Starfleet officers serving on d",
+      "category": "crew",
+      "content": "🚀 Milestone v2.6.0 — Multi-Vessel Architecture: Crew Serves on Any Ship. - **Established architectural principle:** Alex AI crew are elite Starfleet officers who can serve on any vessel\n- **Host LLM becomes the Ship's Computer** for that specific vessel (USS Cursor, USS VS Code, USS Claude Terminal, etc.)\n- **Crew expertise remains consistent** across all platforms while adapting to each ship's unique capabilities\n- **Platform independence achieved** through crew-as-transferable-officers model\n- **Canon-accurate metaphor:** Like actual Starfleet officers serving on d. Keywords: crew, ship, computer, cursor, code, terminal, capabilities, captain, picard, vessel. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "ship",
+        "computer",
+        "cursor",
+        "code",
+        "terminal",
+        "capabilities",
+        "captain",
+        "picard",
+        "vessel"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.6.0_MULTI_VESSEL_ARCHITECTURE.md",
+        "timestamp": "2025-11-26T09:25:08.911Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-d01009039f7b",
+      "title": "🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations",
+      "description": "# 🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations",
+      "category": "crew",
+      "content": "🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations. # 🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations. Keywords: crew, alex, cursor, ship, computer, operations, expertise, coordination, milestone, picard. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "alex",
+        "cursor",
+        "ship",
+        "computer",
+        "operations",
+        "expertise",
+        "coordination",
+        "milestone",
+        "picard"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.6.1_PARADIGM_SHIFT_CREW_OPERATIONS.md",
+        "timestamp": "2025-11-26T09:25:08.911Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-804c8e6a8eef",
+      "title": "Alex AI Universal - Milestone: Revised Prime Directive System",
+      "description": "# Alex AI Universal - Milestone: Revised Prime Directive System",
+      "category": "crew",
+      "content": "Alex AI Universal - Milestone: Revised Prime Directive System. # Alex AI Universal - Milestone: Revised Prime Directive System. Keywords: system, file, change, crew, rollback, tracking, memory, complete, session, member. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "system",
+        "file",
+        "change",
+        "crew",
+        "rollback",
+        "tracking",
+        "memory",
+        "complete",
+        "session",
+        "member"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_REVISED_PRIME_DIRECTIVE_2025-09-27T02-50-00.md",
+        "timestamp": "2025-09-27",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-094f6e92abb4",
+      "title": "🚀 Milestone: Full Alex AI System Engagement & Architecture Validation",
+      "description": "# 🚀 Milestone: Full Alex AI System Engagement & Architecture Validation",
+      "category": "crew",
+      "content": "🚀 Milestone: Full Alex AI System Engagement & Architecture Validation. # 🚀 Milestone: Full Alex AI System Engagement & Architecture Validation. Keywords: crew, status, project, server, system, projects, websocket, integration, dashboard, real. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "status",
+        "project",
+        "server",
+        "system",
+        "projects",
+        "websocket",
+        "integration",
+        "dashboard",
+        "real"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_FULL_SYSTEM_ENGAGEMENT_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.911Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-48d4ce70f0d4",
+      "title": "🚀 Milestone: Alex AI Multi-Project Architecture",
+      "description": "**Date:** October 13, 2025  \n**Status:** ✅ **COMPLETE & OPERATIONAL**  \n**Execution Time:** <2 hours  \n**Method:** Crew Consensus → Architecture → Implementation",
+      "category": "crew",
+      "content": "🚀 Milestone: Alex AI Multi-Project Architecture. **Date:** October 13, 2025  \n**Status:** ✅ **COMPLETE & OPERATIONAL**  \n**Execution Time:** <2 hours  \n**Method:** Crew Consensus → Architecture → Implementation. Keywords: project, projects, crew, alpha, beta, gamma, dashboard, port, portfolio, multi. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "project",
+        "projects",
+        "crew",
+        "alpha",
+        "beta",
+        "gamma",
+        "dashboard",
+        "port",
+        "portfolio",
+        "multi",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_MULTI_PROJECT_ARCHITECTURE_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.911Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 62,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-40540930c0e8",
+      "title": "🖖 Milestone: Next.js 15 Unified Architecture Design",
+      "description": "# 🖖 Milestone: Next.js 15 Unified Architecture Design",
+      "category": "crew",
+      "content": "🖖 Milestone: Next.js 15 Unified Architecture Design. # 🖖 Milestone: Next.js 15 Unified Architecture Design. Keywords: next, approved, phase, architecture, crew, code, state, complete, implementation, server. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "next",
+        "approved",
+        "phase",
+        "architecture",
+        "crew",
+        "code",
+        "state",
+        "complete",
+        "implementation",
+        "server"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_NEXTJS_ARCHITECTURE_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.911Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.911Z",
+      "updated_at": "2025-11-26T09:25:08.911Z"
+    },
+    {
+      "memory_id": "milestone-d9346ec527d6",
+      "title": "🖖 Alex AI Universal - Condensed Milestone Summary",
+      "description": "# 🖖 Alex AI Universal - Condensed Milestone Summary",
+      "category": "crew",
+      "content": "🖖 Alex AI Universal - Condensed Milestone Summary. # 🖖 Alex AI Universal - Condensed Milestone Summary. Keywords: milestones, crew, milestone, commander, lieutenant, system, date, captain, picard, data. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "milestones",
+        "crew",
+        "milestone",
+        "commander",
+        "lieutenant",
+        "system",
+        "date",
+        "captain",
+        "picard",
+        "data",
+        "crew-worf",
+        "crew-troi",
+        "crew-crusher",
+        "crew-uhura",
+        "crew-quark"
+      ],
+      "crew_member": "worf",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_SUMMARY_CONDENSED.md",
+        "timestamp": "2025-10-06",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "worf",
+              "name": "Lieutenant Worf"
+            },
+            "relevance": "high",
+            "score": 69,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "troi",
+              "name": "Counselor Troi"
+            },
+            "relevance": "high",
+            "score": 73,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "crusher",
+              "name": "Dr. Crusher"
+            },
+            "relevance": "high",
+            "score": 72,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "uhura",
+              "name": "Lieutenant Uhura"
+            },
+            "relevance": "high",
+            "score": 83,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "quark",
+              "name": "Quark"
+            },
+            "relevance": "high",
+            "score": 77,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "worf",
+            "troi",
+            "crusher",
+            "uhura",
+            "quark"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.912Z",
+      "updated_at": "2025-11-26T09:25:08.912Z"
+    },
+    {
+      "memory_id": "milestone-5ed0c810ce5a",
+      "title": "🤖 Fully Automated Milestone Push System",
+      "description": "The milestone push process is now **completely automated**. Simply say \"milestone push\" in chat or run the command, and the system will:\n\n1. ✅ Detect repository changes\n2. ✅ Run crew consensus review\n3. ✅ Automatically execute milestone push if approved\n4. ✅ Create commit, tag, and push to remote",
+      "category": "crew",
+      "content": "🤖 Fully Automated Milestone Push System. The milestone push process is now **completely automated**. Simply say \"milestone push\" in chat or run the command, and the system will:\n\n1. ✅ Detect repository changes\n2. ✅ Run crew consensus review\n3. ✅ Automatically execute milestone push if approved\n4. ✅ Create commit, tag, and push to remote. Keywords: milestone, push, crew, review, automated, consensus, auto, changes, approved, system. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "milestone",
+        "push",
+        "crew",
+        "review",
+        "automated",
+        "consensus",
+        "auto",
+        "changes",
+        "approved",
+        "system",
+        "crew-picard",
+        "crew-riker",
+        "crew-troi",
+        "crew-crusher",
+        "crew-uhura",
+        "crew-quark"
+      ],
+      "crew_member": "picard",
+      "priority": "high",
+      "metadata": {
+        "fileName": "AUTOMATED_MILESTONE_PUSH_COMPLETE.md",
+        "timestamp": "2025-11-25",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 46,
+            "memoryCount": 2
+          },
+          {
+            "crewMember": {
+              "id": "riker",
+              "name": "Commander Riker"
+            },
+            "relevance": "high",
+            "score": 49,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "troi",
+              "name": "Counselor Troi"
+            },
+            "relevance": "high",
+            "score": 51,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "crusher",
+              "name": "Dr. Crusher"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "uhura",
+              "name": "Lieutenant Uhura"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "quark",
+              "name": "Quark"
+            },
+            "relevance": "high",
+            "score": 54,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard",
+            "riker",
+            "troi",
+            "crusher",
+            "uhura",
+            "quark"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.912Z",
+      "updated_at": "2025-11-26T09:25:08.912Z"
+    },
+    {
+      "memory_id": "milestone-943bf0e19578",
+      "title": "🔒 Milestone Lockdown Point - Complete Reference",
+      "description": "**Date:** November 23, 2025  \n**Milestone Tag:** `milestone-2025-11-23-quark-riker-integration-openrouter-automation`  \n**Commit:** `4c5935e` (milestone) + `6493263` (reference docs)  \n**Branch:** `feature/milestone-push-automation`",
+      "category": "crew",
+      "content": "🔒 Milestone Lockdown Point - Complete Reference. **Date:** November 23, 2025  \n**Milestone Tag:** `milestone-2025-11-23-quark-riker-integration-openrouter-automation`  \n**Commit:** `4c5935e` (milestone) + `6493263` (reference docs)  \n**Branch:** `feature/milestone-push-automation`. Keywords: scripts, crew, openrouter, integration, milestone, quark, riker, docs, complete, reference. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "scripts",
+        "crew",
+        "openrouter",
+        "integration",
+        "milestone",
+        "quark",
+        "riker",
+        "docs",
+        "complete",
+        "reference"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_LOCKDOWN_POINT.md",
+        "timestamp": "2025-11-23",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.912Z",
+      "updated_at": "2025-11-26T09:25:08.912Z"
+    },
+    {
+      "memory_id": "milestone-5f0d2751369b",
+      "title": "🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation",
+      "description": "# 🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation",
+      "category": "crew",
+      "content": "🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation. # 🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation. Keywords: crew, quark, riker, openrouter, integration, cost, scripts, task, system, automation. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "crew",
+        "quark",
+        "riker",
+        "openrouter",
+        "integration",
+        "cost",
+        "scripts",
+        "task",
+        "system",
+        "automation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_REFERENCE_QUARK_RIKER_OPENROUTER.md",
+        "timestamp": "2025-11-23",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.912Z",
+      "updated_at": "2025-11-26T09:25:08.912Z"
+    },
+    {
+      "memory_id": "milestone-ac0e1e5ea157",
+      "title": "🚨 MILESTONE: Emergency Protocols System & Crew Role Swapping",
+      "description": "**Date:** December 2024  \n**Commit:** 6c080a6  \n**Status:** ✅ COMPLETED  \n**Impact:** 🚀 QUANTUM LEAP IN SYSTEM RESILIENCE",
+      "category": "crew",
+      "content": "🚨 MILESTONE: Emergency Protocols System & Crew Role Swapping. **Date:** December 2024  \n**Commit:** 6c080a6  \n**Status:** ✅ COMPLETED  \n**Impact:** 🚀 QUANTUM LEAP IN SYSTEM RESILIENCE. Keywords: emergency, system, crew, protocols, role, memory, complete, knowledge, backup, security. Category: crew.",
+      "tags": [
+        "crew",
+        "milestone",
+        "emergency",
+        "system",
+        "crew",
+        "protocols",
+        "role",
+        "memory",
+        "complete",
+        "knowledge",
+        "backup",
+        "security"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_EMERGENCY_PROTOCOLS_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.912Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.912Z",
+      "updated_at": "2025-11-26T09:25:08.912Z"
+    },
+    {
+      "memory_id": "milestone-6a4673fbe9e5",
+      "title": "🖖 Milestone: MCP Main Dashboard - Complete Implementation",
+      "description": "# 🖖 Milestone: MCP Main Dashboard - Complete Implementation",
+      "category": "dashboard",
+      "content": "🖖 Milestone: MCP Main Dashboard - Complete Implementation. # 🖖 Milestone: MCP Main Dashboard - Complete Implementation. Keywords: dashboard, system, status, main, workflows, interface, crew, real, time, workflow. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "dashboard",
+        "system",
+        "status",
+        "main",
+        "workflows",
+        "interface",
+        "crew",
+        "real",
+        "time",
+        "workflow",
+        "crew-worf"
+      ],
+      "crew_member": "worf",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-21_MCP_MAIN_DASHBOARD_COMPLETE.md",
+        "timestamp": "2025-01-21",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "worf",
+              "name": "Lieutenant Worf"
+            },
+            "relevance": "high",
+            "score": 30,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "worf"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-42399a1a0ab1",
+      "title": "🖖 Milestone: Dashboard Build Error Fix",
+      "description": "**Date:** 2025-01-24  \n**Status:** ✅ Complete  \n**Priority:** HIGH  \n**Duration:** Single session",
+      "category": "dashboard",
+      "content": "🖖 Milestone: Dashboard Build Error Fix. **Date:** 2025-01-24  \n**Status:** ✅ Complete  \n**Priority:** HIGH  \n**Duration:** Single session. Keywords: dashboard, error, progressprovider, build, component, line, closing, content, missing, errorboundary. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "dashboard",
+        "error",
+        "progressprovider",
+        "build",
+        "component",
+        "line",
+        "closing",
+        "content",
+        "missing",
+        "errorboundary"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_DASHBOARD_BUILD_ERROR_FIX.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-a8b1d62a1e1d",
+      "title": "🖖 Milestone: DDD Architecture Review Checkpoint",
+      "description": "**Date:** 2025-01-24  \n**Status:** ✅ Checkpoint Created  \n**Purpose:** Safety checkpoint before major DDD architecture refactoring",
+      "category": "dashboard",
+      "content": "🖖 Milestone: DDD Architecture Review Checkpoint. **Date:** 2025-01-24  \n**Status:** ✅ Checkpoint Created  \n**Purpose:** Safety checkpoint before major DDD architecture refactoring. Keywords: components, architecture, checkpoint, dashboard, component, data, analysis, refactoring, supabase, auth. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "components",
+        "architecture",
+        "checkpoint",
+        "dashboard",
+        "component",
+        "data",
+        "analysis",
+        "refactoring",
+        "supabase",
+        "auth"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_DDD_ARCHITECTURE_REVIEW_CHECKPOINT.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-c60312043fba",
+      "title": "🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes",
+      "description": "# 🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes",
+      "category": "dashboard",
+      "content": "🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes. # 🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes. Keywords: dashboard, components, crew, system, fixes, component, documentation, recommendations, complete, scripts. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "dashboard",
+        "components",
+        "crew",
+        "system",
+        "fixes",
+        "component",
+        "documentation",
+        "recommendations",
+        "complete",
+        "scripts"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_AND_DASHBOARD_FIXES.md",
+        "timestamp": "2025-11-26T09:25:08.913Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-2e359d048094",
+      "title": "🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System",
+      "description": "# 🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System",
+      "category": "dashboard",
+      "content": "🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System. # 🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System. Keywords: components, component, dashboard, documentation, system, knowledge, data, step, recommendations, process. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "components",
+        "component",
+        "dashboard",
+        "documentation",
+        "system",
+        "knowledge",
+        "data",
+        "step",
+        "recommendations",
+        "process"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_UI_IMPLEMENTATION.md",
+        "timestamp": "2025-11-26T09:25:08.913Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-a8f1b9f229a8",
+      "title": "🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture",
+      "description": "# 🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture",
+      "category": "dashboard",
+      "content": "🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture. # 🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture. Keywords: crossfade, iframe, content, theme, supabase, dashboard, smooth, project, seamless, architecture. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "crossfade",
+        "iframe",
+        "content",
+        "theme",
+        "supabase",
+        "dashboard",
+        "smooth",
+        "project",
+        "seamless",
+        "architecture"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_UNIFIED_UX_DDD.md",
+        "timestamp": "2025-11-26T09:25:08.913Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.913Z",
+      "updated_at": "2025-11-26T09:25:08.913Z"
+    },
+    {
+      "memory_id": "milestone-51bb5113d32c",
+      "title": "🎉 MILESTONE: Zero-Flash UX + Unified Architecture",
+      "description": "# 🎉 MILESTONE: Zero-Flash UX + Unified Architecture",
+      "category": "dashboard",
+      "content": "🎉 MILESTONE: Zero-Flash UX + Unified Architecture. # 🎉 MILESTONE: Zero-Flash UX + Unified Architecture. Keywords: theme, flash, content, after, zero, crossfade, supabase, before, state, architecture. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "theme",
+        "flash",
+        "content",
+        "after",
+        "zero",
+        "crossfade",
+        "supabase",
+        "before",
+        "state",
+        "architecture"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_ZERO_FLASH_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.914Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-eaa62481bca9",
+      "title": "Milestone v1.4.1: Theme System Restoration & Bug Fixes",
+      "description": "# Milestone v1.4.1: Theme System Restoration & Bug Fixes",
+      "category": "dashboard",
+      "content": "Milestone v1.4.1: Theme System Restoration & Bug Fixes. # Milestone v1.4.1: Theme System Restoration & Bug Fixes. Keywords: theme, dashboard, system, error, json, projects, crew, architecture, layer, project. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "theme",
+        "dashboard",
+        "system",
+        "error",
+        "json",
+        "projects",
+        "crew",
+        "architecture",
+        "layer",
+        "project"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.4.1_THEME_SYSTEM_RESTORATION.md",
+        "timestamp": "2025-11-26T09:25:08.914Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-4c206d2878e5",
+      "title": "Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability",
+      "description": "## Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability",
+      "category": "dashboard",
+      "content": "Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability. ## Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability. Keywords: lounge, dashboard, observation, page, route, hydration, alias, next, milestone, 2025. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "lounge",
+        "dashboard",
+        "observation",
+        "page",
+        "route",
+        "hydration",
+        "alias",
+        "next",
+        "milestone",
+        "2025"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-10-20_OBSERVATION_LOUNGE_UNIFY.md",
+        "timestamp": "2025-10-20",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-27bfa6f74b80",
+      "title": "Milestone – 2025-10-21 – Preview Policy and Theme Parity",
+      "description": "## Milestone – 2025-10-21 – Preview Policy and Theme Parity",
+      "category": "dashboard",
+      "content": "Milestone – 2025-10-21 – Preview Policy and Theme Parity. ## Milestone – 2025-10-21 – Preview Policy and Theme Parity. Keywords: preview, theme, dashboard, parity, page, projects, policy, embed, previews, production. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "preview",
+        "theme",
+        "dashboard",
+        "parity",
+        "page",
+        "projects",
+        "policy",
+        "embed",
+        "previews",
+        "production"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-10-21_PREVIEW_POLICY_AND_THEME_PARITY.md",
+        "timestamp": "2025-10-21",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-5a5a060bbe0f",
+      "title": "🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live",
+      "description": "# 🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live",
+      "category": "dashboard",
+      "content": "🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live. # 🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live. Keywords: crew, vibe, quiz, wizard, project, parallel, theme, platform, complete, execution. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "crew",
+        "vibe",
+        "quiz",
+        "wizard",
+        "project",
+        "parallel",
+        "theme",
+        "platform",
+        "complete",
+        "execution"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_IMPLEMENTATION_QUEUE_COMPLETE_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.914Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-0ace698f7ad5",
+      "title": "Milestone: Recovery + Rollback to Stable Baseline (2025-10-15)",
+      "description": "## Milestone: Recovery + Rollback to Stable Baseline (2025-10-15)",
+      "category": "dashboard",
+      "content": "Milestone: Recovery + Rollback to Stable Baseline (2025-10-15). ## Milestone: Recovery + Rollback to Stable Baseline (2025-10-15). Keywords: baseline, 2025, ports, 3000, milestone, recovery, rollback, stable, styling, navigation. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "baseline",
+        "2025",
+        "ports",
+        "3000",
+        "milestone",
+        "recovery",
+        "rollback",
+        "stable",
+        "styling",
+        "navigation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_RECOVERY_ROLLBACK_2025-10-15.md",
+        "timestamp": "2025-10-15",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-192e2e97a8c8",
+      "title": "🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System",
+      "description": "# 🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System",
+      "category": "dashboard",
+      "content": "🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System. # 🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System. Keywords: theme, gallery, themes, selection, content, target, project, headline, business, client. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "theme",
+        "gallery",
+        "themes",
+        "selection",
+        "content",
+        "target",
+        "project",
+        "headline",
+        "business",
+        "client"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_THEME_GALLERY_COMPLETE_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.914Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-f5a6d270a38b",
+      "title": "🎨 Milestone: Universal Theme System Integration",
+      "description": "**Date:** October 13, 2025  \n**Status:** ✅ **COMPLETE**  \n**Achievement:** Multi-project platform with independent theme management",
+      "category": "dashboard",
+      "content": "🎨 Milestone: Universal Theme System Integration. **Date:** October 13, 2025  \n**Status:** ✅ **COMPLETE**  \n**Achievement:** Multi-project platform with independent theme management. Keywords: theme, project, themes, system, dashboard, universal, update, midnight, professional, definitions. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "theme",
+        "project",
+        "themes",
+        "system",
+        "dashboard",
+        "universal",
+        "update",
+        "midnight",
+        "professional",
+        "definitions"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_UNIVERSAL_THEME_SYSTEM_2025_10_13.md",
+        "timestamp": "2025-11-26T09:25:08.914Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.914Z",
+      "updated_at": "2025-11-26T09:25:08.914Z"
+    },
+    {
+      "memory_id": "milestone-07e0e725ef49",
+      "title": "🖖 Enhanced Agentic Architecture Milestone",
+      "description": "# 🖖 Enhanced Agentic Architecture Milestone\n## Ship's Computer with Individual Crew Vector Data Access",
+      "category": "dashboard",
+      "content": "🖖 Enhanced Agentic Architecture Milestone. # 🖖 Enhanced Agentic Architecture Milestone\n## Ship's Computer with Individual Crew Vector Data Access. Keywords: contrast, system, theme, architecture, crew, components, enhanced, universal, computer, accessibility. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "contrast",
+        "system",
+        "theme",
+        "architecture",
+        "crew",
+        "components",
+        "enhanced",
+        "universal",
+        "computer",
+        "accessibility"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "ENHANCED_AGENTIC_ARCHITECTURE_MILESTONE.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-6504c7d73c6a",
+      "title": "🖖 MAJOR MILESTONE GITHUB PUSH SUMMARY",
+      "description": "**Captain's Log:** Major Milestone Ready for GitHub Push - Theme State Fix MVP Complete  \n**Date:** October 4, 2024  \n**Status:** ✅ **MAJOR MILESTONE READY FOR GITHUB**",
+      "category": "dashboard",
+      "content": "🖖 MAJOR MILESTONE GITHUB PUSH SUMMARY. **Captain's Log:** Major Milestone Ready for GitHub Push - Theme State Fix MVP Complete  \n**Date:** October 4, 2024  \n**Status:** ✅ **MAJOR MILESTONE READY FOR GITHUB**. Keywords: complete, theme, milestone, state, major, system, ready, crew, production, integration. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "complete",
+        "theme",
+        "milestone",
+        "state",
+        "major",
+        "system",
+        "ready",
+        "crew",
+        "production",
+        "integration"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MAJOR_MILESTONE_GITHUB_PUSH_SUMMARY.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-72a4c32d1174",
+      "title": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP",
+      "description": "**Captain's Log:** Milestone Push Successfully Completed - MVP Achievements Committed  \n**Date:** October 4, 2024  \n**Status:** ✅ **MILESTONE PUSH SUCCESS**",
+      "category": "dashboard",
+      "content": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP. **Captain's Log:** Milestone Push Successfully Completed - MVP Achievements Committed  \n**Date:** October 4, 2024  \n**Status:** ✅ **MILESTONE PUSH SUCCESS**. Keywords: committed, crew, theme, state, milestone, system, complete, build, production, integration. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "committed",
+        "crew",
+        "theme",
+        "state",
+        "milestone",
+        "system",
+        "complete",
+        "build",
+        "production",
+        "integration",
+        "crew-troi",
+        "crew-crusher",
+        "crew-uhura",
+        "crew-quark"
+      ],
+      "crew_member": "troi",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_PUSH_SUCCESS.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "troi",
+              "name": "Counselor Troi"
+            },
+            "relevance": "high",
+            "score": 53,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "crusher",
+              "name": "Dr. Crusher"
+            },
+            "relevance": "high",
+            "score": 52,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "uhura",
+              "name": "Lieutenant Uhura"
+            },
+            "relevance": "high",
+            "score": 54,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "quark",
+              "name": "Quark"
+            },
+            "relevance": "high",
+            "score": 51,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "troi",
+            "crusher",
+            "uhura",
+            "quark"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-6caab0940d7e",
+      "title": "🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS",
+      "description": "# 🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS",
+      "category": "dashboard",
+      "content": "🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS. # 🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS. Keywords: theme, state, complete, system, integration, development, time, crew, management, real. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "theme",
+        "state",
+        "complete",
+        "system",
+        "integration",
+        "development",
+        "time",
+        "crew",
+        "management",
+        "real"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_THEME_STATE_FIX_MVP.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-a72e1c338bb2",
+      "title": "Milestone: UI & Agentic System Enhancements",
+      "description": "### Universal Contrast System\n- Fixed contrast issues across all themes (light, dark, star-trek, neon, ocean)\n- Created WCAG AA compliant color palettes\n- Implemented universal `ContrastAware` component system\n- Updated all major pages with contrast-aware components",
+      "category": "dashboard",
+      "content": "Milestone: UI & Agentic System Enhancements. ### Universal Contrast System\n- Fixed contrast issues across all themes (light, dark, star-trek, neon, ocean)\n- Created WCAG AA compliant color palettes\n- Implemented universal `ContrastAware` component system\n- Updated all major pages with contrast-aware components. Keywords: system, agentic, contrast, components, enhanced, universal, crew, page, navigation, implemented. Category: dashboard.",
+      "tags": [
+        "dashboard",
+        "milestone",
+        "system",
+        "agentic",
+        "contrast",
+        "components",
+        "enhanced",
+        "universal",
+        "crew",
+        "page",
+        "navigation",
+        "implemented"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_UI_AGENTIC_ENHANCEMENTS.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-9833aeb2ba08",
+      "title": "Feature Branch: Milestone Push Automation",
+      "description": "**Branch:** `feature/milestone-push-automation`  \n**Purpose:** Independent milestone push automation with merge-back capability",
+      "category": "features",
+      "content": "Feature Branch: Milestone Push Automation. **Branch:** `feature/milestone-push-automation`  \n**Purpose:** Independent milestone push automation with merge-back capability. Keywords: milestone, merge, main, feature, branch, automation, push, back, strategy, pushes. Category: features.",
+      "tags": [
+        "features",
+        "milestone",
+        "milestone",
+        "merge",
+        "main",
+        "feature",
+        "branch",
+        "automation",
+        "push",
+        "back",
+        "strategy",
+        "pushes"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "feature-milestone-push-automation.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-c6d88bdece02",
+      "title": "Milestone: Complete N8N to MCP Migration Execution",
+      "description": "# Milestone: Complete N8N to MCP Migration Execution",
+      "category": "mcp",
+      "content": "Milestone: Complete N8N to MCP Migration Execution. # Milestone: Complete N8N to MCP Migration Execution. Keywords: migration, complete, workflow, workflows, server, deployment, scripts, remote, client, success. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "migration",
+        "complete",
+        "workflow",
+        "workflows",
+        "server",
+        "deployment",
+        "scripts",
+        "remote",
+        "client",
+        "success"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION_EXECUTION.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-6d40e22fe13c",
+      "title": "Milestone: MCP Layer Analysis & Feature Branch Creation",
+      "description": "# Milestone: MCP Layer Analysis & Feature Branch Creation",
+      "category": "mcp",
+      "content": "Milestone: MCP Layer Analysis & Feature Branch Creation. # Milestone: MCP Layer Analysis & Feature Branch Creation. Keywords: context, milestone, branch, implementation, layer, analysis, feature, push, cost, crew. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "context",
+        "milestone",
+        "branch",
+        "implementation",
+        "layer",
+        "analysis",
+        "feature",
+        "push",
+        "cost",
+        "crew"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_MCP_LAYER_ANALYSIS_AND_FEATURE_BRANCH.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-6b3d6cb8d76e",
+      "title": "Milestone: MCP Layer Implementation Complete",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ Phase 1 & 2 Complete - Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`",
+      "category": "mcp",
+      "content": "Milestone: MCP Layer Implementation Complete. **Date:** January 20, 2025  \n**Status:** ✅ Phase 1 & 2 Complete - Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`. Keywords: context, cache, crew, scripts, milestone, complete, phase, push, integration, implementation. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "context",
+        "cache",
+        "crew",
+        "scripts",
+        "milestone",
+        "complete",
+        "phase",
+        "push",
+        "integration",
+        "implementation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_MCP_LAYER_IMPLEMENTATION_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.915Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.915Z",
+      "updated_at": "2025-11-26T09:25:08.915Z"
+    },
+    {
+      "memory_id": "milestone-df77839fdb7c",
+      "title": "Milestone: MCP Server Deployment to mcp.pbradygeorgen.com",
+      "description": "# Milestone: MCP Server Deployment to mcp.pbradygeorgen.com",
+      "category": "mcp",
+      "content": "Milestone: MCP Server Deployment to mcp.pbradygeorgen.com. # Milestone: MCP Server Deployment to mcp.pbradygeorgen.com. Keywords: server, nginx, pbradygeorgen, ubuntu, deployment, bash, docker, certificate, 5679, scripts. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "server",
+        "nginx",
+        "pbradygeorgen",
+        "ubuntu",
+        "deployment",
+        "bash",
+        "docker",
+        "certificate",
+        "5679",
+        "scripts"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_MCP_SERVER_DEPLOYMENT_TO_MCP_PBRADYGEORGEN_COM.md",
+        "timestamp": "2026-02-19",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-9716d932c503",
+      "title": "🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete",
+      "description": "# 🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete",
+      "category": "mcp",
+      "content": "🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete. # 🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete. Keywords: components, data, architecture, dashboard, refactored, fallback, unifieddataservice, phase, server, service. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "components",
+        "data",
+        "architecture",
+        "dashboard",
+        "refactored",
+        "fallback",
+        "unifieddataservice",
+        "phase",
+        "server",
+        "service",
+        "crew-picard",
+        "crew-riker",
+        "crew-data"
+      ],
+      "crew_member": "picard",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_DDD_ARCHITECTURE_REFACTORING_MCP_INTEGRATION.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 45,
+            "memoryCount": 2
+          },
+          {
+            "crewMember": {
+              "id": "riker",
+              "name": "Commander Riker"
+            },
+            "relevance": "high",
+            "score": 49,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 55,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard",
+            "riker",
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-8ad9052b7921",
+      "title": "Milestone: MCP Migration - DDD Controller Layer Transition",
+      "description": "# Milestone: MCP Migration - DDD Controller Layer Transition",
+      "category": "mcp",
+      "content": "Milestone: MCP Migration - DDD Controller Layer Transition. # Milestone: MCP Migration - DDD Controller Layer Transition. Keywords: layer, crew, cursor, migration, memories, controller, webhook, protocol, standardized, reliable. Category: mcp.",
+      "tags": [
+        "mcp",
+        "milestone",
+        "layer",
+        "crew",
+        "cursor",
+        "migration",
+        "memories",
+        "controller",
+        "webhook",
+        "protocol",
+        "standardized",
+        "reliable"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-11-23_MCP_DDD_CONTROLLER_MIGRATION.md",
+        "timestamp": "2025-11-23",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-dec239af1305",
+      "title": "Milestone: Complete n8n to MCP Migration",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ Complete - All Phases Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`",
+      "category": "n8n",
+      "content": "Milestone: Complete n8n to MCP Migration. **Date:** January 20, 2025  \n**Status:** ✅ Complete - All Phases Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`. Keywords: success, complete, execution, workflow, migration, operational, monitoring, workflows, phase, dashboard. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "success",
+        "complete",
+        "execution",
+        "workflow",
+        "migration",
+        "operational",
+        "monitoring",
+        "workflows",
+        "phase",
+        "dashboard",
+        "crew-riker",
+        "crew-worf",
+        "crew-troi",
+        "crew-crusher",
+        "crew-uhura",
+        "crew-quark"
+      ],
+      "crew_member": "riker",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION.md",
+        "timestamp": "2025-11-26T09:25:08.916Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "riker",
+              "name": "Commander Riker"
+            },
+            "relevance": "high",
+            "score": 49,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "worf",
+              "name": "Lieutenant Worf"
+            },
+            "relevance": "high",
+            "score": 38,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "troi",
+              "name": "Counselor Troi"
+            },
+            "relevance": "high",
+            "score": 48,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "crusher",
+              "name": "Dr. Crusher"
+            },
+            "relevance": "high",
+            "score": 48,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "uhura",
+              "name": "Lieutenant Uhura"
+            },
+            "relevance": "high",
+            "score": 48,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "quark",
+              "name": "Quark"
+            },
+            "relevance": "high",
+            "score": 50,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "riker",
+            "worf",
+            "troi",
+            "crusher",
+            "uhura",
+            "quark"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-d55aa3fe927a",
+      "title": "Milestone: Crew-Coordinated Webhook Registration Investigation",
+      "description": "# Milestone: Crew-Coordinated Webhook Registration Investigation",
+      "category": "n8n",
+      "content": "Milestone: Crew-Coordinated Webhook Registration Investigation. # Milestone: Crew-Coordinated Webhook Registration Investigation. Keywords: webhook, database, registration, crew, version, infrastructure, service, scripts, workflows, investigation. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "webhook",
+        "database",
+        "registration",
+        "crew",
+        "version",
+        "infrastructure",
+        "service",
+        "scripts",
+        "workflows",
+        "investigation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_CREW_COORDINATED_WEBHOOK_INVESTIGATION.md",
+        "timestamp": "2025-11-26T09:25:08.916Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-e853fd6f65cf",
+      "title": "🎯 Milestone: N8N API Key Security Hardening & Universal Access",
+      "description": "# 🎯 Milestone: N8N API Key Security Hardening & Universal Access",
+      "category": "n8n",
+      "content": "🎯 Milestone: N8N API Key Security Hardening & Universal Access. # 🎯 Milestone: N8N API Key Security Hardening & Universal Access. Keywords: scripts, update, security, credentials, secure, hardcoded, universal, access, keys, credential. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "scripts",
+        "update",
+        "security",
+        "credentials",
+        "secure",
+        "hardcoded",
+        "universal",
+        "access",
+        "keys",
+        "credential"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_N8N_API_KEY_SECURITY_HARDENING.md",
+        "timestamp": "2025-01-20",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-450394453da7",
+      "title": "🎯 Milestone: Complete N8N Restoration & Webhook Configuration",
+      "description": "# 🎯 Milestone: Complete N8N Restoration & Webhook Configuration",
+      "category": "n8n",
+      "content": "🎯 Milestone: Complete N8N Restoration & Webhook Configuration. # 🎯 Milestone: Complete N8N Restoration & Webhook Configuration. Keywords: workflows, scripts, configuration, security, workflow, secure, restoration, update, instance, webhook. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "workflows",
+        "scripts",
+        "configuration",
+        "security",
+        "workflow",
+        "secure",
+        "restoration",
+        "update",
+        "instance",
+        "webhook"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_N8N_COMPLETE_RESTORATION_AND_WEBHOOK_CONFIG.md",
+        "timestamp": "2025-01-20",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-c056a67b2ced",
+      "title": "Milestone: N8N Controller Layer Audit Complete",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ Complete - Critical Findings Identified  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`",
+      "category": "n8n",
+      "content": "Milestone: N8N Controller Layer Audit Complete. **Date:** January 20, 2025  \n**Status:** ✅ Complete - Critical Findings Identified  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`. Keywords: complete, controller, layer, operational, workflows, decommission, audit, critical, priority, system. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "complete",
+        "controller",
+        "layer",
+        "operational",
+        "workflows",
+        "decommission",
+        "audit",
+        "critical",
+        "priority",
+        "system"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_N8N_CONTROLLER_LAYER_AUDIT_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.916Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.916Z",
+      "updated_at": "2025-11-26T09:25:08.916Z"
+    },
+    {
+      "memory_id": "milestone-f30782e292fd",
+      "title": "Milestone: N8N Version Analysis and WEBHOOK_URL Configuration",
+      "description": "# Milestone: N8N Version Analysis and WEBHOOK_URL Configuration",
+      "category": "n8n",
+      "content": "Milestone: N8N Version Analysis and WEBHOOK_URL Configuration. # Milestone: N8N Version Analysis and WEBHOOK_URL Configuration. Keywords: configuration, version, webhook_url, environment, container, terraform, latest, docker, infrastructure, stable. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "configuration",
+        "version",
+        "webhook_url",
+        "environment",
+        "container",
+        "terraform",
+        "latest",
+        "docker",
+        "infrastructure",
+        "stable"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_N8N_VERSION_ANALYSIS_AND_WEBHOOK_CONFIG.md",
+        "timestamp": "2025-01-20",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.917Z",
+      "updated_at": "2025-11-26T09:25:08.917Z"
+    },
+    {
+      "memory_id": "milestone-4726320e8154",
+      "title": "Milestone: Project Type Detection & Webhook Automation",
+      "description": "# Milestone: Project Type Detection & Webhook Automation",
+      "category": "n8n",
+      "content": "Milestone: Project Type Detection & Webhook Automation. # Milestone: Project Type Detection & Webhook Automation. Keywords: webhook, project, type, detection, crew, registration, automation, enhanced, tier, workflow. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "webhook",
+        "project",
+        "type",
+        "detection",
+        "crew",
+        "registration",
+        "automation",
+        "enhanced",
+        "tier",
+        "workflow"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_PROJECT_TYPE_DETECTION_AND_WEBHOOK_AUTOMATION.md",
+        "timestamp": "2025-01-20",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.917Z",
+      "updated_at": "2025-11-26T09:25:08.917Z"
+    },
+    {
+      "memory_id": "milestone-daf0999c4aa0",
+      "title": "Milestone: RAG System Operational Readiness",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ Infrastructure Complete, ⚠️  Webhook Registration Pending  \n**Crew:** Full coordination",
+      "category": "n8n",
+      "content": "Milestone: RAG System Operational Readiness. **Date:** January 20, 2025  \n**Status:** ✅ Infrastructure Complete, ⚠️  Webhook Registration Pending  \n**Crew:** Full coordination. Keywords: scripts, webhook, registration, edition, crew, community, system, container, automation, webhook_url. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "scripts",
+        "webhook",
+        "registration",
+        "edition",
+        "crew",
+        "community",
+        "system",
+        "container",
+        "automation",
+        "webhook_url"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_RAG_SYSTEM_OPERATIONAL_READINESS.md",
+        "timestamp": "2025-11-26T09:25:08.917Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.917Z",
+      "updated_at": "2025-11-26T09:25:08.917Z"
+    },
+    {
+      "memory_id": "milestone-f5727b937205",
+      "title": "Milestone: RAG Webhook Investigation & Automation",
+      "description": "# Milestone: RAG Webhook Investigation & Automation",
+      "category": "n8n",
+      "content": "Milestone: RAG Webhook Investigation & Automation. # Milestone: RAG Webhook Investigation & Automation. Keywords: webhook, automation, activation, scripts, fallback, investigation, ensure, comprehensive, workflow, limitation. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "webhook",
+        "automation",
+        "activation",
+        "scripts",
+        "fallback",
+        "investigation",
+        "ensure",
+        "comprehensive",
+        "workflow",
+        "limitation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_RAG_WEBHOOK_INVESTIGATION_AND_AUTOMATION.md",
+        "timestamp": "2025-11-26T09:25:08.917Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.917Z",
+      "updated_at": "2025-11-26T09:25:08.917Z"
+    },
+    {
+      "memory_id": "milestone-29939c47b64b",
+      "title": "🖖 Milestone: MCP Comprehensive Dashboard - Complete Implementation",
+      "description": "# 🖖 Milestone: MCP Comprehensive Dashboard - Complete Implementation",
+      "category": "n8n",
+      "content": "🖖 Milestone: MCP Comprehensive Dashboard - Complete Implementation. # 🖖 Milestone: MCP Comprehensive Dashboard - Complete Implementation. Keywords: dashboard, workflow, workflows, crew, error, settings, node, management, complete, components. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "dashboard",
+        "workflow",
+        "workflows",
+        "crew",
+        "error",
+        "settings",
+        "node",
+        "management",
+        "complete",
+        "components",
+        "crew-worf"
+      ],
+      "crew_member": "worf",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-21_MCP_COMPREHENSIVE_DASHBOARD_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.918Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "worf",
+              "name": "Lieutenant Worf"
+            },
+            "relevance": "high",
+            "score": 46,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "worf"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-a828882f18eb",
+      "title": "🖖 Milestone: MCP Health Fixes & n8n Workflow Translation",
+      "description": "# 🖖 Milestone: MCP Health Fixes & n8n Workflow Translation",
+      "category": "n8n",
+      "content": "🖖 Milestone: MCP Health Fixes & n8n Workflow Translation. # 🖖 Milestone: MCP Health Fixes & n8n Workflow Translation. Keywords: health, workflows, execution, webhook, workflow, translation, check, translated, diagnosis, documentation. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "health",
+        "workflows",
+        "execution",
+        "webhook",
+        "workflow",
+        "translation",
+        "check",
+        "translated",
+        "diagnosis",
+        "documentation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-21_MCP_HEALTH_FIXES_AND_WORKFLOW_TRANSLATION.md",
+        "timestamp": "2025-01-21",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-b525e6c80193",
+      "title": "Milestone – 2025-11-12 – N8N Crew Telemetry Upgrade",
+      "description": "- Integrated live telemetry into the `npx alex-ai chat` flow by enhancing `@alex-ai/universal-core` to surface webhook diagnostics and real-time crew responses.\n- Normalized every active crew workflow to emit structured JSON payloads, ensuring the CLI can display summaries, original requests, and metadata even when OpenRouter calls fail.\n- Added `scripts/sync-n8n-workflows.js` to keep the repo’s IaC JSONs in sync with `n8n.pbradygeorgen.com`, then pushed the updated workflows to production (IDs ",
+      "category": "n8n",
+      "content": "Milestone – 2025-11-12 – N8N Crew Telemetry Upgrade. - Integrated live telemetry into the `npx alex-ai chat` flow by enhancing `@alex-ai/universal-core` to surface webhook diagnostics and real-time crew responses.\n- Normalized every active crew workflow to emit structured JSON payloads, ensuring the CLI can display summaries, original requests, and metadata even when OpenRouter calls fail.\n- Added `scripts/sync-n8n-workflows.js` to keep the repo’s IaC JSONs in sync with `n8n.pbradygeorgen.com`, then pushed the updated workflows to production (IDs . Keywords: crew, sync, supabase, workflow, github, secrets, workflows, automation, telemetry, webhook. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "crew",
+        "sync",
+        "supabase",
+        "workflow",
+        "github",
+        "secrets",
+        "workflows",
+        "automation",
+        "telemetry",
+        "webhook"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-11-12_n8n-crew-telemetry-upgrade.md",
+        "timestamp": "2025-11-12",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-38ee6d90daff",
+      "title": "🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution",
+      "description": "# 🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution",
+      "category": "n8n",
+      "content": "🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution. # 🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution. Keywords: status, crew, supabase, migration, action, items, briefing, system, project, commander. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "status",
+        "crew",
+        "supabase",
+        "migration",
+        "action",
+        "items",
+        "briefing",
+        "system",
+        "project",
+        "commander"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md",
+        "timestamp": "2025-11-19",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-de6234da899c",
+      "title": "Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration",
+      "description": "# Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration",
+      "category": "n8n",
+      "content": "Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration. # Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration. Keywords: supabase, temporal, automation, integration, project, dashboard, creative, projects, architecture, navigation. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "supabase",
+        "temporal",
+        "automation",
+        "integration",
+        "project",
+        "dashboard",
+        "creative",
+        "projects",
+        "architecture",
+        "navigation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.3.0_SUMMARY.md",
+        "timestamp": "2025-11-01",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-e1cecf8fb765",
+      "title": "Milestone v1.4.0: DDD Workflow System",
+      "description": "**Date:** November 2, 2025  \n**Version:** 1.4.0  \n**Status:** ✅ Complete  \n**Theme:** Git-Versioned Infrastructure as Code",
+      "category": "n8n",
+      "content": "Milestone v1.4.0: DDD Workflow System. **Date:** November 2, 2025  \n**Version:** 1.4.0  \n**Status:** ✅ Complete  \n**Theme:** Git-Versioned Infrastructure as Code. Keywords: workflows, workflow, credential, deployment, scripts, system, supabase, architecture, node, automated. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "workflows",
+        "workflow",
+        "credential",
+        "deployment",
+        "scripts",
+        "system",
+        "supabase",
+        "architecture",
+        "node",
+        "automated"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.4.0_DDD_WORKFLOW_SYSTEM.md",
+        "timestamp": "2025-11-26T09:25:08.918Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.918Z",
+      "updated_at": "2025-11-26T09:25:08.918Z"
+    },
+    {
+      "memory_id": "milestone-b2f605156511",
+      "title": "Milestone v1.5.1: RAG System Automation via APIs",
+      "description": "**Date**: November 2, 2025  \n**Automation Achievement**: 86% (6/7 steps)  \n**Commits**: 2 (105a28b, f37442f)  \n**Files Changed**: 8 files, 1120+ insertions",
+      "category": "n8n",
+      "content": "Milestone v1.5.1: RAG System Automation via APIs. **Date**: November 2, 2025  \n**Automation Achievement**: 86% (6/7 steps)  \n**Commits**: 2 (105a28b, f37442f)  \n**Files Changed**: 8 files, 1120+ insertions. Keywords: supabase, automation, credential, workflow, manual, scripts, migration, create, workflows, automated. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "supabase",
+        "automation",
+        "credential",
+        "workflow",
+        "manual",
+        "scripts",
+        "migration",
+        "create",
+        "workflows",
+        "automated"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.5.1_RAG_AUTOMATION.md",
+        "timestamp": "2025-11-02",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.919Z",
+      "updated_at": "2025-11-26T09:25:08.919Z"
+    },
+    {
+      "memory_id": "milestone-da5006eb0505",
+      "title": "Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening",
+      "description": "# Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening",
+      "category": "n8n",
+      "content": "Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening. # Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening. Keywords: automation, instance, connect, validation, user, workflow, supabase, automated, from, scripts. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "automation",
+        "instance",
+        "connect",
+        "validation",
+        "user",
+        "workflow",
+        "supabase",
+        "automated",
+        "from",
+        "scripts"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.7.3_95_PERCENT_N8N_AUTOMATION.md",
+        "timestamp": "2025-11-26T09:25:08.919Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.919Z",
+      "updated_at": "2025-11-26T09:25:08.919Z"
+    },
+    {
+      "memory_id": "milestone-048f97c17acb",
+      "title": "Milestone v1.7.4: Complete N8N Restoration + Crew Memory System",
+      "description": "# Milestone v1.7.4: Complete N8N Restoration + Crew Memory System",
+      "category": "n8n",
+      "content": "Milestone v1.7.4: Complete N8N Restoration + Crew Memory System. # Milestone v1.7.4: Complete N8N Restoration + Crew Memory System. Keywords: workflows, crew, system, complete, restored, docker, scripts, user, workflow, from. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "workflows",
+        "crew",
+        "system",
+        "complete",
+        "restored",
+        "docker",
+        "scripts",
+        "user",
+        "workflow",
+        "from"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.7.4_COMPLETE_N8N_RESTORATION.md",
+        "timestamp": "2025-11-03",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.919Z",
+      "updated_at": "2025-11-26T09:25:08.919Z"
+    },
+    {
+      "memory_id": "milestone-b18bf3937399",
+      "title": "Milestone v2.0.0: Complete Terraform Infrastructure as Code",
+      "description": "# Milestone v2.0.0: Complete Terraform Infrastructure as Code",
+      "category": "n8n",
+      "content": "Milestone v2.0.0: Complete Terraform Infrastructure as Code. # Milestone v2.0.0: Complete Terraform Infrastructure as Code. Keywords: terraform, infrastructure, complete, automation, from, agent, dynamodb, instance, code, https. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "terraform",
+        "infrastructure",
+        "complete",
+        "automation",
+        "from",
+        "agent",
+        "dynamodb",
+        "instance",
+        "code",
+        "https"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.0.0_TERRAFORM_INFRASTRUCTURE_AS_CODE.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-25139411ea7e",
+      "title": "Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis",
+      "description": "# Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis",
+      "category": "n8n",
+      "content": "Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis. # Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis. Keywords: webhook, crew, workflows, analysis, issue, environment, container, automation, complete, observation. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "webhook",
+        "crew",
+        "workflows",
+        "analysis",
+        "issue",
+        "environment",
+        "container",
+        "automation",
+        "complete",
+        "observation"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.1.0_WEBHOOK_RESTORATION_ATTEMPT.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-91fc4ef1f95f",
+      "title": "🚀 Milestone v2.4.0 — Automated Crew Webhook Registration",
+      "description": "A new automation layer has been added so the crew can manage every production webhook without touching the n8n UI. We now orchestrate workflow activation, webhook warm‑up, and verification entirely through CLI tooling, using shared credentials sourced from `~/.zshrc`.",
+      "category": "n8n",
+      "content": "🚀 Milestone v2.4.0 — Automated Crew Webhook Registration. A new automation layer has been added so the crew can manage every production webhook without touching the n8n UI. We now orchestrate workflow activation, webhook warm‑up, and verification entirely through CLI tooling, using shared credentials sourced from `~/.zshrc`.. Keywords: webhook, crew, automation, every, workflow, scripts, workflows, milestone, automated, registration. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "webhook",
+        "crew",
+        "automation",
+        "every",
+        "workflow",
+        "scripts",
+        "workflows",
+        "milestone",
+        "automated",
+        "registration"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.0_AUTOMATED_CREW_WEBHOOK_REGISTRATION.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-46d03f272fb0",
+      "title": "🚧 Milestone v2.4.1 — Webhook Diagnostics & Credential Audit",
+      "description": "Executed the full crew automation sequence to register and validate every production webhook. Workflows are active, but endpoints still return HTTP 404/401, confirming we need owner-level n8n credentials before automation can complete.",
+      "category": "n8n",
+      "content": "🚧 Milestone v2.4.1 — Webhook Diagnostics & Credential Audit. Executed the full crew automation sequence to register and validate every production webhook. Workflows are active, but endpoints still return HTTP 404/401, confirming we need owner-level n8n credentials before automation can complete.. Keywords: milestone, webhook, crew, automation, register, workflows, owner, endpoints, diagnostics, credential. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "milestone",
+        "webhook",
+        "crew",
+        "automation",
+        "register",
+        "workflows",
+        "owner",
+        "endpoints",
+        "diagnostics",
+        "credential"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.1_WEBHOOK_DIAGNOSTICS.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-f8f3c245b746",
+      "title": "🪐 Milestone v2.4.2 — Crew Credential Automation Blueprint",
+      "description": "Documented the credential management strategy needed to transition Alex AI into SaaS mode: no more manual `~/.zshrc` edits, all keys resolved automatically per project.",
+      "category": "n8n",
+      "content": "🪐 Milestone v2.4.2 — Crew Credential Automation Blueprint. Documented the credential management strategy needed to transition Alex AI into SaaS mode: no more manual `~/.zshrc` edits, all keys resolved automatically per project.. Keywords: credential, automation, project, milestone, crew, blueprint, saas, keys, owner, into. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "credential",
+        "automation",
+        "project",
+        "milestone",
+        "crew",
+        "blueprint",
+        "saas",
+        "keys",
+        "owner",
+        "into"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.2_CREW_AUTOMATION_BLUEPRINT.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-0bae778f35ab",
+      "title": "🧩 Milestone v2.4.3 — Shell & Secrets Refactor",
+      "description": "Refactored the operator shell so secrets load from a single secure source while the default environment remains lightweight and reproducible.",
+      "category": "n8n",
+      "content": "🧩 Milestone v2.4.3 — Shell & Secrets Refactor. Refactored the operator shell so secrets load from a single secure source while the default environment remains lightweight and reproducible.. Keywords: secrets, shell, milestone, refactor, source, crew, owner, summary, refactored, operator. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "secrets",
+        "shell",
+        "milestone",
+        "refactor",
+        "source",
+        "crew",
+        "owner",
+        "summary",
+        "refactored",
+        "operator"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.3_SHELL_SECRETS_REFACTOR.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-ee705f8e01a3",
+      "title": "🚀 Milestone v2.4.4 — Owner-Session Workflow Execution",
+      "description": "# 🚀 Milestone v2.4.4 — Owner-Session Workflow Execution",
+      "category": "n8n",
+      "content": "🚀 Milestone v2.4.4 — Owner-Session Workflow Execution. # 🚀 Milestone v2.4.4 — Owner-Session Workflow Execution. Keywords: session, workflows, milestone, owner, workflow, execution, execute, manual, leader, what. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "session",
+        "workflows",
+        "milestone",
+        "owner",
+        "workflow",
+        "execution",
+        "execute",
+        "manual",
+        "leader",
+        "what"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.4_N8N_OWNER_SESSION_EXECUTION.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-5dbd14292e43",
+      "title": "🚀 Milestone v2.4.5 — Remote n8n Leader Refresh",
+      "description": "- Added `scripts/remote-n8n-leader-refresh.sh`, a one-command wrapper that:\n  1. SSHes into the production n8n host (`n8n.pbradygeorgen.com` backend) and forces `INSTANCE_ROLE=main`.\n  2. Restarts the container using the remote `docker-compose.n8n.yml`.\n  3. Invokes `scripts/crew-webhook-refresh-via-api.js` remotely to re-register all crew/coordination webhooks.\n  4. Runs the local `rag-query` verification to confirm knowledge-ingest availability.\n- Ensured `scripts/crew-webhook-refresh-via-api.",
+      "category": "n8n",
+      "content": "🚀 Milestone v2.4.5 — Remote n8n Leader Refresh. - Added `scripts/remote-n8n-leader-refresh.sh`, a one-command wrapper that:\n  1. SSHes into the production n8n host (`n8n.pbradygeorgen.com` backend) and forces `INSTANCE_ROLE=main`.\n  2. Restarts the container using the remote `docker-compose.n8n.yml`.\n  3. Invokes `scripts/crew-webhook-refresh-via-api.js` remotely to re-register all crew/coordination webhooks.\n  4. Runs the local `rag-query` verification to confirm knowledge-ingest availability.\n- Ensured `scripts/crew-webhook-refresh-via-api.. Keywords: refresh, remote, leader, crew, scripts, webhook, milestone, command, wrapper, that. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "refresh",
+        "remote",
+        "leader",
+        "crew",
+        "scripts",
+        "webhook",
+        "milestone",
+        "command",
+        "wrapper",
+        "that"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.4.5_REMOTE_LEADER_REFRESH.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-977d642ae31a",
+      "title": "Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew",
+      "description": "## Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew",
+      "category": "n8n",
+      "content": "Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew. ## Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew. Keywords: post, crew, auto, from, collaboration, scripts, milestone, 2025, automated, self. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "post",
+        "crew",
+        "auto",
+        "from",
+        "collaboration",
+        "scripts",
+        "milestone",
+        "2025",
+        "automated",
+        "self"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-10-21_AUTOMATED_RAG_AND_CREW_SELF_SUSTAINING.md",
+        "timestamp": "2025-10-21",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-c40a357bbef3",
+      "title": "📊 Milestone Push Status",
+      "description": "**Date:** November 19, 2025  \n**Milestone:** `MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md`  \n**Status:** ⚠️ Pending - Webhook Not Registered",
+      "category": "n8n",
+      "content": "📊 Milestone Push Status. **Date:** November 19, 2025  \n**Milestone:** `MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md`  \n**Status:** ⚠️ Pending - Webhook Not Registered. Keywords: milestone, webhook, push, status, bash, pending, registered, backup, emergency, webhook_url. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "milestone",
+        "webhook",
+        "push",
+        "status",
+        "bash",
+        "pending",
+        "registered",
+        "backup",
+        "emergency",
+        "webhook_url"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_PUSH_STATUS.md",
+        "timestamp": "2025-11-19",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-52f0f788f24b",
+      "title": "MCP Milestone Summarization Migration",
+      "description": "**Date:** November 23, 2025  \n**Status:** ✅ Complete  \n**Purpose:** Complete migration from n8n webhooks to MCP for milestone summarization",
+      "category": "n8n",
+      "content": "MCP Milestone Summarization Migration. **Date:** November 23, 2025  \n**Status:** ✅ Complete  \n**Purpose:** Complete migration from n8n webhooks to MCP for milestone summarization. Keywords: milestone, summarization, scripts, migration, webhook, complete, uses, openrouter, summarize, status. Category: n8n.",
+      "tags": [
+        "n8n",
+        "milestone",
+        "milestone",
+        "summarization",
+        "scripts",
+        "migration",
+        "webhook",
+        "complete",
+        "uses",
+        "openrouter",
+        "summarize",
+        "status"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MCP_MILESTONE_SUMMARIZATION_MIGRATION.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-446983cca476",
+      "title": "Milestone: MCP Memory Storage System Complete",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ Complete - Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`",
+      "category": "rag",
+      "content": "Milestone: MCP Memory Storage System Complete. **Date:** January 20, 2025  \n**Status:** ✅ Complete - Operational  \n**Priority:** HIGH  \n**Branch:** `feature/milestone-push-automation`. Keywords: memory, query, storage, scripts, complete, memories, caching, system, webhook, direct. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "memory",
+        "query",
+        "storage",
+        "scripts",
+        "complete",
+        "memories",
+        "caching",
+        "system",
+        "webhook",
+        "direct"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_MCP_MEMORY_STORAGE_SYSTEM_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-c4d609fe3feb",
+      "title": "Milestone: RAG Bypass Solution Operational",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ OPERATIONAL  \n**Priority:** CRITICAL - Mission Success",
+      "category": "rag",
+      "content": "Milestone: RAG Bypass Solution Operational. **Date:** January 20, 2025  \n**Status:** ✅ OPERATIONAL  \n**Priority:** CRITICAL - Mission Success. Keywords: direct, integration, supabase, ingestion, operational, system, mission, webhook, limitations, content. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "direct",
+        "integration",
+        "supabase",
+        "ingestion",
+        "operational",
+        "system",
+        "mission",
+        "webhook",
+        "limitations",
+        "content"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_RAG_BYPASS_SOLUTION_OPERATIONAL.md",
+        "timestamp": "2025-11-26T09:25:08.920Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.920Z",
+      "updated_at": "2025-11-26T09:25:08.920Z"
+    },
+    {
+      "memory_id": "milestone-d8ca73b6b354",
+      "title": "Milestone: YouTube RAG Optimization & MCP Integration",
+      "description": "# Milestone: YouTube RAG Optimization & MCP Integration",
+      "category": "rag",
+      "content": "Milestone: YouTube RAG Optimization & MCP Integration. # Milestone: YouTube RAG Optimization & MCP Integration. Keywords: youtube, integration, system, captions, crew, video, enrichment, fast, processing, videos. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "youtube",
+        "integration",
+        "system",
+        "captions",
+        "crew",
+        "video",
+        "enrichment",
+        "fast",
+        "processing",
+        "videos"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-22_YOUTUBE_RAG_OPTIMIZATION.md",
+        "timestamp": "2025-11-26T09:25:08.921Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-e578e6f169ca",
+      "title": "🧠 MILESTONE: RAG + Hallucination Prevention System Validation",
+      "description": "# 🧠 MILESTONE: RAG + Hallucination Prevention System Validation",
+      "category": "rag",
+      "content": "🧠 MILESTONE: RAG + Hallucination Prevention System Validation. # 🧠 MILESTONE: RAG + Hallucination Prevention System Validation. Keywords: milestone, user, tool, hallucination, operations, protocol, success, terminal, working, proven. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "milestone",
+        "user",
+        "tool",
+        "hallucination",
+        "operations",
+        "protocol",
+        "success",
+        "terminal",
+        "working",
+        "proven",
+        "crew-picard",
+        "crew-riker"
+      ],
+      "crew_member": "picard",
+      "priority": "high",
+      "metadata": {
+        "fileName": "MILESTONE_RAG_SYSTEM_VALIDATION_2025_01_19.md",
+        "timestamp": "2025-01-19",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "picard",
+              "name": "Captain Picard"
+            },
+            "relevance": "high",
+            "score": 67,
+            "memoryCount": 1
+          },
+          {
+            "crewMember": {
+              "id": "riker",
+              "name": "Commander Riker"
+            },
+            "relevance": "high",
+            "score": 92,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "picard",
+            "riker"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-f8d5d0b7958e",
+      "title": "Milestone v1.5.0: DDD Architecture for User Settings",
+      "description": "# Milestone v1.5.0: DDD Architecture for User Settings",
+      "category": "rag",
+      "content": "Milestone v1.5.0: DDD Architecture for User Settings. # Milestone v1.5.0: DDD Architecture for User Settings. Keywords: settings, supabase, user, architecture, client, localstorage, workflows, theme, sync, default. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "settings",
+        "supabase",
+        "user",
+        "architecture",
+        "client",
+        "localstorage",
+        "workflows",
+        "theme",
+        "sync",
+        "default"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v1.5.0_DDD_USER_SETTINGS.md",
+        "timestamp": "2025-11-26T09:25:08.921Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-8fcbeca19368",
+      "title": "Milestone v1.7.0: Complete RAG CRUD System with Modern AI",
+      "description": "# Milestone v1.7.0: Complete RAG CRUD System with Modern AI",
+      "category": "rag",
+      "content": "Milestone v1.7.0: Complete RAG CRUD System with Modern AI. # Milestone v1.7.0: Complete RAG CRUD System with Modern AI. Keywords: knowledge, search, crew, system, supabase, crud, complete, query, semantic, migrations. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "knowledge",
+        "search",
+        "crew",
+        "system",
+        "supabase",
+        "crud",
+        "complete",
+        "query",
+        "semantic",
+        "migrations",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_v1.7.0_COMPLETE_RAG_CRUD_SYSTEM.md",
+        "timestamp": "2025-11-02",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 45,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-5203811b12b8",
+      "title": "Milestone v1.7.1: RAG System Fully Operational with Supabase Fallback",
+      "description": "# Milestone v1.7.1: RAG System Fully Operational with Supabase Fallback",
+      "category": "rag",
+      "content": "Milestone v1.7.1: RAG System Fully Operational with Supabase Fallback. # Milestone v1.7.1: RAG System Fully Operational with Supabase Fallback. Keywords: supabase, fallback, webhook, crew, system, operational, webhooks, architecture, complete, platform. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "supabase",
+        "fallback",
+        "webhook",
+        "crew",
+        "system",
+        "operational",
+        "webhooks",
+        "architecture",
+        "complete",
+        "platform",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_v1.7.1_RAG_OPERATIONAL_WITH_FALLBACK.md",
+        "timestamp": "2025-11-02",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 22,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-9f9e21fc4376",
+      "title": "🧠 Milestone v2.6.2 — RAG Micro-Test: Admiral Rank Protocol",
+      "description": "- **Created test case for RAG knowledge ingestion** using smallest possible data point\n- **Established user rank protocol:** Admiral, not Commander (Starfleet hierarchy)\n- **Prepared knowledge document** for n8n RAG ingestion when system is online\n- **Tests crew's ability** to learn and apply even subtle contextual corrections\n- **Validates RAG architecture** can incorporate micro-level protocol details",
+      "category": "rag",
+      "content": "🧠 Milestone v2.6.2 — RAG Micro-Test: Admiral Rank Protocol. - **Created test case for RAG knowledge ingestion** using smallest possible data point\n- **Established user rank protocol:** Admiral, not Commander (Starfleet hierarchy)\n- **Prepared knowledge document** for n8n RAG ingestion when system is online\n- **Tests crew's ability** to learn and apply even subtle contextual corrections\n- **Validates RAG architecture** can incorporate micro-level protocol details. Keywords: admiral, crew, protocol, rank, knowledge, user, test, commander, ingestion, data. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "admiral",
+        "crew",
+        "protocol",
+        "rank",
+        "knowledge",
+        "user",
+        "test",
+        "commander",
+        "ingestion",
+        "data"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_v2.6.2_RAG_MICRO_TEST_ADMIRAL_PROTOCOL.md",
+        "timestamp": "2025-11-26T09:25:08.921Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-62b7b19013a0",
+      "title": "Alex AI Universal - Milestone: Complete User Flow Implementation",
+      "description": "# Alex AI Universal - Milestone: Complete User Flow Implementation",
+      "category": "rag",
+      "content": "Alex AI Universal - Milestone: Complete User Flow Implementation. # Alex AI Universal - Milestone: Complete User Flow Implementation. Keywords: crew, memory, member, alex, installation, integration, execution, user, system, coordination. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "crew",
+        "memory",
+        "member",
+        "alex",
+        "installation",
+        "integration",
+        "execution",
+        "user",
+        "system",
+        "coordination",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_COMPLETE_USER_FLOW_2025-09-27T03-15-00.md",
+        "timestamp": "2025-09-27",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 55,
+            "memoryCount": 2
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.921Z",
+      "updated_at": "2025-11-26T09:25:08.921Z"
+    },
+    {
+      "memory_id": "milestone-9cf8b42adeb0",
+      "title": "Alex AI Universal - Milestone Build: Cursor Engagement Protocol",
+      "description": "# Alex AI Universal - Milestone Build: Cursor Engagement Protocol",
+      "category": "rag",
+      "content": "Alex AI Universal - Milestone Build: Cursor Engagement Protocol. # Alex AI Universal - Milestone Build: Cursor Engagement Protocol. Keywords: engagement, alex, cursor, protocol, storage, user, project, natural, language, zero. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "engagement",
+        "alex",
+        "cursor",
+        "protocol",
+        "storage",
+        "user",
+        "project",
+        "natural",
+        "language",
+        "zero"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "milestone-summary.md",
+        "timestamp": "2025-09-27",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-b03113c696e0",
+      "title": "🚀 MILESTONE: Universal Pattern Storage System - Revolutionary Self-Sustaining RAG Implementation",
+      "description": "# 🚀 MILESTONE: Universal Pattern Storage System - Revolutionary Self-Sustaining RAG Implementation",
+      "category": "rag",
+      "content": "🚀 MILESTONE: Universal Pattern Storage System - Revolutionary Self-Sustaining RAG Implementation. # 🚀 MILESTONE: Universal Pattern Storage System - Revolutionary Self-Sustaining RAG Implementation. Keywords: pattern, crew, universal, storage, ethical, system, validation, integration, webhook, self. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "pattern",
+        "crew",
+        "universal",
+        "storage",
+        "ethical",
+        "system",
+        "validation",
+        "integration",
+        "webhook",
+        "self",
+        "crew-data"
+      ],
+      "crew_member": "data",
+      "priority": "medium",
+      "metadata": {
+        "fileName": "MILESTONE_UNIVERSAL_PATTERN_STORAGE_SYSTEM_2025-10-02.md",
+        "timestamp": "2025-11-26T09:25:08.922Z",
+        "crewAssociations": [
+          {
+            "crewMember": {
+              "id": "data",
+              "name": "Commander Data"
+            },
+            "relevance": "high",
+            "score": 67,
+            "memoryCount": 1
+          }
+        ],
+        "accessPattern": {
+          "primary_crew": [
+            "data"
+          ],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-c84dcff82e79",
+      "title": "🎯 Current Milestone: RAG + Hallucination System Validation",
+      "description": "# 🎯 Current Milestone: RAG + Hallucination System Validation",
+      "category": "rag",
+      "content": "🎯 Current Milestone: RAG + Hallucination System Validation. # 🎯 Current Milestone: RAG + Hallucination System Validation. Keywords: milestone, what, hallucination, system, validation, seconds, proven, protocol, direct, file. Category: rag.",
+      "tags": [
+        "rag",
+        "milestone",
+        "milestone",
+        "what",
+        "hallucination",
+        "system",
+        "validation",
+        "seconds",
+        "proven",
+        "protocol",
+        "direct",
+        "file"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "CURRENT_MILESTONE.md",
+        "timestamp": "2025-11-26T09:25:08.922Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-07e321e4b1aa",
+      "title": "Milestone: E2E Testing Quick Wins Complete",
+      "description": "**Date:** January 20, 2025  \n**Status:** ✅ All Quick Wins Complete  \n**Crew:** Full coordination and execution",
+      "category": "testing",
+      "content": "Milestone: E2E Testing Quick Wins Complete. **Date:** January 20, 2025  \n**Status:** ✅ All Quick Wins Complete  \n**Crew:** Full coordination and execution. Keywords: test, fixtures, webhook, tests, scripts, error, quick, wins, testing, complete. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "test",
+        "fixtures",
+        "webhook",
+        "tests",
+        "scripts",
+        "error",
+        "quick",
+        "wins",
+        "testing",
+        "complete"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_E2E_TESTING_QUICK_WINS_COMPLETE.md",
+        "timestamp": "2025-11-26T09:25:08.922Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-bf04ae9c43e5",
+      "title": "Milestone: Webhook Registration Investigation & E2E Testing Deep Dive",
+      "description": "# Milestone: Webhook Registration Investigation & E2E Testing Deep Dive",
+      "category": "testing",
+      "content": "Milestone: Webhook Registration Investigation & E2E Testing Deep Dive. # Milestone: Webhook Registration Investigation & E2E Testing Deep Dive. Keywords: webhook, test, scripts, testing, registration, knowledge, tests, workflow, container, ingest. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "webhook",
+        "test",
+        "scripts",
+        "testing",
+        "registration",
+        "knowledge",
+        "tests",
+        "workflow",
+        "container",
+        "ingest"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-20_WEBHOOK_REGISTRATION_INVESTIGATION_AND_E2E_TESTING.md",
+        "timestamp": "2025-11-26T09:25:08.922Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-1f1f8a46d751",
+      "title": "🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework",
+      "description": "# 🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework",
+      "category": "testing",
+      "content": "🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework. # 🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework. Keywords: crew, timeout, test, tests, framework, cost, optimization, scripts, testing, coordination. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "crew",
+        "timeout",
+        "test",
+        "tests",
+        "framework",
+        "cost",
+        "optimization",
+        "scripts",
+        "testing",
+        "coordination"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_MCP_TIMEOUT_OPTIMIZATION_AND_E2E_FRAMEWORK.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-02d469b966d6",
+      "title": "🖖 Milestone: Universal Progress System & MCP Optimization",
+      "description": "# 🖖 Milestone: Universal Progress System & MCP Optimization",
+      "category": "testing",
+      "content": "🖖 Milestone: Universal Progress System & MCP Optimization. # 🖖 Milestone: Universal Progress System & MCP Optimization. Keywords: progress, crew, test, timeout, dashboard, tests, components, system, optimization, cost. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "progress",
+        "crew",
+        "test",
+        "timeout",
+        "dashboard",
+        "tests",
+        "components",
+        "system",
+        "optimization",
+        "cost"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_2025-01-24_UNIVERSAL_PROGRESS_SYSTEM_AND_MCP_OPTIMIZATION.md",
+        "timestamp": "2025-01-24",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-a8119f48c418",
+      "title": "🖖 Milestone: Cursor AI Automatic Startup & State Recovery System",
+      "description": "# 🖖 Milestone: Cursor AI Automatic Startup & State Recovery System",
+      "category": "testing",
+      "content": "🖖 Milestone: Cursor AI Automatic Startup & State Recovery System. # 🖖 Milestone: Cursor AI Automatic Startup & State Recovery System. Keywords: state, cursor, recovery, layout, automatic, startup, scripts, automatically, integration, testing. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "state",
+        "cursor",
+        "recovery",
+        "layout",
+        "automatic",
+        "startup",
+        "scripts",
+        "automatically",
+        "integration",
+        "testing"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_CURSOR_AI_AUTOMATIC_STARTUP.md",
+        "timestamp": "2025-11-19",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    },
+    {
+      "memory_id": "milestone-2ab6cc84683d",
+      "title": "🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System",
+      "description": "# 🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System",
+      "category": "testing",
+      "content": "🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System. # 🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System. Keywords: testing, crew, validation, phase, optimization, security, framework, coordination, performance, complete. Category: testing.",
+      "tags": [
+        "testing",
+        "milestone",
+        "testing",
+        "crew",
+        "validation",
+        "phase",
+        "optimization",
+        "security",
+        "framework",
+        "coordination",
+        "performance",
+        "complete"
+      ],
+      "crew_member": null,
+      "priority": "low",
+      "metadata": {
+        "fileName": "MILESTONE_E2E_TESTING_FRAMEWORK_2025-10-02.md",
+        "timestamp": "2025-11-26T09:25:08.922Z",
+        "crewAssociations": [],
+        "accessPattern": {
+          "primary_crew": [],
+          "secondary_crew": []
+        }
+      },
+      "embedding_ready": true,
+      "created_at": "2025-11-26T09:25:08.922Z",
+      "updated_at": "2025-11-26T09:25:08.922Z"
+    }
+  ]
+}

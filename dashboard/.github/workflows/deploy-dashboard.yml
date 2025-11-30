@@ -1,0 +1,43 @@
+name: Deploy Alex AI Dashboard
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'dashboard/**' ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: dashboard/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd dashboard
+        npm ci
+    
+    - name: Build dashboard
+      run: |
+        cd dashboard
+        npm run build
+      env:
+        N8N_API_URL: https://n8n.pbradygeorgen.com/api/v1
+        N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+    
+    - name: Deploy to N8N Server
+      run: |
+        cd dashboard
+        ./scripts/deploy-to-n8n-server.sh
+        # Upload package to N8N server using your preferred method
+        # This could be scp, rsync, or integration with your existing deployment system

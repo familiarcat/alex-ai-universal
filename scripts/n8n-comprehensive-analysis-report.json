@@ -1,0 +1,268 @@
+{
+  "timestamp": "2025-09-21T21:01:42.596Z",
+  "analysis": {
+    "timestamp": "2025-09-21T21:01:42.045Z",
+    "totalWorkflows": 28,
+    "crewWorkflows": [
+      {
+        "id": "36KPle5mPiMaazG6",
+        "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.993Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "BdNHOluRYUw2JxGW",
+        "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.466Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "GhSB8EpZWXLU78LM",
+        "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:04.079Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "Imn7p6pVgi6SRvnF",
+        "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.639Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "QJnN7ks2KsQTENDc",
+        "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.732Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "SXAMupVWdOxZybF6",
+        "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.816Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "e0UEwyVcXJqeePdj",
+        "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.901Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      },
+      {
+        "id": "gIwrQHHArgrVARjL",
+        "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:03.553Z",
+        "nodeCount": 7,
+        "issues": [],
+        "score": 100,
+        "standardCompliance": true
+      }
+    ],
+    "systemWorkflows": [
+      {
+        "id": "AeoHsSbJAXbWSs8Y",
+        "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T04:30:50.860Z",
+        "nodeCount": 4,
+        "type": "system",
+        "needsIntegration": true
+      },
+      {
+        "id": "VQDH8tqWvVmigWd1",
+        "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T20:50:07.000Z",
+        "nodeCount": 7,
+        "type": "system",
+        "needsIntegration": true
+      },
+      {
+        "id": "aNfs26Wlau80ufmh",
+        "name": "SYSTEM - Mission Control - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:04.288Z",
+        "nodeCount": 4,
+        "type": "system",
+        "needsIntegration": true
+      },
+      {
+        "id": "eviPmIvTnoJcnaas",
+        "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:04.188Z",
+        "nodeCount": 15,
+        "type": "system",
+        "needsIntegration": true
+      }
+    ],
+    "projectWorkflows": [
+      {
+        "id": "58B6WvShXJ7bj8Ni",
+        "name": "PROJECT - Alex AI - Job Opportunities - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.304Z",
+        "nodeCount": 2,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "FEdNQJgLBjJVh3oP",
+        "name": "PROJECT - Alex AI - Crew Integration - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.122Z",
+        "nodeCount": 6,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "RY8pm6gUFtkTKcpg",
+        "name": "PROJECT - Alex AI - Resume Analysis - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.568Z",
+        "nodeCount": 2,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "Xbdaf4VdEA4mEuL2",
+        "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.387Z",
+        "nodeCount": 6,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "oQTqPZBq8R7Zuza9",
+        "name": "PROJECT - Alex AI - Job Opportunities Live - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.213Z",
+        "nodeCount": 4,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "p0L9kldRFQmexqBx",
+        "name": "PROJECT - Alex AI - MCP Integration - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.468Z",
+        "nodeCount": 2,
+        "type": "project",
+        "needsIntegration": true
+      },
+      {
+        "id": "rLN1eArIA6t3tEwZ",
+        "name": "PROJECT - Alex AI - Contact Management - Production",
+        "active": true,
+        "updatedAt": "2025-09-21T05:16:05.037Z",
+        "nodeCount": 2,
+        "type": "project",
+        "needsIntegration": true
+      }
+    ],
+    "issues": {
+      "structural": [],
+      "connection": [],
+      "integration": [],
+      "standardization": []
+    },
+    "recommendations": [
+      {
+        "priority": "MEDIUM",
+        "category": "COMPLETENESS",
+        "issue": "Missing crew workflows: Quark",
+        "action": "Create missing crew member workflows",
+        "workflows": [
+          "Quark"
+        ]
+      },
+      {
+        "priority": "MEDIUM",
+        "category": "INTEGRATION",
+        "issue": "4 system workflows need crew integration",
+        "action": "Integrate system workflows with crew coordination",
+        "workflows": [
+          "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+          "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+          "SYSTEM - Mission Control - OpenRouter - Production",
+          "SYSTEM - Enhanced Mission Control - OpenRouter - Production"
+        ]
+      },
+      {
+        "priority": "LOW",
+        "category": "INTEGRATION",
+        "issue": "7 project workflows need crew integration",
+        "action": "Connect project workflows to crew system",
+        "workflows": [
+          "PROJECT - Alex AI - Job Opportunities - Production",
+          "PROJECT - Alex AI - Crew Integration - Production",
+          "PROJECT - Alex AI - Resume Analysis - Production",
+          "PROJECT - Alex AI - MCP Enhancement - Production",
+          "PROJECT - Alex AI - Job Opportunities Live - Production",
+          "PROJECT - Alex AI - MCP Integration - Production",
+          "PROJECT - Alex AI - Contact Management - Production"
+        ]
+      }
+    ]
+  },
+  "testResults": [
+    {
+      "workflowId": "36KPle5mPiMaazG6",
+      "workflowName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "success": true,
+      "response": "",
+      "executionTime": "unknown"
+    },
+    {
+      "workflowId": "BdNHOluRYUw2JxGW",
+      "workflowName": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "success": true,
+      "response": "",
+      "executionTime": "unknown"
+    },
+    {
+      "workflowId": "GhSB8EpZWXLU78LM",
+      "workflowName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "success": true,
+      "response": "",
+      "executionTime": "unknown"
+    }
+  ],
+  "summary": {
+    "totalWorkflows": 28,
+    "crewWorkflows": 8,
+    "systemWorkflows": 4,
+    "projectWorkflows": 7,
+    "nonStandardCrew": 0,
+    "testsPerformed": 3,
+    "testsPassed": 3
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-11-25T12:22:26.367Z",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "failed": 3,
+    "warnings": 1,
+    "skipped": 0,
+    "successRate": "50.0%"
+  },
+  "results": {
+    "passed": [
+      {
+        "test": "UnifiedDataService: getCrewStats",
+        "message": "Service method exists and is properly defined",
+        "component": "CrewMemoryVisualization"
+      },
+      {
+        "test": "Component Refactoring: CrewMemoryVisualization",
+        "message": "Component uses UnifiedDataService (DDD compliant)"
+      },
+      {
+        "test": "E2E Flow: CrewMemoryVisualization",
+        "message": "All components of the data flow chain exist",
+        "component": "CrewMemoryVisualization"
+      }
+    ],
+    "failed": [
+      {
+        "test": "MCP Server Health",
+        "message": "Request timeout"
+      },
+      {
+        "test": "MCP Endpoint: crew/stats",
+        "message": "Request timeout",
+        "component": "CrewMemoryVisualization"
+      },
+      {
+        "test": "MCP Proxy: crew/stats",
+        "message": "Proxy returned 308",
+        "component": "CrewMemoryVisualization"
+      }
+    ],
+    "warnings": [
+      {
+        "test": "n8n Fallback",
+        "message": "n8n server not accessible: Request timeout"
+      }
+    ],
+    "skipped": []
+  },
+  "componentResults": [
+    {
+      "component": "CrewMemoryVisualization",
+      "tests": {
+        "mcpEndpoint": false,
+        "mcpProxy": false,
+        "unifiedService": true,
+        "refactoring": true,
+        "e2eFlow": true
+      }
+    }
+  ]
+}

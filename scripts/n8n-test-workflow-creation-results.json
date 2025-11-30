@@ -1,0 +1,42 @@
+{
+  "created": [],
+  "errors": [
+    {
+      "crewMember": "Captain Jean-Luc Picard",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Commander Data",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Commander William Riker",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Dr. Beverly Crusher",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Counselor Deanna Troi",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Lieutenant Uhura",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Lieutenant Worf",
+      "error": "Request failed with status code 400"
+    },
+    {
+      "crewMember": "Lieutenant Commander Geordi La Forge",
+      "error": "Request failed with status code 400"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "successful": 0,
+    "failed": 8
+  }
+}

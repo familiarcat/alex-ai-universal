@@ -1,0 +1,118 @@
+version: '3.8'
+
+# 🖖 Unified Alex AI Deployment
+# Single docker-compose for all services:
+# - n8n (n8n.pbradygeorgen.com)
+# - MCP Server (mcp.pbradygeorgen.com)
+# - Dashboard (projects.pbradygeorgen.com)
+#
+# Deployed to single EC2 instance via Terraform
+
+services:
+  n8n:
+    image: n8nio/n8n:${N8N_VERSION:-1.120.4}
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    env_file:
+      - /opt/n8n/.env
+    environment:
+      - WEBHOOK_URL=https://${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+      - N8N_PROTOCOL=https
+      - N8N_HOST=${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+      - N8N_PORT=5678
+      - N8N_EDITOR_BASE_URL=https://${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+    volumes:
+      - /home/ubuntu/.n8n:/home/node/.n8n
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - alex-ai-network
+
+  mcp-server:
+    build:
+      context: /home/ubuntu/alex-ai-universal
+      dockerfile: mcp-server/Dockerfile
+    container_name: mcp-server
+    restart: always
+    ports:
+      - "5679:5679"
+    env_file:
+      - /opt/mcp/.env
+    environment:
+      - MCP_PORT=5679
+      - MCP_API_KEY=${MCP_API_KEY:-${N8N_API_KEY}}
+      - NODE_ENV=production
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    volumes:
+      - /home/ubuntu/.mcp:/app/data
+      - /home/ubuntu/alex-ai-universal:/app
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5679/healthz', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - alex-ai-network
+    depends_on:
+      - n8n
+
+  dashboard:
+    build:
+      context: /home/ubuntu/alex-ai-universal/projects/dashboard
+      dockerfile: Dockerfile
+    container_name: alex-ai-dashboard
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - /opt/dashboard/.env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_MCP_URL=https://mcp.pbradygeorgen.com
+      - NEXT_PUBLIC_N8N_URL=https://n8n.pbradygeorgen.com
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    volumes:
+      - /home/ubuntu/.dashboard:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - alex-ai-network
+    depends_on:
+      - mcp-server
+      - n8n
+
+networks:
+  alex-ai-network:
+    driver: bridge
+

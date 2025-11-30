@@ -1,0 +1,35 @@
+{
+  "name": "Alex AI Testing Configuration",
+  "version": "1.0.0",
+  "description": "Configuration for Alex AI testing environment",
+  "testing": {
+    "enabled": true,
+    "privateRegistry": "https://npm.pkg.github.com",
+    "testProjects": [
+      "react-test-project",
+      "nodejs-test-project",
+      "typescript-test-project"
+    ],
+    "crewMembers": [
+      "Captain Picard",
+      "Commander Data",
+      "Commander Riker",
+      "Lieutenant Commander Geordi",
+      "Lieutenant Worf",
+      "Counselor Troi",
+      "Dr. Crusher",
+      "Lieutenant Uhura",
+      "Quark"
+    ],
+    "n8nIntegration": {
+      "enabled": true,
+      "baseUrl": "https://n8n.pbradygeorgen.com",
+      "apiKey": "${N8N_API_KEY}"
+    },
+    "ragMemory": {
+      "enabled": true,
+      "supabaseUrl": "${SUPABASE_URL}",
+      "supabaseKey": "${SUPABASE_ANON_KEY}"
+    }
+  }
+}

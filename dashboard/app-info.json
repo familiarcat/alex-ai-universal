@@ -1,0 +1,24 @@
+{
+    "app": {
+        "appId": "dwmfx8efrhb9y",
+        "appArn": "arn:aws:amplify:us-east-2:860268930466:apps/dwmfx8efrhb9y",
+        "name": "Alex AI Dashboard",
+        "description": "Real-time Alex AI Universal Dashboard",
+        "platform": "WEB",
+        "createTime": "2025-09-23T23:34:20.572000-05:00",
+        "updateTime": "2025-09-23T23:34:20.572000-05:00",
+        "environmentVariables": {
+            "N8N_API_URL": "https://n8n.pbradygeorgen.com/api/v1"
+        },
+        "defaultDomain": "dwmfx8efrhb9y.amplifyapp.com",
+        "enableBranchAutoBuild": false,
+        "enableBranchAutoDeletion": false,
+        "enableBasicAuth": false,
+        "customRules": [],
+        "customHeaders": "",
+        "enableAutoBranchCreation": false,
+        "cacheConfig": {
+            "type": "AMPLIFY_MANAGED_NO_COOKIES"
+        }
+    }
+}

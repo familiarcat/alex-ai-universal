@@ -1,0 +1,31 @@
+{
+  "id": "CREW_MEMORY_RECOVERY_ROLLBACK_2025_10_15",
+  "type": "milestone_learning",
+  "timestamp": "2025-10-15T00:00:00Z",
+  "context": {
+    "situation": "Dashboard lost styling/navigation; n8n seemed broken; local ports conflicted.",
+    "root_causes": [
+      "Conflicting local dev servers on ports 3001/3002",
+      "Recent edits diverged from stable baseline",
+      "Git HEAD corruption masked repo state"
+    ],
+    "actions": [
+      "Checked out stable commit 4cb788d",
+      "Freed ports 3000–3010; relaunched dev on 3000",
+      "Verified UI functional and styled"
+    ]
+  },
+  "learnings": [
+    "Before debugging UI, ensure only one dev server is running",
+    "When instability occurs, revert to last known-good commit and verify",
+    "Prefer npm over yarn in this repo to avoid GITHUB_TOKEN env issues"
+  ],
+  "next_steps": [
+    "Add port preflight to dev script",
+    "Add `dev:n8n` health check gating",
+    "Document rollback protocol in README"
+  ]
+}
+
+
+

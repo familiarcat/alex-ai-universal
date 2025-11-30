@@ -1,0 +1,30 @@
+{
+  "componentName": "MCPDashboardSection",
+  "filePath": "/dashboard/components/MCPDashboardSection.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "fetch(/api/mcp/workflows/storage)",
+    "fetch(/api/mcp/workflows/executions?limit=100)",
+    "fetch(/api/mcp/status)",
+    "API: /api/mcp/workflows/storage",
+    "API: /api/mcp/workflows/storage",
+    "API: /api/mcp/workflows/executions?limit=100",
+    "API: /api/mcp/workflows/executions",
+    "API: /api/mcp/status",
+    "API: /api/mcp/status"
+  ],
+  "dataFlow": [
+    "Component → fetch(/api/mcp/workflows/storage) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/mcp/workflows/executions?limit=100) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/mcp/status) → Next.js API → Supabase/n8n",
+    "Component → /api/mcp/workflows/storage → Supabase/n8n",
+    "Component → /api/mcp/workflows/storage → Supabase/n8n",
+    "Component → /api/mcp/workflows/executions?limit=100 → Supabase/n8n",
+    "Component → /api/mcp/workflows/executions → Supabase/n8n",
+    "Component → /api/mcp/status → Supabase/n8n",
+    "Component → /api/mcp/status → Supabase/n8n"
+  ],
+  "problems": [],
+  "recommendations": []
+}

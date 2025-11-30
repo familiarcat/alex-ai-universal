@@ -1,0 +1,875 @@
+{
+  "timestamp": "2025-11-26T09:25:08.891Z",
+  "crewSummaries": [
+    {
+      "crewMember": "Captain Picard",
+      "crewMemberId": "picard",
+      "totalMemories": 2,
+      "relevantMilestones": [
+        {
+          "milestone": "🧠 MILESTONE: RAG + Hallucination Prevention System Validation",
+          "category": "rag",
+          "relevance": "high",
+          "score": 67,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🗂️ Milestone: File System Reorganization Plan",
+          "category": "crew",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 2
+        },
+        {
+          "milestone": "🤖 Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 50,
+          "memoryCount": 2
+        },
+        {
+          "milestone": "🚀 MILESTONE: Project Structure Optimized - Ready for Next Phase",
+          "category": "crew",
+          "relevance": "high",
+          "score": 50,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 46,
+          "memoryCount": 2
+        },
+        {
+          "milestone": "🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete",
+          "category": "mcp",
+          "relevance": "high",
+          "score": 45,
+          "memoryCount": 2
+        }
+      ],
+      "expertise": "strategic, leadership, mission, architecture",
+      "summary": "Captain Picard has 2 memories. Most relevant to 6 milestones. Expertise areas: strategic, leadership, mission, architecture."
+    },
+    {
+      "crewMember": "Commander Riker",
+      "crewMemberId": "riker",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🧠 MILESTONE: RAG + Hallucination Prevention System Validation",
+          "category": "rag",
+          "relevance": "high",
+          "score": 92,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🗂️ Milestone: File System Reorganization Plan",
+          "category": "crew",
+          "relevance": "high",
+          "score": 55,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 49,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete",
+          "category": "mcp",
+          "relevance": "high",
+          "score": 49,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 49,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "tactical, coordination, workflow, organization",
+      "summary": "Commander Riker has 1 memories. Most relevant to 5 milestones. Expertise areas: tactical, coordination, workflow, organization."
+    },
+    {
+      "crewMember": "Commander Data",
+      "crewMemberId": "data",
+      "totalMemories": 2,
+      "relevantMilestones": [
+        {
+          "milestone": "🚀 MILESTONE: Universal Pattern Storage System - Revolutionary Self-Sustaining RAG Implementation",
+          "category": "rag",
+          "relevance": "high",
+          "score": 67,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Identity Theories Integration System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 63,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🚀 Milestone: Alex AI Multi-Project Architecture",
+          "category": "crew",
+          "relevance": "high",
+          "score": 62,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🏆 MILESTONE: DDD Architecture Migration Complete",
+          "category": "architecture",
+          "relevance": "high",
+          "score": 55,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Alex AI Universal - Milestone: Complete User Flow Implementation",
+          "category": "rag",
+          "relevance": "high",
+          "score": 55,
+          "memoryCount": 2
+        },
+        {
+          "milestone": "🖖 Milestone: DDD Architecture Refactoring - MCP Integration Complete",
+          "category": "mcp",
+          "relevance": "high",
+          "score": 55,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone v1.7.0: Complete RAG CRUD System with Modern AI",
+          "category": "rag",
+          "relevance": "high",
+          "score": 45,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 Milestone: Crew Vector System Implementation",
+          "category": "crew",
+          "relevance": "high",
+          "score": 37,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone v1.7.1: RAG System Fully Operational with Supabase Fallback",
+          "category": "rag",
+          "relevance": "high",
+          "score": 22,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "technical, analysis, optimization, patterns",
+      "summary": "Commander Data has 2 memories. Most relevant to 9 milestones. Expertise areas: technical, analysis, optimization, patterns."
+    },
+    {
+      "crewMember": "Lt. Cmdr. La Forge",
+      "crewMemberId": "la_forge",
+      "totalMemories": 0,
+      "relevantMilestones": [],
+      "summary": "No memories found for Lt. Cmdr. La Forge"
+    },
+    {
+      "crewMember": "Lieutenant Worf",
+      "crewMemberId": "worf",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🖖 Alex AI Universal - Condensed Milestone Summary",
+          "category": "crew",
+          "relevance": "high",
+          "score": 69,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 Milestone: MCP Comprehensive Dashboard - Complete Implementation",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 46,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 38,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Identity Theories Integration System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 31,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 Milestone: MCP Main Dashboard - Complete Implementation",
+          "category": "dashboard",
+          "relevance": "high",
+          "score": 30,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "security, compliance, threat, defense",
+      "summary": "Lieutenant Worf has 1 memories. Most relevant to 5 milestones. Expertise areas: security, compliance, threat, defense."
+    },
+    {
+      "crewMember": "Counselor Troi",
+      "crewMemberId": "troi",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🖖 Alex AI Universal - Condensed Milestone Summary",
+          "category": "crew",
+          "relevance": "high",
+          "score": 73,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP",
+          "category": "dashboard",
+          "relevance": "high",
+          "score": 53,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 51,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 48,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "ux, user, psychology, experience",
+      "summary": "Counselor Troi has 1 memories. Most relevant to 5 milestones. Expertise areas: ux, user, psychology, experience."
+    },
+    {
+      "crewMember": "Dr. Crusher",
+      "crewMemberId": "crusher",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🖖 Alex AI Universal - Condensed Milestone Summary",
+          "category": "crew",
+          "relevance": "high",
+          "score": 72,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP",
+          "category": "dashboard",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 48,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "health, diagnosis, medical, system",
+      "summary": "Dr. Crusher has 1 memories. Most relevant to 5 milestones. Expertise areas: health, diagnosis, medical, system."
+    },
+    {
+      "crewMember": "Lieutenant Uhura",
+      "crewMemberId": "uhura",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🖖 Alex AI Universal - Condensed Milestone Summary",
+          "category": "crew",
+          "relevance": "high",
+          "score": 83,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 54,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP",
+          "category": "dashboard",
+          "relevance": "high",
+          "score": 54,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 52,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 48,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "communication, network, transmission, integration",
+      "summary": "Lieutenant Uhura has 1 memories. Most relevant to 5 milestones. Expertise areas: communication, network, transmission, integration."
+    },
+    {
+      "crewMember": "Quark",
+      "crewMemberId": "quark",
+      "totalMemories": 1,
+      "relevantMilestones": [
+        {
+          "milestone": "🖖 Alex AI Universal - Condensed Milestone Summary",
+          "category": "crew",
+          "relevance": "high",
+          "score": 77,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 55,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🤖 Fully Automated Milestone Push System",
+          "category": "crew",
+          "relevance": "high",
+          "score": 54,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "🖖 MILESTONE PUSH SUCCESS - THEME STATE FIX MVP",
+          "category": "dashboard",
+          "relevance": "high",
+          "score": 51,
+          "memoryCount": 1
+        },
+        {
+          "milestone": "Milestone: Complete n8n to MCP Migration",
+          "category": "n8n",
+          "relevance": "high",
+          "score": 50,
+          "memoryCount": 1
+        }
+      ],
+      "expertise": "business, cost, optimization, efficiency",
+      "summary": "Quark has 1 memories. Most relevant to 5 milestones. Expertise areas: business, cost, optimization, efficiency."
+    },
+    {
+      "crewMember": "Chief O'Brien",
+      "crewMemberId": "obrien",
+      "totalMemories": 0,
+      "relevantMilestones": [],
+      "summary": "No memories found for Chief O'Brien"
+    }
+  ],
+  "optimization": {
+    "totalMilestones": 96,
+    "totalCrewMemories": 10,
+    "averageRelevance": 54,
+    "recommendations": [
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture",
+        "category": "architecture",
+        "message": "Milestone \"🎉 MILESTONE: Unified UX + Zero-Flash Crossfade + DDD Architecture\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Quantum Physics Crew Identity Propagation System",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone: Quantum Physics Crew Identity Propagation System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Observation Lounge Consolidation & Optimization",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone: Observation Lounge Consolidation & Optimization\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v2.3.0: Complete Crew Automation & Communication System",
+        "category": "crew",
+        "message": "Milestone \"Milestone v2.3.0: Complete Crew Automation & Communication System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone v2.5.0 — Alex AI CLI Restoration & Universal Orchestration",
+        "category": "crew",
+        "message": "Milestone \"🚀 Milestone v2.5.0 — Alex AI CLI Restoration & Universal Orchestration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone v2.5.1 — Crew Identity & Communication Protocol",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone v2.5.1 — Crew Identity & Communication Protocol\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone v2.6.0 — Multi-Vessel Architecture: Crew Serves on Any Ship",
+        "category": "crew",
+        "message": "Milestone \"🚀 Milestone v2.6.0 — Multi-Vessel Architecture: Crew Serves on Any Ship\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone v2.6.1 — The Paradigm Shift: From Single Assistant to Crew Operations\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Alex AI Universal - Milestone: Revised Prime Directive System",
+        "category": "crew",
+        "message": "Milestone \"Alex AI Universal - Milestone: Revised Prime Directive System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone: Full Alex AI System Engagement & Architecture Validation",
+        "category": "crew",
+        "message": "Milestone \"🚀 Milestone: Full Alex AI System Engagement & Architecture Validation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Next.js 15 Unified Architecture Design",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone: Next.js 15 Unified Architecture Design\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🔒 Milestone Lockdown Point - Complete Reference",
+        "category": "crew",
+        "message": "Milestone \"🔒 Milestone Lockdown Point - Complete Reference\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation",
+        "category": "crew",
+        "message": "Milestone \"🖖 Milestone Reference: Quark + Riker Integration + OpenRouter Automation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚨 MILESTONE: Emergency Protocols System & Crew Role Swapping",
+        "category": "crew",
+        "message": "Milestone \"🚨 MILESTONE: Emergency Protocols System & Crew Role Swapping\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Dashboard Build Error Fix",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 Milestone: Dashboard Build Error Fix\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: DDD Architecture Review Checkpoint",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 Milestone: DDD Architecture Review Checkpoint\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 Milestone: Crew Recommendations Implementation & Dashboard Fixes\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 Milestone: Crew Recommendations UI Implementation - Component-Based Knowledge System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture",
+        "category": "dashboard",
+        "message": "Milestone \"🎉 MILESTONE: Unified UX + Seamless Crossfade + DDD Architecture\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎉 MILESTONE: Zero-Flash UX + Unified Architecture",
+        "category": "dashboard",
+        "message": "Milestone \"🎉 MILESTONE: Zero-Flash UX + Unified Architecture\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.4.1: Theme System Restoration & Bug Fixes",
+        "category": "dashboard",
+        "message": "Milestone \"Milestone v1.4.1: Theme System Restoration & Bug Fixes\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability",
+        "category": "dashboard",
+        "message": "Milestone \"Milestone – 2025-10-20 – Observation Lounge Unify + Nav Stability\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone – 2025-10-21 – Preview Policy and Theme Parity",
+        "category": "dashboard",
+        "message": "Milestone \"Milestone – 2025-10-21 – Preview Policy and Theme Parity\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live",
+        "category": "dashboard",
+        "message": "Milestone \"🚀 Milestone: Implementation Queue Complete - Vibe Coding Platform Live\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: Recovery + Rollback to Stable Baseline (2025-10-15)",
+        "category": "dashboard",
+        "message": "Milestone \"Milestone: Recovery + Rollback to Stable Baseline (2025-10-15)\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System",
+        "category": "dashboard",
+        "message": "Milestone \"🎨 Milestone: Universal Theme Gallery - Complete Visual Selection System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎨 Milestone: Universal Theme System Integration",
+        "category": "dashboard",
+        "message": "Milestone \"🎨 Milestone: Universal Theme System Integration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Enhanced Agentic Architecture Milestone",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 Enhanced Agentic Architecture Milestone\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 MAJOR MILESTONE GITHUB PUSH SUMMARY",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 MAJOR MILESTONE GITHUB PUSH SUMMARY\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS",
+        "category": "dashboard",
+        "message": "Milestone \"🖖 MILESTONE: THEME STATE FIX MVP - COMPLETE SUCCESS\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: UI & Agentic System Enhancements",
+        "category": "dashboard",
+        "message": "Milestone \"Milestone: UI & Agentic System Enhancements\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Feature Branch: Milestone Push Automation",
+        "category": "features",
+        "message": "Milestone \"Feature Branch: Milestone Push Automation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: Complete N8N to MCP Migration Execution",
+        "category": "mcp",
+        "message": "Milestone \"Milestone: Complete N8N to MCP Migration Execution\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: MCP Layer Analysis & Feature Branch Creation",
+        "category": "mcp",
+        "message": "Milestone \"Milestone: MCP Layer Analysis & Feature Branch Creation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: MCP Layer Implementation Complete",
+        "category": "mcp",
+        "message": "Milestone \"Milestone: MCP Layer Implementation Complete\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: MCP Server Deployment to mcp.pbradygeorgen.com",
+        "category": "mcp",
+        "message": "Milestone \"Milestone: MCP Server Deployment to mcp.pbradygeorgen.com\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: MCP Migration - DDD Controller Layer Transition",
+        "category": "mcp",
+        "message": "Milestone \"Milestone: MCP Migration - DDD Controller Layer Transition\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: Crew-Coordinated Webhook Registration Investigation",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: Crew-Coordinated Webhook Registration Investigation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎯 Milestone: N8N API Key Security Hardening & Universal Access",
+        "category": "n8n",
+        "message": "Milestone \"🎯 Milestone: N8N API Key Security Hardening & Universal Access\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎯 Milestone: Complete N8N Restoration & Webhook Configuration",
+        "category": "n8n",
+        "message": "Milestone \"🎯 Milestone: Complete N8N Restoration & Webhook Configuration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: N8N Controller Layer Audit Complete",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: N8N Controller Layer Audit Complete\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: N8N Version Analysis and WEBHOOK_URL Configuration",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: N8N Version Analysis and WEBHOOK_URL Configuration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: Project Type Detection & Webhook Automation",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: Project Type Detection & Webhook Automation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: RAG System Operational Readiness",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: RAG System Operational Readiness\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: RAG Webhook Investigation & Automation",
+        "category": "n8n",
+        "message": "Milestone \"Milestone: RAG Webhook Investigation & Automation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: MCP Health Fixes & n8n Workflow Translation",
+        "category": "n8n",
+        "message": "Milestone \"🖖 Milestone: MCP Health Fixes & n8n Workflow Translation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone – 2025-11-12 – N8N Crew Telemetry Upgrade",
+        "category": "n8n",
+        "message": "Milestone \"Milestone – 2025-11-12 – N8N Crew Telemetry Upgrade\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution",
+        "category": "n8n",
+        "message": "Milestone \"🖖 Milestone: Observation Lounge Status Briefing & Action Items Execution\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v1.3.0 - DDD Architecture & Temporal Wake Integration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.4.0: DDD Workflow System",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v1.4.0: DDD Workflow System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.5.1: RAG System Automation via APIs",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v1.5.1: RAG System Automation via APIs\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v1.7.3: 95% N8N Automation + Infrastructure Hardening\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.7.4: Complete N8N Restoration + Crew Memory System",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v1.7.4: Complete N8N Restoration + Crew Memory System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v2.0.0: Complete Terraform Infrastructure as Code",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v2.0.0: Complete Terraform Infrastructure as Code\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis",
+        "category": "n8n",
+        "message": "Milestone \"Milestone v2.1.0: Webhook Restoration & DDD Automation Analysis\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone v2.4.0 — Automated Crew Webhook Registration",
+        "category": "n8n",
+        "message": "Milestone \"🚀 Milestone v2.4.0 — Automated Crew Webhook Registration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚧 Milestone v2.4.1 — Webhook Diagnostics & Credential Audit",
+        "category": "n8n",
+        "message": "Milestone \"🚧 Milestone v2.4.1 — Webhook Diagnostics & Credential Audit\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🪐 Milestone v2.4.2 — Crew Credential Automation Blueprint",
+        "category": "n8n",
+        "message": "Milestone \"🪐 Milestone v2.4.2 — Crew Credential Automation Blueprint\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🧩 Milestone v2.4.3 — Shell & Secrets Refactor",
+        "category": "n8n",
+        "message": "Milestone \"🧩 Milestone v2.4.3 — Shell & Secrets Refactor\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone v2.4.4 — Owner-Session Workflow Execution",
+        "category": "n8n",
+        "message": "Milestone \"🚀 Milestone v2.4.4 — Owner-Session Workflow Execution\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 Milestone v2.4.5 — Remote n8n Leader Refresh",
+        "category": "n8n",
+        "message": "Milestone \"🚀 Milestone v2.4.5 — Remote n8n Leader Refresh\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew",
+        "category": "n8n",
+        "message": "Milestone \"Milestone – 2025-10-21 – Automated RAG + Self‑Sustaining Crew\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "📊 Milestone Push Status",
+        "category": "n8n",
+        "message": "Milestone \"📊 Milestone Push Status\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "MCP Milestone Summarization Migration",
+        "category": "n8n",
+        "message": "Milestone \"MCP Milestone Summarization Migration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: MCP Memory Storage System Complete",
+        "category": "rag",
+        "message": "Milestone \"Milestone: MCP Memory Storage System Complete\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: RAG Bypass Solution Operational",
+        "category": "rag",
+        "message": "Milestone \"Milestone: RAG Bypass Solution Operational\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: YouTube RAG Optimization & MCP Integration",
+        "category": "rag",
+        "message": "Milestone \"Milestone: YouTube RAG Optimization & MCP Integration\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone v1.5.0: DDD Architecture for User Settings",
+        "category": "rag",
+        "message": "Milestone \"Milestone v1.5.0: DDD Architecture for User Settings\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🧠 Milestone v2.6.2 — RAG Micro-Test: Admiral Rank Protocol",
+        "category": "rag",
+        "message": "Milestone \"🧠 Milestone v2.6.2 — RAG Micro-Test: Admiral Rank Protocol\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Alex AI Universal - Milestone Build: Cursor Engagement Protocol",
+        "category": "rag",
+        "message": "Milestone \"Alex AI Universal - Milestone Build: Cursor Engagement Protocol\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🎯 Current Milestone: RAG + Hallucination System Validation",
+        "category": "rag",
+        "message": "Milestone \"🎯 Current Milestone: RAG + Hallucination System Validation\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: E2E Testing Quick Wins Complete",
+        "category": "testing",
+        "message": "Milestone \"Milestone: E2E Testing Quick Wins Complete\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "Milestone: Webhook Registration Investigation & E2E Testing Deep Dive",
+        "category": "testing",
+        "message": "Milestone \"Milestone: Webhook Registration Investigation & E2E Testing Deep Dive\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework",
+        "category": "testing",
+        "message": "Milestone \"🖖 Milestone: MCP Timeout Optimization & E2E Testing Framework\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Universal Progress System & MCP Optimization",
+        "category": "testing",
+        "message": "Milestone \"🖖 Milestone: Universal Progress System & MCP Optimization\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🖖 Milestone: Cursor AI Automatic Startup & State Recovery System",
+        "category": "testing",
+        "message": "Milestone \"🖖 Milestone: Cursor AI Automatic Startup & State Recovery System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      },
+      {
+        "type": "unassociated_milestone",
+        "milestone": "🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System",
+        "category": "testing",
+        "message": "Milestone \"🚀 MILESTONE: E2E Testing Framework - Complete Workflow Validation System\" has no associated crew memories. Consider creating crew analysis for this milestone."
+      }
+    ]
+  }
+}

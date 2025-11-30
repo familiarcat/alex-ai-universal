@@ -1,0 +1,213 @@
+{
+  "timestamp": "2025-11-11T06:05:05.125Z",
+  "baseUrl": "https://n8n.pbradygeorgen.com",
+  "runDirectory": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z",
+  "workflows": [
+    {
+      "id": "6YQVP2lXuzWEMLJH",
+      "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/COORDINATION_-_Observation_Lounge_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/6YQVP2lXuzWEMLJH-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "Bcu0ySPIXX27mSYH",
+      "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Lieutenant_Commander_Geordi_La_Forge_-_Infrastructure_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/Bcu0ySPIXX27mSYH-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "NaExwWejsSLVd5ai",
+      "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Lieutenant_Uhura_-_Communications_I_O_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/NaExwWejsSLVd5ai-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "aDQeEuI2ww6l02xM",
+      "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Lieutenant_Worf_-_Security_Compliance_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/aDQeEuI2ww6l02xM-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "aQSbIwT4JGJ9z1F3",
+      "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Commander_Data_-_Android_Analytics_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/aQSbIwT4JGJ9z1F3-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "eJm8awXujdfR3kH4",
+      "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Dr_Beverly_Crusher_-_Health_Diagnostics_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/eJm8awXujdfR3kH4-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "hEHWeCy2L0dTHQKJ",
+      "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Chief_Miles_O_Brien_-_Pragmatic_Solutions_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/hEHWeCy2L0dTHQKJ-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "lrcDjOHwjAjgOi7q",
+      "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Captain_Jean-Luc_Picard_-_Strategic_Leadership_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/lrcDjOHwjAjgOi7q-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "ma2guAdSn8WJvQCO",
+      "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Counselor_Deanna_Troi_-_User_Experience_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/ma2guAdSn8WJvQCO-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "o5DRBwrD2KlF3IFe",
+      "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/COORDINATION_-_Democratic_Collaboration_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/o5DRBwrD2KlF3IFe-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "wkQnU1qlwixsdGZc",
+      "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Chief_Miles_O_Brien_-_Pragmatic_Solutions_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/wkQnU1qlwixsdGZc-failed.png"
+      },
+      "status": "failed"
+    },
+    {
+      "id": "yn5snWtN7IKu19hD",
+      "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "toggledOff": false,
+      "toggledOn": false,
+      "errors": [
+        "Could not find workflow toggle button"
+      ],
+      "screenshots": {
+        "editor": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/CREW_-_Commander_William_Riker_-_Tactical_Execution_-_OpenRouter_-_Production.png",
+        "failure": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/screenshots/yn5snWtN7IKu19hD-failed.png"
+      },
+      "status": "failed"
+    }
+  ],
+  "errors": [],
+  "webhookTests": [
+    {
+      "name": "Captain Picard",
+      "path": "/webhook/crew-captain-jean-luc-picard",
+      "status": "not_registered",
+      "httpStatus": 404
+    },
+    {
+      "name": "Commander Data",
+      "path": "/webhook/crew-commander-data",
+      "status": "not_registered",
+      "httpStatus": 404
+    },
+    {
+      "name": "Geordi La Forge",
+      "path": "/webhook/crew-geordi-la-forge",
+      "status": "not_registered",
+      "httpStatus": 404
+    },
+    {
+      "name": "Observation Lounge",
+      "path": "/webhook/observation-lounge",
+      "status": "not_registered",
+      "httpStatus": 404
+    }
+  ],
+  "results": {
+    "success": 0,
+    "failed": 12,
+    "total": 12
+  },
+  "webhookResults": {
+    "working": 0,
+    "notWorking": 4
+  },
+  "durationSeconds": 778.8,
+  "summaryFile": "reports/n8n-toggle-runs/2025-11-11T06-05-05-122Z/summary.json"
+}

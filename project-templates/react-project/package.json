@@ -1,0 +1,21 @@
+{
+  "name": "react-project",
+  "version": "1.0.0",
+  "description": "React application with Alex AI integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "echo \"No tests specified\""
+  },
+  "dependencies": {
+    "@alex-ai/core": "file:../local-registry/alex-ai-core-1.0.0-private.tgz",
+    "@alex-ai/cli": "file:../local-registry/alex-ai-cli-1.0.0-private.tgz"
+  },
+  "keywords": [
+    "alex-ai",
+    "react"
+  ],
+  "author": "Alex AI Team",
+  "license": "MIT"
+}

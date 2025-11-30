@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: TypeScript check
+        run: ./node_modules/.bin/tsc --noEmit -p tsconfig.json
+      - name: Package VSIX
+        run: |
+          npm install -g vsce
+          vsce package || true
+      - name: Upload VSIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: alex-ai-vsix
+          path: '*.vsix'
+name: CI
+
+on:
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps (core)
+        working-directory: ../universal-core
+        run: npm install
+      - name: Install deps (extension)
+        working-directory: .
+        run: npm install
+      - name: Run smoke test
+        run: npm test

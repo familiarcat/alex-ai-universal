@@ -1,0 +1,69 @@
+{
+  "id": "KOK1vhGdHKd0c6Em",
+  "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "requestMethod": "GET",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Quark",
+        "allowUnauthorizedCerts": false,
+        "responseFormat": "json",
+        "jsonParameters": false,
+        "options": {},
+        "headerParametersUi": {},
+        "queryParametersUi": {},
+        "infoMessage": ""
+      },
+      "id": "656dfc0f-650f-4355-a1a7-b453f1cfab48",
+      "name": "Quark Memory Retrieval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        464,
+        112
+      ]
+    },
+    {
+      "id": "33908237-4f98-412f-a173-d18dfecf9b0d",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        256,
+        112
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Quark Memory Retrieval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "4391d77c-1a01-4959-80cd-9a09461bfa41",
+  "triggerCount": 0,
+  "createdAt": "2025-09-12T00:15:01.322Z",
+  "updatedAt": "2025-09-21T21:31:50.321Z",
+  "tags": [],
+  "_downloadedAt": "2025-09-21T21:33:26.803Z",
+  "_category": "utility-workflows",
+  "_source": "remote-n8n"
+}

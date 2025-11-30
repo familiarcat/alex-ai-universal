@@ -1,0 +1,90 @@
+{
+  "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "f79241d1-1660-4fe6-99c3-d456c85fb72a",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Federation Directive Receiver",
+        "parameters": {
+          "path": "082503f8-8939-40c4-9620-81e3eff05d82",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Response Handler"
+      ]
+    },
+    {
+      "id": "8004bbbe-cefe-486b-8b91-8d8b848416da",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Federation Concise Agency Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Federation Concise Agency Response"
+      ]
+    },
+    {
+      "id": "4a7cfcfd-5b06-41ce-a166-b0eb8ad2c98a",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Federation Concise Agency Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      }
+    },
+    {
+      "id": "deeac417-c2ef-4e04-a613-7dafd6e86122",
+      "type": "transform",
+      "config": {
+        "name": "Response Handler",
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          464,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "afJEJkFCHES9fsRU",
+    "originalName": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.213Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979213-97v0rr",
+  "createdAt": "2025-11-21T11:19:39.213Z",
+  "updatedAt": "2025-11-21T11:19:39.213Z"
+}

@@ -1,0 +1,131 @@
+{
+  "name": "Knowledge Query (RAG READ - Hybrid Search)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "5aaf6137-f707-4743-a506-4a278754ecfa",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "knowledge-query",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Parse Query"
+      ]
+    },
+    {
+      "id": "bf1e59d2-5a2e-423c-ac5b-bdada22739e1",
+      "type": "transform",
+      "config": {
+        "name": "Parse Query",
+        "parameters": {
+          "functionCode": "// Parse query parameters and build search strategy\nconst body = $input.item.json.body;\n\nconst searchType = body.searchType || 'hybrid'; // hybrid, semantic, keyword, exact\nconst query = body.query || '';\nconst filters = body.filters || {};\nconst limit = body.limit || 10;\n\n// Build search parameters\nconst searchParams = {\n  query: query,\n  search_type: searchType,\n  \n  // Filters\n  category: filters.category,\n  tags: filters.tags,\n  crew_members: filters.crew_members,\n  date_from: filters.date_from,\n  date_to: filters.date_to,\n  session_id: filters.session_id,\n  \n  // Pagination\n  limit: limit,\n  offset: filters.offset || 0,\n  \n  // Ranking\n  rank_by: filters.rank_by || 'relevance' // relevance, date, votes\n};\n\nconsole.log('🔍 RAG Query:', searchType, '|', query);\n\nreturn { json: searchParams };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Supabase Search"
+      ]
+    },
+    {
+      "id": "a9cf27b5-e4eb-46ff-82ac-275fcf7a83cb",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Search",
+        "parameters": {
+          "operation": "getAll",
+          "table": "knowledge_base",
+          "returnAll": false,
+          "limit": "={{ $json.limit }}",
+          "filters": {
+            "conditions": []
+          },
+          "options": {
+            "queryName": "search_knowledge"
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Format Results"
+      ]
+    },
+    {
+      "id": "d9adc364-f19a-4588-bf7c-bd58549cd66f",
+      "type": "transform",
+      "config": {
+        "name": "Format Results",
+        "parameters": {
+          "functionCode": "// Format results with provenance and ranking\nconst items = $input.all();\n\nconst results = items.map((item, index) => {\n  const data = item.json;\n  \n  // Parse JSON fields back to objects\n  const parseIfString = (field) => {\n    if (typeof field === 'string') {\n      try { return JSON.parse(field); } catch (e) { return field; }\n    }\n    return field;\n  };\n  \n  return {\n    rank: index + 1,\n    session_id: data.session_id,\n    title: data.title,\n    category: data.category,\n    executive_summary: data.executive_summary,\n    \n    // Provenance\n    crew_members: parseIfString(data.crew_members),\n    session_date: data.session_date,\n    created_at: data.created_at,\n    \n    // Key insights\n    critical_decisions: parseIfString(data.critical_decisions),\n    technical_patterns: parseIfString(data.technical_patterns),\n    lessons_learned: parseIfString(data.lessons_learned),\n    \n    // Metadata\n    tags: parseIfString(data.tags),\n    \n    // Relevance score (placeholder for future vector search)\n    relevance_score: 1.0 - (index * 0.05)\n  };\n});\n\nconsole.log(`✅ Found ${results.length} results`);\n\nreturn {\n  json: {\n    success: true,\n    query: $('Parse Query').item.json.query,\n    total_results: results.length,\n    results: results\n  }\n};"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "16da577b-3a76-4692-a7ed-e6895b081c7d",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1050,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "eJQB5nEXL3UkxvUO",
+    "originalName": "Knowledge Query (RAG READ - Hybrid Search)",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-ilfr0k",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

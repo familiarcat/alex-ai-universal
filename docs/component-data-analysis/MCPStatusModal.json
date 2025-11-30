@@ -1,0 +1,16 @@
+{
+  "componentName": "MCPStatusModal",
+  "filePath": "/dashboard/components/MCPStatusModal.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "fetch(/api/mcp/status)",
+    "API: /api/mcp/status"
+  ],
+  "dataFlow": [
+    "Component → fetch(/api/mcp/status) → Next.js API → Supabase/n8n",
+    "Component → /api/mcp/status → Supabase/n8n"
+  ],
+  "problems": [],
+  "recommendations": []
+}

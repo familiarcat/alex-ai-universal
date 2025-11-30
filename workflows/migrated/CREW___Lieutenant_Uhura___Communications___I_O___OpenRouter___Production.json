@@ -1,0 +1,163 @@
+{
+  "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "20d611ff-5954-415b-9ff8-468e678b30c0",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Uhura Directive",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-lieutenant-uhura",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Lieutenant Uhura Memory Retrieval"
+      ]
+    },
+    {
+      "id": "95fefd7e-fbcc-47e1-9f49-3c4d4b3acf19",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Uhura Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Lieutenant Uhura",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "f4eb5da0-ab99-4ab0-a08f-264b70a2118b",
+      "type": "workflowExecute",
+      "config": {
+        "name": "LLM Selection Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          336
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Uhura AI Agent"
+      ]
+    },
+    {
+      "id": "014dc85d-7d28-4e05-ba02-c473fbd55bd6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Uhura AI Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge Communication"
+      ]
+    },
+    {
+      "id": "8130060f-e5d2-42f4-86d1-16ab94306c0b",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Lieutenant Uhura Memory Storage",
+        "parameters": {
+          "authentication": "none",
+          "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "sendBody": true,
+          "jsonParameters": true,
+          "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'uhura',\n      knowledgeType: 'communication_protocol',\n      priority: 'medium',\n      title: 'Communications Advisory',\n      summary: summaryLine.trim() || 'Communications guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'uhura']\n    }\n  };\n})() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Uhura Response"
+      ]
+    },
+    {
+      "id": "29665462-f690-4b6f-a95b-aafd27522d1c",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge Communication",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Lieutenant Uhura Memory Storage"
+      ]
+    },
+    {
+      "id": "d62ba79c-69d0-4466-8382-da6e618431f5",
+      "type": "transform",
+      "config": {
+        "name": "Lieutenant Uhura Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ {\n  success: true,\n  crew_member: 'lieutenant_uhura',\n  crew_name: 'Lieutenant Uhura',\n  role: 'Communications Officer',\n  summary: $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Lieutenant Uhura AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Lieutenant Uhura Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Lieutenant Uhura AI Agent').item.json?.model || null,\n    usage: $('Lieutenant Uhura AI Agent').item.json?.usage || null\n  }\n} }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1136,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "i74OzYVUt18w5MyZ",
+    "originalName": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-hi1zz",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

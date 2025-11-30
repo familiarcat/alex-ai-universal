@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Wrapper to post collaboration notes to n8n → Supabase RAG
+# Usage: alex-n8n-post <plan_id> <doc.md>
+
+REPO_ROOT="/Users/bradygeorgen/Documents/workspace/alex-ai-universal"
+PLAN_ID="${1:-NEXT16_PREP_$(date +%Y-%m-%d)}"
+DOC_PATH="${2:-docs/N8N_WEBHOOK_STATUS_AND_NEXT16_PREP.md}"
+
+if [ ! -f "$REPO_ROOT/$DOC_PATH" ]; then
+  echo "Document not found: $REPO_ROOT/$DOC_PATH" >&2
+  exit 1
+fi
+
+# Always use zsh to load ~/.zshrc env for N8N_* vars (avoid nested path quirks)
+ZDOTDIR="$HOME" /bin/zsh -lc "cd '$REPO_ROOT'; /Users/bradygeorgen/Documents/workspace/alex-ai-universal/scripts/n8n-post-collaboration.sh '$PLAN_ID' '$DOC_PATH'"
+
+

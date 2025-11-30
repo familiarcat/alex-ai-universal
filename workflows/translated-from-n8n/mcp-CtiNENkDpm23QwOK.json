@@ -1,0 +1,320 @@
+{
+  "id": "mcp-CtiNENkDpm23QwOK",
+  "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+  "description": "Converted from n8n workflow: COORDINATION - Democratic Collaboration - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "8148bfec-b8c8-4681-a50d-9ae7a2a49e95",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        128,
+        304
+      ],
+      "parameters": {
+        "path": "llm-collaboration",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "llm-collaboration",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "ba72b4bb-1b86-4c27-a3b5-c63c5163bdaf",
+      "name": "Democratic LLM Router",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        352,
+        304
+      ],
+      "parameters": {
+        "functionCode": "// Democratic LLM Selection Algorithm\nconst task = $json.task;\nconst availableModels = $json.collaboration_context.available_models;\nconst budgetConstraints = $json.collaboration_context.budget_constraints;\n\n// Model configurations with OpenRouter IDs\nconst models = {\n  'claude-sonnet': {\n    platform: 'anthropic',\n    openrouter_id: 'anthropic/claude-3.5-sonnet',\n    cost_per_token: 0.000003,\n    specialization: 'strategic_analysis',\n    strengths: ['reasoning', 'analysis', 'coding', 'writing']\n  },\n  'gpt-4o': {\n    platform: 'openai', \n    openrouter_id: 'openai/gpt-4o',\n    cost_per_token: 0.000005,\n    specialization: 'research',\n    strengths: ['multimodal', 'creativity', 'general_purpose']\n  },\n  'gemini-pro': {\n    platform: 'google',\n    openrouter_id: 'google/gemini-pro-1.5',\n    cost_per_token: 0.000002,\n    specialization: 'optimization', \n    strengths: ['code_analysis', 'performance', 'efficiency']\n  },\n  'llama-3': {\n    platform: 'meta',\n    openrouter_id: 'meta-llama/llama-3-70b-instruct',\n    cost_per_token: 0.000001,\n    specialization: 'code_implementation',\n    strengths: ['open_source', 'cost_effective', 'coding']\n  }\n};\n\n// Task-model affinity scoring\nconst taskAffinities = {\n  'code_implementation': {\n    'llama-3': 0.95,\n    'claude-sonnet': 0.85,\n    'gemini-pro': 0.80,\n    'gpt-4o': 0.70\n  },\n  'strategic_analysis': {\n    'claude-sonnet': 0.98,\n    'gpt-4o': 0.90,\n    'gemini-pro': 0.75,\n    'llama-3': 0.65\n  },\n  'research': {\n    'gpt-4o': 0.95,\n    'claude-sonnet': 0.85,\n    'gemini-pro': 0.75,\n    'llama-3': 0.60\n  },\n  'optimization': {\n    'gemini-pro': 0.95,\n    'llama-3': 0.85,\n    'claude-sonnet': 0.80,\n    'gpt-4o': 0.75\n  }\n};\n\n// Democratic selection algorithm\nfunction selectBestModel(task, availableModels) {\n  const taskType = task.type;\n  const complexity = task.complexity;\n  \n  let scores = {};\n  \n  // Calculate base scores from task affinity\n  if (taskAffinities[taskType]) {\n    scores = { ...taskAffinities[taskType] };\n  } else {\n    // Default scoring for unknown task types\n    availableModels.forEach(model => {\n      scores[model] = 0.7; // neutral score\n    });\n  }\n  \n  // Adjust for complexity\n  const complexityMultiplier = {\n    'low': 0.9,\n    'medium': 1.0,\n    'high': 1.1\n  }[complexity] || 1.0;\n  \n  // Apply complexity adjustment and cost considerations\n  Object.keys(scores).forEach(modelName => {\n    if (models[modelName]) {\n      scores[modelName] *= complexityMultiplier;\n      \n      // Cost efficiency bonus for budget-conscious selections\n      const costEfficiency = 1 / (models[modelName].cost_per_token * 1000000); // normalize\n      scores[modelName] += costEfficiency * 0.1; // small cost bonus\n    }\n  });\n  \n  // Find the best model\n  const bestModel = Object.entries(scores)\n    .filter(([model]) => availableModels.includes(model))\n    .sort(([,a], [,b]) => b - a)[0];\n  \n  return {\n    selected_model: bestModel[0],\n    confidence: bestModel[1],\n    all_scores: scores,\n    model_config: models[bestModel[0]]\n  };\n}\n\n// Perform selection\nconst selection = selectBestModel(task, availableModels);\n\n// Estimate cost\nconst estimatedTokens = {\n  'low': 500,\n  'medium': 1500,\n  'high': 3000\n}[task.complexity] || 1500;\n\nconst estimatedCost = estimatedTokens * selection.model_config.cost_per_token;\n\nreturn [{\n  collaboration_id: $json.collaboration_id,\n  session_id: $json.session_id,\n  selected_model: selection.selected_model,\n  confidence_score: selection.confidence,\n  model_config: selection.model_config,\n  estimated_cost: estimatedCost,\n  estimated_tokens: estimatedTokens,\n  routing_decision: {\n    primary_model: selection.selected_model,\n    fallback_models: Object.entries(selection.all_scores)\n      .filter(([model]) => model !== selection.selected_model && availableModels.includes(model))\n      .sort(([,a], [,b]) => b - a)\n      .slice(0, 2)\n      .map(([model]) => model),\n    democratic_scores: selection.all_scores\n  },\n  task: task\n}];"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Democratic LLM Router"
+      }
+    },
+    {
+      "id": "e634a7ef-c12a-44b6-8b71-1fa2ca6135a2",
+      "name": "Model Router",
+      "type": "mcp.unknown",
+      "originalType": "n8n-nodes-base.switch",
+      "position": [
+        560,
+        304
+      ],
+      "parameters": {},
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Model Router"
+      }
+    },
+    {
+      "id": "e2dd86c6-4e45-411a-aac0-93a65dc32944",
+      "name": "Claude API",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        784,
+        208
+      ],
+      "parameters": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{$env.CLAUDE_API_KEY}}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "claude-3-5-sonnet-20241022"
+            },
+            {
+              "name": "max_tokens",
+              "value": "={{$json.estimated_tokens}}"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"user\", \"content\": $json.task.description}]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Claude API"
+      }
+    },
+    {
+      "id": "dfc1670f-3fa7-4a8c-9e96-0076d8ef7b9b",
+      "name": "OpenRouter API",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        784,
+        400
+      ],
+      "parameters": {
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.OPENROUTER_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://n8n.pbradygeorgen.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "LLM Democratic Collaboration"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "={{$json.model_config.openrouter_id}}"
+            },
+            {
+              "name": "max_tokens",
+              "value": "={{$json.estimated_tokens}}"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\": \"user\", \"content\": $json.task.description}]"
+            },
+            {
+              "name": "temperature",
+              "value": 0.7
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "OpenRouter API"
+      }
+    },
+    {
+      "id": "911aa5a3-5551-4f6c-be09-48fec51fe34b",
+      "name": "Response Aggregator",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        1008,
+        304
+      ],
+      "parameters": {
+        "functionCode": "// Response Aggregation and Quality Assessment\nconst input = $input.all();\nconst originalData = input[0]; // Contains our routing decision\nconst llmResponse = input[0]; // Contains the LLM response\n\n// Parse the LLM response based on the platform\nlet parsedResponse;\nlet usage = {};\n\nif (originalData.selected_model === 'claude-sonnet') {\n  // Claude API response format\n  parsedResponse = {\n    content: llmResponse.content?.[0]?.text || llmResponse.text || 'No response',\n    model: llmResponse.model || 'claude-3-5-sonnet-20241022',\n    usage: llmResponse.usage || {}\n  };\n} else {\n  // OpenRouter API response format (OpenAI compatible)\n  parsedResponse = {\n    content: llmResponse.choices?.[0]?.message?.content || 'No response',\n    model: llmResponse.model || originalData.model_config.openrouter_id,\n    usage: llmResponse.usage || {}\n  };\n}\n\n// Calculate actual cost based on usage\nconst actualTokens = parsedResponse.usage.total_tokens || originalData.estimated_tokens;\nconst actualCost = actualTokens * originalData.model_config.cost_per_token;\n\n// Quality assessment\nconst qualityMetrics = {\n  response_length: parsedResponse.content.length,\n  estimated_vs_actual_tokens: {\n    estimated: originalData.estimated_tokens,\n    actual: actualTokens,\n    accuracy: Math.abs(1 - (actualTokens / originalData.estimated_tokens))\n  },\n  cost_efficiency: {\n    estimated: originalData.estimated_cost,\n    actual: actualCost,\n    savings: originalData.estimated_cost - actualCost\n  },\n  model_confidence: originalData.confidence_score\n};\n\n// Final collaboration result\nconst collaborationResult = {\n  collaboration_id: originalData.collaboration_id,\n  session_id: originalData.session_id,\n  timestamp: new Date().toISOString(),\n  \n  // Democratic selection results\n  democratic_selection: {\n    selected_model: originalData.selected_model,\n    confidence_score: originalData.confidence_score,\n    routing_decision: originalData.routing_decision,\n    selection_rationale: `Selected ${originalData.selected_model} with ${(originalData.confidence_score * 100).toFixed(1)}% confidence for ${originalData.task.type} task`\n  },\n  \n  // LLM Response\n  llm_response: {\n    content: parsedResponse.content,\n    model: parsedResponse.model,\n    platform: originalData.model_config.platform\n  },\n  \n  // Cost and usage analytics\n  analytics: {\n    usage: parsedResponse.usage,\n    cost_analysis: qualityMetrics.cost_efficiency,\n    token_prediction_accuracy: qualityMetrics.estimated_vs_actual_tokens.accuracy,\n    quality_score: Math.min(1.0, originalData.confidence_score * (1 - qualityMetrics.estimated_vs_actual_tokens.accuracy * 0.1))\n  },\n  \n  // Task metadata\n  task_metadata: {\n    task_id: originalData.task.task_id,\n    task_type: originalData.task.type,\n    complexity: originalData.task.complexity,\n    completion_time: new Date().toISOString()\n  },\n  \n  // System metadata for learning\n  system_metadata: {\n    n8n_workflow: 'LLM_Democratic_Collaboration',\n    integration_version: '1.0.0',\n    collaboration_mode: 'democratic_selection',\n    success: true\n  }\n};\n\nreturn [collaborationResult];"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Aggregator"
+      }
+    },
+    {
+      "id": "2535ddb6-0c05-4b5b-a74b-a71e5916340b",
+      "name": "Result Webhook",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        1232,
+        304
+      ],
+      "parameters": {
+        "url": "={{ $env.N8N_BASE_URL }}/webhook/collaboration-complete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "collaboration_result",
+              "value": "={{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Result Webhook"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Democratic LLM Router",
+      "source": "Webhook Trigger",
+      "target": "Democratic LLM Router",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Democratic LLM Router-Model Router",
+      "source": "Democratic LLM Router",
+      "target": "Model Router",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Model Router-Claude API",
+      "source": "Model Router",
+      "target": "Claude API",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Model Router-OpenRouter API",
+      "source": "Model Router",
+      "target": "OpenRouter API",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Model Router-OpenRouter API",
+      "source": "Model Router",
+      "target": "OpenRouter API",
+      "sourceHandle": "main-2",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Model Router-OpenRouter API",
+      "source": "Model Router",
+      "target": "OpenRouter API",
+      "sourceHandle": "main-3",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Claude API-Response Aggregator",
+      "source": "Claude API",
+      "target": "Response Aggregator",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-OpenRouter API-Response Aggregator",
+      "source": "OpenRouter API",
+      "target": "Response Aggregator",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Response Aggregator-Result Webhook",
+      "source": "Response Aggregator",
+      "target": "Result Webhook",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "8148bfec-b8c8-4681-a50d-9ae7a2a49e95",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "llm-collaboration",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=llm-collaboration",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "CtiNENkDpm23QwOK",
+    "convertedAt": "2025-11-21T14:24:04.663Z",
+    "originalName": "COORDINATION - Democratic Collaboration - OpenRouter - Production"
+  }
+}

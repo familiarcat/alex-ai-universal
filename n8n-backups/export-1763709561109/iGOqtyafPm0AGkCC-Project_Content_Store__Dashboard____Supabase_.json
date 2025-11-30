@@ -1,0 +1,162 @@
+{
+  "updatedAt": "2025-11-20T17:45:54.252Z",
+  "createdAt": "2025-11-20T01:11:40.347Z",
+  "id": "iGOqtyafPm0AGkCC",
+  "name": "Project Content Store (Dashboard => Supabase)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-content-store",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Validate and transform project content\nconst body = $input.item.json.body;\n\n// Required fields\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nif (!body.headline) {\n  throw new Error('headline is required');\n}\n\n// Build project data\nconst projectData = {\n  project_id: body.projectId,\n  headline: body.headline,\n  subheadline: body.subheadline || '',\n  description: body.description || '',\n  theme: body.theme || 'midnight',\n  project_type: body.projectType || 'business',\n  business_type: body.businessType || null,\n  components: body.components ? JSON.stringify(body.components) : null,\n  pages: body.pages ? JSON.stringify(body.pages) : null,\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('📦 Storing project:', projectData.project_id);\n\nreturn { json: projectData };"
+      },
+      "id": "validate-transform",
+      "name": "Validate & Transform",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": "projects",
+        "columns": "project_id,headline,subheadline,description,theme,project_type,business_type,components,pages,updated_at",
+        "options": {
+          "onConflict": "project_id",
+          "skipOnConflict": false,
+          "upsert": true
+        }
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase Upsert",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"projectId\": $json.project_id, \"message\": \"Project stored successfully\", \"timestamp\": $now } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        850,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to store project\" } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "response-error",
+      "name": "Response Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        850,
+        450
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate & Transform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Transform": {
+      "main": [
+        [
+          {
+            "node": "Supabase Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Upsert": {
+      "main": [
+        [
+          {
+            "node": "Response Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "3ba43ec4-ba04-4865-bb8e-a7411f02ec44",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:11:40.349Z",
+      "createdAt": "2025-11-20T01:11:40.349Z",
+      "role": "workflow:owner",
+      "workflowId": "iGOqtyafPm0AGkCC",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}
