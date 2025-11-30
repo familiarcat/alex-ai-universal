@@ -1,0 +1,217 @@
+{
+  "id": "mcp-VpU32Ywg1ONe2wxW",
+  "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Commander Data - Android Analytics - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "ddb6338f-a9e2-4c46-be27-f34255d31458",
+      "name": "Commander Data Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-commander-data",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-commander-data",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander Data Directive"
+      }
+    },
+    {
+      "id": "a91cf418-a550-4e7f-95b1-3134fdb4cb1e",
+      "name": "Commander Data Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'data',\n      knowledgeType: 'technical_analysis',\n      priority: 'high',\n      title: 'Android Analytics Report',\n      summary: summaryLine.trim() || 'Technical analysis update',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'data']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander Data Memory Retrieval"
+      }
+    },
+    {
+      "id": "cedb3bcb-0b1c-49d8-9598-77dd9dbf2396",
+      "name": "LLM Selection Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        352
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "LLM Selection Agent"
+      }
+    },
+    {
+      "id": "c599d054-b1a0-45f7-a446-7688e1cb90d8",
+      "name": "Commander Data AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander Data AI Agent"
+      }
+    },
+    {
+      "id": "d9e91c24-94f4-4c99-af0c-e62e026c54eb",
+      "name": "Commander Data Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander Data Memory Storage"
+      }
+    },
+    {
+      "id": "a651acca-90e9-42ad-9ec7-ffeb409df7db",
+      "name": "Observation Lounge Communication",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge Communication"
+      }
+    },
+    {
+      "id": "c0c07afd-3753-456a-9789-9ecf8eba2928",
+      "name": "Commander Data Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_data',\n  crew_name: 'Commander Data',\n  role: 'Operations Officer',\n  summary: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander Data Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander Data AI Agent').item.json?.model || null,\n    usage: $('Commander Data AI Agent').item.json?.usage || null\n  }\n} }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Commander Data Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Commander Data Directive-LLM Selection Agent",
+      "source": "Commander Data Directive",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-LLM Selection Agent-Commander Data AI Agent",
+      "source": "LLM Selection Agent",
+      "target": "Commander Data AI Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander Data AI Agent-Observation Lounge Communication",
+      "source": "Commander Data AI Agent",
+      "target": "Observation Lounge Communication",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge Communication-Commander Data Memory Storage",
+      "source": "Observation Lounge Communication",
+      "target": "Commander Data Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander Data Memory Retrieval-LLM Selection Agent",
+      "source": "Commander Data Memory Retrieval",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Commander Data Memory Storage-Commander Data Response",
+      "source": "Commander Data Memory Storage",
+      "target": "Commander Data Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "ddb6338f-a9e2-4c46-be27-f34255d31458",
+      "nodeName": "Commander Data Directive",
+      "webhookPath": "crew-commander-data",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-commander-data",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "VpU32Ywg1ONe2wxW",
+    "convertedAt": "2025-11-21T14:24:04.675Z",
+    "originalName": "CREW - Commander Data - Android Analytics - OpenRouter - Production"
+  }
+}

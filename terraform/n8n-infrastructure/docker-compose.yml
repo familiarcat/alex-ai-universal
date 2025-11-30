@@ -1,0 +1,36 @@
+version: '3.8'
+
+# N8N Docker Compose Configuration for Production
+# This ensures WEBHOOK_URL is always set correctly
+# Used by Terraform user-data script and manual deployments
+
+services:
+  n8n:
+    image: n8nio/n8n:${N8N_VERSION:-latest}
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    env_file:
+      - /opt/n8n/.env
+    environment:
+      # Explicitly set WEBHOOK_URL (redundant but ensures it's set)
+      - WEBHOOK_URL=https://${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+      - N8N_PROTOCOL=https
+      - N8N_HOST=${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+      - N8N_PORT=5678
+      - N8N_EDITOR_BASE_URL=https://${N8N_DOMAIN:-n8n.pbradygeorgen.com}
+    volumes:
+      - /home/ubuntu/.n8n:/home/node/.n8n
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+

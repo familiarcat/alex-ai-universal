@@ -1,0 +1,130 @@
+{
+  "name": "Project Content Store (Dashboard => Supabase)",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "webhook-trigger",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "project-content-store",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate & Transform"
+      ]
+    },
+    {
+      "id": "validate-transform",
+      "type": "transform",
+      "config": {
+        "name": "Validate & Transform",
+        "parameters": {
+          "functionCode": "// Validate and transform project content\nconst body = $input.item.json.body;\n\n// Required fields\nif (!body.projectId) {\n  throw new Error('projectId is required');\n}\n\nif (!body.headline) {\n  throw new Error('headline is required');\n}\n\n// Build project data\nconst projectData = {\n  project_id: body.projectId,\n  headline: body.headline,\n  subheadline: body.subheadline || '',\n  description: body.description || '',\n  theme: body.theme || 'midnight',\n  project_type: body.projectType || 'business',\n  business_type: body.businessType || null,\n  components: body.components ? JSON.stringify(body.components) : null,\n  pages: body.pages ? JSON.stringify(body.pages) : null,\n  updated_at: new Date().toISOString()\n};\n\nconsole.log('📦 Storing project:', projectData.project_id);\n\nreturn { json: projectData };"
+        },
+        "type": "n8n-nodes-base.function",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.function"
+      },
+      "next": [
+        "Supabase Upsert"
+      ]
+    },
+    {
+      "id": "supabase-upsert",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Upsert",
+        "parameters": {
+          "operation": "insert",
+          "table": "projects",
+          "columns": "project_id,headline,subheadline,description,theme,project_type,business_type,components,pages,updated_at",
+          "options": {
+            "onConflict": "project_id",
+            "skipOnConflict": false,
+            "upsert": true
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "position": [
+          650,
+          300
+        ],
+        "originalType": "n8n-nodes-base.supabase"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "response-success",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"projectId\": $json.project_id, \"message\": \"Project stored successfully\", \"timestamp\": $now } }}",
+          "options": {
+            "responseCode": 200,
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "response-error",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to store project\" } }}",
+          "options": {
+            "responseCode": 500
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          450
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "iGOqtyafPm0AGkCC",
+    "originalName": "Project Content Store (Dashboard => Supabase)",
+    "migratedAt": "2025-11-21T11:19:39.214Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979214-yechku",
+  "createdAt": "2025-11-21T11:19:39.214Z",
+  "updatedAt": "2025-11-21T11:19:39.214Z"
+}

@@ -1,0 +1,1 @@
+/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones/2025-01/MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md

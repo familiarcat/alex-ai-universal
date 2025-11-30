@@ -1,0 +1,1 @@
+/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones/2025-01/MILESTONE_2025-01-24_DDD_ARCHITECTURE_REFACTORING_MCP_INTEGRATION.md

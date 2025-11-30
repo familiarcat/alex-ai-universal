@@ -1,0 +1,244 @@
+{
+  "id": "mcp-JfqWZUw0gU4n1Oft",
+  "name": "Supabase Schema Setup",
+  "description": "Converted from n8n workflow: Supabase Schema Setup",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "a6935241-dad2-4f19-a4e3-485830bff411",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "path": "supabase-schema-setup",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "supabase-schema-setup",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "04642a84-dcce-4d09-94cb-569baea430c6",
+      "name": "Validate Admin Key",
+      "type": "mcp.logic",
+      "originalType": "n8n-nodes-base.if",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.headers['x-admin-key']}}",
+              "value2": "={{$env.ADMIN_SETUP_KEY}}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Validate Admin Key"
+      }
+    },
+    {
+      "id": "0fc5aad6-7c74-441c-b648-08e0b71bb21e",
+      "name": "Create Main Table",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.postgres",
+      "position": [
+        650,
+        200
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Create project_content table\nCREATE TABLE IF NOT EXISTS project_content (\n  project_id TEXT PRIMARY KEY,\n  headline TEXT NOT NULL,\n  subheadline TEXT,\n  description TEXT,\n  theme TEXT DEFAULT 'gradient',\n  business_type TEXT,\n  components JSONB DEFAULT '[]'::jsonb,\n  pages JSONB DEFAULT '{}'::jsonb,\n  updated_at BIGINT NOT NULL,\n  synced_at TIMESTAMPTZ DEFAULT NOW(),\n  created_at TIMESTAMPTZ DEFAULT NOW(),\n  version INTEGER DEFAULT 1,\n  deleted_at TIMESTAMPTZ DEFAULT NULL\n);",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Create Main Table"
+      }
+    },
+    {
+      "id": "cc29fd73-fa6f-42de-a491-06f3547f1377",
+      "name": "Create Indexes",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.postgres",
+      "position": [
+        850,
+        200
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Create indexes\nCREATE INDEX IF NOT EXISTS idx_project_content_updated_at ON project_content(updated_at DESC);\nCREATE INDEX IF NOT EXISTS idx_project_content_synced_at ON project_content(synced_at DESC);\nCREATE INDEX IF NOT EXISTS idx_project_content_business_type ON project_content(business_type);\nCREATE INDEX IF NOT EXISTS idx_project_content_theme ON project_content(theme);\nCREATE INDEX IF NOT EXISTS idx_project_content_deleted_at ON project_content(deleted_at) WHERE deleted_at IS NULL;",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Create Indexes"
+      }
+    },
+    {
+      "id": "ae4ec274-026b-4a6e-aa8e-ea9827dd9cd7",
+      "name": "Create Changelog",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.postgres",
+      "position": [
+        1050,
+        200
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Create changelog table\nCREATE TABLE IF NOT EXISTS project_content_changelog (\n  id BIGSERIAL PRIMARY KEY,\n  project_id TEXT NOT NULL,\n  action TEXT NOT NULL,\n  changed_fields JSONB,\n  old_values JSONB,\n  new_values JSONB,\n  source TEXT DEFAULT 'dashboard',\n  user_agent TEXT,\n  ip_address INET,\n  changed_at TIMESTAMPTZ DEFAULT NOW()\n);\n\nCREATE INDEX IF NOT EXISTS idx_changelog_project_id ON project_content_changelog(project_id);\nCREATE INDEX IF NOT EXISTS idx_changelog_changed_at ON project_content_changelog(changed_at DESC);",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Create Changelog"
+      }
+    },
+    {
+      "id": "60d90017-5eee-494f-bb68-16f5d701efb2",
+      "name": "Setup RLS",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.postgres",
+      "position": [
+        1250,
+        200
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Enable RLS\nALTER TABLE project_content ENABLE ROW LEVEL SECURITY;\n\n-- Create policy for service role\nDROP POLICY IF EXISTS \"Allow n8n service role full access\" ON project_content;\nCREATE POLICY \"Allow n8n service role full access\"\n  ON project_content\n  FOR ALL\n  TO service_role\n  USING (true)\n  WITH CHECK (true);",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Setup RLS"
+      }
+    },
+    {
+      "id": "b56d9bbb-88fd-42d3-b014-5064df1d6b4b",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1450,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Supabase schema created successfully\", \"tables\": [\"project_content\", \"project_content_changelog\"], \"timestamp\": $now } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "880d8dc9-2773-494f-be80-7ab121f89f18",
+      "name": "Response Unauthorized",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        650,
+        400
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 403,
+        "responseBody": "={{ { \"success\": false, \"error\": \"Unauthorized: Invalid admin key\" } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Unauthorized"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Validate Admin Key",
+      "source": "Webhook Trigger",
+      "target": "Validate Admin Key",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Admin Key-Create Main Table",
+      "source": "Validate Admin Key",
+      "target": "Create Main Table",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Validate Admin Key-Response Unauthorized",
+      "source": "Validate Admin Key",
+      "target": "Response Unauthorized",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Create Main Table-Create Indexes",
+      "source": "Create Main Table",
+      "target": "Create Indexes",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Create Indexes-Create Changelog",
+      "source": "Create Indexes",
+      "target": "Create Changelog",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Create Changelog-Setup RLS",
+      "source": "Create Changelog",
+      "target": "Setup RLS",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Setup RLS-Response Success",
+      "source": "Setup RLS",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "a6935241-dad2-4f19-a4e3-485830bff411",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "supabase-schema-setup",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=supabase-schema-setup",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "JfqWZUw0gU4n1Oft",
+    "convertedAt": "2025-11-21T14:24:04.672Z",
+    "originalName": "Supabase Schema Setup"
+  }
+}

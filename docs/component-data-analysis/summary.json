@@ -1,0 +1,253 @@
+{
+  "analyzedAt": "2025-11-28T11:20:28.705Z",
+  "totalComponents": 62,
+  "componentsWithLiveData": 36,
+  "componentsWithMockData": 6,
+  "componentsWithoutData": 20,
+  "dataFlowPaths": [
+    "Component → UnifiedDataService → Next.js API → Supabase (primary) / n8n (fallback)",
+    "Component → /api/memories/retrieve → Supabase/n8n",
+    "Component → /api/memories/stats → Supabase/n8n",
+    "Component → useAppState → localStorage",
+    "Component → fetch(/api/lounge/crew-advice) → Next.js API → Supabase/n8n",
+    "Component → /api/lounge/crew-advice → Supabase/n8n",
+    "Component → fetch(/api/crew/thoughts?limit=50) → Next.js API → Supabase/n8n",
+    "Component → /api/crew/thoughts?limit=50 → Supabase/n8n",
+    "Component → fetch(/api/codebase-changes) → Next.js API → Supabase/n8n",
+    "Component → /api/codebase-changes → Supabase/n8n",
+    "Component → fetch(/api/mcp/workflows/storage) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/mcp/workflows/executions?limit=100) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/mcp/status) → Next.js API → Supabase/n8n",
+    "Component → /api/mcp/workflows/storage → Supabase/n8n",
+    "Component → /api/mcp/workflows/executions?limit=100 → Supabase/n8n",
+    "Component → /api/mcp/workflows/executions → Supabase/n8n",
+    "Component → /api/mcp/status → Supabase/n8n",
+    "Component → fetch(/api/health) → Next.js API → Supabase/n8n",
+    "Component → /api/health → Supabase/n8n",
+    "Component → fetch(/api/sync-status) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/sync-toggle) → Next.js API → Supabase/n8n",
+    "Component → /api/sync-status → Supabase/n8n",
+    "Component → /api/sync-toggle → Supabase/n8n",
+    "Component → fetch(/api/theme/test?action=list) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/theme/test?action=verify-settings) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/theme/test?action=test-all) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/theme/test) → Next.js API → Supabase/n8n",
+    "Component → /api/theme/test?action=list → Supabase/n8n",
+    "Component → /api/theme/test?action=verify-settings → Supabase/n8n",
+    "Component → /api/theme/test?action=test-all → Supabase/n8n",
+    "Component → /api/theme/test → Supabase/n8n",
+    "Component → fetch(/api/data/vectors?patternType=ui_design&limit=20) → Next.js API → Supabase/n8n",
+    "Component → fetch(/api/data/vectors?patternType=dashboard&limit=10) → Next.js API → Supabase/n8n",
+    "Component → /api/data/vectors?patternType=ui_design&limit=20 → Supabase/n8n",
+    "Component → /api/data/vectors?patternType=dashboard&limit=10 → Supabase/n8n",
+    "Component → /api/data/vectors → Supabase/n8n"
+  ],
+  "allProblems": [
+    {
+      "component": "AgentMemoryDisplay",
+      "problem": "Component initializes with empty data - needs live data source"
+    },
+    {
+      "component": "CommandPalette",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "CrossServerSyncPanel",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "DebatePanel",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "DeleteProjectModal",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "DomainSubSection",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "DynamicComponentRegistry",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "DynamicDataRenderer",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "NestedComponentGroup",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "PriorityMatrix",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "ProgressOverlay",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "QuizInline",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "ServiceStatusDisplay",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "SimpleChart",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "SyncProof",
+      "problem": "Component initializes with empty data - needs live data source"
+    },
+    {
+      "component": "SyncProof",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "SyncToggle",
+      "problem": "Component initializes with empty data - needs live data source"
+    },
+    {
+      "component": "TerminalWindow",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "ThemeAwareCTA",
+      "problem": "Component uses hardcoded data - should connect to live source"
+    },
+    {
+      "component": "ThemeSelector",
+      "problem": "Component appears to need data but has no data source"
+    },
+    {
+      "component": "UniversalProgressBar",
+      "problem": "Component appears to need data but has no data source"
+    }
+  ],
+  "allRecommendations": [
+    {
+      "component": "CommandPalette",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "CrossServerSyncPanel",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "DebatePanel",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "DebatePanel",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "DebatePanel",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "DeleteProjectModal",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "DomainSubSection",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "DynamicComponentRegistry",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "DynamicComponentRegistry",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "DynamicComponentRegistry",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "DynamicDataRenderer",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "NestedComponentGroup",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "PriorityMatrix",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "ProgressOverlay",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "QuizInline",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "ServiceStatusDisplay",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "SimpleChart",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "SimpleChart",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "SimpleChart",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "SyncProof",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "SyncProof",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "SyncProof",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "TerminalWindow",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "TerminalWindow",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "TerminalWindow",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "ThemeAwareCTA",
+      "recommendation": "Replace mock data with UnifiedDataService call"
+    },
+    {
+      "component": "ThemeAwareCTA",
+      "recommendation": "Create API endpoint if needed"
+    },
+    {
+      "component": "ThemeAwareCTA",
+      "recommendation": "Update component to handle loading/error states"
+    },
+    {
+      "component": "ThemeSelector",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    },
+    {
+      "component": "UniversalProgressBar",
+      "recommendation": "Add UnifiedDataService or useAppState for data"
+    }
+  ]
+}

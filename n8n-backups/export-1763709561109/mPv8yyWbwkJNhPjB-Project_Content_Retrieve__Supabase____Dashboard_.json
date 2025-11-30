@@ -1,0 +1,228 @@
+{
+  "updatedAt": "2025-11-20T17:46:06.872Z",
+  "createdAt": "2025-11-20T01:15:46.840Z",
+  "id": "mPv8yyWbwkJNhPjB",
+  "name": "Project Content Retrieve (Supabase => Dashboard)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Webhook Trigger",
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "project-content-retrieve",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        250,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "ef4d04fd-d11f-4bec-870f-69573b550c51"
+    },
+    {
+      "name": "Extract Params",
+      "parameters": {
+        "functionCode": "// Extract projectId from query params\nconst query = $input.item.json.query;\nconst projectId = query?.projectId;\n\nif (!projectId) {\n  throw new Error('projectId query parameter is required');\n}\n\nconsole.log('🔍 Retrieving project:', projectId);\n\nreturn { json: { project_id: projectId } };"
+      },
+      "position": [
+        450,
+        300
+      ],
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "id": "1c08de06-e39c-4350-bf8b-8450e50e755d"
+    },
+    {
+      "name": "Supabase Select",
+      "parameters": {
+        "operation": "get",
+        "table": "projects",
+        "filterType": "manual",
+        "matchType": "matchAll",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "project_id",
+              "keyValue": "={{ $json.project_id }}"
+            },
+            {
+              "keyName": "deleted_at",
+              "keyValue": "is.null"
+            }
+          ]
+        },
+        "options": {
+          "limit": 1
+        }
+      },
+      "position": [
+        650,
+        300
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "credentials": {
+        "supabaseApi": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Account"
+        }
+      },
+      "id": "7cb669e2-a39b-461c-8baf-3b9c8834a77b"
+    },
+    {
+      "name": "Check Found",
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.length }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "position": [
+        850,
+        300
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "id": "7721e6be-07ae-45d7-83f9-fe1fa0a34ecb"
+    },
+    {
+      "name": "Transform Response",
+      "parameters": {
+        "functionCode": "// Transform Supabase data to dashboard format\nconst project = $input.item.json;\n\nconst result = {\n  projectId: project.project_id,\n  headline: project.headline,\n  subheadline: project.subheadline,\n  description: project.description,\n  theme: project.theme,\n  projectType: project.project_type,\n  businessType: project.business_type,\n  components: project.components ? JSON.parse(project.components) : [],\n  pages: project.pages ? JSON.parse(project.pages) : {},\n  updatedAt: new Date(project.updated_at).getTime()\n};\n\nreturn { json: result };"
+      },
+      "position": [
+        1050,
+        200
+      ],
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "id": "c3bbca6e-4898-43de-be77-243a456586b5"
+    },
+    {
+      "name": "Response Success",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "position": [
+        1250,
+        200
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "ca683b83-6cbf-47b3-856e-eea7fd4becfb"
+    },
+    {
+      "name": "Response Not Found",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"error\": \"Project not found\", \"projectId\": $('Extract Params').item.json.project_id } }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "position": [
+        1250,
+        400
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "260a7ab1-d5f5-4694-bfcc-c76fef47a424"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Params": {
+      "main": [
+        [
+          {
+            "node": "Supabase Select",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Select": {
+      "main": [
+        [
+          {
+            "node": "Check Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Found": {
+      "main": [
+        [
+          {
+            "node": "Transform Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Response": {
+      "main": [
+        [
+          {
+            "node": "Response Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "df726e81-39da-429e-93e1-dd62db1025f5",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:46.843Z",
+      "createdAt": "2025-11-20T01:15:46.843Z",
+      "role": "workflow:owner",
+      "workflowId": "mPv8yyWbwkJNhPjB",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

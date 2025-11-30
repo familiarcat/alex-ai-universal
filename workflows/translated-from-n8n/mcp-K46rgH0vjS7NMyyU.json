@@ -1,0 +1,217 @@
+{
+  "id": "mcp-K46rgH0vjS7NMyyU",
+  "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "682e02b5-1920-4253-81e7-7b37c9966f24",
+      "name": "Lieutenant Worf Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-lieutenant-worf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-lieutenant-worf",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Lieutenant Worf Directive"
+      }
+    },
+    {
+      "id": "3f4e4b2b-b395-4622-bae0-7858e7931d9c",
+      "name": "Lieutenant Worf Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'worf',\n      knowledgeType: 'security_analysis',\n      priority: 'high',\n      title: 'Security Readiness Advisory',\n      summary: summaryLine.trim() || 'Security analysis guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'worf']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Lieutenant Worf Memory Retrieval"
+      }
+    },
+    {
+      "id": "88e32dcb-48ea-4f8b-829a-102da06288bd",
+      "name": "LLM Selection Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        384
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "LLM Selection Agent"
+      }
+    },
+    {
+      "id": "853d7e07-e627-4fb6-bca3-dd16ea0ccd49",
+      "name": "Lieutenant Worf AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Lieutenant Worf AI Agent"
+      }
+    },
+    {
+      "id": "7a7552bb-05e9-4eea-a759-1f1375d04c36",
+      "name": "Lieutenant Worf Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Lieutenant Worf Memory Storage"
+      }
+    },
+    {
+      "id": "34980ffd-1340-4d86-a4ed-2b676ee076af",
+      "name": "Observation Lounge Communication",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge Communication"
+      }
+    },
+    {
+      "id": "a9a2559d-ae94-42c5-9352-bfa07f8aebd2",
+      "name": "Lieutenant Worf Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'lieutenant_worf',\n  crew_name: 'Lieutenant Worf',\n  role: 'Security Officer',\n  summary: $('Lieutenant Worf AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Lieutenant Worf AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Lieutenant Worf AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Lieutenant Worf Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Lieutenant Worf AI Agent').item.json?.model || null,\n    usage: $('Lieutenant Worf AI Agent').item.json?.usage || null\n  }\n} }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Lieutenant Worf Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Lieutenant Worf Directive-LLM Selection Agent",
+      "source": "Lieutenant Worf Directive",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-LLM Selection Agent-Lieutenant Worf AI Agent",
+      "source": "LLM Selection Agent",
+      "target": "Lieutenant Worf AI Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Lieutenant Worf AI Agent-Observation Lounge Communication",
+      "source": "Lieutenant Worf AI Agent",
+      "target": "Observation Lounge Communication",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge Communication-Lieutenant Worf Memory Storage",
+      "source": "Observation Lounge Communication",
+      "target": "Lieutenant Worf Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Lieutenant Worf Memory Retrieval-LLM Selection Agent",
+      "source": "Lieutenant Worf Memory Retrieval",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Lieutenant Worf Memory Storage-Lieutenant Worf Response",
+      "source": "Lieutenant Worf Memory Storage",
+      "target": "Lieutenant Worf Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "682e02b5-1920-4253-81e7-7b37c9966f24",
+      "nodeName": "Lieutenant Worf Directive",
+      "webhookPath": "crew-lieutenant-worf",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-lieutenant-worf",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "K46rgH0vjS7NMyyU",
+    "convertedAt": "2025-11-21T14:24:04.672Z",
+    "originalName": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production"
+  }
+}

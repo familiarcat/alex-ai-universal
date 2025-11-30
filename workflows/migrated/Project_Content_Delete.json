@@ -1,0 +1,130 @@
+{
+  "name": "Project Content Delete",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "8e5b4c1d-ff6a-4b08-afb4-411a5148c8b6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "path": "project-content-delete",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          250,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Validate Input"
+      ]
+    },
+    {
+      "id": "2eda553f-4eca-4039-816b-e452184f38f0",
+      "type": "transform",
+      "config": {
+        "name": "Validate Input",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{$json.body.projectId}}",
+                "operation": "isNotEmpty"
+              },
+              {
+                "value1": "={{$json.headers['x-source']}}",
+                "value2": "alex-ai-dashboard"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "position": [
+          450,
+          300
+        ],
+        "originalType": "n8n-nodes-base.if"
+      },
+      "next": [
+        "Supabase Soft Delete",
+        "Response Error"
+      ]
+    },
+    {
+      "id": "8b0b4b98-bd34-4fc6-82a8-3c843cfcfa03",
+      "type": "supabaseQuery",
+      "config": {
+        "name": "Supabase Soft Delete",
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE project_content SET deleted_at = NOW() WHERE project_id = $1 AND deleted_at IS NULL RETURNING project_id, deleted_at;",
+          "parameters": {
+            "values": [
+              {
+                "name": "$1",
+                "value": "={{$json.body.projectId}}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "position": [
+          650,
+          200
+        ],
+        "originalType": "n8n-nodes-base.postgres"
+      },
+      "next": [
+        "Response Success"
+      ]
+    },
+    {
+      "id": "649fa230-7d1b-49c9-9939-98970a556980",
+      "type": "transform",
+      "config": {
+        "name": "Response Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"success\": true, \"projectId\": $json[0].project_id, \"deletedAt\": $json[0].deleted_at } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          850,
+          200
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    },
+    {
+      "id": "24cd7153-505e-4c55-8793-aba4550a525e",
+      "type": "transform",
+      "config": {
+        "name": "Response Error",
+        "parameters": {
+          "respondWith": "json",
+          "responseCode": 400,
+          "responseBody": "={{ { \"success\": false, \"error\": \"Invalid input: missing projectId\" } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          650,
+          400
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "SX6Aopi69reKvaBs",
+    "originalName": "Project Content Delete",
+    "migratedAt": "2025-11-21T11:19:39.211Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979211-nsc0pp",
+  "createdAt": "2025-11-21T11:19:39.211Z",
+  "updatedAt": "2025-11-21T11:19:39.211Z"
+}

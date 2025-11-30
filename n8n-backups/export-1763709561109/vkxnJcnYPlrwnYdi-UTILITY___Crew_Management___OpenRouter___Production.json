@@ -1,0 +1,64 @@
+{
+  "updatedAt": "2025-11-20T05:43:07.000Z",
+  "createdAt": "2025-11-20T01:15:41.643Z",
+  "id": "vkxnJcnYPlrwnYdi",
+  "name": "UTILITY - Crew Management - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Crew Request",
+      "parameters": {},
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "e6c9a9e0-cc66-41d5-9c38-998fa5d0cdd1"
+    },
+    {
+      "name": "Crew Response",
+      "parameters": {},
+      "position": [
+        460,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "cb630234-cca2-4932-98ac-26126bfb422d"
+    }
+  ],
+  "connections": {
+    "Crew Request": {
+      "main": [
+        [
+          {
+            "node": "Crew Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "9516f069-faeb-497e-ac7e-aabd54db20e4",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:41.647Z",
+      "createdAt": "2025-11-20T01:15:41.647Z",
+      "role": "workflow:owner",
+      "workflowId": "vkxnJcnYPlrwnYdi",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

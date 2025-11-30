@@ -1,0 +1,14 @@
+{
+  "componentName": "DashboardBentoLayout",
+  "filePath": "/dashboard/components/DashboardBentoLayout.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "useAppState (localStorage state)"
+  ],
+  "dataFlow": [
+    "Component → useAppState → localStorage"
+  ],
+  "problems": [],
+  "recommendations": []
+}

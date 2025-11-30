@@ -1,0 +1,46 @@
+{
+  "name": "UTILITY - Crew Management - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "e6c9a9e0-cc66-41d5-9c38-998fa5d0cdd1",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Crew Request",
+        "parameters": {},
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Crew Response"
+      ]
+    },
+    {
+      "id": "cb630234-cca2-4932-98ac-26126bfb422d",
+      "type": "transform",
+      "config": {
+        "name": "Crew Response",
+        "parameters": {},
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "vkxnJcnYPlrwnYdi",
+    "originalName": "UTILITY - Crew Management - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.216Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979216-0bikw",
+  "createdAt": "2025-11-21T11:19:39.216Z",
+  "updatedAt": "2025-11-21T11:19:39.216Z"
+}

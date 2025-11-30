@@ -1,0 +1,21 @@
+{
+  "documents": [
+    {
+      "doc_type": "video",
+      "audience": "all",
+      "category": "ai-best-practices",
+      "title": "The Mystery of Time | Through the Wormhole | Science Channel",
+      "summary": "YouTube video metadata",
+      "content": "Title: The Mystery of Time | Through the Wormhole | Science Channel\n\nAuthor: Science Channel\n\nThumbnail: https://i.ytimg.com/vi/yVwZSoFJWSQ/hqdefault.jpg",
+      "keywords": [
+        "youtube",
+        "ai",
+        "agentic",
+        "best-practices"
+      ],
+      "source_type": "youtube",
+      "source_url": "https://www.youtube.com/watch?v=yVwZSoFJWSQ&t=2351s",
+      "is_current": true
+    }
+  ]
+}

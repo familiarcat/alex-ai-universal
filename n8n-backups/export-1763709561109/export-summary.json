@@ -1,0 +1,267 @@
+{
+  "exportDate": "2025-11-21T07:19:21.124Z",
+  "totalWorkflows": 52,
+  "exported": 52,
+  "workflows": [
+    {
+      "id": "1jLMbG6FEsE30jey",
+      "name": "UTILITY - AI Controller - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "56NKAB40TerTiNXL",
+      "name": "PROJECT - Alex AI - Contact Management - Production",
+      "active": true
+    },
+    {
+      "id": "5XppNRFC6vWhGBBZ",
+      "name": "Crew - Quark - Business Intelligence & Budget Optimization (OpenRouter Optimized)",
+      "active": true
+    },
+    {
+      "id": "6AXbtRwpdUIjHmyi",
+      "name": "SYSTEM - Mission Control - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "9mQio9lYn9hgQ06s",
+      "name": "CREW - Chief Miles O'Brien - Pragmatic Solutions - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "BBWlzjKJ411IDzCL",
+      "name": "CREW - Dr. Beverly Crusher - Health & Diagnostics - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "CtiNENkDpm23QwOK",
+      "name": "COORDINATION - Democratic Collaboration - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "EO0rXQDgXNOpC7gt",
+      "name": "Anti-Hallucination Crew Workflow (HTTP)",
+      "active": true
+    },
+    {
+      "id": "FJzMCM2ODvGEjXmM",
+      "name": "Crew Memory Storage Workflow",
+      "active": true
+    },
+    {
+      "id": "FappZOihi5sU6cck",
+      "name": "Hallucination Monitoring Dashboard",
+      "active": true
+    },
+    {
+      "id": "GdtzqaEseO1i4Ttb",
+      "name": "ANTI-HALLUCINATION - Crew Detection - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "JNVUGysrSx7zepxf",
+      "name": "Crew Memory Storage Workflow (Optimized)",
+      "active": true
+    },
+    {
+      "id": "JfqWZUw0gU4n1Oft",
+      "name": "Supabase Schema Setup",
+      "active": true
+    },
+    {
+      "id": "K46rgH0vjS7NMyyU",
+      "name": "CREW - Lieutenant Worf - Security & Compliance - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "LZRFbLLddymZLkMY",
+      "name": "RAG Health Check (Auto-Remediation)",
+      "active": true
+    },
+    {
+      "id": "PSS0SjngUOxCQUT5",
+      "name": "Documentation Generation from RAG",
+      "active": true
+    },
+    {
+      "id": "PXoVbAuphRhwsaum",
+      "name": "PROJECT - Alex AI - Job Opportunities - Production",
+      "active": true
+    },
+    {
+      "id": "RK4UUMmb3WhUZDqg",
+      "name": "User Settings Retrieve (Dashboard <= Supabase)",
+      "active": true
+    },
+    {
+      "id": "RraXD8vZeF1jYF4t",
+      "name": "Knowledge Archive (RAG DELETE - Soft Delete)",
+      "active": true
+    },
+    {
+      "id": "SLYo5CCfDht7sWDZ",
+      "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "SX6Aopi69reKvaBs",
+      "name": "Project Content Delete",
+      "active": true
+    },
+    {
+      "id": "Say3IHgvp6zdLYI7",
+      "name": "CREW - Captain Jean-Luc Picard - Strategic Leadership - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "T5FqVPDqS5ks3sVx",
+      "name": "PROJECT - Alex AI - Resume Analysis - Production",
+      "active": true
+    },
+    {
+      "id": "Vp9509kJNN7vxp2c",
+      "name": "Project Content Retrieve",
+      "active": true
+    },
+    {
+      "id": "VpU32Ywg1ONe2wxW",
+      "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "XyYkm6y1P8Pw6HbK",
+      "name": "Project Content Delete (Dashboard => Supabase)",
+      "active": true
+    },
+    {
+      "id": "YfWq0T4TeIV2ffh8",
+      "name": "ANTI-HALLUCINATION - HTTP Handler - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "a3WOKLGOqk9ZTsqs",
+      "name": "User Settings Store (Dashboard => Supabase)",
+      "active": true
+    },
+    {
+      "id": "a8NPgojFmLTkchG2",
+      "name": "CREW - Commander William Riker - Tactical Execution - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "aIj0j8QYvaYyGhJj",
+      "name": "Knowledge Update (RAG UPDATE - Versioning)",
+      "active": true
+    },
+    {
+      "id": "afJEJkFCHES9fsRU",
+      "name": "SYSTEM - OpenRouter Agent Coordination - OpenRouter - Production",
+      "active": false
+    },
+    {
+      "id": "bPKdb3mIWplNcLMQ",
+      "name": "Milestone RAG Storage Workflow",
+      "active": true
+    },
+    {
+      "id": "c0HYTqTFtktCE3Fk",
+      "name": "Alex AI Knowledge Base RAG Ingestion",
+      "active": true
+    },
+    {
+      "id": "cJyOFpjcBz0fAyvV",
+      "name": "CREW - Lieutenant Commander Geordi La Forge - Infrastructure - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "eJQB5nEXL3UkxvUO",
+      "name": "Knowledge Query (RAG READ - Hybrid Search)",
+      "active": true
+    },
+    {
+      "id": "fGqL10I7EDA5bzmW",
+      "name": "Knowledge Ingest (Crew Memories => Supabase RAG)",
+      "active": true
+    },
+    {
+      "id": "i74OzYVUt18w5MyZ",
+      "name": "CREW - Lieutenant Uhura - Communications & I/O - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "iFj0GnVytIe4HGBj",
+      "name": "Project Content Store",
+      "active": true
+    },
+    {
+      "id": "iGOqtyafPm0AGkCC",
+      "name": "Project Content Store (Dashboard => Supabase)",
+      "active": true
+    },
+    {
+      "id": "jdlvuYe6yyEfoKiF",
+      "name": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+      "active": true
+    },
+    {
+      "id": "lMfN1UuG77BkCfM6",
+      "name": "PROJECT - Alex AI - Crew Integration - Production",
+      "active": true
+    },
+    {
+      "id": "mPv8yyWbwkJNhPjB",
+      "name": "Project Content Retrieve (Supabase => Dashboard)",
+      "active": true
+    },
+    {
+      "id": "mYJoUvFnsI1tlnXa",
+      "name": "Crew - Quark - Ferengi Business Intelligence (OpenRouter Optimized)",
+      "active": true
+    },
+    {
+      "id": "nKAJA2Dilm909Cm4",
+      "name": "Knowledge Embed (Generate AI Embeddings)",
+      "active": true
+    },
+    {
+      "id": "pf740EpHPzIOEJ8S",
+      "name": "Anti-Hallucination Crew Workflow",
+      "active": true
+    },
+    {
+      "id": "r5lPputZcOLgeG5H",
+      "name": "PROJECT - Alex AI - MCP Enhancement - Production",
+      "active": true
+    },
+    {
+      "id": "rNuwkxuIZ2nYm3Zj",
+      "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+      "active": false
+    },
+    {
+      "id": "sjzg92g0v36XZyku",
+      "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "vcuWBVUzAADZ8e5r",
+      "name": "COORDINATION - Observation Lounge - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "vkxnJcnYPlrwnYdi",
+      "name": "UTILITY - Crew Management - OpenRouter - Production",
+      "active": true
+    },
+    {
+      "id": "w1PGO3hrExjXlA8F",
+      "name": "PROJECT - Alex AI - MCP Integration - Production",
+      "active": true
+    },
+    {
+      "id": "zXnm6wcbhJh3L1aK",
+      "name": "PROJECT - Alex AI - Job Opportunities Live - Production",
+      "active": true
+    }
+  ]
+}

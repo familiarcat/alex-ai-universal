@@ -1,0 +1,100 @@
+{
+  "name": "PROJECT - Alex AI - Job Opportunities Live - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "1fed3779-eb3e-44bc-a099-467ad02ebb90",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Job Opportunities Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-job-opportunities",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Fetch Job Opportunities from Supabase"
+      ]
+    },
+    {
+      "id": "7c39f8e7-2a27-42e5-bf91-3a1cbfd9f137",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Fetch Job Opportunities from Supabase",
+        "parameters": {
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/job_opportunities",
+          "authentication": "genericCredentialType",
+          "options": {
+            "headers": {
+              "apikey": "sb_publishable_ibWfa8oHqDMzbhEr6BxgBw_0aXaq3DU",
+              "Authorization": "Bearer sb_publishable_ibWfa8oHqDMzbhEr6BxgBw_0aXaq3DU"
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Process Job Data"
+      ]
+    },
+    {
+      "id": "64733bc0-5cee-4ce6-bf17-f3f968170ad4",
+      "type": "transform",
+      "config": {
+        "name": "Process Job Data",
+        "parameters": {
+          "jsCode": "// Process and format job opportunities data\nconst supabaseData = $input.all()[0].json;\n\n// Check if we got data from Supabase\nif (!supabaseData || supabaseData.length === 0) {\n  // Return empty data with proper structure\n  return {\n    data: [],\n    total: 0,\n    message: \"No job opportunities found\",\n    timestamp: new Date().toISOString(),\n    source: \"supabase\"\n  };\n}\n\n// Format the data for the frontend\nconst formattedJobs = supabaseData.map(job => ({\n  id: job.id,\n  company: job.company || 'Unknown Company',\n  position: job.position || 'Unknown Position',\n  location: job.location || 'Unknown Location',\n  remote_option: job.remote_option || 'Not specified',\n  salary_range: job.salary_range || 'Not specified',\n  description: job.description || 'No description available',\n  requirements: job.requirements || 'No requirements specified',\n  benefits: job.benefits || 'No benefits specified',\n  application_url: job.application_url || '#',\n  source: job.source || 'supabase',\n  scraped_at: job.scraped_at || new Date().toISOString(),\n  alex_ai_score: job.alex_ai_score || 0,\n  st_louis_area: job.st_louis_area || false,\n  st_louis_focus: job.st_louis_focus || false,\n  created_at: job.created_at || new Date().toISOString(),\n  updated_at: job.updated_at || new Date().toISOString()\n}));\n\nreturn {\n  data: formattedJobs,\n  total: formattedJobs.length,\n  message: `Found ${formattedJobs.length} job opportunities`,\n  timestamp: new Date().toISOString(),\n  source: \"supabase\"\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          680,
+          300
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Job Opportunities Response"
+      ]
+    },
+    {
+      "id": "93d29854-be37-46c8-ad4d-2ea3f31136c6",
+      "type": "transform",
+      "config": {
+        "name": "Job Opportunities Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          900,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "zXnm6wcbhJh3L1aK",
+    "originalName": "PROJECT - Alex AI - Job Opportunities Live - Production",
+    "migratedAt": "2025-11-21T11:19:39.217Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979217-w5ga4",
+  "createdAt": "2025-11-21T11:19:39.217Z",
+  "updatedAt": "2025-11-21T11:19:39.217Z"
+}

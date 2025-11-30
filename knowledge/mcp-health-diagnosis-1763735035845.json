@@ -1,0 +1,33 @@
+{
+  "category": "system_health_diagnosis",
+  "title": "MCP Server Health Diagnosis - Dr. Crusher Analysis",
+  "executive_summary": "MCP server container is running but marked as unhealthy. Health endpoint responds but API endpoints may be failing. Docker health check configuration needs review.",
+  "symptoms": [
+    "Container marked as unhealthy",
+    "3 API endpoints failing"
+  ],
+  "diagnosis": "Container infrastructure operational but application health checks failing",
+  "treatment_plan": [
+    "Investigate Docker health check configuration",
+    "Review container resource limits (CPU, memory)",
+    "Fix failing API endpoint implementations",
+    "Verify API authentication and routing",
+    "Review Docker health check command",
+    "Ensure health check endpoint is accessible from container"
+  ],
+  "technical_details": {
+    "failing_endpoints": [
+      "/api/status",
+      "/api/workflows",
+      "/api/memory/query"
+    ],
+    "docker_health_failing_streak": 222
+  },
+  "lessons_learned": [
+    "Docker health checks require accessible endpoints",
+    "API authentication must be properly configured",
+    "Container logs provide critical diagnostic information",
+    "Health endpoint should be simple and fast"
+  ],
+  "timestamp": "2025-11-21T14:23:55.844Z"
+}

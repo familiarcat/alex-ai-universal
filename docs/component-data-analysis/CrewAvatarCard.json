@@ -1,0 +1,16 @@
+{
+  "componentName": "CrewAvatarCard",
+  "filePath": "/dashboard/components/CrewAvatarCard.tsx",
+  "hasLiveData": true,
+  "hasMockData": false,
+  "dataSources": [
+    "fetch(/api/lounge/crew-advice)",
+    "API: /api/lounge/crew-advice"
+  ],
+  "dataFlow": [
+    "Component → fetch(/api/lounge/crew-advice) → Next.js API → Supabase/n8n",
+    "Component → /api/lounge/crew-advice → Supabase/n8n"
+  ],
+  "problems": [],
+  "recommendations": []
+}

@@ -1,0 +1,1773 @@
+{
+  "timestamp": "2025-11-26T08:05:38.219Z",
+  "totalMilestones": 96,
+  "categories": [
+    {
+      "category": "n8n",
+      "displayName": "N8N Workflows",
+      "count": 29,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_PUSH_STATUS.md",
+          "title": "📊 milestone push status",
+          "timestamp": "2025-11-19",
+          "relativePath": ".backup-ec2-emergency/MILESTONE_PUSH_STATUS.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "dashboard",
+            "bugfixes",
+            "crew",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-10-21_AUTOMATED_RAG_AND_CREW_SELF_SUSTAINING.md",
+          "title": "milestone – 2025-10-21 – automated rag + self‑sustaining crew",
+          "timestamp": "2025-10-21",
+          "relativePath": "milestones/MILESTONE_2025-10-21_AUTOMATED_RAG_AND_CREW_SELF_SUSTAINING.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "crew",
+            "dashboard",
+            "architecture",
+            "deployment",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION.md",
+          "title": "milestone: complete n8n to mcp migration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION.md",
+          "categories": [
+            "n8n",
+            "mcp",
+            "dashboard",
+            "testing",
+            "optimization",
+            "bugfixes",
+            "crew",
+            "deployment",
+            "architecture",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_CREW_COORDINATED_WEBHOOK_INVESTIGATION.md",
+          "title": "milestone: crew-coordinated webhook registration investigation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_CREW_COORDINATED_WEBHOOK_INVESTIGATION.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "bugfixes",
+            "rag",
+            "architecture",
+            "deployment",
+            "dashboard",
+            "testing",
+            "security",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_N8N_API_KEY_SECURITY_HARDENING.md",
+          "title": "🎯 milestone: n8n api key security hardening & universal access",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_N8N_API_KEY_SECURITY_HARDENING.md",
+          "categories": [
+            "n8n",
+            "security",
+            "dashboard",
+            "architecture",
+            "crew",
+            "rag",
+            "testing",
+            "features",
+            "deployment",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_N8N_COMPLETE_RESTORATION_AND_WEBHOOK_CONFIG.md",
+          "title": "🎯 milestone: complete n8n restoration & webhook configuration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_N8N_COMPLETE_RESTORATION_AND_WEBHOOK_CONFIG.md",
+          "categories": [
+            "n8n",
+            "bugfixes",
+            "security",
+            "architecture",
+            "crew",
+            "features",
+            "deployment",
+            "rag",
+            "dashboard",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_N8N_CONTROLLER_LAYER_AUDIT_COMPLETE.md",
+          "title": "milestone: n8n controller layer audit complete",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_N8N_CONTROLLER_LAYER_AUDIT_COMPLETE.md",
+          "categories": [
+            "n8n",
+            "mcp",
+            "rag",
+            "architecture",
+            "crew",
+            "optimization",
+            "features",
+            "bugfixes",
+            "dashboard",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_N8N_VERSION_ANALYSIS_AND_WEBHOOK_CONFIG.md",
+          "title": "milestone: n8n version analysis and webhook_url configuration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_N8N_VERSION_ANALYSIS_AND_WEBHOOK_CONFIG.md",
+          "categories": [
+            "n8n",
+            "testing",
+            "deployment",
+            "architecture",
+            "crew",
+            "features",
+            "security",
+            "dashboard"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_PROJECT_TYPE_DETECTION_AND_WEBHOOK_AUTOMATION.md",
+          "title": "milestone: project type detection & webhook automation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_PROJECT_TYPE_DETECTION_AND_WEBHOOK_AUTOMATION.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "testing",
+            "security",
+            "architecture",
+            "dashboard",
+            "rag",
+            "features",
+            "deployment",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_RAG_SYSTEM_OPERATIONAL_READINESS.md",
+          "title": "milestone: rag system operational readiness",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_RAG_SYSTEM_OPERATIONAL_READINESS.md",
+          "categories": [
+            "n8n",
+            "testing",
+            "rag",
+            "crew",
+            "dashboard",
+            "bugfixes",
+            "architecture",
+            "security",
+            "deployment",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_RAG_WEBHOOK_INVESTIGATION_AND_AUTOMATION.md",
+          "title": "milestone: rag webhook investigation & automation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_RAG_WEBHOOK_INVESTIGATION_AND_AUTOMATION.md",
+          "categories": [
+            "n8n",
+            "dashboard",
+            "rag",
+            "crew",
+            "deployment",
+            "architecture",
+            "testing",
+            "features",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-21_MCP_COMPREHENSIVE_DASHBOARD_COMPLETE.md",
+          "title": "🖖 milestone: mcp comprehensive dashboard - complete implementation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-21_MCP_COMPREHENSIVE_DASHBOARD_COMPLETE.md",
+          "categories": [
+            "n8n",
+            "dashboard",
+            "bugfixes",
+            "crew",
+            "mcp",
+            "features",
+            "optimization",
+            "rag",
+            "testing",
+            "deployment",
+            "architecture"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-21_MCP_HEALTH_FIXES_AND_WORKFLOW_TRANSLATION.md",
+          "title": "🖖 milestone: mcp health fixes & n8n workflow translation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-21_MCP_HEALTH_FIXES_AND_WORKFLOW_TRANSLATION.md",
+          "categories": [
+            "n8n",
+            "mcp",
+            "bugfixes",
+            "rag",
+            "testing",
+            "dashboard",
+            "deployment",
+            "features",
+            "crew",
+            "architecture",
+            "optimization",
+            "security"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-11-12_n8n-crew-telemetry-upgrade.md",
+          "title": "milestone – 2025-11-12 – n8n crew telemetry upgrade",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-11-12_n8n-crew-telemetry-upgrade.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "crew",
+            "testing",
+            "architecture",
+            "dashboard",
+            "security",
+            "bugfixes",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md",
+          "title": "🖖 milestone: observation lounge status briefing & action items execution",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-11-19_OBSERVATION_LOUNGE_STATUS_BRIEFING.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "rag",
+            "architecture",
+            "dashboard",
+            "security",
+            "deployment",
+            "bugfixes",
+            "testing",
+            "optimization",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.3.0_SUMMARY.md",
+          "title": "milestone v1.3.0 - ddd architecture & temporal wake integration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.3.0_SUMMARY.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "architecture",
+            "deployment",
+            "dashboard",
+            "crew",
+            "testing",
+            "security",
+            "optimization",
+            "bugfixes",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.4.0_DDD_WORKFLOW_SYSTEM.md",
+          "title": "milestone v1.4.0: ddd workflow system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.4.0_DDD_WORKFLOW_SYSTEM.md",
+          "categories": [
+            "n8n",
+            "deployment",
+            "architecture",
+            "dashboard",
+            "crew",
+            "testing",
+            "rag",
+            "bugfixes",
+            "features",
+            "security",
+            "mcp"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.5.1_RAG_AUTOMATION.md",
+          "title": "milestone v1.5.1: rag system automation via apis",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.5.1_RAG_AUTOMATION.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "deployment",
+            "crew",
+            "dashboard",
+            "testing",
+            "bugfixes",
+            "architecture",
+            "security",
+            "features",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.7.3_95_PERCENT_N8N_AUTOMATION.md",
+          "title": "milestone v1.7.3: 95% n8n automation + infrastructure hardening",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.7.3_95_PERCENT_N8N_AUTOMATION.md",
+          "categories": [
+            "n8n",
+            "bugfixes",
+            "architecture",
+            "rag",
+            "dashboard",
+            "crew",
+            "deployment",
+            "testing",
+            "security",
+            "mcp",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.7.4_COMPLETE_N8N_RESTORATION.md",
+          "title": "milestone v1.7.4: complete n8n restoration + crew memory system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.7.4_COMPLETE_N8N_RESTORATION.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "crew",
+            "dashboard",
+            "security",
+            "architecture",
+            "features",
+            "deployment",
+            "bugfixes",
+            "testing",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.0.0_TERRAFORM_INFRASTRUCTURE_AS_CODE.md",
+          "title": "milestone v2.0.0: complete terraform infrastructure as code",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.0.0_TERRAFORM_INFRASTRUCTURE_AS_CODE.md",
+          "categories": [
+            "n8n",
+            "deployment",
+            "architecture",
+            "security",
+            "crew",
+            "dashboard",
+            "rag",
+            "features",
+            "testing",
+            "bugfixes",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.1.0_WEBHOOK_RESTORATION_ATTEMPT.md",
+          "title": "milestone v2.1.0: webhook restoration & ddd automation analysis",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.1.0_WEBHOOK_RESTORATION_ATTEMPT.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "rag",
+            "bugfixes",
+            "architecture",
+            "testing",
+            "deployment",
+            "security",
+            "dashboard",
+            "optimization",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.0_AUTOMATED_CREW_WEBHOOK_REGISTRATION.md",
+          "title": "🚀 milestone v2.4.0 — automated crew webhook registration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.0_AUTOMATED_CREW_WEBHOOK_REGISTRATION.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "features",
+            "dashboard",
+            "rag",
+            "deployment",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.1_WEBHOOK_DIAGNOSTICS.md",
+          "title": "🚧 milestone v2.4.1 — webhook diagnostics & credential audit",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.1_WEBHOOK_DIAGNOSTICS.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "crew",
+            "deployment",
+            "testing",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.2_CREW_AUTOMATION_BLUEPRINT.md",
+          "title": "🪐 milestone v2.4.2 — crew credential automation blueprint",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.2_CREW_AUTOMATION_BLUEPRINT.md",
+          "categories": [
+            "n8n",
+            "architecture",
+            "crew",
+            "rag",
+            "bugfixes",
+            "dashboard",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.3_SHELL_SECRETS_REFACTOR.md",
+          "title": "🧩 milestone v2.4.3 — shell & secrets refactor",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.3_SHELL_SECRETS_REFACTOR.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "rag",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.4_N8N_OWNER_SESSION_EXECUTION.md",
+          "title": "🚀 milestone v2.4.4 — owner-session workflow execution",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.4_N8N_OWNER_SESSION_EXECUTION.md",
+          "categories": [
+            "n8n",
+            "crew",
+            "dashboard",
+            "rag"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.4.5_REMOTE_LEADER_REFRESH.md",
+          "title": "🚀 milestone v2.4.5 — remote n8n leader refresh",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.4.5_REMOTE_LEADER_REFRESH.md",
+          "categories": [
+            "n8n",
+            "rag",
+            "crew",
+            "deployment",
+            "architecture"
+          ]
+        },
+        {
+          "fileName": "MCP_MILESTONE_SUMMARIZATION_MIGRATION.md",
+          "title": "mcp milestone summarization migration",
+          "timestamp": "unknown",
+          "relativePath": "docs/mcp/MCP_MILESTONE_SUMMARIZATION_MIGRATION.md",
+          "categories": [
+            "n8n",
+            "mcp",
+            "architecture",
+            "optimization",
+            "features",
+            "crew",
+            "deployment",
+            "bugfixes",
+            "testing",
+            "dashboard"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "crew",
+      "displayName": "Crew Coordination",
+      "count": 21,
+      "milestones": [
+        {
+          "fileName": "AUTOMATED_MILESTONE_PUSH_COMPLETE.md",
+          "title": "🤖 fully automated milestone push system",
+          "timestamp": "2025-11-25",
+          "relativePath": "docs/AUTOMATED_MILESTONE_PUSH_COMPLETE.md",
+          "categories": [
+            "crew",
+            "optimization",
+            "features",
+            "dashboard",
+            "bugfixes",
+            "security",
+            "architecture",
+            "mcp",
+            "n8n",
+            "rag",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_LOCKDOWN_POINT.md",
+          "title": "🔒 milestone lockdown point - complete reference",
+          "timestamp": "2025-11-23",
+          "relativePath": "MILESTONE_LOCKDOWN_POINT.md",
+          "categories": [
+            "crew",
+            "optimization",
+            "mcp",
+            "testing",
+            "n8n",
+            "dashboard",
+            "features",
+            "deployment",
+            "bugfixes",
+            "rag",
+            "security"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_REFERENCE_QUARK_RIKER_OPENROUTER.md",
+          "title": "🖖 milestone reference: quark + riker integration + openrouter automation",
+          "timestamp": "2025-11-23",
+          "relativePath": "docs/MILESTONE_REFERENCE_QUARK_RIKER_OPENROUTER.md",
+          "categories": [
+            "crew",
+            "optimization",
+            "mcp",
+            "testing",
+            "n8n",
+            "dashboard",
+            "rag",
+            "bugfixes",
+            "features",
+            "security",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_FULL_SYSTEM_ENGAGEMENT_2025_10_13.md",
+          "title": "🚀 milestone: full alex ai system engagement & architecture validation",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_FULL_SYSTEM_ENGAGEMENT_2025_10_13.md",
+          "categories": [
+            "crew",
+            "testing",
+            "n8n",
+            "dashboard",
+            "mcp",
+            "rag",
+            "deployment",
+            "architecture",
+            "optimization",
+            "security",
+            "features",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_MULTI_PROJECT_ARCHITECTURE_2025_10_13.md",
+          "title": "🚀 milestone: alex ai multi-project architecture",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_MULTI_PROJECT_ARCHITECTURE_2025_10_13.md",
+          "categories": [
+            "crew",
+            "dashboard",
+            "deployment",
+            "architecture",
+            "security",
+            "mcp",
+            "optimization",
+            "testing",
+            "features",
+            "rag"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_NEXTJS_ARCHITECTURE_2025_10_13.md",
+          "title": "🖖 milestone: next.js 15 unified architecture design",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_NEXTJS_ARCHITECTURE_2025_10_13.md",
+          "categories": [
+            "crew",
+            "architecture",
+            "dashboard",
+            "deployment",
+            "mcp",
+            "bugfixes",
+            "testing",
+            "rag",
+            "security",
+            "optimization",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_SUMMARY_CONDENSED.md",
+          "title": "🖖 alex ai universal - condensed milestone summary",
+          "timestamp": "2025-10-06",
+          "relativePath": "docs-condensed/MILESTONE_SUMMARY_CONDENSED.md",
+          "categories": [
+            "crew",
+            "rag",
+            "security",
+            "dashboard",
+            "bugfixes",
+            "optimization",
+            "n8n",
+            "features",
+            "deployment",
+            "testing",
+            "architecture"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_REVISED_PRIME_DIRECTIVE_2025-09-27T02-50-00.md",
+          "title": "alex ai universal - milestone: revised prime directive system",
+          "timestamp": "2025-09-27",
+          "relativePath": "milestones/MILESTONE_REVISED_PRIME_DIRECTIVE_2025-09-27T02-50-00.md",
+          "categories": [
+            "crew",
+            "rag",
+            "features",
+            "testing",
+            "architecture",
+            "n8n",
+            "bugfixes",
+            "dashboard",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "AUTOMATED_MILESTONE_PUSH_SYSTEM.md",
+          "title": "🤖 automated milestone push system",
+          "timestamp": "2025-01-25",
+          "relativePath": "docs/AUTOMATED_MILESTONE_PUSH_SYSTEM.md",
+          "categories": [
+            "crew",
+            "optimization",
+            "security",
+            "dashboard",
+            "deployment",
+            "architecture",
+            "rag",
+            "testing",
+            "n8n",
+            "features",
+            "bugfixes",
+            "mcp"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_READY_FOR_NEXT_PHASE_2025_01_19.md",
+          "title": "🚀 milestone: project structure optimized - ready for next phase",
+          "timestamp": "2025-01-19",
+          "relativePath": "docs/archive/milestones/MILESTONE_READY_FOR_NEXT_PHASE_2025_01_19.md",
+          "categories": [
+            "crew",
+            "rag",
+            "architecture",
+            "security",
+            "optimization",
+            "features",
+            "dashboard",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-21_CREW_VECTOR_SYSTEM_IMPLEMENTATION.md",
+          "title": "🖖 milestone: crew vector system implementation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-21_CREW_VECTOR_SYSTEM_IMPLEMENTATION.md",
+          "categories": [
+            "crew",
+            "rag",
+            "optimization",
+            "mcp",
+            "dashboard",
+            "n8n",
+            "architecture",
+            "features",
+            "security",
+            "testing",
+            "deployment",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-22_FILE_SYSTEM_REORGANIZATION_PLAN.md",
+          "title": "🗂️ milestone: file system reorganization plan",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-22_FILE_SYSTEM_REORGANIZATION_PLAN.md",
+          "categories": [
+            "crew",
+            "mcp",
+            "architecture",
+            "rag",
+            "testing",
+            "features",
+            "n8n",
+            "dashboard",
+            "bugfixes",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-22_IDENTITY_THEORIES_INTEGRATION_SYSTEM.md",
+          "title": "milestone: identity theories integration system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-22_IDENTITY_THEORIES_INTEGRATION_SYSTEM.md",
+          "categories": [
+            "crew",
+            "rag",
+            "optimization",
+            "mcp",
+            "architecture",
+            "security",
+            "features",
+            "n8n",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-22_QUANTUM_PHYSICS_CREW_IDENTITY_PROPAGATION.md",
+          "title": "🖖 milestone: quantum physics crew identity propagation system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-22_QUANTUM_PHYSICS_CREW_IDENTITY_PROPAGATION.md",
+          "categories": [
+            "crew",
+            "rag",
+            "mcp",
+            "n8n",
+            "architecture",
+            "dashboard",
+            "bugfixes",
+            "security",
+            "optimization",
+            "deployment",
+            "testing",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_OBSERVATION_LOUNGE_CONSOLIDATION.md",
+          "title": "🖖 milestone: observation lounge consolidation & optimization",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_OBSERVATION_LOUNGE_CONSOLIDATION.md",
+          "categories": [
+            "crew",
+            "optimization",
+            "rag",
+            "dashboard",
+            "architecture",
+            "features",
+            "mcp",
+            "security",
+            "deployment",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.3.0_COMPLETE_CREW_AUTOMATION.md",
+          "title": "milestone v2.3.0: complete crew automation & communication system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.3.0_COMPLETE_CREW_AUTOMATION.md",
+          "categories": [
+            "crew",
+            "n8n",
+            "deployment",
+            "rag",
+            "bugfixes",
+            "architecture",
+            "dashboard",
+            "testing",
+            "security",
+            "optimization",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.5.0_ALEX_AI_CLI_RESTORATION.md",
+          "title": "🚀 milestone v2.5.0 — alex ai cli restoration & universal orchestration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.5.0_ALEX_AI_CLI_RESTORATION.md",
+          "categories": [
+            "crew",
+            "testing",
+            "bugfixes",
+            "rag",
+            "n8n",
+            "features",
+            "architecture",
+            "dashboard"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.5.1_CREW_IDENTITY_PROTOCOL.md",
+          "title": "🖖 milestone v2.5.1 — crew identity & communication protocol",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.5.1_CREW_IDENTITY_PROTOCOL.md",
+          "categories": [
+            "crew",
+            "architecture",
+            "rag",
+            "dashboard",
+            "security",
+            "n8n",
+            "deployment",
+            "optimization",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.6.0_MULTI_VESSEL_ARCHITECTURE.md",
+          "title": "🚀 milestone v2.6.0 — multi-vessel architecture: crew serves on any ship",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.6.0_MULTI_VESSEL_ARCHITECTURE.md",
+          "categories": [
+            "crew",
+            "architecture",
+            "security",
+            "rag",
+            "bugfixes",
+            "n8n",
+            "deployment",
+            "features",
+            "dashboard",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.6.1_PARADIGM_SHIFT_CREW_OPERATIONS.md",
+          "title": "🖖 milestone v2.6.1 — the paradigm shift: from single assistant to crew operations",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.6.1_PARADIGM_SHIFT_CREW_OPERATIONS.md",
+          "categories": [
+            "crew",
+            "architecture",
+            "rag",
+            "features",
+            "dashboard",
+            "bugfixes",
+            "deployment",
+            "security",
+            "optimization",
+            "n8n",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_EMERGENCY_PROTOCOLS_COMPLETE.md",
+          "title": "🚨 milestone: emergency protocols system & crew role swapping",
+          "timestamp": "unknown",
+          "relativePath": "examples/alex-ai-nextjs/MILESTONE_EMERGENCY_PROTOCOLS_COMPLETE.md",
+          "categories": [
+            "crew",
+            "rag",
+            "dashboard",
+            "security",
+            "features",
+            "architecture",
+            "optimization",
+            "deployment"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "dashboard",
+      "displayName": "Dashboard & UI",
+      "count": 19,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_2025-10-21_PREVIEW_POLICY_AND_THEME_PARITY.md",
+          "title": "milestone – 2025-10-21 – preview policy and theme parity",
+          "timestamp": "2025-10-21",
+          "relativePath": "milestones/MILESTONE_2025-10-21_PREVIEW_POLICY_AND_THEME_PARITY.md",
+          "categories": [
+            "dashboard",
+            "deployment",
+            "n8n",
+            "rag",
+            "crew"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-10-20_OBSERVATION_LOUNGE_UNIFY.md",
+          "title": "milestone – 2025-10-20 – observation lounge unify + nav stability",
+          "timestamp": "2025-10-20",
+          "relativePath": "milestones/MILESTONE_2025-10-20_OBSERVATION_LOUNGE_UNIFY.md",
+          "categories": [
+            "dashboard",
+            "n8n",
+            "crew",
+            "bugfixes",
+            "rag",
+            "testing",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_RECOVERY_ROLLBACK_2025-10-15.md",
+          "title": "milestone: recovery + rollback to stable baseline (2025-10-15)",
+          "timestamp": "2025-10-15",
+          "relativePath": "milestones/MILESTONE_RECOVERY_ROLLBACK_2025-10-15.md",
+          "categories": [
+            "dashboard",
+            "mcp",
+            "n8n",
+            "crew",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_IMPLEMENTATION_QUEUE_COMPLETE_2025_10_13.md",
+          "title": "🚀 milestone: implementation queue complete - vibe coding platform live",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_IMPLEMENTATION_QUEUE_COMPLETE_2025_10_13.md",
+          "categories": [
+            "dashboard",
+            "crew",
+            "features",
+            "optimization",
+            "architecture",
+            "mcp",
+            "n8n",
+            "deployment",
+            "testing",
+            "rag",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_THEME_GALLERY_COMPLETE_2025_10_13.md",
+          "title": "🎨 milestone: universal theme gallery - complete visual selection system",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_THEME_GALLERY_COMPLETE_2025_10_13.md",
+          "categories": [
+            "dashboard",
+            "crew",
+            "mcp",
+            "features",
+            "architecture",
+            "n8n",
+            "testing",
+            "optimization",
+            "rag",
+            "deployment",
+            "security"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_UNIVERSAL_THEME_SYSTEM_2025_10_13.md",
+          "title": "🎨 milestone: universal theme system integration",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_UNIVERSAL_THEME_SYSTEM_2025_10_13.md",
+          "categories": [
+            "dashboard",
+            "architecture",
+            "features",
+            "crew",
+            "testing",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-21_MCP_MAIN_DASHBOARD_COMPLETE.md",
+          "title": "🖖 milestone: mcp main dashboard - complete implementation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-21_MCP_MAIN_DASHBOARD_COMPLETE.md",
+          "categories": [
+            "dashboard",
+            "mcp",
+            "n8n",
+            "deployment",
+            "crew",
+            "bugfixes",
+            "features",
+            "architecture",
+            "optimization",
+            "rag"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_DASHBOARD_BUILD_ERROR_FIX.md",
+          "title": "🖖 milestone: dashboard build error fix",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_DASHBOARD_BUILD_ERROR_FIX.md",
+          "categories": [
+            "dashboard",
+            "bugfixes",
+            "architecture",
+            "n8n",
+            "testing",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_DDD_ARCHITECTURE_REVIEW_CHECKPOINT.md",
+          "title": "🖖 milestone: ddd architecture review checkpoint",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_DDD_ARCHITECTURE_REVIEW_CHECKPOINT.md",
+          "categories": [
+            "dashboard",
+            "architecture",
+            "crew",
+            "security",
+            "optimization",
+            "bugfixes",
+            "mcp",
+            "rag",
+            "n8n",
+            "deployment",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_AND_DASHBOARD_FIXES.md",
+          "title": "🖖 milestone: crew recommendations implementation & dashboard fixes",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_AND_DASHBOARD_FIXES.md",
+          "categories": [
+            "dashboard",
+            "bugfixes",
+            "crew",
+            "optimization",
+            "architecture",
+            "rag",
+            "security",
+            "features",
+            "n8n",
+            "testing",
+            "mcp",
+            "deployment"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_UI_IMPLEMENTATION.md",
+          "title": "🖖 milestone: crew recommendations ui implementation - component-based knowledge system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-11-24_CREW_RECOMMENDATIONS_UI_IMPLEMENTATION.md",
+          "categories": [
+            "dashboard",
+            "crew",
+            "optimization",
+            "rag",
+            "security",
+            "features",
+            "architecture",
+            "n8n",
+            "testing",
+            "deployment",
+            "bugfixes",
+            "mcp"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_UNIFIED_UX_DDD.md",
+          "title": "🎉 milestone: unified ux + seamless crossfade + ddd architecture",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_UNIFIED_UX_DDD.md",
+          "categories": [
+            "dashboard",
+            "n8n",
+            "architecture",
+            "rag",
+            "crew",
+            "features",
+            "deployment",
+            "security",
+            "optimization",
+            "bugfixes",
+            "mcp",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_ZERO_FLASH_COMPLETE.md",
+          "title": "🎉 milestone: zero-flash ux + unified architecture",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_ZERO_FLASH_COMPLETE.md",
+          "categories": [
+            "dashboard",
+            "architecture",
+            "n8n",
+            "rag",
+            "crew",
+            "deployment",
+            "security",
+            "optimization",
+            "bugfixes",
+            "testing",
+            "mcp",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.4.1_THEME_SYSTEM_RESTORATION.md",
+          "title": "milestone v1.4.1: theme system restoration & bug fixes",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.4.1_THEME_SYSTEM_RESTORATION.md",
+          "categories": [
+            "dashboard",
+            "bugfixes",
+            "crew",
+            "architecture",
+            "rag",
+            "mcp",
+            "n8n",
+            "testing",
+            "security",
+            "features",
+            "deployment",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "ENHANCED_AGENTIC_ARCHITECTURE_MILESTONE.md",
+          "title": "🖖 enhanced agentic architecture milestone",
+          "timestamp": "unknown",
+          "relativePath": "examples/alex-ai-nextjs/ENHANCED_AGENTIC_ARCHITECTURE_MILESTONE.md",
+          "categories": [
+            "dashboard",
+            "crew",
+            "architecture",
+            "security",
+            "optimization",
+            "rag",
+            "deployment",
+            "features",
+            "bugfixes",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_UI_AGENTIC_ENHANCEMENTS.md",
+          "title": "milestone: ui & agentic system enhancements",
+          "timestamp": "unknown",
+          "relativePath": "examples/alex-ai-nextjs/MILESTONE_UI_AGENTIC_ENHANCEMENTS.md",
+          "categories": [
+            "dashboard",
+            "crew",
+            "features",
+            "bugfixes",
+            "rag",
+            "architecture",
+            "security",
+            "deployment",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MAJOR_MILESTONE_GITHUB_PUSH_SUMMARY.md",
+          "title": "🖖 major milestone github push summary",
+          "timestamp": "unknown",
+          "relativePath": "examples/demo-project/MAJOR_MILESTONE_GITHUB_PUSH_SUMMARY.md",
+          "categories": [
+            "dashboard",
+            "deployment",
+            "crew",
+            "bugfixes",
+            "testing",
+            "optimization",
+            "security",
+            "rag",
+            "architecture",
+            "n8n",
+            "features",
+            "mcp"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_PUSH_SUCCESS.md",
+          "title": "🖖 milestone push success - theme state fix mvp",
+          "timestamp": "unknown",
+          "relativePath": "examples/demo-project/MILESTONE_PUSH_SUCCESS.md",
+          "categories": [
+            "dashboard",
+            "deployment",
+            "crew",
+            "optimization",
+            "bugfixes",
+            "testing",
+            "rag",
+            "architecture",
+            "security",
+            "features",
+            "mcp",
+            "n8n"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_THEME_STATE_FIX_MVP.md",
+          "title": "🖖 milestone: theme state fix mvp - complete success",
+          "timestamp": "unknown",
+          "relativePath": "examples/demo-project/MILESTONE_THEME_STATE_FIX_MVP.md",
+          "categories": [
+            "dashboard",
+            "bugfixes",
+            "testing",
+            "optimization",
+            "crew",
+            "rag",
+            "deployment",
+            "architecture",
+            "security",
+            "features",
+            "n8n"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "rag",
+      "displayName": "RAG & Knowledge",
+      "count": 12,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_UNIVERSAL_PATTERN_STORAGE_SYSTEM_2025-10-02.md",
+          "title": "🚀 milestone: universal pattern storage system - revolutionary self-sustaining rag implementation",
+          "timestamp": "2025-10-02",
+          "relativePath": "milestones/MILESTONE_UNIVERSAL_PATTERN_STORAGE_SYSTEM_2025-10-02.md",
+          "categories": [
+            "rag",
+            "crew",
+            "n8n",
+            "security",
+            "testing",
+            "optimization",
+            "deployment",
+            "architecture",
+            "dashboard",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_COMPLETE_USER_FLOW_2025-09-27T03-15-00.md",
+          "title": "alex ai universal - milestone: complete user flow implementation",
+          "timestamp": "2025-09-27",
+          "relativePath": "milestones/MILESTONE_COMPLETE_USER_FLOW_2025-09-27T03-15-00.md",
+          "categories": [
+            "rag",
+            "crew",
+            "n8n",
+            "deployment",
+            "mcp",
+            "architecture",
+            "testing",
+            "bugfixes",
+            "dashboard",
+            "optimization",
+            "features"
+          ]
+        },
+        {
+          "fileName": "milestone-summary.md",
+          "title": "alex ai universal - milestone build: cursor engagement protocol",
+          "timestamp": "2025-09-27",
+          "relativePath": "milestones/MILESTONE_CURSOR_ENGAGEMENT_PROTOCOL_2025-09-27T09-05-12Z/milestone-summary.md",
+          "categories": [
+            "rag",
+            "crew",
+            "n8n",
+            "testing",
+            "deployment",
+            "dashboard",
+            "security",
+            "architecture",
+            "mcp",
+            "optimization",
+            "features",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_RAG_SYSTEM_VALIDATION_2025_01_19.md",
+          "title": "🧠 milestone: rag + hallucination prevention system validation",
+          "timestamp": "2025-01-19",
+          "relativePath": "docs/archive/milestones/MILESTONE_RAG_SYSTEM_VALIDATION_2025_01_19.md",
+          "categories": [
+            "rag",
+            "crew",
+            "bugfixes",
+            "dashboard",
+            "architecture",
+            "security",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_MCP_MEMORY_STORAGE_SYSTEM_COMPLETE.md",
+          "title": "milestone: mcp memory storage system complete",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_MCP_MEMORY_STORAGE_SYSTEM_COMPLETE.md",
+          "categories": [
+            "rag",
+            "mcp",
+            "n8n",
+            "optimization",
+            "crew",
+            "architecture",
+            "features",
+            "dashboard",
+            "deployment",
+            "bugfixes",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_RAG_BYPASS_SOLUTION_OPERATIONAL.md",
+          "title": "milestone: rag bypass solution operational",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_RAG_BYPASS_SOLUTION_OPERATIONAL.md",
+          "categories": [
+            "rag",
+            "n8n",
+            "crew",
+            "architecture",
+            "features",
+            "optimization",
+            "deployment",
+            "testing",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-22_YOUTUBE_RAG_OPTIMIZATION.md",
+          "title": "milestone: youtube rag optimization & mcp integration",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-22_YOUTUBE_RAG_OPTIMIZATION.md",
+          "categories": [
+            "rag",
+            "mcp",
+            "crew",
+            "optimization",
+            "n8n",
+            "dashboard",
+            "testing",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.5.0_DDD_USER_SETTINGS.md",
+          "title": "milestone v1.5.0: ddd architecture for user settings",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.5.0_DDD_USER_SETTINGS.md",
+          "categories": [
+            "rag",
+            "n8n",
+            "architecture",
+            "dashboard",
+            "crew",
+            "security",
+            "bugfixes",
+            "deployment",
+            "mcp",
+            "features",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.7.0_COMPLETE_RAG_CRUD_SYSTEM.md",
+          "title": "milestone v1.7.0: complete rag crud system with modern ai",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.7.0_COMPLETE_RAG_CRUD_SYSTEM.md",
+          "categories": [
+            "rag",
+            "n8n",
+            "crew",
+            "deployment",
+            "architecture",
+            "bugfixes",
+            "dashboard",
+            "features",
+            "security",
+            "testing",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v1.7.1_RAG_OPERATIONAL_WITH_FALLBACK.md",
+          "title": "milestone v1.7.1: rag system fully operational with supabase fallback",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v1.7.1_RAG_OPERATIONAL_WITH_FALLBACK.md",
+          "categories": [
+            "rag",
+            "n8n",
+            "crew",
+            "architecture",
+            "bugfixes",
+            "testing",
+            "dashboard",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_v2.6.2_RAG_MICRO_TEST_ADMIRAL_PROTOCOL.md",
+          "title": "🧠 milestone v2.6.2 — rag micro-test: admiral rank protocol",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_v2.6.2_RAG_MICRO_TEST_ADMIRAL_PROTOCOL.md",
+          "categories": [
+            "rag",
+            "crew",
+            "testing",
+            "n8n",
+            "security",
+            "features",
+            "architecture",
+            "dashboard",
+            "mcp",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "CURRENT_MILESTONE.md",
+          "title": "🎯 current milestone: rag + hallucination system validation",
+          "timestamp": "unknown",
+          "relativePath": "docs/archive/planning/CURRENT_MILESTONE.md",
+          "categories": [
+            "rag",
+            "crew",
+            "dashboard",
+            "optimization",
+            "features",
+            "architecture"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "mcp",
+      "displayName": "MCP Integration",
+      "count": 6,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION_EXECUTION.md",
+          "title": "milestone: complete n8n to mcp migration execution",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_COMPLETE_N8N_TO_MCP_MIGRATION_EXECUTION.md",
+          "categories": [
+            "mcp",
+            "n8n",
+            "deployment",
+            "rag",
+            "crew",
+            "architecture",
+            "dashboard",
+            "features",
+            "optimization",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_MCP_LAYER_ANALYSIS_AND_FEATURE_BRANCH.md",
+          "title": "milestone: mcp layer analysis & feature branch creation",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_MCP_LAYER_ANALYSIS_AND_FEATURE_BRANCH.md",
+          "categories": [
+            "mcp",
+            "optimization",
+            "features",
+            "crew",
+            "rag",
+            "n8n",
+            "testing",
+            "architecture"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_MCP_LAYER_IMPLEMENTATION_COMPLETE.md",
+          "title": "milestone: mcp layer implementation complete",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_MCP_LAYER_IMPLEMENTATION_COMPLETE.md",
+          "categories": [
+            "mcp",
+            "rag",
+            "crew",
+            "optimization",
+            "testing",
+            "n8n",
+            "architecture",
+            "features",
+            "deployment",
+            "security"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_MCP_SERVER_DEPLOYMENT_TO_MCP_PBRADYGEORGEN_COM.md",
+          "title": "milestone: mcp server deployment to mcp.pbradygeorgen.com",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_MCP_SERVER_DEPLOYMENT_TO_MCP_PBRADYGEORGEN_COM.md",
+          "categories": [
+            "mcp",
+            "deployment",
+            "dashboard",
+            "bugfixes",
+            "crew",
+            "n8n",
+            "rag",
+            "testing",
+            "architecture",
+            "features",
+            "security",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_DDD_ARCHITECTURE_REFACTORING_MCP_INTEGRATION.md",
+          "title": "🖖 milestone: ddd architecture refactoring - mcp integration complete",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_DDD_ARCHITECTURE_REFACTORING_MCP_INTEGRATION.md",
+          "categories": [
+            "mcp",
+            "crew",
+            "dashboard",
+            "architecture",
+            "rag",
+            "security",
+            "optimization",
+            "n8n",
+            "bugfixes",
+            "features",
+            "deployment",
+            "testing"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-11-23_MCP_DDD_CONTROLLER_MIGRATION.md",
+          "title": "milestone: mcp migration - ddd controller layer transition",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-11-23_MCP_DDD_CONTROLLER_MIGRATION.md",
+          "categories": [
+            "mcp",
+            "n8n",
+            "crew",
+            "architecture",
+            "rag",
+            "optimization",
+            "dashboard",
+            "features",
+            "deployment",
+            "testing",
+            "bugfixes"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "testing",
+      "displayName": "Testing & Quality",
+      "count": 6,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_E2E_TESTING_FRAMEWORK_2025-10-02.md",
+          "title": "🚀 milestone: e2e testing framework - complete workflow validation system",
+          "timestamp": "2025-10-02",
+          "relativePath": "milestones/MILESTONE_E2E_TESTING_FRAMEWORK_2025-10-02.md",
+          "categories": [
+            "testing",
+            "crew",
+            "security",
+            "optimization",
+            "rag",
+            "dashboard",
+            "n8n",
+            "deployment",
+            "architecture",
+            "features",
+            "bugfixes"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_E2E_TESTING_QUICK_WINS_COMPLETE.md",
+          "title": "milestone: e2e testing quick wins complete",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_E2E_TESTING_QUICK_WINS_COMPLETE.md",
+          "categories": [
+            "testing",
+            "bugfixes",
+            "n8n",
+            "rag",
+            "dashboard",
+            "crew",
+            "mcp",
+            "features",
+            "deployment",
+            "architecture",
+            "security"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-20_WEBHOOK_REGISTRATION_INVESTIGATION_AND_E2E_TESTING.md",
+          "title": "milestone: webhook registration investigation & e2e testing deep dive",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-20_WEBHOOK_REGISTRATION_INVESTIGATION_AND_E2E_TESTING.md",
+          "categories": [
+            "testing",
+            "n8n",
+            "rag",
+            "crew",
+            "dashboard",
+            "bugfixes",
+            "architecture",
+            "deployment",
+            "security",
+            "features",
+            "optimization"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_MCP_TIMEOUT_OPTIMIZATION_AND_E2E_FRAMEWORK.md",
+          "title": "🖖 milestone: mcp timeout optimization & e2e testing framework",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_MCP_TIMEOUT_OPTIMIZATION_AND_E2E_FRAMEWORK.md",
+          "categories": [
+            "testing",
+            "crew",
+            "optimization",
+            "mcp",
+            "dashboard",
+            "bugfixes",
+            "architecture",
+            "deployment",
+            "security",
+            "rag",
+            "n8n",
+            "features"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_2025-01-24_UNIVERSAL_PROGRESS_SYSTEM_AND_MCP_OPTIMIZATION.md",
+          "title": "🖖 milestone: universal progress system & mcp optimization",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_2025-01-24_UNIVERSAL_PROGRESS_SYSTEM_AND_MCP_OPTIMIZATION.md",
+          "categories": [
+            "testing",
+            "dashboard",
+            "crew",
+            "optimization",
+            "mcp",
+            "bugfixes",
+            "rag",
+            "architecture",
+            "deployment",
+            "security",
+            "features",
+            "n8n"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_CURSOR_AI_AUTOMATIC_STARTUP.md",
+          "title": "🖖 milestone: cursor ai automatic startup & state recovery system",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_CURSOR_AI_AUTOMATIC_STARTUP.md",
+          "categories": [
+            "testing",
+            "dashboard",
+            "crew",
+            "features",
+            "n8n",
+            "architecture",
+            "rag",
+            "bugfixes",
+            "deployment",
+            "security",
+            "optimization"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "architecture",
+      "displayName": "Architecture & DDD",
+      "count": 2,
+      "milestones": [
+        {
+          "fileName": "MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md",
+          "title": "🏆 milestone: ddd architecture migration complete",
+          "timestamp": "2025-10-13",
+          "relativePath": "docs/archive/milestones/MILESTONE_DDD_ARCHITECTURE_COMPLETE_2025_10_13.md",
+          "categories": [
+            "architecture",
+            "crew",
+            "dashboard",
+            "rag",
+            "deployment",
+            "n8n",
+            "features",
+            "testing",
+            "optimization",
+            "security",
+            "bugfixes",
+            "mcp"
+          ]
+        },
+        {
+          "fileName": "MILESTONE_SUMMARY.md",
+          "title": "🎉 milestone: unified ux + zero-flash crossfade + ddd architecture",
+          "timestamp": "2025-01",
+          "relativePath": "milestones/2025-01/MILESTONE_SUMMARY.md",
+          "categories": [
+            "architecture",
+            "dashboard",
+            "n8n",
+            "crew",
+            "security",
+            "rag",
+            "optimization",
+            "mcp",
+            "deployment"
+          ]
+        }
+      ]
+    },
+    {
+      "category": "features",
+      "displayName": "New Features",
+      "count": 1,
+      "milestones": [
+        {
+          "fileName": "feature-milestone-push-automation.md",
+          "title": "feature branch: milestone push automation",
+          "timestamp": "unknown",
+          "relativePath": "docs/branches/feature-milestone-push-automation.md",
+          "categories": [
+            "features",
+            "n8n",
+            "testing",
+            "rag"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "mostActiveCategory": "n8n",
+    "totalCategories": 8,
+    "dateRange": {
+      "earliest": "2025-01",
+      "latest": "2025-11-25"
+    }
+  }
+}

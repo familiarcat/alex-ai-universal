@@ -1,0 +1,206 @@
+{
+  "updatedAt": "2025-11-20T17:46:27.990Z",
+  "createdAt": "2025-11-20T01:15:39.405Z",
+  "id": "sjzg92g0v36XZyku",
+  "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Counselor Deanna Troi Directive",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-counselor-deanna-troi",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        304
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "86d61f8a-aab8-4a7a-a15d-ddbb4c5fc04d"
+    },
+    {
+      "name": "Counselor Deanna Troi Memory Retrieval",
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'troi',\n      knowledgeType: 'best_practice',\n      priority: 'medium',\n      title: 'User Experience Advisory',\n      summary: summaryLine.trim() || 'User experience guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'troi']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "position": [
+        464,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "2487d7c8-d578-4186-9f15-ed52710e18e1"
+    },
+    {
+      "name": "LLM Selection Agent",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        464,
+        320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "8ceed87d-8b2c-4b78-8a30-6ce655ff5aac"
+    },
+    {
+      "name": "Counselor Deanna Troi AI Agent",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        688,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "09fa0501-2264-49ff-936d-87820ef6fe36"
+    },
+    {
+      "name": "Counselor Deanna Troi Memory Storage",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "position": [
+        912,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "a421ba82-7454-4049-8fac-b5449df59590"
+    },
+    {
+      "name": "Observation Lounge Communication",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "position": [
+        912,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "id": "1f8021b6-8986-4c9d-bf8a-1d1d78fc61f9"
+    },
+    {
+      "name": "Counselor Deanna Troi Response",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'counselor_troi',\n  crew_name: 'Counselor Deanna Troi',\n  role: 'Ship Counselor',\n  summary: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Counselor Deanna Troi Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Counselor Deanna Troi AI Agent').item.json?.model || null,\n    usage: $('Counselor Deanna Troi AI Agent').item.json?.usage || null\n  }\n} }}",
+        "options": {}
+      },
+      "position": [
+        1120,
+        304
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "88d1e5a5-b5b7-4aa1-968a-77524b435661"
+    }
+  ],
+  "connections": {
+    "Counselor Deanna Troi Directive": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Selection Agent": {
+      "main": [
+        [
+          {
+            "node": "Counselor Deanna Troi AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Counselor Deanna Troi AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Observation Lounge Communication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Observation Lounge Communication": {
+      "main": [
+        [
+          {
+            "node": "Counselor Deanna Troi Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Counselor Deanna Troi Memory Retrieval": {
+      "main": [
+        [
+          {
+            "node": "LLM Selection Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Counselor Deanna Troi Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Counselor Deanna Troi Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "b8976c16-eb4b-4c5c-99ea-468cf98ab09b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:39.407Z",
+      "createdAt": "2025-11-20T01:15:39.407Z",
+      "role": "workflow:owner",
+      "workflowId": "sjzg92g0v36XZyku",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

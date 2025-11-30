@@ -1,0 +1,421 @@
+{
+  "timestamp": "2025-11-25T16:32:58.340Z",
+  "crewAssessments": {
+    "picard": {
+      "crewMember": "Captain Jean-Luc Picard",
+      "role": "Strategic vision for theme coherence and user journey",
+      "recommendations": []
+    },
+    "data": {
+      "crewMember": "Commander Data",
+      "role": "Mathematical precision in contrast ratios, color science, WCAG compliance",
+      "recommendations": [
+        {
+          "type": "contrast",
+          "priority": "high",
+          "recommendation": "Ensure all CTAs meet WCAG AA (4.5:1) minimum, AAA (7.0:1) preferred",
+          "implementation": "Calculate contrast ratios for each theme's CTA colors against backgrounds"
+        }
+      ]
+    },
+    "troi": {
+      "crewMember": "Counselor Deanna Troi",
+      "role": "Emotional resonance, psychological impact of colors, user perception",
+      "recommendations": [
+        {
+          "type": "emotional",
+          "priority": "high",
+          "recommendation": "Each theme should evoke its intended emotional response through color psychology",
+          "implementation": "Map theme colors to psychological responses and user emotions"
+        }
+      ]
+    },
+    "la_forge": {
+      "crewMember": "Lieutenant Commander Geordi La Forge",
+      "role": "Implementation, CSS architecture, component system design",
+      "recommendations": [
+        {
+          "type": "implementation",
+          "priority": "high",
+          "recommendation": "Create CSS variable system for theme-aware component styling",
+          "implementation": "Extend GlobalThemeStyles with component-specific color variables"
+        }
+      ]
+    },
+    "quark": {
+      "crewMember": "Quark",
+      "role": "CTA effectiveness, conversion optimization, action-oriented design",
+      "recommendations": [
+        {
+          "type": "cta",
+          "priority": "critical",
+          "recommendation": "Primary CTAs must be visually dominant and action-compelling",
+          "implementation": "Use size, color intensity, and positioning to create clear CTA hierarchy"
+        }
+      ]
+    },
+    "riker": {
+      "crewMember": "Commander William Riker",
+      "role": "Tactical organization of color hierarchy, workflow optimization",
+      "recommendations": []
+    }
+  },
+  "recommendations": {
+    "colorSystem": {
+      "recommendation": "Extend theme colors to include component-specific palettes",
+      "implementation": "Add ctaPrimary, ctaSecondary, cardBackground, etc. to each theme"
+    },
+    "typography": {
+      "recommendation": "Implement responsive text sizing based on component size",
+      "implementation": "Use CSS clamp() and relative units for fluid typography"
+    },
+    "ctaHierarchy": {
+      "recommendation": "Create clear visual hierarchy for CTAs across all themes",
+      "implementation": "Use size, color intensity, and spacing to differentiate CTA levels"
+    },
+    "wordWrapping": {
+      "recommendation": "Ensure proper word wrapping for all text elements",
+      "implementation": "Use word-break, overflow-wrap, and max-width constraints"
+    }
+  },
+  "themeDefinitions": {
+    "mochaEarth": {
+      "name": "Mocha Earth",
+      "description": "Warm, organic, grounded - evokes coffee, earth, natural materials",
+      "ragContext": "Earth tones, natural materials, warmth, comfort, organic design",
+      "crewPersona": "Troi - empathetic, calming, natural",
+      "colorPalette": {
+        "primary": "#556c52",
+        "secondary": "#8B6F47",
+        "tertiary": "#D4A574",
+        "accent": "#556c52",
+        "background": "linear-gradient(135deg, #F5EFE7 0%, #E8DED2 100%)",
+        "text": "#2D2520",
+        "ctaPrimary": "#556c52",
+        "ctaSecondary": "#8B6F47"
+      },
+      "emotionalTone": "calm, trustworthy, organic, grounded",
+      "actionOrientation": "gentle persuasion, trust-building, natural flow"
+    },
+    "verdantNature": {
+      "name": "Verdant Nature",
+      "description": "Fresh, growth, vitality - green energy, life, renewal",
+      "ragContext": "Nature, growth, vitality, freshness, renewal, organic life",
+      "crewPersona": "La Forge - growth, renewal, practical growth",
+      "colorPalette": {
+        "primary": "#2E7D32",
+        "secondary": "#4CAF50",
+        "tertiary": "#81C784",
+        "accent": "#2E7D32",
+        "background": "linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%)",
+        "text": "#1B3A1F",
+        "ctaPrimary": "#2E7D32",
+        "ctaSecondary": "#4CAF50"
+      },
+      "emotionalTone": "fresh, energetic, growth-oriented, natural",
+      "actionOrientation": "growth, renewal, positive action, vitality"
+    },
+    "chromeMetallic": {
+      "name": "Chrome Metallic",
+      "description": "Futuristic, precision, technology - sleek, modern, high-tech",
+      "ragContext": "Technology, precision, future, innovation, sleek design",
+      "crewPersona": "Data - precise, analytical, technological",
+      "colorPalette": {
+        "primary": "#00D4FF",
+        "secondary": "#00A8CC",
+        "tertiary": "#007A99",
+        "accent": "#00D4FF",
+        "background": "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)",
+        "text": "#E8E8E8",
+        "ctaPrimary": "#00D4FF",
+        "ctaSecondary": "#00A8CC"
+      },
+      "emotionalTone": "futuristic, precise, innovative, high-tech",
+      "actionOrientation": "precise action, technological advancement, innovation"
+    },
+    "brutalist": {
+      "name": "Brutalist",
+      "description": "Bold, raw, unapologetic - stark contrast, strong statements",
+      "ragContext": "Brutalism, raw design, bold statements, unapologetic, stark",
+      "crewPersona": "Worf - bold, unapologetic, strong",
+      "colorPalette": {
+        "primary": "#000000",
+        "secondary": "#FFFFFF",
+        "tertiary": "#CCCCCC",
+        "accent": "#000000",
+        "background": "#FFFFFF",
+        "text": "#000000",
+        "ctaPrimary": "#000000",
+        "ctaSecondary": "#FFFFFF"
+      },
+      "emotionalTone": "bold, direct, unapologetic, strong",
+      "actionOrientation": "direct action, clear statements, bold decisions"
+    },
+    "mutedNeon": {
+      "name": "Muted Neon",
+      "description": "Modern, subtle energy - contemporary, sophisticated vibrancy",
+      "ragContext": "Modern design, subtle energy, contemporary, sophisticated",
+      "crewPersona": "Riker - modern, tactical, contemporary",
+      "colorPalette": {
+        "primary": "#00b2a8",
+        "secondary": "#00E5D4",
+        "tertiary": "#B2DFDB",
+        "accent": "#00b2a8",
+        "background": "linear-gradient(135deg, #F5F0EA 0%, #E8E1D9 100%)",
+        "text": "#2A2A2A",
+        "ctaPrimary": "#00b2a8",
+        "ctaSecondary": "#00E5D4"
+      },
+      "emotionalTone": "modern, sophisticated, contemporary, subtle energy",
+      "actionOrientation": "modern action, contemporary flow, sophisticated engagement"
+    },
+    "monochromeBlue": {
+      "name": "Monochrome Blue",
+      "description": "Calm, professional, trustworthy - blue psychology, reliability",
+      "ragContext": "Blue psychology, trust, reliability, professionalism, calm",
+      "crewPersona": "Picard - trustworthy, professional, reliable",
+      "colorPalette": {
+        "primary": "#1565C0",
+        "secondary": "#42A5F5",
+        "tertiary": "#90CAF9",
+        "accent": "#1565C0",
+        "background": "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+        "text": "#0D3B66",
+        "ctaPrimary": "#1565C0",
+        "ctaSecondary": "#42A5F5"
+      },
+      "emotionalTone": "calm, professional, trustworthy, reliable",
+      "actionOrientation": "trust-building, professional engagement, reliable action"
+    },
+    "gradient": {
+      "name": "Gradient Fusion",
+      "description": "Dynamic, flowing, creative - purple to pink energy, movement",
+      "ragContext": "Gradients, flow, creativity, dynamic movement, energy",
+      "crewPersona": "Troi - flowing, creative, dynamic",
+      "colorPalette": {
+        "primary": "#f7c9fc",
+        "secondary": "#f093fb",
+        "tertiary": "#764ba2",
+        "accent": "#f7c9fc",
+        "background": "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+        "text": "#f8f8f8",
+        "ctaPrimary": "#f7c9fc",
+        "ctaSecondary": "#f093fb"
+      },
+      "emotionalTone": "dynamic, creative, flowing, energetic",
+      "actionOrientation": "creative action, dynamic flow, energetic engagement"
+    },
+    "pastel": {
+      "name": "Pastel",
+      "description": "Soft, gentle, approachable - delicate colors, friendly, welcoming",
+      "ragContext": "Pastels, softness, gentleness, approachability, delicate",
+      "crewPersona": "Troi - gentle, approachable, empathetic",
+      "colorPalette": {
+        "primary": "#a27294",
+        "secondary": "#e8a4d4",
+        "tertiary": "#f5c2e8",
+        "accent": "#a27294",
+        "background": "linear-gradient(135deg, #fff5f7 0%, #f5f8ff 100%)",
+        "text": "#2d2d2d",
+        "ctaPrimary": "#a27294",
+        "ctaSecondary": "#e8a4d4"
+      },
+      "emotionalTone": "soft, gentle, approachable, welcoming",
+      "actionOrientation": "gentle persuasion, welcoming action, approachable engagement"
+    },
+    "cyberpunk": {
+      "name": "Cyberpunk",
+      "description": "Edgy, high-energy, rebellious - neon pink, dark, intense",
+      "ragContext": "Cyberpunk, neon, high-energy, rebellious, intense, edgy",
+      "crewPersona": "Worf - intense, edgy, strong",
+      "colorPalette": {
+        "primary": "#ff0099",
+        "secondary": "#ff00cc",
+        "tertiary": "#cc0066",
+        "accent": "#ff0099",
+        "background": "linear-gradient(135deg, #1a0520 0%, #2d1040 100%)",
+        "text": "#f0e8ff",
+        "ctaPrimary": "#ff0099",
+        "ctaSecondary": "#ff00cc"
+      },
+      "emotionalTone": "edgy, high-energy, rebellious, intense",
+      "actionOrientation": "bold action, intense engagement, rebellious energy"
+    },
+    "glassmorphism": {
+      "name": "Glassmorphism",
+      "description": "Elegant, translucent, modern - glass effects, depth, sophistication",
+      "ragContext": "Glassmorphism, translucency, depth, elegance, modern sophistication",
+      "crewPersona": "Picard - elegant, sophisticated, refined",
+      "colorPalette": {
+        "primary": "#a78bfa",
+        "secondary": "#c4b5fd",
+        "tertiary": "#ddd6fe",
+        "accent": "#a78bfa",
+        "background": "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+        "text": "#e8e8e8",
+        "ctaPrimary": "#a78bfa",
+        "ctaSecondary": "#c4b5fd"
+      },
+      "emotionalTone": "elegant, sophisticated, refined, modern",
+      "actionOrientation": "elegant action, sophisticated engagement, refined flow"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "description": "Deep, mysterious, calm - night sky, tranquility, depth",
+      "ragContext": "Midnight, night sky, depth, mystery, tranquility, calm",
+      "crewPersona": "Picard - deep, thoughtful, calm",
+      "colorPalette": {
+        "primary": "#00ffff",
+        "secondary": "#00cccc",
+        "tertiary": "#009999",
+        "accent": "#00ffff",
+        "background": "linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #1a1a24 100%)",
+        "text": "#e8e8e8",
+        "ctaPrimary": "#00ffff",
+        "ctaSecondary": "#00cccc"
+      },
+      "emotionalTone": "deep, mysterious, calm, tranquil",
+      "actionOrientation": "thoughtful action, calm engagement, deep focus"
+    },
+    "offworld": {
+      "name": "Offworld",
+      "description": "Space, exploration, infinite - cosmic blue, vastness, discovery",
+      "ragContext": "Space, exploration, cosmic, infinite, vastness, discovery, offworld",
+      "crewPersona": "Data - exploration, discovery, infinite possibilities",
+      "colorPalette": {
+        "primary": "#00d9ff",
+        "secondary": "#00b8d4",
+        "tertiary": "#0097a7",
+        "accent": "#00d9ff",
+        "background": "linear-gradient(135deg, #020818 0%, #041c35 50%, #062a4d 100%)",
+        "text": "#e0f4ff",
+        "ctaPrimary": "#00d9ff",
+        "ctaSecondary": "#00b8d4"
+      },
+      "emotionalTone": "exploratory, infinite, cosmic, discovery",
+      "actionOrientation": "exploration, discovery, infinite possibilities, cosmic action"
+    }
+  },
+  "componentTypes": {
+    "cta": {
+      "name": "Call-to-Action Buttons",
+      "hierarchy": [
+        "primary",
+        "secondary",
+        "tertiary"
+      ],
+      "sizing": {
+        "large": {
+          "fontSize": "18px",
+          "padding": "16px 32px",
+          "minHeight": "56px"
+        },
+        "medium": {
+          "fontSize": "16px",
+          "padding": "12px 24px",
+          "minHeight": "48px"
+        },
+        "small": {
+          "fontSize": "14px",
+          "padding": "8px 16px",
+          "minHeight": "40px"
+        }
+      },
+      "wordWrap": "break-word",
+      "maxWidth": "100%"
+    },
+    "card": {
+      "name": "Card Components",
+      "hierarchy": [
+        "elevated",
+        "outlined",
+        "flat"
+      ],
+      "sizing": {
+        "large": {
+          "padding": "32px",
+          "fontSize": "16px"
+        },
+        "medium": {
+          "padding": "24px",
+          "fontSize": "14px"
+        },
+        "small": {
+          "padding": "16px",
+          "fontSize": "12px"
+        }
+      },
+      "wordWrap": "break-word",
+      "maxWidth": "100%"
+    },
+    "heading": {
+      "name": "Headings",
+      "hierarchy": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6"
+      ],
+      "sizing": {
+        "h1": {
+          "fontSize": "32px",
+          "lineHeight": "1.2",
+          "fontWeight": 700
+        },
+        "h2": {
+          "fontSize": "28px",
+          "lineHeight": "1.3",
+          "fontWeight": 600
+        },
+        "h3": {
+          "fontSize": "24px",
+          "lineHeight": "1.4",
+          "fontWeight": 600
+        },
+        "h4": {
+          "fontSize": "20px",
+          "lineHeight": "1.4",
+          "fontWeight": 600
+        },
+        "h5": {
+          "fontSize": "18px",
+          "lineHeight": "1.5",
+          "fontWeight": 500
+        },
+        "h6": {
+          "fontSize": "16px",
+          "lineHeight": "1.5",
+          "fontWeight": 500
+        }
+      },
+      "wordWrap": "break-word",
+      "maxWidth": "100%"
+    },
+    "text": {
+      "name": "Body Text",
+      "hierarchy": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "sizing": {
+        "large": {
+          "fontSize": "18px",
+          "lineHeight": "1.6"
+        },
+        "medium": {
+          "fontSize": "16px",
+          "lineHeight": "1.5"
+        },
+        "small": {
+          "fontSize": "14px",
+          "lineHeight": "1.4"
+        }
+      },
+      "wordWrap": "break-word",
+      "maxWidth": "100%"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "name": "SYSTEM - Mission Control - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "ab827429-8338-443a-b30c-b49642b975cd",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Mission Directive",
+        "parameters": {
+          "path": "0283b7ab-c44c-47c2-925a-513054e1105f",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Mission Response"
+      ]
+    },
+    {
+      "id": "b7d7394a-0aa0-4462-a23c-6416a14ae6ec",
+      "type": "workflowExecute",
+      "config": {
+        "name": "AlexAI Optimized Crew Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "AlexAI Optimized Crew Response"
+      ]
+    },
+    {
+      "id": "905f2768-088b-4d20-a505-be6ccdaf181e",
+      "type": "workflowExecute",
+      "config": {
+        "name": "AlexAI Optimized Crew Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      }
+    },
+    {
+      "id": "f89643ba-db4e-423b-a182-55d4552312d8",
+      "type": "transform",
+      "config": {
+        "name": "Mission Response",
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          464,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "6AXbtRwpdUIjHmyi",
+    "originalName": "SYSTEM - Mission Control - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.205Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979206-s4j1he",
+  "createdAt": "2025-11-21T11:19:39.206Z",
+  "updatedAt": "2025-11-21T11:19:39.206Z"
+}

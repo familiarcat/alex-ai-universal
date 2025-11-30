@@ -1,0 +1,78 @@
+{
+  "id": "mcp-56NKAB40TerTiNXL",
+  "name": "PROJECT - Alex AI - Contact Management - Production",
+  "description": "Converted from n8n workflow: PROJECT - Alex AI - Contact Management - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "dd34de65-fbed-434d-9e9d-ba1f9d6524c9",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alex-ai-contacts",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "alex-ai-contacts",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "046d4655-f5f7-4d3f-9b63-c1b431da8a11",
+      "name": "Respond Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Contacts - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Respond Success"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Respond Success",
+      "source": "Webhook Trigger",
+      "target": "Respond Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "dd34de65-fbed-434d-9e9d-ba1f9d6524c9",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "alex-ai-contacts",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=alex-ai-contacts",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "56NKAB40TerTiNXL",
+    "convertedAt": "2025-11-21T14:24:04.661Z",
+    "originalName": "PROJECT - Alex AI - Contact Management - Production"
+  }
+}

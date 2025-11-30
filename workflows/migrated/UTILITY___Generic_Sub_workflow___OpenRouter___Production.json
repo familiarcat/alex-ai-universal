@@ -1,0 +1,59 @@
+{
+  "name": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "6c5a7265-f278-408f-88c0-64f8068c70d9",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Quark Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "requestMethod": "GET",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories?crew_member=eq.Quark",
+          "allowUnauthorizedCerts": false,
+          "responseFormat": "json",
+          "jsonParameters": false,
+          "options": {},
+          "headerParametersUi": {},
+          "queryParametersUi": {},
+          "infoMessage": ""
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      }
+    },
+    {
+      "id": "70f20150-b75e-4c62-8daf-024ad5086f86",
+      "type": "transform",
+      "config": {
+        "name": "Start",
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          256,
+          112
+        ],
+        "originalType": "n8n-nodes-base.executeWorkflowTrigger"
+      },
+      "next": [
+        "Quark Memory Retrieval"
+      ]
+    }
+  ],
+  "metadata": {
+    "originalId": "rNuwkxuIZ2nYm3Zj",
+    "originalName": "UTILITY - Generic Sub-workflow - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.216Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979216-i2ou3u",
+  "createdAt": "2025-11-21T11:19:39.216Z",
+  "updatedAt": "2025-11-21T11:19:39.216Z"
+}

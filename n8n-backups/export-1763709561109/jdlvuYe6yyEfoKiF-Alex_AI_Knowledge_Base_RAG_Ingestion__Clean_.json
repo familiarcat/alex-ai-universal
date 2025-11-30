@@ -1,0 +1,74 @@
+{
+  "updatedAt": "2025-11-20T17:45:58.432Z",
+  "createdAt": "2025-11-20T01:15:42.575Z",
+  "id": "jdlvuYe6yyEfoKiF",
+  "name": "Alex AI Knowledge Base RAG Ingestion (Clean)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "name": "Webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingest-knowledge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "id": "d3d04114-6335-4ad1-8826-1e4526f2e816"
+    },
+    {
+      "name": "Respond",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, received: $json, note: 'Clean workflow OK' } }}",
+        "options": {}
+      },
+      "position": [
+        520,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "id": "7dcc719f-fb99-4867-a797-99a1e1b24323"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "versionId": "8e59ff55-9cd2-4f5b-b277-6a95cc1a8703",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:15:42.577Z",
+      "createdAt": "2025-11-20T01:15:42.577Z",
+      "role": "workflow:owner",
+      "workflowId": "jdlvuYe6yyEfoKiF",
+      "projectId": "EIEuUglJ1PFtAKvx"
+    }
+  ],
+  "tags": []
+}

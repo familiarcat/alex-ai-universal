@@ -1,0 +1,70 @@
+{
+  "id": "mcp-vkxnJcnYPlrwnYdi",
+  "name": "UTILITY - Crew Management - OpenRouter - Production",
+  "description": "Converted from n8n workflow: UTILITY - Crew Management - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "e6c9a9e0-cc66-41d5-9c38-998fa5d0cdd1",
+      "name": "Crew Request",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {},
+      "webhookInfo": {
+        "path": "",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Crew Request"
+      }
+    },
+    {
+      "id": "cb630234-cca2-4932-98ac-26126bfb422d",
+      "name": "Crew Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {},
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Crew Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Crew Request-Crew Response",
+      "source": "Crew Request",
+      "target": "Crew Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "e6c9a9e0-cc66-41d5-9c38-998fa5d0cdd1",
+      "nodeName": "Crew Request",
+      "webhookPath": "",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "vkxnJcnYPlrwnYdi",
+    "convertedAt": "2025-11-21T14:24:04.686Z",
+    "originalName": "UTILITY - Crew Management - OpenRouter - Production"
+  }
+}

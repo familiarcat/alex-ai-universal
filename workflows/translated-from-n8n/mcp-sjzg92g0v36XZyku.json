@@ -1,0 +1,217 @@
+{
+  "id": "mcp-sjzg92g0v36XZyku",
+  "name": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+  "description": "Converted from n8n workflow: CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "86d61f8a-aab8-4a7a-a15d-ddbb4c5fc04d",
+      "name": "Counselor Deanna Troi Directive",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crew-counselor-deanna-troi",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "crew-counselor-deanna-troi",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Counselor Deanna Troi Directive"
+      }
+    },
+    {
+      "id": "2487d7c8-d578-4186-9f15-ed52710e18e1",
+      "name": "Counselor Deanna Troi Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        112
+      ],
+      "parameters": {
+        "authentication": "none",
+        "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'troi',\n      knowledgeType: 'best_practice',\n      priority: 'medium',\n      title: 'User Experience Advisory',\n      summary: summaryLine.trim() || 'User experience guidance',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'troi']\n    }\n  };\n})() }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Counselor Deanna Troi Memory Retrieval"
+      }
+    },
+    {
+      "id": "8ceed87d-8b2c-4b78-8a30-6ce655ff5aac",
+      "name": "LLM Selection Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        320
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "LLM Selection Agent"
+      }
+    },
+    {
+      "id": "09fa0501-2264-49ff-936d-87820ef6fe36",
+      "name": "Counselor Deanna Troi AI Agent",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Counselor Deanna Troi AI Agent"
+      }
+    },
+    {
+      "id": "a421ba82-7454-4049-8fac-b5449df59590",
+      "name": "Counselor Deanna Troi Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        112
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Counselor Deanna Troi Memory Storage"
+      }
+    },
+    {
+      "id": "1f8021b6-8986-4c9d-bf8a-1d1d78fc61f9",
+      "name": "Observation Lounge Communication",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        912,
+        304
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge Communication"
+      }
+    },
+    {
+      "id": "88d1e5a5-b5b7-4aa1-968a-77524b435661",
+      "name": "Counselor Deanna Troi Response",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1120,
+        304
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  success: true,\n  crew_member: 'counselor_troi',\n  crew_name: 'Counselor Deanna Troi',\n  role: 'Ship Counselor',\n  summary: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Counselor Deanna Troi AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Counselor Deanna Troi Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Counselor Deanna Troi AI Agent').item.json?.model || null,\n    usage: $('Counselor Deanna Troi AI Agent').item.json?.usage || null\n  }\n} }}",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Counselor Deanna Troi Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Counselor Deanna Troi Directive-LLM Selection Agent",
+      "source": "Counselor Deanna Troi Directive",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-LLM Selection Agent-Counselor Deanna Troi AI Agent",
+      "source": "LLM Selection Agent",
+      "target": "Counselor Deanna Troi AI Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Counselor Deanna Troi AI Agent-Observation Lounge Communication",
+      "source": "Counselor Deanna Troi AI Agent",
+      "target": "Observation Lounge Communication",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge Communication-Counselor Deanna Troi Memory Storage",
+      "source": "Observation Lounge Communication",
+      "target": "Counselor Deanna Troi Memory Storage",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Counselor Deanna Troi Memory Retrieval-LLM Selection Agent",
+      "source": "Counselor Deanna Troi Memory Retrieval",
+      "target": "LLM Selection Agent",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Counselor Deanna Troi Memory Storage-Counselor Deanna Troi Response",
+      "source": "Counselor Deanna Troi Memory Storage",
+      "target": "Counselor Deanna Troi Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "86d61f8a-aab8-4a7a-a15d-ddbb4c5fc04d",
+      "nodeName": "Counselor Deanna Troi Directive",
+      "webhookPath": "crew-counselor-deanna-troi",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=crew-counselor-deanna-troi",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "sjzg92g0v36XZyku",
+    "convertedAt": "2025-11-21T14:24:04.685Z",
+    "originalName": "CREW - Counselor Deanna Troi - User Experience - OpenRouter - Production"
+  }
+}

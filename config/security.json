@@ -1,0 +1,15 @@
+{
+  "extensionIsolation": {
+    "sandbox": true,
+    "messagePassing": true,
+    "noDirectDomainAccess": true
+  },
+  "buildArtifacts": {
+    "integrityVerification": true,
+    "isolation": true
+  },
+  "dataFlow": {
+    "pattern": "Extensions → API Gateway → Auth → Domain → Infrastructure",
+    "enforceBoundaries": true
+  }
+}

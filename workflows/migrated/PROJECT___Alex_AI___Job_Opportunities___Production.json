@@ -1,0 +1,54 @@
+{
+  "name": "PROJECT - Alex AI - Job Opportunities - Production",
+  "description": "v1",
+  "steps": [
+    {
+      "id": "eb69a3e3-79cc-4c0c-8f6f-0389788b878d",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Webhook Trigger",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "alex-ai-job-opportunities",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          300
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Respond Success"
+      ]
+    },
+    {
+      "id": "4a7f0f9a-c2ec-4f6b-ad85-1b07c95691a9",
+      "type": "transform",
+      "config": {
+        "name": "Respond Success",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { \"data\": [], \"total\": 0, \"message\": \"Alex AI Job Opportunities - Production endpoint working\", \"timestamp\": new Date().toISOString() } }}"
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          460,
+          300
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "PXoVbAuphRhwsaum",
+    "originalName": "PROJECT - Alex AI - Job Opportunities - Production",
+    "migratedAt": "2025-11-21T11:19:39.209Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979209-irdl3n",
+  "createdAt": "2025-11-21T11:19:39.209Z",
+  "updatedAt": "2025-11-21T11:19:39.209Z"
+}

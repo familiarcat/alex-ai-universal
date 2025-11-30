@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-11-27T11:30:47.256Z",
+  "checks": [
+    {
+      "check": "Directory exists: .cursor",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.cursor"
+    },
+    {
+      "check": "Directory exists: .cursor/alex-ai",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.cursor/alex-ai"
+    },
+    {
+      "check": "Directory exists: .vscode",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.vscode"
+    },
+    {
+      "check": "File exists: .cursorrules",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.cursorrules",
+      "required": true
+    },
+    {
+      "check": "File exists: .vscode/tasks.json",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.vscode/tasks.json",
+      "required": true
+    },
+    {
+      "check": "File exists: .cursor/settings.json",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.cursor/settings.json",
+      "required": true
+    },
+    {
+      "check": "File exists: .cursor/alex-ai/cursor-startup-prompt.md",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/.cursor/alex-ai/cursor-startup-prompt.md",
+      "required": false
+    },
+    {
+      "check": "Tasks with runOn: folderOpen",
+      "status": "✅",
+      "count": 4
+    },
+    {
+      "check": "Script exists: load-crew-memories.js",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/scripts/crew/coordination/load-crew-memories.js"
+    },
+    {
+      "check": "Script exists: generate-cursor-prompt.js",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/scripts/generate-cursor-prompt.js"
+    },
+    {
+      "check": "Script exists: cursor-startup.sh",
+      "status": "✅",
+      "path": "/Users/bradygeorgen/Documents/workspace/alex-ai-universal/scripts/cursor-startup.sh"
+    },
+    {
+      "check": "Script execution: cursor:memories",
+      "status": "✅"
+    },
+    {
+      "check": "Startup prompt freshness",
+      "status": "✅",
+      "age": "0 hours"
+    },
+    {
+      "check": "Environment: SUPABASE_URL",
+      "status": "✅"
+    },
+    {
+      "check": "Environment: SUPABASE_SERVICE_ROLE_KEY",
+      "status": "✅"
+    },
+    {
+      "check": "Environment: N8N_URL (optional)",
+      "status": "✅"
+    },
+    {
+      "check": "Environment: OPENROUTER_API_KEY (optional)",
+      "status": "✅"
+    }
+  ],
+  "issues": [],
+  "recommendations": []
+}

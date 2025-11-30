@@ -1,0 +1,197 @@
+{
+  "id": "mcp-RK4UUMmb3WhUZDqg",
+  "name": "User Settings Retrieve (Dashboard <= Supabase)",
+  "description": "Converted from n8n workflow: User Settings Retrieve (Dashboard <= Supabase)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "settings-retrieve",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "settings-retrieve",
+        "method": "GET",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "extract-user-id",
+      "name": "Extract User ID",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Extract userId from query params (default to 'default' for single-user MVP)\nconst query = $input.item.json.query || {};\nconst userId = query.userId || 'default';\n\nconsole.log('🔍 Retrieving settings for user:', userId);\n\nreturn { json: { user_id: userId } };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Extract User ID"
+      }
+    },
+    {
+      "id": "supabase-select",
+      "name": "Supabase Select",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "getAll",
+        "table": "user_settings",
+        "returnAll": false,
+        "filters": {
+          "conditions": [
+            {
+              "column": "user_id",
+              "condition": "equals",
+              "value": "={{ $json.user_id }}"
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Select"
+      }
+    },
+    {
+      "id": "transform-response",
+      "name": "Transform Response",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Transform Supabase response to expected format\nconst items = $input.all();\n\nif (items.length === 0 || !items[0].json) {\n  console.log('❌ No settings found, returning defaults');\n  return {\n    json: {\n      userId: 'default',\n      globalTheme: 'midnight',\n      preferences: {}\n    }\n  };\n}\n\nconst settings = items[0].json;\n\n// Parse preferences if string\nlet preferences = settings.preferences || {};\nif (typeof preferences === 'string') {\n  try {\n    preferences = JSON.parse(preferences);\n  } catch (e) {\n    preferences = {};\n  }\n}\n\nconsole.log('✅ Retrieved settings:', settings.user_id, '| Theme:', settings.global_theme);\n\nreturn {\n  json: {\n    userId: settings.user_id,\n    globalTheme: settings.global_theme,\n    preferences: preferences,\n    updatedAt: settings.updated_at\n  }\n};"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Transform Response"
+      }
+    },
+    {
+      "id": "response-success",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1050,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "response-error",
+      "name": "Response Error",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1050,
+        450
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"error\": $json.error, \"message\": \"Failed to retrieve settings\" } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Error"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Extract User ID",
+      "source": "Webhook Trigger",
+      "target": "Extract User ID",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Extract User ID-Supabase Select",
+      "source": "Extract User ID",
+      "target": "Supabase Select",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Select-Transform Response",
+      "source": "Supabase Select",
+      "target": "Transform Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Transform Response-Response Success",
+      "source": "Transform Response",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "webhook-trigger",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "settings-retrieve",
+      "webhookMethod": "GET",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=settings-retrieve",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "RK4UUMmb3WhUZDqg",
+    "convertedAt": "2025-11-21T14:24:04.674Z",
+    "originalName": "User Settings Retrieve (Dashboard <= Supabase)"
+  }
+}

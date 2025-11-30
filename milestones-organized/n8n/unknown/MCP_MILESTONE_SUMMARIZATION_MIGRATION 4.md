@@ -1,0 +1,1 @@
+/Users/bradygeorgen/Documents/workspace/alex-ai-universal/docs/mcp/MCP_MILESTONE_SUMMARIZATION_MIGRATION.md

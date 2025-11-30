@@ -1,0 +1,328 @@
+{
+  "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "3a6528b0-8af6-4249-9275-c4343305b571",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Mission Coordinator - Picard",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "federation-mission",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          400,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "Mission Analysis & Planning"
+      ]
+    },
+    {
+      "id": "c28e2c9b-89ca-4033-9852-61a08b5a45c0",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Enhanced Federation Crew Memory Retrieval",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          352,
+          544
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      }
+    },
+    {
+      "id": "e27f05d6-3d4e-4b2b-a051-68d1fc072013",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Mission Analysis & Planning",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          208
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Execution Commander - Riker",
+        "Data - Analytics & Logic Specialist",
+        "Geordi - Engineering Specialist",
+        "Crusher - Health & Optimization Specialist",
+        "Worf - Security Specialist",
+        "Troi - UX & Empathy Specialist",
+        "Uhura - Communications & I/O Specialist",
+        "Quark - Business & Budget Specialist"
+      ]
+    },
+    {
+      "id": "a18f0176-85e8-4f8b-b307-14db6d064aa6",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Execution Commander - Riker",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          400
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "f44df589-c2f0-4b32-a4cb-82af6af84aea",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Data - Analytics & Logic Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          608
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "37769a1f-1215-4eae-ac1b-7c23a9cd7425",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Geordi - Engineering Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          800
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "0e899676-2478-4602-8eed-aaae39b65cc1",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Crusher - Health & Optimization Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          1008
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "90ad4f3e-c44a-4fb4-899e-e4a5433ae794",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Worf - Security Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          1200
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "2ea19d4e-780f-4395-8129-635b6e01f9c9",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Troi - UX & Empathy Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          1408
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "d428c078-ebc9-48e2-89d7-c29bd1e32a59",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Uhura - Communications & I/O Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          1600
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "39f7d4b1-9a07-4054-b4e2-6a03db4c5d88",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Quark - Business & Budget Specialist",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          608,
+          1808
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge - Crew Coordination Hub"
+      ]
+    },
+    {
+      "id": "15e0a3af-2ff5-4a1c-a4af-bc009963e0c9",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge - Crew Coordination Hub",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          800,
+          1008
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Response Aggregator & Synthesizer"
+      ]
+    },
+    {
+      "id": "0bfe77af-f3f7-4e43-ad3a-f90b81c91d4c",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Enhanced Federation Crew Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          368,
+          736
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Enhanced Federation Crew Response"
+      ]
+    },
+    {
+      "id": "db531857-82c3-4923-bda2-a809dcab5a05",
+      "type": "transform",
+      "config": {
+        "name": "Response Aggregator & Synthesizer",
+        "parameters": {
+          "jsCode": "// Federation Crew Response Aggregator\nconst missionAnalysis = $('Mission Analysis & Planning').first().json;\nconst executionCommander = $('Execution Commander - Riker').first().json;\nconst dataSpecialist = $('Data - Analytics & Logic Specialist').first().json;\nconst geordiSpecialist = $('Geordi - Engineering Specialist').first().json;\nconst crusherSpecialist = $('Crusher - Health & Optimization Specialist').first().json;\nconst worfSpecialist = $('Worf - Security Specialist').first().json;\nconst troiSpecialist = $('Troi - UX & Empathy Specialist').first().json;\nconst uhuraSpecialist = $('Uhura - Communications & I/O Specialist').first().json;\nconst quarkSpecialist = $('Quark - Business & Budget Specialist').first().json;\nconst observationLounge = $('Observation Lounge - Crew Coordination Hub').first().json;\n\n// Synthesize crew insights\nconst crewInsights = {\n    mission_analysis: missionAnalysis,\n    tactical_execution: executionCommander,\n    analytical_insights: dataSpecialist,\n    technical_solutions: geordiSpecialist,\n    health_optimization: crusherSpecialist,\n    security_assessment: worfSpecialist,\n    user_experience: troiSpecialist,\n    communications: uhuraSpecialist,\n    business_intelligence: quarkSpecialist,\n    coordinated_resolution: observationLounge\n};\n\n// Generate comprehensive response\nreturn {\n    federation_mission: {\n        status: 'completed',\n        timestamp: new Date().toISOString(),\n        crew_coordination: 'successful',\n        mission_resolution: observationLounge,\n        crew_insights: crewInsights,\n        next_actions: generateNextActions(crewInsights),\n        recommendations: generateRecommendations(crewInsights)\n    }\n};\n\nfunction generateNextActions(insights) {\n    // Generate actionable next steps based on crew insights\n    return {\n        immediate: ['Review security protocols', 'Optimize system performance'],\n        short_term: ['Implement technical solutions', 'Monitor health metrics'],\n        long_term: ['Establish ongoing monitoring', 'Plan future optimizations']\n    };\n}\n\nfunction generateRecommendations(insights) {\n    // Generate strategic recommendations\n    return {\n        priority: 'High',\n        risk_level: 'Low',\n        success_probability: 'Excellent',\n        crew_confidence: 'Unified'\n    };\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "position": [
+          1200,
+          1008
+        ],
+        "originalType": "n8n-nodes-base.code"
+      },
+      "next": [
+        "Federation Response Handler"
+      ]
+    },
+    {
+      "id": "9a2c8443-12f3-4206-9188-627f98eb7bcd",
+      "type": "transform",
+      "config": {
+        "name": "Federation Response Handler",
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1360,
+          1008
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "SLYo5CCfDht7sWDZ",
+    "originalName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.210Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979210-ve4m7",
+  "createdAt": "2025-11-21T11:19:39.210Z",
+  "updatedAt": "2025-11-21T11:19:39.210Z"
+}

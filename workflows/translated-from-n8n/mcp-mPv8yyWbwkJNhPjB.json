@@ -1,0 +1,236 @@
+{
+  "id": "mcp-mPv8yyWbwkJNhPjB",
+  "name": "Project Content Retrieve (Supabase => Dashboard)",
+  "description": "Converted from n8n workflow: Project Content Retrieve (Supabase => Dashboard)",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "ef4d04fd-d11f-4bec-870f-69573b550c51",
+      "name": "Webhook Trigger",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        250,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "project-content-retrieve",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "project-content-retrieve",
+        "method": "GET",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Webhook Trigger"
+      }
+    },
+    {
+      "id": "1c08de06-e39c-4350-bf8b-8450e50e755d",
+      "name": "Extract Params",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        450,
+        300
+      ],
+      "parameters": {
+        "functionCode": "// Extract projectId from query params\nconst query = $input.item.json.query;\nconst projectId = query?.projectId;\n\nif (!projectId) {\n  throw new Error('projectId query parameter is required');\n}\n\nconsole.log('🔍 Retrieving project:', projectId);\n\nreturn { json: { project_id: projectId } };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Extract Params"
+      }
+    },
+    {
+      "id": "7cb669e2-a39b-461c-8baf-3b9c8834a77b",
+      "name": "Supabase Select",
+      "type": "mcp.database",
+      "originalType": "n8n-nodes-base.supabase",
+      "position": [
+        650,
+        300
+      ],
+      "parameters": {
+        "operation": "get",
+        "table": "projects",
+        "filterType": "manual",
+        "matchType": "matchAll",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "project_id",
+              "keyValue": "={{ $json.project_id }}"
+            },
+            {
+              "keyName": "deleted_at",
+              "keyValue": "is.null"
+            }
+          ]
+        },
+        "options": {
+          "limit": 1
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Supabase Select"
+      }
+    },
+    {
+      "id": "7721e6be-07ae-45d7-83f9-fe1fa0a34ecb",
+      "name": "Check Found",
+      "type": "mcp.logic",
+      "originalType": "n8n-nodes-base.if",
+      "position": [
+        850,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.length }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Check Found"
+      }
+    },
+    {
+      "id": "c3bbca6e-4898-43de-be77-243a456586b5",
+      "name": "Transform Response",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.function",
+      "position": [
+        1050,
+        200
+      ],
+      "parameters": {
+        "functionCode": "// Transform Supabase data to dashboard format\nconst project = $input.item.json;\n\nconst result = {\n  projectId: project.project_id,\n  headline: project.headline,\n  subheadline: project.subheadline,\n  description: project.description,\n  theme: project.theme,\n  projectType: project.project_type,\n  businessType: project.business_type,\n  components: project.components ? JSON.parse(project.components) : [],\n  pages: project.pages ? JSON.parse(project.pages) : {},\n  updatedAt: new Date(project.updated_at).getTime()\n};\n\nreturn { json: result };"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Transform Response"
+      }
+    },
+    {
+      "id": "ca683b83-6cbf-47b3-856e-eea7fd4becfb",
+      "name": "Response Success",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1250,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Success"
+      }
+    },
+    {
+      "id": "260a7ab1-d5f5-4694-bfcc-c76fef47a424",
+      "name": "Response Not Found",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1250,
+        400
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"error\": \"Project not found\", \"projectId\": $('Extract Params').item.json.project_id } }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Not Found"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Webhook Trigger-Extract Params",
+      "source": "Webhook Trigger",
+      "target": "Extract Params",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Extract Params-Supabase Select",
+      "source": "Extract Params",
+      "target": "Supabase Select",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Supabase Select-Check Found",
+      "source": "Supabase Select",
+      "target": "Check Found",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Check Found-Transform Response",
+      "source": "Check Found",
+      "target": "Transform Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Check Found-Response Not Found",
+      "source": "Check Found",
+      "target": "Response Not Found",
+      "sourceHandle": "main-1",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Transform Response-Response Success",
+      "source": "Transform Response",
+      "target": "Response Success",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "ef4d04fd-d11f-4bec-870f-69573b550c51",
+      "nodeName": "Webhook Trigger",
+      "webhookPath": "project-content-retrieve",
+      "webhookMethod": "GET",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=project-content-retrieve",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "mPv8yyWbwkJNhPjB",
+    "convertedAt": "2025-11-21T14:24:04.681Z",
+    "originalName": "Project Content Retrieve (Supabase => Dashboard)"
+  }
+}

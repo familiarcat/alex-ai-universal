@@ -1,0 +1,14 @@
+{
+  "componentName": "CommandPalette",
+  "filePath": "/dashboard/components/CommandPalette.tsx",
+  "hasLiveData": false,
+  "hasMockData": false,
+  "dataSources": [],
+  "dataFlow": [],
+  "problems": [
+    "Component appears to need data but has no data source"
+  ],
+  "recommendations": [
+    "Add UnifiedDataService or useAppState for data"
+  ]
+}

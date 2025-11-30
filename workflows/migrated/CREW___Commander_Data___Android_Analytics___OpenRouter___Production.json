@@ -1,0 +1,163 @@
+{
+  "name": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+  "description": "Migrated from n8n",
+  "steps": [
+    {
+      "id": "ddb6338f-a9e2-4c46-be27-f34255d31458",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Commander Data Directive",
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "crew-commander-data",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "position": [
+          240,
+          304
+        ],
+        "originalType": "n8n-nodes-base.webhook"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "a91cf418-a550-4e7f-95b1-3134fdb4cb1e",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Commander Data Memory Retrieval",
+        "parameters": {
+          "authentication": "none",
+          "url": "https://n8n.pbradygeorgen.com/webhook/crew-memory-storage",
+          "sendBody": true,
+          "jsonParameters": true,
+          "bodyParametersJson": "={{ (() => {\n  const content = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) || '';\n  const summaryLine = content.split('\\n').find(line => line.trim()) || content;\n  return {\n    body: {\n      crewMember: 'data',\n      knowledgeType: 'technical_analysis',\n      priority: 'high',\n      title: 'Android Analytics Report',\n      summary: summaryLine.trim() || 'Technical analysis update',\n      detailedAnalysis: content,\n      keyFindings: [],\n      conclusions: [],\n      recommendations: [],\n      tags: ['crew', 'data']\n    }\n  };\n})() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "LLM Selection Agent"
+      ]
+    },
+    {
+      "id": "cedb3bcb-0b1c-49d8-9598-77dd9dbf2396",
+      "type": "workflowExecute",
+      "config": {
+        "name": "LLM Selection Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          464,
+          352
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Commander Data AI Agent"
+      ]
+    },
+    {
+      "id": "c599d054-b1a0-45f7-a446-7688e1cb90d8",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Commander Data AI Agent",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          688,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Observation Lounge Communication"
+      ]
+    },
+    {
+      "id": "d9e91c24-94f4-4c99-af0c-e62e026c54eb",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Commander Data Memory Storage",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          112
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Commander Data Response"
+      ]
+    },
+    {
+      "id": "a651acca-90e9-42ad-9ec7-ffeb409df7db",
+      "type": "workflowExecute",
+      "config": {
+        "name": "Observation Lounge Communication",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "url": "https://api.openrouter.ai/api/v1/chat/completions",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          912,
+          304
+        ],
+        "originalType": "n8n-nodes-base.httpRequest"
+      },
+      "next": [
+        "Commander Data Memory Storage"
+      ]
+    },
+    {
+      "id": "c0c07afd-3753-456a-9789-9ecf8eba2928",
+      "type": "transform",
+      "config": {
+        "name": "Commander Data Response",
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ {\n  success: true,\n  crew_member: 'commander_data',\n  crew_name: 'Commander Data',\n  role: 'Operations Officer',\n  summary: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content?.split('\\n').find(line => line.trim())?.trim() || $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || 'No response generated.',\n  full_response: $('Commander Data AI Agent').item.json?.choices?.[0]?.message?.content || null,\n  request: $('Commander Data Directive').item.json || null,\n  memory: $json,\n  metadata: {\n    generated_at: $now,\n    model: $('Commander Data AI Agent').item.json?.model || null,\n    usage: $('Commander Data AI Agent').item.json?.usage || null\n  }\n} }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "position": [
+          1120,
+          304
+        ],
+        "originalType": "n8n-nodes-base.respondToWebhook"
+      }
+    }
+  ],
+  "metadata": {
+    "originalId": "VpU32Ywg1ONe2wxW",
+    "originalName": "CREW - Commander Data - Android Analytics - OpenRouter - Production",
+    "migratedAt": "2025-11-21T11:19:39.211Z",
+    "source": "n8n"
+  },
+  "id": "mcp-1763723979211-cbxecv",
+  "createdAt": "2025-11-21T11:19:39.211Z",
+  "updatedAt": "2025-11-21T11:19:39.211Z"
+}

@@ -1,0 +1,1 @@
+/Users/bradygeorgen/Documents/workspace/alex-ai-universal/milestones/MILESTONE_2025-10-21_AUTOMATED_RAG_AND_CREW_SELF_SUSTAINING.md

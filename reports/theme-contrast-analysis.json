@@ -1,0 +1,112 @@
+{
+  "mochaEarth": {
+    "themeId": "mochaEarth",
+    "issues": [],
+    "recommendations": []
+  },
+  "verdantNature": {
+    "themeId": "verdantNature",
+    "issues": [],
+    "recommendations": []
+  },
+  "chromeMetallic": {
+    "themeId": "chromeMetallic",
+    "issues": [],
+    "recommendations": []
+  },
+  "brutalist": {
+    "themeId": "brutalist",
+    "issues": [],
+    "recommendations": []
+  },
+  "mutedNeon": {
+    "themeId": "mutedNeon",
+    "issues": [
+      {
+        "type": "button_contrast",
+        "severity": "critical",
+        "message": "Button contrast (2.34) fails WCAG AA Large Text (needs 3)",
+        "current": 2.3362231689305046,
+        "required": 3,
+        "fix": {
+          "suggestion": "Use darker accent color for better contrast",
+          "example": "#007c75"
+        }
+      }
+    ],
+    "recommendations": []
+  },
+  "monochromeBlue": {
+    "themeId": "monochromeBlue",
+    "issues": [],
+    "recommendations": []
+  },
+  "gradient": {
+    "themeId": "gradient",
+    "issues": [
+      {
+        "type": "button_contrast",
+        "severity": "critical",
+        "message": "Button contrast (2.56) fails WCAG AA Large Text (needs 3)",
+        "current": 2.5647754587257894,
+        "required": 3,
+        "fix": {
+          "suggestion": "Use lighter accent color for better contrast",
+          "example": "#f9d9fc"
+        }
+      },
+      {
+        "type": "text_contrast",
+        "severity": "critical",
+        "message": "Text contrast (3.45) fails WCAG AA Normal Text (needs 4.5)",
+        "current": 3.4464588081941585,
+        "required": 4.5,
+        "fix": {
+          "suggestion": "Use lighter text color",
+          "example": "#f9f9f9"
+        }
+      },
+      {
+        "type": "heading_contrast",
+        "severity": "critical",
+        "message": "Heading contrast (3.66) fails WCAG AA Normal Text (needs 4.5)",
+        "current": 3.6601941794469877,
+        "required": 4.5
+      }
+    ],
+    "recommendations": []
+  },
+  "pastel": {
+    "themeId": "pastel",
+    "issues": [
+      {
+        "type": "button_contrast",
+        "severity": "warning",
+        "message": "Button contrast (3.66) passes Large Text but fails Normal Text (needs 4.5)",
+        "current": 3.6597805796818146,
+        "required": 4.5
+      }
+    ],
+    "recommendations": []
+  },
+  "cyberpunk": {
+    "themeId": "cyberpunk",
+    "issues": [],
+    "recommendations": []
+  },
+  "glassmorphism": {
+    "themeId": "glassmorphism",
+    "issues": [],
+    "recommendations": []
+  },
+  "midnight": {
+    "themeId": "midnight",
+    "issues": [],
+    "recommendations": []
+  },
+  "offworld": {
+    "themeId": "offworld",
+    "issues": [],
+    "recommendations": []
+  }
+}

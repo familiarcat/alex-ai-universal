@@ -1,0 +1,468 @@
+{
+  "id": "mcp-SLYo5CCfDht7sWDZ",
+  "name": "SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+  "description": "Converted from n8n workflow: SYSTEM - Enhanced Mission Control - OpenRouter - Production",
+  "version": "1.0.0",
+  "active": true,
+  "nodes": [
+    {
+      "id": "3a6528b0-8af6-4249-9275-c4343305b571",
+      "name": "Mission Coordinator - Picard",
+      "type": "mcp.webhook",
+      "originalType": "n8n-nodes-base.webhook",
+      "position": [
+        400,
+        304
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "federation-mission",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookInfo": {
+        "path": "federation-mission",
+        "method": "POST",
+        "responseMode": "responseNode",
+        "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+      },
+      "metadata": {
+        "converted": true,
+        "originalNode": "Mission Coordinator - Picard"
+      }
+    },
+    {
+      "id": "c28e2c9b-89ca-4033-9852-61a08b5a45c0",
+      "name": "Enhanced Federation Crew Memory Retrieval",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        352,
+        544
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Enhanced Federation Crew Memory Retrieval"
+      }
+    },
+    {
+      "id": "e27f05d6-3d4e-4b2b-a051-68d1fc072013",
+      "name": "Mission Analysis & Planning",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        208
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Mission Analysis & Planning"
+      }
+    },
+    {
+      "id": "a18f0176-85e8-4f8b-b307-14db6d064aa6",
+      "name": "Execution Commander - Riker",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        400
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Execution Commander - Riker"
+      }
+    },
+    {
+      "id": "f44df589-c2f0-4b32-a4cb-82af6af84aea",
+      "name": "Data - Analytics & Logic Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        608
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Data - Analytics & Logic Specialist"
+      }
+    },
+    {
+      "id": "37769a1f-1215-4eae-ac1b-7c23a9cd7425",
+      "name": "Geordi - Engineering Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        800
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Geordi - Engineering Specialist"
+      }
+    },
+    {
+      "id": "0e899676-2478-4602-8eed-aaae39b65cc1",
+      "name": "Crusher - Health & Optimization Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        1008
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Crusher - Health & Optimization Specialist"
+      }
+    },
+    {
+      "id": "90ad4f3e-c44a-4fb4-899e-e4a5433ae794",
+      "name": "Worf - Security Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        1200
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Worf - Security Specialist"
+      }
+    },
+    {
+      "id": "2ea19d4e-780f-4395-8129-635b6e01f9c9",
+      "name": "Troi - UX & Empathy Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        1408
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Troi - UX & Empathy Specialist"
+      }
+    },
+    {
+      "id": "d428c078-ebc9-48e2-89d7-c29bd1e32a59",
+      "name": "Uhura - Communications & I/O Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        1600
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Uhura - Communications & I/O Specialist"
+      }
+    },
+    {
+      "id": "39f7d4b1-9a07-4054-b4e2-6a03db4c5d88",
+      "name": "Quark - Business & Budget Specialist",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        1808
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Quark - Business & Budget Specialist"
+      }
+    },
+    {
+      "id": "15e0a3af-2ff5-4a1c-a4af-bc009963e0c9",
+      "name": "Observation Lounge - Crew Coordination Hub",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        800,
+        1008
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openrouter.ai/api/v1/chat/completions",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Observation Lounge - Crew Coordination Hub"
+      }
+    },
+    {
+      "id": "0bfe77af-f3f7-4e43-ad3a-f90b81c91d4c",
+      "name": "Enhanced Federation Crew Memory Storage",
+      "type": "mcp.http",
+      "originalType": "n8n-nodes-base.httpRequest",
+      "position": [
+        368,
+        736
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://rpkkkbufdwxmjaerbhbn.supabase.co/rest/v1/crew_memories",
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Enhanced Federation Crew Memory Storage"
+      }
+    },
+    {
+      "id": "db531857-82c3-4923-bda2-a809dcab5a05",
+      "name": "Response Aggregator & Synthesizer",
+      "type": "mcp.transform",
+      "originalType": "n8n-nodes-base.code",
+      "position": [
+        1200,
+        1008
+      ],
+      "parameters": {
+        "jsCode": "// Federation Crew Response Aggregator\nconst missionAnalysis = $('Mission Analysis & Planning').first().json;\nconst executionCommander = $('Execution Commander - Riker').first().json;\nconst dataSpecialist = $('Data - Analytics & Logic Specialist').first().json;\nconst geordiSpecialist = $('Geordi - Engineering Specialist').first().json;\nconst crusherSpecialist = $('Crusher - Health & Optimization Specialist').first().json;\nconst worfSpecialist = $('Worf - Security Specialist').first().json;\nconst troiSpecialist = $('Troi - UX & Empathy Specialist').first().json;\nconst uhuraSpecialist = $('Uhura - Communications & I/O Specialist').first().json;\nconst quarkSpecialist = $('Quark - Business & Budget Specialist').first().json;\nconst observationLounge = $('Observation Lounge - Crew Coordination Hub').first().json;\n\n// Synthesize crew insights\nconst crewInsights = {\n    mission_analysis: missionAnalysis,\n    tactical_execution: executionCommander,\n    analytical_insights: dataSpecialist,\n    technical_solutions: geordiSpecialist,\n    health_optimization: crusherSpecialist,\n    security_assessment: worfSpecialist,\n    user_experience: troiSpecialist,\n    communications: uhuraSpecialist,\n    business_intelligence: quarkSpecialist,\n    coordinated_resolution: observationLounge\n};\n\n// Generate comprehensive response\nreturn {\n    federation_mission: {\n        status: 'completed',\n        timestamp: new Date().toISOString(),\n        crew_coordination: 'successful',\n        mission_resolution: observationLounge,\n        crew_insights: crewInsights,\n        next_actions: generateNextActions(crewInsights),\n        recommendations: generateRecommendations(crewInsights)\n    }\n};\n\nfunction generateNextActions(insights) {\n    // Generate actionable next steps based on crew insights\n    return {\n        immediate: ['Review security protocols', 'Optimize system performance'],\n        short_term: ['Implement technical solutions', 'Monitor health metrics'],\n        long_term: ['Establish ongoing monitoring', 'Plan future optimizations']\n    };\n}\n\nfunction generateRecommendations(insights) {\n    // Generate strategic recommendations\n    return {\n        priority: 'High',\n        risk_level: 'Low',\n        success_probability: 'Excellent',\n        crew_confidence: 'Unified'\n    };\n}"
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Response Aggregator & Synthesizer"
+      }
+    },
+    {
+      "id": "9a2c8443-12f3-4206-9188-627f98eb7bcd",
+      "name": "Federation Response Handler",
+      "type": "mcp.response",
+      "originalType": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1360,
+        1008
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookInfo": null,
+      "metadata": {
+        "converted": true,
+        "originalNode": "Federation Response Handler"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-Mission Coordinator - Picard-Mission Analysis & Planning",
+      "source": "Mission Coordinator - Picard",
+      "target": "Mission Analysis & Planning",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Execution Commander - Riker",
+      "source": "Mission Analysis & Planning",
+      "target": "Execution Commander - Riker",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Data - Analytics & Logic Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Data - Analytics & Logic Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Geordi - Engineering Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Geordi - Engineering Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Crusher - Health & Optimization Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Crusher - Health & Optimization Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Worf - Security Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Worf - Security Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Troi - UX & Empathy Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Troi - UX & Empathy Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Uhura - Communications & I/O Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Uhura - Communications & I/O Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Mission Analysis & Planning-Quark - Business & Budget Specialist",
+      "source": "Mission Analysis & Planning",
+      "target": "Quark - Business & Budget Specialist",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Execution Commander - Riker-Observation Lounge - Crew Coordination Hub",
+      "source": "Execution Commander - Riker",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Data - Analytics & Logic Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Data - Analytics & Logic Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Geordi - Engineering Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Geordi - Engineering Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Crusher - Health & Optimization Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Crusher - Health & Optimization Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Worf - Security Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Worf - Security Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Troi - UX & Empathy Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Troi - UX & Empathy Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Uhura - Communications & I/O Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Uhura - Communications & I/O Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Quark - Business & Budget Specialist-Observation Lounge - Crew Coordination Hub",
+      "source": "Quark - Business & Budget Specialist",
+      "target": "Observation Lounge - Crew Coordination Hub",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Observation Lounge - Crew Coordination Hub-Response Aggregator & Synthesizer",
+      "source": "Observation Lounge - Crew Coordination Hub",
+      "target": "Response Aggregator & Synthesizer",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Response Aggregator & Synthesizer-Federation Response Handler",
+      "source": "Response Aggregator & Synthesizer",
+      "target": "Federation Response Handler",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge-Enhanced Federation Crew Memory Storage-Enhanced Federation Crew Response",
+      "source": "Enhanced Federation Crew Memory Storage",
+      "target": "Enhanced Federation Crew Response",
+      "sourceHandle": "main-0",
+      "targetHandle": "input"
+    }
+  ],
+  "webhookExecutionPoints": [
+    {
+      "nodeId": "3a6528b0-8af6-4249-9275-c4343305b571",
+      "nodeName": "Mission Coordinator - Picard",
+      "webhookPath": "federation-mission",
+      "webhookMethod": "POST",
+      "mcpExecutionPath": "/api/workflows/execute?webhook=federation-mission",
+      "note": "⚠️ WEBHOOK EXECUTION POINT: This webhook can be executed via MCP at /api/workflows/execute with webhook path"
+    }
+  ],
+  "metadata": {
+    "originalWorkflowId": "SLYo5CCfDht7sWDZ",
+    "convertedAt": "2025-11-21T14:24:04.674Z",
+    "originalName": "SYSTEM - Enhanced Mission Control - OpenRouter - Production"
+  }
+}

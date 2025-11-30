@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background: Deep space blue representing the crew's mission -->
+  <rect width="64" height="64" fill="#0b0b10" rx="8"/>
+  
+  <!-- Primary accent: Cyan/green representing active status and Data's analytical precision -->
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#00ffaa" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Central "A" for Alex AI: Geometric, precise (Data's influence) -->
+  <path d="M 32 12 L 24 28 L 40 28 Z" fill="#00ffaa" opacity="0.9"/>
+  <rect x="28" y="28" width="8" height="16" fill="#00ffaa" opacity="0.9"/>
+  
+  <!-- Star Trek gold accent: Represents crew coordination and Picard's leadership -->
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#FFD700" stroke-width="1.5" opacity="0.4"/>
+  
+  <!-- LCARS-inspired corner elements: Troi's design harmony -->
+  <rect x="4" y="4" width="8" height="2" fill="#FF9900" rx="1"/>
+  <rect x="52" y="4" width="8" height="2" fill="#FF9900" rx="1"/>
+  <rect x="4" y="58" width="8" height="2" fill="#FF9900" rx="1"/>
+  <rect x="52" y="58" width="8" height="2" fill="#FF9900" rx="1"/>
+  
+  <!-- Status indicator: Small dot showing operational status -->
+  <circle cx="48" cy="16" r="3" fill="#00ffaa"/>
+  
+  <!-- Subtle glow effect: Represents the crew's collaborative energy -->
+  <circle cx="32" cy="32" r="20" fill="url(#glow)" opacity="0.2"/>
+  
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#00ffaa" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00ffaa" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+

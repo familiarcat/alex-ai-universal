@@ -1,0 +1,42 @@
+{
+  "name": "RBAC Get User Roles",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rbac-get-roles",
+        "responseMode": "responseNode"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT role FROM user_roles WHERE user_id = $1 AND ($2::text IS NULL OR project_id = $2) AND ($3::text IS NULL OR tier = $3)"
+      },
+      "name": "Get Roles",
+      "type": "n8n-nodes-base.postgres",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { roles: $json.map(r => r.role) } }}"
+      },
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Get Roles", "type": "main", "index": 0 }]]
+    },
+    "Get Roles": {
+      "main": [[{ "node": "Respond", "type": "main", "index": 0 }]]
+    }
+  }
+}
+
