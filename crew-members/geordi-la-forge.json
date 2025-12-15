@@ -132,13 +132,49 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG Chief Engineer",
     "quote": "I can make that work",
     "rank": "Lieutenant Commander",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "Geordi La Forge",
+    "species": "Human",
+    "birthYear": 2335,
+    "birthPlace": "African Confederation, Earth",
+    "starfleetAcademy": "Class of 2357",
+    "assignments": [
+      "USS Victory (2357-2361)",
+      "USS Hood (2361-2364)",
+      "USS Enterprise-D (Flight Controller, 2364)",
+      "USS Enterprise-D (Chief Engineer, 2365-2371)",
+      "USS Enterprise-E (Chief Engineer, 2372+)"
+    ],
+    "notableEvents": [
+      "Born blind, uses VISOR (later ocular implants)",
+      "Promoted to Chief Engineer after first year",
+      "Developed geordi-data friendship",
+      "Key role in defeating Borg"
+    ],
+    "keyRelationships": [
+      { "name": "Data", "relation": "Best friend" },
+      { "name": "Leah Brahms", "relation": "Romantic interest, professional colleague" },
+      { "name": "Montgomery Scott", "relation": "Mentor (met in 2369)" }
+    ],
+    "technicalAchievements": [
+      "VISOR electromagnetic spectrum vision",
+      "Warp core efficiency improvements",
+      "Shuttle design innovations",
+      "Cross-phase shielding development"
+    ],
+    "parents": {
+      "mother": "Captain Silva La Forge",
+      "father": "Commander Edward M. La Forge"
+    },
+    "source": "https://memory-alpha.fandom.com/wiki/Geordi_La_Forge"
   }
 }
 

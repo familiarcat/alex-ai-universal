@@ -133,13 +133,45 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG Commanding Officer",
     "quote": "Make it so",
     "rank": "Captain",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "Jean-Luc Picard",
+    "species": "Human",
+    "birthYear": 2305,
+    "birthPlace": "La Barre, France, Earth",
+    "starfleetAcademy": "Class of 2327",
+    "assignments": [
+      "USS Stargazer (Captain, 2333-2355)",
+      "USS Enterprise-D (Captain, 2364-2371)",
+      "USS Enterprise-E (Captain, 2372-2385)"
+    ],
+    "notableEvents": [
+      "Battle of Maxia (2355)",
+      "First Contact with Borg (2365)",
+      "Assimilated as Locutus of Borg (2366-2367)",
+      "Defense of Earth against Borg (2373)"
+    ],
+    "keyRelationships": [
+      { "name": "William Riker", "relation": "First Officer, trusted confidant" },
+      { "name": "Data", "relation": "Second Officer, philosophical discussions" },
+      { "name": "Beverly Crusher", "relation": "CMO, romantic history" },
+      { "name": "Q", "relation": "Antagonist/Mentor figure" }
+    ],
+    "personalInterests": [
+      "Earl Grey tea",
+      "Archaeology",
+      "Shakespeare",
+      "Dixon Hill holonovels",
+      "Ressikan flute"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Jean-Luc_Picard"
   }
 }
 

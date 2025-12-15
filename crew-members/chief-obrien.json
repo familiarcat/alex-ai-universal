@@ -128,10 +128,53 @@
   ],
   "metadata": {
     "created": "2025-10-31T00:00:00Z",
-    "version": "1.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "DS9/TNG Chief of Operations",
-    "quote": "Simple solutions are usually the best solutions"
+    "quote": "Simple solutions are usually the best solutions",
+    "rank": "Senior Chief Petty Officer",
+    "series": "Star Trek: The Next Generation / Deep Space 9"
+  },
+  "memoryAlpha": {
+    "fullName": "Miles Edward O'Brien",
+    "species": "Human",
+    "birthYear": 2328,
+    "birthPlace": "Killarney, Ireland, Earth",
+    "enlistmentYear": 2345,
+    "assignments": [
+      "USS Rutledge (2347-2364)",
+      "USS Enterprise-D (Transporter Chief, 2364-2369)",
+      "Deep Space 9 (Chief of Operations, 2369-2375)",
+      "Starfleet Academy (Professor, 2375+)"
+    ],
+    "notableEvents": [
+      "Cardassian War veteran (Setlik III massacre)",
+      "Expert in Cardassian technology (DS9)",
+      "Temporal displacement incident (aged 20 years mentally)",
+      "Multiple engineering miracles on DS9",
+      "Taught engineering at Starfleet Academy"
+    ],
+    "keyRelationships": [
+      { "name": "Keiko O'Brien", "relation": "Wife" },
+      { "name": "Molly O'Brien", "relation": "Daughter" },
+      { "name": "Kirayoshi O'Brien", "relation": "Son" },
+      { "name": "Julian Bashir", "relation": "Best friend (DS9)" },
+      { "name": "Worf", "relation": "Colleague, friend" }
+    ],
+    "technicalSkills": [
+      "Transporter operations expert",
+      "Cardassian technology specialist",
+      "Field engineering under pressure",
+      "System integration and repair"
+    ],
+    "personalTraits": [
+      "Irish heritage proud",
+      "Darts champion",
+      "Kayaking enthusiast",
+      "Long-suffering (the 'O'Brien must suffer' trope)"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Miles_O%27Brien"
   }
 }
 

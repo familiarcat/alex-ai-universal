@@ -131,13 +131,49 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG Ship's Counselor",
     "quote": "I sense...",
-    "rank": "Commander (Counselor)",
+    "rank": "Lieutenant Commander / Commander",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "Deanna Troi",
+    "species": "Half-Betazoid, Half-Human",
+    "birthYear": 2336,
+    "birthPlace": "Betazed",
+    "starfleetAcademy": "Class of 2359",
+    "assignments": [
+      "USS Enterprise-D (Ship's Counselor, 2364-2371)",
+      "USS Enterprise-E (Ship's Counselor, 2372+)",
+      "USS Titan (2379+)"
+    ],
+    "notableEvents": [
+      "Empathic abilities from Betazoid heritage",
+      "Bridge officer certification (2370)",
+      "Promoted to Commander",
+      "Marriage to William Riker (2379)"
+    ],
+    "keyRelationships": [
+      { "name": "William Riker", "relation": "Imzadi, later husband" },
+      { "name": "Lwaxana Troi", "relation": "Mother, Betazoid Ambassador" },
+      { "name": "Beverly Crusher", "relation": "Close friend" },
+      { "name": "Worf", "relation": "Brief romantic relationship" }
+    ],
+    "abilities": [
+      "Empathic sensing of emotions",
+      "Limited telepathy (with other Betazoids)",
+      "Psychology expertise",
+      "Diplomatic skills"
+    ],
+    "personalTraits": [
+      "Chocolate addiction",
+      "Compassionate nature",
+      "Bridge duty capable"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Deanna_Troi"
   }
 }
 

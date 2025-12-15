@@ -132,13 +132,46 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG Operations Officer",
     "quote": "I am superior, sir, in many ways, but I would gladly give it up to be human",
-    "rank": "Commander",
+    "rank": "Lieutenant Commander / Commander",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "Data",
+    "species": "Soong-type android",
+    "activationYear": 2338,
+    "creationPlace": "Omicron Theta colony",
+    "creator": "Dr. Noonian Soong",
+    "starfleetAcademy": "Class of 2345",
+    "assignments": [
+      "USS Trieste (2345-2364)",
+      "USS Enterprise-D (Operations Officer, 2364-2371)",
+      "USS Enterprise-E (Second Officer, 2372-2379)"
+    ],
+    "notableEvents": [
+      "Discovered on Omicron Theta (2338)",
+      "Established as sentient life form (2365)",
+      "Emotion chip installed (2371)",
+      "Sacrificed life to save Enterprise-E (2379)"
+    ],
+    "keyRelationships": [
+      { "name": "Geordi La Forge", "relation": "Best friend" },
+      { "name": "Jean-Luc Picard", "relation": "Captain, mentor" },
+      { "name": "Lore", "relation": "Brother android (antagonist)" },
+      { "name": "Spot", "relation": "Pet cat" }
+    ],
+    "capabilities": [
+      "Positronic brain with 100 petabytes storage",
+      "60 trillion operations per second",
+      "Superhuman strength",
+      "Perfect recall",
+      "Cannot use contractions (early programming)"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Data"
   }
 }
 

@@ -131,13 +131,51 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
-    "character": "TOS/TNG Communications Officer",
+    "character": "TOS Communications Officer",
     "quote": "Hailing frequencies open",
-    "rank": "Lieutenant",
+    "rank": "Lieutenant / Lieutenant Commander / Commander / Captain",
     "series": "Star Trek: The Original Series / Films"
+  },
+  "memoryAlpha": {
+    "fullName": "Nyota Uhura",
+    "species": "Human",
+    "birthYear": 2233,
+    "birthPlace": "United States of Africa, Earth",
+    "starfleetAcademy": "Class of 2257",
+    "assignments": [
+      "USS Enterprise (NCC-1701) (Communications Officer, 2265-2270)",
+      "USS Enterprise (NCC-1701) (Communications Officer, 2270s refits)",
+      "USS Enterprise-A (Communications Officer, 2286-2293)",
+      "Starfleet Academy (Instructor, post-retirement)"
+    ],
+    "notableEvents": [
+      "First interracial kiss on US television (with Kirk, 1968)",
+      "Pioneer in Starfleet communications",
+      "Broke barriers for women and people of color in Starfleet",
+      "Multi-lingual (multiple alien languages)",
+      "Bridge crew during original five-year mission"
+    ],
+    "keyRelationships": [
+      { "name": "James T. Kirk", "relation": "Captain" },
+      { "name": "Spock", "relation": "Colleague, friend" },
+      { "name": "Pavel Chekov", "relation": "Bridge colleague" },
+      { "name": "Hikaru Sulu", "relation": "Bridge colleague" }
+    ],
+    "skills": [
+      "Xenolinguistics expert",
+      "Subspace communications specialist",
+      "Code breaking and encryption",
+      "Singing and musical performance"
+    ],
+    "culturalSignificance": [
+      "Inspired Mae Jemison (first African-American woman in space)",
+      "Nichelle Nichols' portrayal broke racial barriers",
+      "Recruited for NASA astronaut program"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Nyota_Uhura"
   }
 }
 

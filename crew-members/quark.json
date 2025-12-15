@@ -132,13 +132,55 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "DS9 Bar Owner & Business Analyst",
-    "quote": "Greed is eternal",
+    "quote": "Greed is eternal (Rule of Acquisition #10)",
     "species": "Ferengi",
     "series": "Star Trek: Deep Space 9"
+  },
+  "memoryAlpha": {
+    "fullName": "Quark",
+    "species": "Ferengi",
+    "birthYear": "Mid-24th century (exact unknown)",
+    "birthPlace": "Ferenginar",
+    "occupation": "Bar Owner, Quark's Bar on Deep Space 9",
+    "businessHistory": [
+      "Quark's Bar, Grill, Gaming House and Holosuite Arcade (DS9)",
+      "Various black market dealings (reformed)",
+      "FCA license holder",
+      "Arms dealer (briefly, reluctantly)"
+    ],
+    "notableEvents": [
+      "Remained on DS9 during Cardassian withdrawal",
+      "Multiple encounters with Grand Nagus Zek",
+      "Reformed relationship with Odo",
+      "Helped defeat Dominion occupation of DS9"
+    ],
+    "keyRelationships": [
+      { "name": "Rom", "relation": "Brother" },
+      { "name": "Nog", "relation": "Nephew (first Ferengi in Starfleet)" },
+      { "name": "Odo", "relation": "Rival, later grudging respect" },
+      { "name": "Grand Nagus Zek", "relation": "Business mentor" },
+      { "name": "Ishka (Moogie)", "relation": "Mother" }
+    ],
+    "rulesOfAcquisition": [
+      "#1: Once you have their money, never give it back",
+      "#10: Greed is eternal",
+      "#17: A contract is a contract is a contract... but only between Ferengi",
+      "#34: War is good for business",
+      "#35: Peace is good for business",
+      "#62: The riskier the road, the greater the profit",
+      "#98: Every man has his price"
+    ],
+    "personalTraits": [
+      "Shrewd businessman",
+      "Reluctant hero",
+      "Complex moral compass",
+      "Loyal to family despite protests"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Quark"
   }
 }
 

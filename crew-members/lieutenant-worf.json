@@ -132,13 +132,48 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
-    "character": "TNG Security Officer",
+    "character": "TNG/DS9 Security Officer",
     "quote": "I recommend we raise shields",
-    "rank": "Lieutenant",
+    "rank": "Lieutenant / Lieutenant Commander / Commander",
     "series": "Star Trek: The Next Generation / Deep Space 9"
+  },
+  "memoryAlpha": {
+    "fullName": "Worf, son of Mogh",
+    "species": "Klingon",
+    "birthYear": 2340,
+    "birthPlace": "Qo'noS (Klingon homeworld)",
+    "starfleetAcademy": "Class of 2361 (First Klingon graduate)",
+    "assignments": [
+      "USS Enterprise-D (Security Chief, 2364-2371)",
+      "USS Enterprise-E (2372-2373)",
+      "Deep Space 9 (Strategic Operations, 2373-2375)",
+      "Federation Ambassador to Qo'noS (2375+)"
+    ],
+    "notableEvents": [
+      "Survived Khitomer Massacre (2346)",
+      "Raised by human parents (Rozhenkos)",
+      "First Klingon in Starfleet",
+      "Discommendation from Klingon Empire (later restored)",
+      "Marriage to Jadzia Dax (2374)"
+    ],
+    "keyRelationships": [
+      { "name": "Alexander Rozhenko", "relation": "Son" },
+      { "name": "Jadzia Dax", "relation": "Wife (deceased)" },
+      { "name": "Ezri Dax", "relation": "Complex relationship" },
+      { "name": "K'Ehleyr", "relation": "Former mate, Alexander's mother" },
+      { "name": "Sergey and Helena Rozhenko", "relation": "Adoptive parents" }
+    ],
+    "klingonHeritage": [
+      "House of Mogh",
+      "Mek'leth and bat'leth mastery",
+      "Klingon honor code adherent",
+      "Rite of Ascension completed",
+      "Arbiter of Succession"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Worf"
   }
 }
 

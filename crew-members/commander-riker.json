@@ -129,13 +129,52 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG First Officer",
     "quote": "I have the conn",
-    "rank": "Commander",
+    "rank": "Commander / Captain",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "William Thomas Riker",
+    "species": "Human",
+    "birthYear": 2335,
+    "birthPlace": "Valdez, Alaska, Earth",
+    "starfleetAcademy": "Class of 2357",
+    "assignments": [
+      "USS Pegasus (2358-2359)",
+      "USS Potemkin (2361-2363)",
+      "USS Hood (2363-2364)",
+      "USS Enterprise-D (First Officer, 2364-2371)",
+      "USS Enterprise-E (First Officer, 2372-2379)",
+      "USS Titan (Captain, 2379+)"
+    ],
+    "notableEvents": [
+      "Declined multiple command opportunities to stay on Enterprise",
+      "Transporter duplicate created Thomas Riker (2361)",
+      "Led away team missions",
+      "Commanded Enterprise-E during Battle of Sector 001"
+    ],
+    "keyRelationships": [
+      { "name": "Jean-Luc Picard", "relation": "Captain, mentor" },
+      { "name": "Deanna Troi", "relation": "Imzadi, wife" },
+      { "name": "Data", "relation": "Trusted colleague" },
+      { "name": "Thomas Riker", "relation": "Transporter duplicate" }
+    ],
+    "personalTraits": [
+      "Plays jazz trombone",
+      "Expert poker player",
+      "The 'Riker Maneuver' (stepping over chairs)",
+      "Skilled cook (specialty: scrambled eggs)"
+    ],
+    "combatSkills": [
+      "Martial arts (Anbo-jyutsu)",
+      "Tactical command",
+      "Away team leadership"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/William_Riker"
   }
 }
 

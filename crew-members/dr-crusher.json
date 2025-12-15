@@ -129,13 +129,50 @@
   ],
   "metadata": {
     "created": "2025-10-26T00:00:00Z",
-    "updated": "2025-10-31T00:00:00Z",
-    "version": "2.0.0",
+    "updated": "2025-12-15T00:00:00Z",
+    "version": "2.1.0",
     "deployedTo": "n8n.pbradygeorgen.com",
     "character": "TNG Chief Medical Officer",
     "quote": "I'm a doctor, not a... wait, I actually am a system doctor",
     "rank": "Commander (Doctor)",
     "series": "Star Trek: The Next Generation"
+  },
+  "memoryAlpha": {
+    "fullName": "Beverly Cheryl Crusher (née Howard)",
+    "species": "Human",
+    "birthYear": 2324,
+    "birthPlace": "Copernicus City, Luna",
+    "starfleetAcademy": "Class of 2350 (Medical)",
+    "assignments": [
+      "USS Enterprise-D (Chief Medical Officer, 2364-2365)",
+      "Starfleet Medical (Head of Starfleet Medical, 2365-2366)",
+      "USS Enterprise-D (Chief Medical Officer, 2366-2371)",
+      "USS Enterprise-E (Chief Medical Officer, 2372+)"
+    ],
+    "notableEvents": [
+      "Husband Jack Crusher killed on USS Stargazer (2354)",
+      "Developed treatments for numerous alien pathogens",
+      "Bridge officer certified",
+      "Theatrical productions aboard Enterprise"
+    ],
+    "keyRelationships": [
+      { "name": "Wesley Crusher", "relation": "Son" },
+      { "name": "Jack Crusher", "relation": "Late husband" },
+      { "name": "Jean-Luc Picard", "relation": "Close friend, romantic tension" },
+      { "name": "Deanna Troi", "relation": "Close friend" }
+    ],
+    "medicalSpecialties": [
+      "General medicine",
+      "Xenobiology",
+      "Emergency medicine",
+      "Surgical procedures"
+    ],
+    "personalInterests": [
+      "Theater and acting",
+      "Dancing (tap, jazz)",
+      "Breakfast with Troi"
+    ],
+    "source": "https://memory-alpha.fandom.com/wiki/Beverly_Crusher"
   }
 }
 
