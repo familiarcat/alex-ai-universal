@@ -115,7 +115,8 @@
     "geordi_la_forge",
     "commander_data",
     "commander_riker",
-    "captain_picard"
+    "captain_picard",
+    "all_crew_members"
   ],
   "typicalUseCases": [
     "When a simple solution is better than a complex one",
